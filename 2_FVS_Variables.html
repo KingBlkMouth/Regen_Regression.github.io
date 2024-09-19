@@ -1,0 +1,1977 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.555">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Regeneration_2_16Sept24 - 2 FVS Vars</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Regeneration_2_16Sept24</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./1.0_Import_Clean.html"> 
+<span class="menu-text">1 Import Clean</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./1.5_DB_Create.html"> 
+<span class="menu-text">1.5 DB Create</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./2_FVS_Variables.html" aria-current="page"> 
+<span class="menu-text">2 FVS Vars</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./3_RandomForests_Prep.html"> 
+<span class="menu-text">3 RF Prep</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./4_RF_by_Eco.html"> 
+<span class="menu-text">4 RF Ecos</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./5_TD_Imp.html"> 
+<span class="menu-text">5 TD Imp</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./6_distributions.html"> 
+<span class="menu-text">6 Histos</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./7_RF_GroupSpp_and_Counts.html"> 
+<span class="menu-text">7 RF Groups &amp; Counts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./8_RF_Spp_Groups.html"> 
+<span class="menu-text">8 RF Spp Groups</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./9_RF_Regression.html"> 
+<span class="menu-text">9 RF Reg</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./10_Hyperparameters.html"> 
+<span class="menu-text">10 Hyper Params</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./11_Heatmap.html"> 
+<span class="menu-text">11- 1st Map</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./12_Error_Map.html"> 
+<span class="menu-text">12 Error Map</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#intro" id="toc-intro" class="nav-link active" data-scroll-target="#intro">Intro</a></li>
+  <li><a href="#import" id="toc-import" class="nav-link" data-scroll-target="#import">Import</a></li>
+  <li><a href="#fvs" id="toc-fvs" class="nav-link" data-scroll-target="#fvs">FVS</a></li>
+  <li><a href="#extract-variables" id="toc-extract-variables" class="nav-link" data-scroll-target="#extract-variables">Extract variables</a></li>
+  <li><a href="#filter" id="toc-filter" class="nav-link" data-scroll-target="#filter">Filter</a>
+  <ul class="collapse">
+  <li><a href="#stem-exclusion" id="toc-stem-exclusion" class="nav-link" data-scroll-target="#stem-exclusion">Stem Exclusion</a></li>
+  </ul></li>
+  <li><a href="#inventory-cycle" id="toc-inventory-cycle" class="nav-link" data-scroll-target="#inventory-cycle">Inventory Cycle</a></li>
+  <li><a href="#subplots" id="toc-subplots" class="nav-link" data-scroll-target="#subplots">7,241 subplots</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">2 FVS Vars</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><em>Libraries</em></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())                                                      </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gc</span>()                                                                                 </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Data tidying and acces</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse, <span class="at">quietly =</span> T)       <span class="co"># Easy to read syntax and data manipulation                   </span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RSQLite)                      <span class="co"># Access SQLite dbs   </span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)                     <span class="co"># Pipes and math functions    </span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># library(readxl)                     # Read xlsx </span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># library(writexl)                    # write xlsx     </span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                                                   </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># yaImpute and related                           </span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># library(yaImpute)                     # RF imputation     </span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># library(vegan)                        # Something to do the yaImpute </span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># library(randomForest)                 # RF package that yaImpute uses                                   </span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>                                                     </span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># plots and tables                          </span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># library(esquisse)                     # Quick data visualization   </span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># library(knitr)                        # Better html tables</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># library(DT)                           # Data tables for Java script tables in HTML</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>                                                      </span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co"># library(kableExtra)                   # Better html tables, change sizes        </span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co"># library(feather)                      # Faster data retrieval    </span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Geography</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co"># library(sf)                           # Simple Features/vector data</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co"># library(terra)                        # Raster functions</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co"># library(spatstat)                     # Spatial stats</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="co"># No sci-notation. </span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">999</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p><em>Functions</em></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>clean_mem <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">ls</span>(<span class="at">envir =</span> .GlobalEnv)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ls()[!(ls() %in% keep)]</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rm</span>(<span class="at">list =</span> x[<span class="sc">!</span>(x <span class="sc">%in%</span> keep)], <span class="at">envir =</span> .GlobalEnv)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gc</span>()</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>keep <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"keep"</span>, <span class="st">"clean_mem"</span>, <span class="st">"clean_na_cols"</span>, <span class="st">"db_list"</span>, <span class="st">"add_commas"</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>clean_na_cols <span class="ot">&lt;-</span> <span class="cf">function</span>(df){</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> df[, <span class="fu">colSums</span>(<span class="fu">is.na</span>(df)) <span class="sc">&lt;</span> <span class="fu">nrow</span>(df)]</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>db_list <span class="ot">&lt;-</span> <span class="cf">function</span>(df, CN_col){</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  name <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  name <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span> <span class="fu">select</span>({{CN_col}})</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  name <span class="ot">&lt;-</span> name <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">CN_col =</span> <span class="fu">str_c</span>(<span class="st">"'"</span>, {{CN_col}}, <span class="st">"'"</span>)) </span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  name <span class="ot">&lt;-</span> <span class="fu">str_flatten_comma</span>(name<span class="sc">$</span>CN_col)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># name &lt;- str_flatten_comma(name[, CN_col])</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  name</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>add_commas <span class="ot">&lt;-</span> <span class="cf">function</span>(n) {</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> <span class="fu">prettyNum</span>(n, <span class="st">","</span>,<span class="at">scientific=</span><span class="cn">FALSE</span>)</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">noquote</span>(t))</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="intro" class="level1">
+<h1>Intro</h1>
+<p><strong>This is the second document in a data pipeline from raw input data to Random Forests imputation. This page will deal with running FVS to get the RF predictor variables from FVS, then further filtering the data by Stem Exclusion and inventory cycle.</strong></p>
+<p>The standlist that I will read in has been filtered for the following: <em>See 1_Import_Clean for specifics.</em></p>
+<p>There were 7,168 plots within the 60k buffer. <em>7,168 plots</em></p>
+<ul>
+<li>Current plot design <em>6,800 plots</em></li>
+<li>Eco-regions (level 4) in WA that exist inside the OkWen 60km Buffer, not the FOA 60 km buffer. <em>13,380 plots</em></li>
+<li>Single condition plots. <em>9,965 plots</em></li>
+<li>Forest or Savanna/not water or Un-sampled. <em>9,016 plots</em>
+<ul>
+<li>I wasn’t sure here, Non-Forest in this code means less than 10% cover. <strong>These were included.</strong></li>
+<li><em>4,400 plots</em> were only Accessible Forest</li>
+</ul></li>
+<li>Artificial regen <em>8,451 plots</em></li>
+<li>Conditions such as Pasture, Range, Beaches and Windbreaks <em>3,835 plots</em></li>
+<li>Fire damage <em>3,552 plots</em>
+<ul>
+<li>3,531 of these have trees.</li>
+</ul></li>
+<li>Habtypcd exists <em>3,448 plots</em></li>
+</ul>
+<p>There are 104 CNs that do not have a habitat type code. I dropped them. I could go into the veg tables and determine an alternative code, but that might be laborious.</p>
+<p>On those 3,448 plots, there were <em>13,792 subplots</em>, 4 for each plot.</p>
+<ul>
+<li>microcond == subpcond <em>13,792 subplots</em></li>
+<li>FPAG/Habtypcd1 indicates Artificial, Non-Veg, or Water <em>13,784 subplots, 3,446 plots </em></li>
+</ul>
+<p>There was one plot that was coded PIAL. I changed that by looking at the P2Veg and tree tables, then selecting the most appropriate code.</p>
+<ul>
+<li>Inside those subplots, there were 350 unique habitat type codes that had 722 descriptions in the various publications.
+<ul>
+<li>399 of the 722 had the same descriptions in different publications.</li>
+</ul></li>
+<li>There were 42 habitat type codes that were not in the reference data.
+<ul>
+<li>308 codes were unique and in the reference data.</li>
+</ul></li>
+<li>Of those that had repeat descriptions, they mostly had the same major trees, but there was variation in the grass/forb/shrubs.</li>
+<li>There were 138 FPAGs</li>
+<li>There were 68 FPAs</li>
+<li>The same 6 EcoRegions are present.</li>
+</ul>
+</section>
+<section id="import" class="level1">
+<h1>Import</h1>
+<p>The saved list of filtered plots is at “C:/RxFire/Regen/Regeneration_2_16Sept24/1_Import_Clean.csv”.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>standlist <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./1.5_dbCreation_standlist.csv"</span>, </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">col_types =</span> <span class="st">"ccc"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>standlist <span class="sc">|&gt;</span> <span class="fu">glimpse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 15,369
+Columns: 3
+$ STAND_CN     &lt;chr&gt; "12964130010497", "12964130010497", "12964130010497", "12…
+$ SUBP         &lt;chr&gt; "1", "2", "3", "4", "1", "2", "3", "4", "1", "2", "3", "4…
+$ STANDPLOT_CN &lt;chr&gt; "12964130010497_1", "12964130010497_2", "12964130010497_3…</code></pre>
+</div>
+</div>
+</section>
+<section id="fvs" class="level1">
+<h1>FVS</h1>
+<p>FVS runs faster if I subset the FIA database. It makes a call to the database for each stand, so a smaller database means less searching for matching CNs. I have not done that here, yet. The current iteration is running off of the full WA db.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># rm(list = ls())</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RSQLite)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse, <span class="at">quietly =</span> T, <span class="at">warn.conflicts =</span> F)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">999</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Set paths ---------------------------------------------------------------</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="do">## Set all the file paths and names in this section. Then, run the rest of the script in sections 2. </span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="do">## Set the working directory</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>fvs_wd <span class="ot">&lt;-</span> <span class="st">"C:/RxFire/Regen/FVS"</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="do">## Where are the FVS executables? FVSbin? </span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co">#  Include the /FVS prefix to variant.exe. </span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>FVSbin <span class="ot">&lt;-</span>  <span class="st">"C:/FVSbin_v5.1/FVS"</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co"># name = regen_MMDDYY_HHMM</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>name <span class="ot">&lt;-</span> <span class="fu">str_c</span>(<span class="st">"regen_"</span>, </span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>              <span class="fu">strftime</span>(<span class="fu">Sys.Date</span>(),<span class="st">"%m%d%y"</span>), </span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>              <span class="st">"_"</span>, </span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>              <span class="fu">strftime</span>(<span class="fu">Sys.time</span>(),<span class="st">"%H%M"</span>))</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="do">## Set the path to the stand input database here, aka the output db from 3_CNs_to_FVS:</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>inputDatabase <span class="ot">&lt;-</span> <span class="st">'C:/RxFire/Regen/Regeneration_2_16Sept24/homemade_fvs_db_17sept24.db'</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Homemade_v1 C:/RxFire/Regen/Regeneration_2_16Sept24/homemade_fvs_db.db</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="co"># State Original DB</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="co"># 1.2 Standlist from xlsx -------------------------------------------------</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>standlist <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"C:/RxFire/Regen/Regeneration_2_16Sept24/1.5_dbCreation_standlist.csv"</span>, </span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>                      <span class="at">col_types =</span> <span class="st">"ccc"</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>                        <span class="at">CN =</span> STANDPLOT_CN</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>                      ) </span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="co"># standlist &lt;- standlist[1:100, ]</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="do">## I don't think I need to have the actual Variant. This is just to read the initial conditions. </span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>standlist<span class="sc">$</span>FVSVariant <span class="ot">&lt;-</span> <span class="st">"EC"</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Batch file Creation -----------------------------------------------------</span></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="do">## Run everything in section 2. There shouldn't be anything to change.</span></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a><span class="co">#  Except, maybe createInputFile(group_stands$CN[s], if CN was read in as Stand_CN. </span></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>int <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>create_dir <span class="ot">&lt;-</span> <span class="cf">function</span>(dir) {</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(dir)) {</span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>      <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Making Run directory: "</span>, dir))</span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>      <span class="fu">dir.create</span>(dir)</span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">else</span>(</span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>        <span class="fu">print</span>(<span class="fu">str_c</span>(dir, <span class="st">", already exists"</span>))</span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a><span class="co"># Create directory where FVS runs will be sent:</span></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>RunDirectory <span class="ot">&lt;-</span> <span class="fu">str_c</span>(fvs_wd, <span class="st">'/'</span>, name)</span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a><span class="fu">create_dir</span>(RunDirectory)</span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a><span class="co"># Create input Directory</span></span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>inputDirectory <span class="ot">&lt;-</span> <span class="fu">str_c</span>(RunDirectory, <span class="st">"/In"</span>)</span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a><span class="fu">create_dir</span>(inputDirectory)</span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a><span class="co"># Create Cmd Directory</span></span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>CmdDirectory <span class="ot">&lt;-</span> <span class="fu">str_c</span>(RunDirectory, <span class="st">"/Cmd"</span>)</span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a><span class="fu">create_dir</span>(CmdDirectory)</span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a><span class="do">## The path to the FVS output database is set here:</span></span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a>outputDatabase <span class="ot">&lt;-</span> <span class="fu">str_c</span>(RunDirectory, <span class="st">"/"</span>, name, <span class="st">".db"</span>)</span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a><span class="do">## This function creates the string for a single stand in FVS.</span></span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a>createInputFile <span class="ot">&lt;-</span> <span class="cf">function</span>(stand, managementID, inputDatabase, outputDatabase){</span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create .key file</span></span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a>  input <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">'STDIDENT</span><span class="sc">\n</span><span class="st">'</span>,                     </span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a>                  stand, <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>,                     </span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'STANDCN</span><span class="sc">\n</span><span class="st">'</span>,                     </span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a>                  stand, <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>,                     </span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'MGMTID</span><span class="sc">\n</span><span class="st">'</span>,                     </span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a>                  managementID,                     </span>
+<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>,                             </span>
+<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'NUMCYCLE          1</span><span class="sc">\n</span><span class="st">'</span>, <span class="co"># Set time intervals. </span></span>
+<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a>                  <span class="co"># 0 = Change all cycles | Cycle length to one year</span></span>
+<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'TIMEINT           0         1</span><span class="sc">\n</span><span class="st">'</span>,</span>
+<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'SCREEN</span><span class="sc">\n</span><span class="st">'</span>,               </span>
+<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a>                  <span class="do">## Database in    </span></span>
+<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'DATABASE</span><span class="sc">\n</span><span class="st">'</span>,</span>
+<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'DSNIN</span><span class="sc">\n</span><span class="st">'</span>,                                                </span>
+<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a>                  inputDatabase, <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>,  </span>
+<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a>                  <span class="do">## Stand</span></span>
+<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'StandSQL</span><span class="sc">\n</span><span class="st">'</span>,                                             </span>
+<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'SELECT * FROM FVS_PLOTINIT_PLOT</span><span class="sc">\n</span><span class="st">'</span>,</span>
+<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a>                  <span class="co"># 'SELECT * FROM FVS_PlotInit\n',  # For a different table name                   </span></span>
+<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"WHERE  STANDPLOT_CN  = '%STAND_CN%'</span><span class="sc">\n</span><span class="st">"</span>,                     </span>
+<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'EndSQL</span><span class="sc">\n</span><span class="st">'</span>,                                                    </span>
+<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'DSNIN</span><span class="sc">\n</span><span class="st">'</span>,                                          </span>
+<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a>                  inputDatabase, <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>,                                             </span>
+<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a>                  <span class="do">## Tree</span></span>
+<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'TreeSQL</span><span class="sc">\n</span><span class="st">'</span>,</span>
+<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'SELECT * FROM FVS_TREEINIT_PLOT</span><span class="sc">\n</span><span class="st">'</span>,</span>
+<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a>                  <span class="co"># 'SELECT * FROM FVS_TreeInit\n',                              </span></span>
+<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"WHERE  STANDPLOT_CN  = '%STAND_CN%'</span><span class="sc">\n</span><span class="st">"</span>,                            </span>
+<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'EndSQL</span><span class="sc">\n</span><span class="st">'</span>,                                                          </span>
+<span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'END</span><span class="sc">\n</span><span class="st">'</span>,   </span>
+<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a>                  <span class="do">##</span></span>
+<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'STRCLASS</span><span class="sc">\n</span><span class="st">'</span>,</span>
+<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a>                  <span class="co"># year of compute 0 = Every cycle</span></span>
+<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'COMPUTE           0</span><span class="sc">\n</span><span class="st">'</span>,                                                                        <span class="co"># Compute below here</span></span>
+<span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a>                  <span class="co"># # acancov defined when str_class is used, after thin Canopy</span></span>
+<span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'CC = bcancov</span><span class="sc">\n</span><span class="st">'</span>,</span>
+<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'END</span><span class="sc">\n</span><span class="st">'</span>,                                                                                            <span class="co"># Compute ends</span></span>
+<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'DATABASE</span><span class="sc">\n</span><span class="st">'</span>,                                                                                     <span class="co"># DB Out Starts</span></span>
+<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'DSNOUT</span><span class="sc">\n</span><span class="st">'</span>,                                      </span>
+<span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a>                  outputDatabase, <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>,</span>
+<span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'SUMMARY           2</span><span class="sc">\n</span><span class="st">'</span>,</span>
+<span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'StrClsDB</span><span class="sc">\n</span><span class="st">'</span>,</span>
+<span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'COMPUTDB</span><span class="sc">\n</span><span class="st">'</span>,</span>
+<span id="cb5-125"><a href="#cb5-125" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'END</span><span class="sc">\n</span><span class="st">'</span>,</span>
+<span id="cb5-126"><a href="#cb5-126" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'Process</span><span class="sc">\n\n</span><span class="st">'</span>)                                    </span>
+<span id="cb5-127"><a href="#cb5-127" aria-hidden="true" tabindex="-1"></a>                   </span>
+<span id="cb5-128"><a href="#cb5-128" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-129"><a href="#cb5-129" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-130"><a href="#cb5-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-131"><a href="#cb5-131" aria-hidden="true" tabindex="-1"></a><span class="fu">write</span>(<span class="fu">str_c</span>(<span class="st">"set RScript="</span>, <span class="st">" </span><span class="sc">\"</span><span class="st">"</span>, <span class="st">"C:/Program Files/R/R-4.4.1/bin/Rscript.exe"</span>, <span class="st">"</span><span class="sc">\"</span><span class="st">"</span>,</span>
+<span id="cb5-132"><a href="#cb5-132" aria-hidden="true" tabindex="-1"></a>            <span class="st">"</span><span class="sc">\n</span><span class="st"> </span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb5-133"><a href="#cb5-133" aria-hidden="true" tabindex="-1"></a>            <span class="st">"cd "</span>, inputDirectory, <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span>), <span class="fu">paste0</span>(RunDirectory, <span class="st">'</span><span class="sc">\\</span><span class="st">test.bat'</span>), <span class="at">append =</span> <span class="st">"TRUE"</span>)</span>
+<span id="cb5-134"><a href="#cb5-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-135"><a href="#cb5-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-136"><a href="#cb5-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-137"><a href="#cb5-137" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (g <span class="cf">in</span> <span class="fu">unique</span>(standlist<span class="sc">$</span>FVSVariant)) {</span>
+<span id="cb5-138"><a href="#cb5-138" aria-hidden="true" tabindex="-1"></a>  masterkeys <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb5-139"><a href="#cb5-139" aria-hidden="true" tabindex="-1"></a>  group_stands <span class="ot">&lt;-</span> <span class="fu">subset</span>(standlist, FVSVariant <span class="sc">==</span> g)</span>
+<span id="cb5-140"><a href="#cb5-140" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (s <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(group_stands)) {</span>
+<span id="cb5-141"><a href="#cb5-141" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-142"><a href="#cb5-142" aria-hidden="true" tabindex="-1"></a>    keywords <span class="ot">&lt;-</span> <span class="fu">createInputFile</span>(<span class="at">stand =</span> group_stands<span class="sc">$</span>CN[s], <span class="at">managementID =</span> group_stands<span class="sc">$</span>CN[s], </span>
+<span id="cb5-143"><a href="#cb5-143" aria-hidden="true" tabindex="-1"></a>                                <span class="at">inputDatabase =</span> inputDatabase,</span>
+<span id="cb5-144"><a href="#cb5-144" aria-hidden="true" tabindex="-1"></a>                                <span class="at">outputDatabase =</span> outputDatabase</span>
+<span id="cb5-145"><a href="#cb5-145" aria-hidden="true" tabindex="-1"></a>                                )</span>
+<span id="cb5-146"><a href="#cb5-146" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-147"><a href="#cb5-147" aria-hidden="true" tabindex="-1"></a>    masterkeys <span class="ot">&lt;-</span> <span class="fu">paste0</span>(masterkeys, keywords)</span>
+<span id="cb5-148"><a href="#cb5-148" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-149"><a href="#cb5-149" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Print to the key file</span></span>
+<span id="cb5-150"><a href="#cb5-150" aria-hidden="true" tabindex="-1"></a>  masterkeys <span class="ot">&lt;-</span> <span class="fu">paste0</span>(masterkeys, <span class="st">"</span><span class="sc">\n</span><span class="st">STOP</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb5-151"><a href="#cb5-151" aria-hidden="true" tabindex="-1"></a>  <span class="co"># "\n STOP?\n" or "\nSTOP\n", outfile has errors 1 &amp; 2, invalid keyword &amp; no Stop</span></span>
+<span id="cb5-152"><a href="#cb5-152" aria-hidden="true" tabindex="-1"></a>  file_name <span class="ot">&lt;-</span> <span class="fu">str_sub</span>(g, <span class="at">end =</span> <span class="sc">-</span><span class="dv">5</span>)</span>
+<span id="cb5-153"><a href="#cb5-153" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write</span>(masterkeys, <span class="at">file =</span> <span class="fu">str_c</span>(inputDirectory, <span class="st">'</span><span class="sc">\\</span><span class="st">'</span>, g, <span class="st">'.key'</span>))</span>
+<span id="cb5-154"><a href="#cb5-154" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-155"><a href="#cb5-155" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Create the .in file ##</span></span>
+<span id="cb5-156"><a href="#cb5-156" aria-hidden="true" tabindex="-1"></a>  fvs_in <span class="ot">&lt;-</span> <span class="fu">paste0</span>(g, <span class="st">".key</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb5-157"><a href="#cb5-157" aria-hidden="true" tabindex="-1"></a>                   g, <span class="st">".fvs</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb5-158"><a href="#cb5-158" aria-hidden="true" tabindex="-1"></a>                   g, <span class="st">".out</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb5-159"><a href="#cb5-159" aria-hidden="true" tabindex="-1"></a>                   g, <span class="st">".trl</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb5-160"><a href="#cb5-160" aria-hidden="true" tabindex="-1"></a>                   g, <span class="st">".sum</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb5-161"><a href="#cb5-161" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-162"><a href="#cb5-162" aria-hidden="true" tabindex="-1"></a>  fvs_in_file <span class="ot">&lt;-</span> <span class="fu">paste0</span>(inputDirectory, <span class="st">'</span><span class="sc">\\</span><span class="st">'</span>, g, <span class="st">'.in'</span>)</span>
+<span id="cb5-163"><a href="#cb5-163" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write</span>(fvs_in, <span class="at">file =</span> fvs_in_file)</span>
+<span id="cb5-164"><a href="#cb5-164" aria-hidden="true" tabindex="-1"></a>  fvs_bat <span class="ot">&lt;-</span> <span class="fu">paste0</span>(FVSbin, <span class="fu">unique</span>(group_stands<span class="sc">$</span>FVSVariant), <span class="st">".exe &lt; "</span>, g, <span class="st">".in &gt;"</span>,</span>
+<span id="cb5-165"><a href="#cb5-165" aria-hidden="true" tabindex="-1"></a>                    RunDirectory, <span class="st">"/Cmd/"</span>, g, <span class="st">".txt"</span>, <span class="st">" 2&gt;&amp;1"</span>, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb5-166"><a href="#cb5-166" aria-hidden="true" tabindex="-1"></a>                    <span class="co"># Send each CMD file to this script</span></span>
+<span id="cb5-167"><a href="#cb5-167" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"%RScript%"</span>,<span class="st">" C:/RxFire/Scripts/ErrorProcessing/RcmdProcess.R "</span>,</span>
+<span id="cb5-168"><a href="#cb5-168" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"</span><span class="sc">\"</span><span class="st">"</span>, RunDirectory, <span class="st">"/Cmd/"</span>, g, <span class="st">".txt"</span>, <span class="st">"</span><span class="sc">\"</span><span class="st">"</span>, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb5-169"><a href="#cb5-169" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-170"><a href="#cb5-170" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write</span>(fvs_bat, <span class="fu">paste0</span>(RunDirectory, <span class="st">'</span><span class="sc">\\</span><span class="st">test.bat'</span>), <span class="at">append =</span> <span class="st">"TRUE"</span>)</span>
+<span id="cb5-171"><a href="#cb5-171" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-172"><a href="#cb5-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-173"><a href="#cb5-173" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize the OUT files</span></span>
+<span id="cb5-174"><a href="#cb5-174" aria-hidden="true" tabindex="-1"></a>fvs_errors <span class="ot">&lt;-</span> <span class="fu">str_c</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">REM This one cleans in extra files out and summarizes the output the Run Directory </span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb5-175"><a href="#cb5-175" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"%RScript%"</span>,<span class="st">" C:/RxFire/Scripts/ErrorProcessing/RfvsProcess.R "</span>,</span>
+<span id="cb5-176"><a href="#cb5-176" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"</span><span class="sc">\"</span><span class="st">"</span>, RunDirectory, <span class="st">"/In"</span>, <span class="st">"</span><span class="sc">\"</span><span class="st">"</span>)</span>
+<span id="cb5-177"><a href="#cb5-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-178"><a href="#cb5-178" aria-hidden="true" tabindex="-1"></a><span class="fu">write</span>(fvs_errors, <span class="fu">paste0</span>(RunDirectory, <span class="st">'</span><span class="sc">\\</span><span class="st">test.bat'</span>), <span class="at">append =</span> <span class="st">"TRUE"</span>)</span>
+<span id="cb5-179"><a href="#cb5-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-180"><a href="#cb5-180" aria-hidden="true" tabindex="-1"></a><span class="co"># write("PAUSE", paste0(inputDirectory, '\\test.bat'), append = "TRUE")</span></span>
+<span id="cb5-181"><a href="#cb5-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-182"><a href="#cb5-182" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), outputDatabase)</span>
+<span id="cb5-183"><a href="#cb5-183" aria-hidden="true" tabindex="-1"></a><span class="fu">dbWriteTable</span>(<span class="at">conn =</span> con, <span class="at">name =</span> <span class="st">"standlist"</span>, <span class="at">value =</span> standlist, <span class="at">overwrite =</span> T)</span>
+<span id="cb5-184"><a href="#cb5-184" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span>
+<span id="cb5-185"><a href="#cb5-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-186"><a href="#cb5-186" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
+<span id="cb5-187"><a href="#cb5-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-188"><a href="#cb5-188" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(out <span class="sc">-</span> int)</span>
+<span id="cb5-189"><a href="#cb5-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-190"><a href="#cb5-190" aria-hidden="true" tabindex="-1"></a><span class="co"># Run this Batch file</span></span>
+<span id="cb5-191"><a href="#cb5-191" aria-hidden="true" tabindex="-1"></a><span class="fu">shell.exec</span>(<span class="fu">str_c</span>(RunDirectory, <span class="st">'</span><span class="sc">\\</span><span class="st">test.bat'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>I am copying some stuff from the above code here. That way I don’t need to run fvs each time.</p>
+<hr>
+<p>I accidentally overwrote the last db and the copy while altering the imputation data. I also had not yet added the changes from Missoula, so I am going through it now and fixing all of it. <em>9/17/24</em></p>
+<hr>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># outputDatabase &lt;- "C:/RxFire/Regen/FVS/regen_080724_1644/regen_080724_1644.db"</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>outputDatabase <span class="ot">&lt;-</span> <span class="st">"C:/RxFire/Regen/FVS/regen_091724_2118/regen_091724_2118.db"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><em>32 minutes to run.</em></p>
+<p><em>11 min to run on second time through. I ran it at night this time.</em></p>
+</section>
+<section id="extract-variables" class="level1">
+<h1>Extract variables</h1>
+<p>In this case, the output table compute has the before anything CC and Year. The other tables have an start and end year. So, using the compute table makes it easy to select the correct Year without setting INV_Year in the database.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), outputDatabase)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>key <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con, <span class="st">"select CaseID, StandID, Variant from FVS_Cases"</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>cc <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con, <span class="st">"select CaseID, Year, CC from FVS_Compute"</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>ba_sdi <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con, <span class="st">"select CaseID, Year, BA, SDI from FVS_Summary2"</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>stem <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con, <span class="st">"select CaseID, Year, Structure_Class from FVS_StrClass where Removal_Code == 0 "</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>xVars <span class="ot">&lt;-</span> <span class="fu">left_join</span>(key, cc, <span class="fu">join_by</span>(CaseID))</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>xVars <span class="ot">&lt;-</span> <span class="fu">left_join</span>(xVars, ba_sdi, <span class="fu">join_by</span>(CaseID, Year))</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>xVars <span class="ot">&lt;-</span> <span class="fu">left_join</span>(xVars, stem, <span class="fu">join_by</span>(CaseID, Year))</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>xVars <span class="sc">|&gt;</span> <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 15369</code></pre>
+</div>
+</div>
+<p>The above number should match the number of subplots from the standlist, <del>13,784.</del></p>
+<p>13,366 after translating FIA to FVS. This method removed empty plots.</p>
+<p>15,369 after incorporating Missoula’s changes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>keep <span class="ot">&lt;-</span> <span class="fu">append</span>(keep, <span class="fu">c</span>(<span class="st">"xVars"</span>, <span class="st">"standlist"</span>))</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">clean_mem</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          used (Mb) gc trigger  (Mb) max used  (Mb)
+Ncells 1238286 66.2    2422434 129.4  2422434 129.4
+Vcells 2453561 18.8    8388608  64.0  4338468  33.1</code></pre>
+</div>
+</div>
+</section>
+<section id="filter" class="level1">
+<h1>Filter</h1>
+<ul>
+<li>Filter out Stem Exclusion from stucture class.</li>
+<li>Add tags for single visit of earlier visit.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>standlist <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./1.5_dbCreation_standlist.csv"</span>, </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">col_types =</span> <span class="st">"ccc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><del>Starting subplot count: <strong>13,784</strong></del></p>
+<p><del>Starting subplot count: <strong>13,366</strong></del></p>
+<p>Starting subplot count: <strong>15,369</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>stem <span class="ot">&lt;-</span> xVars <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>CaseID)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>stem <span class="ot">&lt;-</span> stem <span class="sc">|&gt;</span> <span class="fu">mutate</span>(</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">s_class =</span> <span class="fu">str_sub</span>(Structure_Class, <span class="sc">-</span><span class="dv">2</span>,<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>) </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>stem <span class="ot">&lt;-</span> stem <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Year))</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(stem)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 15369</code></pre>
+</div>
+</div>
+<ul>
+<li><del><strong>13,016</strong></del></li>
+<li><del><strong>13,366</strong></del></li>
+<li><strong>15,369</strong></li>
+</ul>
+<p>In the first FVS run I used the FVS_Ready data. I wanted to make some progress. In the output database, there are 768 NAs. These were the rows that were not present in the FVS Ready data. This will be fixed when I create the new database to pull from.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># These subplots have no living trees</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>noTrees <span class="ot">&lt;-</span> stem <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="fu">is.na</span>(s_class)) <span class="sc">|&gt;</span> <span class="fu">select</span>(StandID, BA)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(noTrees<span class="sc">$</span>BA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>keep <span class="ot">&lt;-</span> <span class="fu">append</span>(keep, <span class="st">"noTrees"</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># The NAs were from joining the StrClass table to the full standlist</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>stem <span class="ot">&lt;-</span> stem <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(s_class)) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>Structure_Class)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(stem)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 15,320
+Columns: 7
+$ StandID &lt;chr&gt; "12964130010497_1", "12964130010497_2", "12964130010497_3", "1…
+$ Variant &lt;chr&gt; "EC", "EC", "EC", "EC", "EC", "EC", "EC", "EC", "EC", "EC", "E…
+$ Year    &lt;int&gt; 2014, 2014, 2014, 2014, 2014, 2014, 2014, 2014, 2014, 2014, 20…
+$ CC      &lt;dbl&gt; 29, 17, 28, 64, 13, 1, 4, 10, 22, 26, 22, 23, 17, 9, 27, 26, 1…
+$ BA      &lt;dbl&gt; 69.457077, 40.775799, 57.351727, 121.564705, 35.052090, 4.0023…
+$ SDI     &lt;int&gt; 118, 66, 124, 297, 49, 5, 10, 31, 69, 80, 77, 76, 74, 50, 150,…
+$ s_class &lt;chr&gt; "SE", "SE", "SE", "SE", "SI", "BG", "BG", "SI", "SI", "SE", "S…</code></pre>
+</div>
+</div>
+<ul>
+<li><del><strong>12,403</strong></del></li>
+<li><del><strong>13,320</strong></del></li>
+<li><strong>15,320</strong></li>
+</ul>
+<p><del>613 rows did not get read by the structure class table. These appear to be subplots that do not have trees or only have dead trees.</del></p>
+<p><del>I am setting these aside for now. Maybe I will leave them in later, I am not sure.</del></p>
+<p>There were many more subplots lost with the FVS Ready. This has something to do with the History codes.</p>
+<section id="stem-exclusion" class="level2">
+<h2 class="anchored" data-anchor-id="stem-exclusion">Stem Exclusion</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>regPlots <span class="ot">&lt;-</span> stem <span class="sc">|&gt;</span> <span class="fu">filter</span>(s_class <span class="sc">!=</span> <span class="st">"SE"</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(regPlots<span class="sc">$</span>s_class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "SI" "BG" "UR" "OS" "YM" "OM"</code></pre>
+</div>
+</div>
+<p><del><strong>8,545 Subplots</strong></del></p>
+<p><strong>9,253</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">add_commas</span>((<span class="fu">nrow</span>(stem) <span class="sc">-</span> <span class="fu">nrow</span>(regPlots)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4,683</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(regPlots) <span class="sc">%&gt;%</span> <span class="fu">add_commas</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10,637</code></pre>
+</div>
+</div>
+<ul>
+<li><del>3,858 plots were classed as Stem Exclusion.</del></li>
+<li><del>4,067</del> plots were classed as Stem Exclusion.</li>
+<li>4,683 lost, 10,637 kept</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>regPlots <span class="sc">|&gt;</span> <span class="fu">filter</span>(s_class <span class="sc">==</span> <span class="st">"BG"</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(CC, BA, SDI) <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       CC               BA                SDI       
+ Min.   : 0.000   Min.   : 0.00409   Min.   : 0.00  
+ 1st Qu.: 2.000   1st Qu.: 2.55472   1st Qu.: 5.00  
+ Median : 3.000   Median : 5.96045   Median :11.00  
+ Mean   : 3.509   Mean   : 7.37372   Mean   :13.04  
+ 3rd Qu.: 5.000   3rd Qu.:10.65093   3rd Qu.:19.00  
+ Max.   :12.000   Max.   :41.03201   Max.   :66.00  </code></pre>
+</div>
+</div>
+<p>Here is the FVS Essentials (p.81) quip about stem exclusion:</p>
+<p><em>Initially defined strata must have over 5 percent canopy cover or they are rejected. Nominal stratum diameter and height are computed by averaging the nine sample trees centered on the 70th percentile tree. Once the strata are defined, the stand is classified as bare ground (BG), stand initiation (SI), stem exclusion (SE), understory reinitiation (UR), young forest multistrata (YM), old forest single stratum (OS), or old forest multistrata (OM) as a function of the number of strata, the nominal diameter of trees in the strata, and stocking.</em></p>
+</section>
+</section>
+<section id="inventory-cycle" class="level1">
+<h1>Inventory Cycle</h1>
+<p><em>Get PLT_CN and pull the PLOT ids</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>cns <span class="ot">&lt;-</span> regPlots <span class="sc">|&gt;</span> <span class="fu">select</span>(StandID) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">PLT_CN =</span> <span class="fu">str_sub</span>(StandID, <span class="dv">1</span>, <span class="sc">-</span><span class="dv">3</span>), </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">SUBP =</span> <span class="fu">str_sub</span>(StandID, <span class="sc">-</span><span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>plt_cn <span class="ot">&lt;-</span> <span class="fu">db_list</span>(cns, PLT_CN)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), <span class="st">"c:/RxFire/Data/_FIADB_WA.db"</span>)</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>plots <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con, <span class="fu">str_c</span>(<span class="st">"select * from PLOT where CN in ("</span>, plt_cn, <span class="st">")"</span>))</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>plots <span class="ot">&lt;-</span> plots <span class="sc">|&gt;</span> <span class="fu">rename</span>(<span class="at">PLT_CN =</span> CN)</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>t_plots <span class="ot">&lt;-</span> <span class="fu">left_join</span>(cns, plots, <span class="fu">join_by</span>(PLT_CN))</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>t_plots <span class="ot">&lt;-</span> t_plots <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">PLOTid =</span> <span class="fu">str_c</span>(PLOT, <span class="st">"_"</span>, SUBP)) <span class="sc">|&gt;</span> <span class="fu">relocate</span>(StandID, PLOTid)</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>t_plots <span class="sc">|&gt;</span> <span class="fu">nrow</span>() <span class="sc">%&gt;%</span> <span class="fu">add_commas</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10,637</code></pre>
+</div>
+</div>
+<p><em>Making sure that PLOTid works</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>t_plots <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 2%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 1%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 2%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 2%">
+<col style="width: 1%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 3%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 0%">
+<col style="width: 0%">
+<col style="width: 0%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">StandID</th>
+<th style="text-align: left;">PLOTid</th>
+<th style="text-align: left;">PLT_CN</th>
+<th style="text-align: left;">SUBP</th>
+<th style="text-align: left;">SRV_CN</th>
+<th style="text-align: left;">CTY_CN</th>
+<th style="text-align: left;">PREV_PLT_CN</th>
+<th style="text-align: right;">INVYR</th>
+<th style="text-align: right;">STATECD</th>
+<th style="text-align: right;">UNITCD</th>
+<th style="text-align: right;">COUNTYCD</th>
+<th style="text-align: right;">PLOT</th>
+<th style="text-align: right;">PLOT_STATUS_CD</th>
+<th style="text-align: right;">PLOT_NONSAMPLE_REASN_CD</th>
+<th style="text-align: right;">MEASYEAR</th>
+<th style="text-align: right;">MEASMON</th>
+<th style="text-align: right;">MEASDAY</th>
+<th style="text-align: right;">REMPER</th>
+<th style="text-align: right;">KINDCD</th>
+<th style="text-align: right;">DESIGNCD</th>
+<th style="text-align: right;">RDDISTCD</th>
+<th style="text-align: right;">WATERCD</th>
+<th style="text-align: right;">LAT</th>
+<th style="text-align: right;">LON</th>
+<th style="text-align: right;">ELEV</th>
+<th style="text-align: right;">GROW_TYP_CD</th>
+<th style="text-align: right;">MORT_TYP_CD</th>
+<th style="text-align: right;">P2PANEL</th>
+<th style="text-align: right;">P3PANEL</th>
+<th style="text-align: left;">ECOSUBCD</th>
+<th style="text-align: right;">CONGCD</th>
+<th style="text-align: right;">MANUAL</th>
+<th style="text-align: right;">KINDCD_NC</th>
+<th style="text-align: right;">QA_STATUS</th>
+<th style="text-align: left;">CREATED_BY</th>
+<th style="text-align: left;">CREATED_DATE</th>
+<th style="text-align: left;">CREATED_IN_INSTANCE</th>
+<th style="text-align: left;">MODIFIED_BY</th>
+<th style="text-align: left;">MODIFIED_DATE</th>
+<th style="text-align: left;">MODIFIED_IN_INSTANCE</th>
+<th style="text-align: left;">MICROPLOT_LOC</th>
+<th style="text-align: right;">DECLINATION</th>
+<th style="text-align: right;">EMAP_HEX</th>
+<th style="text-align: right;">SAMP_METHOD_CD</th>
+<th style="text-align: right;">SUBP_EXAMINE_CD</th>
+<th style="text-align: right;">MACRO_BREAKPOINT_DIA</th>
+<th style="text-align: left;">INTENSITY</th>
+<th style="text-align: right;">CYCLE</th>
+<th style="text-align: right;">SUBCYCLE</th>
+<th style="text-align: left;">ECO_UNIT_PNW</th>
+<th style="text-align: left;">TOPO_POSITION_PNW</th>
+<th style="text-align: right;">NF_SAMPLING_STATUS_CD</th>
+<th style="text-align: right;">NF_PLOT_STATUS_CD</th>
+<th style="text-align: right;">NF_PLOT_NONSAMPLE_REASN_CD</th>
+<th style="text-align: right;">P2VEG_SAMPLING_STATUS_CD</th>
+<th style="text-align: right;">P2VEG_SAMPLING_LEVEL_DETAIL_CD</th>
+<th style="text-align: right;">INVASIVE_SAMPLING_STATUS_CD</th>
+<th style="text-align: right;">INVASIVE_SPECIMEN_RULE_CD</th>
+<th style="text-align: right;">DESIGNCD_P2A</th>
+<th style="text-align: right;">MANUAL_DB</th>
+<th style="text-align: right;">SUBPANEL</th>
+<th style="text-align: right;">COLOCATED_CD_RMRS</th>
+<th style="text-align: right;">CONDCHNGCD_RMRS</th>
+<th style="text-align: right;">FUTFORCD_RMRS</th>
+<th style="text-align: right;">MANUAL_NCRS</th>
+<th style="text-align: right;">MANUAL_NERS</th>
+<th style="text-align: right;">MANUAL_RMRS</th>
+<th style="text-align: left;">PAC_ISLAND_PNWRS</th>
+<th style="text-align: right;">PLOT_SEASON_NERS</th>
+<th style="text-align: right;">PRECIPITATION</th>
+<th style="text-align: left;">PREV_MICROPLOT_LOC_RMRS</th>
+<th style="text-align: right;">PREV_PLOT_STATUS_CD_RMRS</th>
+<th style="text-align: right;">REUSECD1</th>
+<th style="text-align: right;">REUSECD2</th>
+<th style="text-align: right;">REUSECD3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">12964449010497_1</td>
+<td style="text-align: left;">70691_1</td>
+<td style="text-align: left;">12964449010497</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">12963633010497</td>
+<td style="text-align: left;">82010497</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">2005</td>
+<td style="text-align: right;">53</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">70691</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">2005</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">501</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">47.41590</td>
+<td style="text-align: right;">-120.6538</td>
+<td style="text-align: right;">3300</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">M242Dg</td>
+<td style="text-align: right;">5308</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">NIMS_21</td>
+<td style="text-align: left;">2006-02-23 14:39:20</td>
+<td style="text-align: left;">10497</td>
+<td style="text-align: left;">TROFFE</td>
+<td style="text-align: left;">2024-01-24 13:59:12</td>
+<td style="text-align: left;">290487</td>
+<td style="text-align: left;">OFFSET</td>
+<td style="text-align: right;">17.5</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">9.1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">12964449010497_2</td>
+<td style="text-align: left;">70691_2</td>
+<td style="text-align: left;">12964449010497</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">12963633010497</td>
+<td style="text-align: left;">82010497</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">2005</td>
+<td style="text-align: right;">53</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">70691</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">2005</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">501</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">47.41590</td>
+<td style="text-align: right;">-120.6538</td>
+<td style="text-align: right;">3300</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">M242Dg</td>
+<td style="text-align: right;">5308</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">NIMS_21</td>
+<td style="text-align: left;">2006-02-23 14:39:20</td>
+<td style="text-align: left;">10497</td>
+<td style="text-align: left;">TROFFE</td>
+<td style="text-align: left;">2024-01-24 13:59:12</td>
+<td style="text-align: left;">290487</td>
+<td style="text-align: left;">OFFSET</td>
+<td style="text-align: right;">17.5</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">9.1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">12964449010497_3</td>
+<td style="text-align: left;">70691_3</td>
+<td style="text-align: left;">12964449010497</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">12963633010497</td>
+<td style="text-align: left;">82010497</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">2005</td>
+<td style="text-align: right;">53</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">70691</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">2005</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">501</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">47.41590</td>
+<td style="text-align: right;">-120.6538</td>
+<td style="text-align: right;">3300</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">M242Dg</td>
+<td style="text-align: right;">5308</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">NIMS_21</td>
+<td style="text-align: left;">2006-02-23 14:39:20</td>
+<td style="text-align: left;">10497</td>
+<td style="text-align: left;">TROFFE</td>
+<td style="text-align: left;">2024-01-24 13:59:12</td>
+<td style="text-align: left;">290487</td>
+<td style="text-align: left;">OFFSET</td>
+<td style="text-align: right;">17.5</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">9.1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">12964449010497_4</td>
+<td style="text-align: left;">70691_4</td>
+<td style="text-align: left;">12964449010497</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">12963633010497</td>
+<td style="text-align: left;">82010497</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">2005</td>
+<td style="text-align: right;">53</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">70691</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">2005</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">501</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">47.41590</td>
+<td style="text-align: right;">-120.6538</td>
+<td style="text-align: right;">3300</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">M242Dg</td>
+<td style="text-align: right;">5308</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">NIMS_21</td>
+<td style="text-align: left;">2006-02-23 14:39:20</td>
+<td style="text-align: left;">10497</td>
+<td style="text-align: left;">TROFFE</td>
+<td style="text-align: left;">2024-01-24 13:59:12</td>
+<td style="text-align: left;">290487</td>
+<td style="text-align: left;">OFFSET</td>
+<td style="text-align: right;">17.5</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">9.1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">12964657010497_1</td>
+<td style="text-align: left;">79967_1</td>
+<td style="text-align: left;">12964657010497</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">12963633010497</td>
+<td style="text-align: left;">82010497</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">2005</td>
+<td style="text-align: right;">53</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">79967</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">2005</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">501</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">47.40076</td>
+<td style="text-align: right;">-120.4951</td>
+<td style="text-align: right;">2300</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">M242Dh</td>
+<td style="text-align: right;">5308</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">NIMS_21</td>
+<td style="text-align: left;">2006-02-23 14:39:30</td>
+<td style="text-align: left;">10497</td>
+<td style="text-align: left;">TROFFE</td>
+<td style="text-align: left;">2024-01-24 13:59:12</td>
+<td style="text-align: left;">290487</td>
+<td style="text-align: left;">OFFSET</td>
+<td style="text-align: right;">17.5</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">9.1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">12965290010497_2</td>
+<td style="text-align: left;">93944_2</td>
+<td style="text-align: left;">12965290010497</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">12963633010497</td>
+<td style="text-align: left;">82010497</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">2005</td>
+<td style="text-align: right;">53</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">93944</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">2005</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">501</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">47.58130</td>
+<td style="text-align: right;">-120.3399</td>
+<td style="text-align: right;">3900</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">M242Df</td>
+<td style="text-align: right;">5308</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">NIMS_21</td>
+<td style="text-align: left;">2006-02-23 14:40:09</td>
+<td style="text-align: left;">10497</td>
+<td style="text-align: left;">TROFFE</td>
+<td style="text-align: left;">2024-01-24 13:59:12</td>
+<td style="text-align: left;">290487</td>
+<td style="text-align: left;">OFFSET</td>
+<td style="text-align: right;">17.5</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">9.1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For each PLOTid, find the years of each visit. </span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> t_plots <span class="sc">|&gt;</span> </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(StandID, PREV_PLT_CN, INVYR, PLOTid) <span class="sc">|&gt;</span> </span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PLOTid, INVYR) <span class="sc">|&gt;</span> </span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(), </span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(PLOTid, <span class="fu">desc</span>(INVYR)) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>n)</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a tag for first or second visit</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> a <span class="sc">|&gt;</span> <span class="fu">group_by</span>(PLOTid) <span class="sc">|&gt;</span> </span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">instance =</span> <span class="fu">str_c</span>(<span class="st">"visit_"</span>, <span class="fu">row_number</span>())</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Make it wider to see where there was only one visit*</span></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>plot_yr <span class="ot">&lt;-</span> a <span class="sc">|&gt;</span> <span class="fu">select</span>(PLOTid, INVYR, instance) <span class="sc">|&gt;</span> </span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> instance, <span class="at">values_from =</span> INVYR)</span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>plot_yr <span class="sc">|&gt;</span> <span class="fu">nrow</span>() <span class="sc">%&gt;%</span> <span class="fu">add_commas</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7,241</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>plot_yr <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">PLOTid</th>
+<th style="text-align: right;">visit_1</th>
+<th style="text-align: right;">visit_2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">50024_2</td>
+<td style="text-align: right;">2018</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">50024_4</td>
+<td style="text-align: right;">2018</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">50074_1</td>
+<td style="text-align: right;">2017</td>
+<td style="text-align: right;">2007</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">50074_2</td>
+<td style="text-align: right;">2017</td>
+<td style="text-align: right;">2007</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">50074_3</td>
+<td style="text-align: right;">2017</td>
+<td style="text-align: right;">2007</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">50074_4</td>
+<td style="text-align: right;">2007</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<ul>
+<li>7,241 PLOTs with 10,637 visits.</li>
+</ul>
+<p><em>Number of visits</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>v1 <span class="ot">&lt;-</span> a <span class="sc">|&gt;</span> <span class="fu">filter</span>(instance <span class="sc">==</span> <span class="st">"visit_1"</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(plot_yr<span class="sc">$</span>visit_1)) <span class="sc">%&gt;%</span> <span class="fu">add_commas</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7,241</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 6064</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>v2 <span class="ot">&lt;-</span> a <span class="sc">|&gt;</span> <span class="fu">filter</span>(instance <span class="sc">==</span> <span class="st">"visit_2"</span>)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(plot_yr<span class="sc">$</span>visit_2)) <span class="sc">%&gt;%</span> <span class="fu">add_commas</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3,396</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 2481</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><del>There were 6064 individual PLOTs for those 8,545 visits and 2,481 had earlier visits.</del></li>
+<li><del>There were 6,374 individual PLOTs for those 9,253 visits and 2,879 had earlier visits.</del></li>
+<li>7,241 PLOTs, 3,396 had earlier visits.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>plots_2vis <span class="ot">&lt;-</span> plot_yr <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(visit_2)) <span class="sc">|&gt;</span> <span class="fu">select</span>(PLOTid)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>plots_1vis <span class="ot">&lt;-</span> plot_yr <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="fu">is.na</span>(visit_2)) <span class="sc">|&gt;</span> <span class="fu">select</span>(PLOTid)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>plots_2vis <span class="ot">&lt;-</span> <span class="fu">left_join</span>(plots_2vis, t_plots, <span class="fu">join_by</span>(PLOTid))</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>plots_1vis <span class="ot">&lt;-</span> <span class="fu">left_join</span>(plots_1vis, t_plots, <span class="fu">join_by</span>(PLOTid))</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>plots_2vis <span class="ot">&lt;-</span> plots_2vis <span class="sc">|&gt;</span> </span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PLOTid, StandID, INVYR) <span class="sc">|&gt;</span> </span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(), </span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(PLOTid, <span class="fu">desc</span>(INVYR)) <span class="sc">|&gt;</span> </span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PLOTid) <span class="sc">|&gt;</span> </span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">instance =</span> <span class="fu">str_c</span>(<span class="st">"visit_"</span>, <span class="fu">row_number</span>())) <span class="sc">|&gt;</span> </span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(splots_2vis, "C:/RxFire/Regen/Regen_Notes/Subplots_w2visits.csv")</span></span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>plots_2vis <span class="ot">&lt;-</span> plots_2vis <span class="sc">|&gt;</span> </span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(instance <span class="sc">==</span> <span class="st">"visit_2"</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(StandID, INVYR, instance)</span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>plots_1vis <span class="ot">&lt;-</span> plots_1vis <span class="sc">|&gt;</span> </span>
+<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PLOTid, StandID, INVYR) <span class="sc">|&gt;</span> </span>
+<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(), </span>
+<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(PLOTid, <span class="fu">desc</span>(INVYR)) <span class="sc">|&gt;</span> </span>
+<span id="cb37-28"><a href="#cb37-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PLOTid) <span class="sc">|&gt;</span> </span>
+<span id="cb37-29"><a href="#cb37-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">instance =</span> <span class="fu">str_c</span>(<span class="st">"visit_"</span>, <span class="fu">row_number</span>())) <span class="sc">|&gt;</span> </span>
+<span id="cb37-30"><a href="#cb37-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb37-31"><a href="#cb37-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-32"><a href="#cb37-32" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(splots_1vis, "C:/RxFire/Regen/Regen_Notes/Subplots_w1visit.csv")</span></span>
+<span id="cb37-33"><a href="#cb37-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-34"><a href="#cb37-34" aria-hidden="true" tabindex="-1"></a>plots_1vis <span class="ot">&lt;-</span> plots_1vis <span class="sc">|&gt;</span> </span>
+<span id="cb37-35"><a href="#cb37-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(instance <span class="sc">==</span> <span class="st">"visit_1"</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(StandID, INVYR, instance)</span>
+<span id="cb37-36"><a href="#cb37-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-37"><a href="#cb37-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-38"><a href="#cb37-38" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(plots_2vis)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   StandID              INVYR        instance        
+ Length:3396        Min.   :2002   Length:3396       
+ Class :character   1st Qu.:2004   Class :character  
+ Mode  :character   Median :2006   Mode  :character  
+                    Mean   :2006                     
+                    3rd Qu.:2008                     
+                    Max.   :2010                     </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(plots_1vis) <span class="sc">%&gt;%</span> <span class="fu">add_commas</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3,845</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(plots_2vis) <span class="sc">%&gt;%</span> <span class="fu">add_commas</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3,396</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>(<span class="fu">nrow</span>(plots_1vis) <span class="sc">+</span> <span class="fu">nrow</span>(plots_2vis)) <span class="sc">%&gt;%</span> <span class="fu">add_commas</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7,241</code></pre>
+</div>
+</div>
+<ul>
+<li><del>2481 with 2 visits and 3583 with one.</del></li>
+<li><del>That makes 6,064 plots that are either earlier or only have single visits.</del></li>
+<li>3,396 with two, 3,845 with one of 7,241.</li>
+</ul>
+<p><del>2,879 with 2 visits and 3,495 with one. That makes 6,374 plots that are either earlier or only have single visits. In other words, we have 6,374 subplots for our training set and 2,879 for testing.</del></p>
+<p>7,241 for training and 3,396 test.</p>
+</section>
+<section id="subplots" class="level1">
+<h1>7,241 subplots</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>training_set <span class="ot">&lt;-</span> <span class="fu">add_row</span>(plots_2vis, plots_1vis) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>instance)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>testing_set <span class="ot">&lt;-</span> <span class="fu">anti_join</span>(t_plots, training_set, <span class="fu">join_by</span>(StandID, INVYR)) <span class="sc">|&gt;</span> <span class="fu">select</span>(StandID, INVYR)</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>training_set<span class="sc">$</span>TRAIN <span class="ot">&lt;-</span> <span class="st">"train"</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>testing_set<span class="sc">$</span>TRAIN <span class="ot">&lt;-</span> <span class="st">"test"</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>standlist <span class="ot">&lt;-</span> <span class="fu">add_row</span>(training_set, testing_set)</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(standlist)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 10,637
+Columns: 3
+$ StandID &lt;chr&gt; "22954433010497_1", "22954433010497_2", "22954433010497_3", "2…
+$ INVYR   &lt;int&gt; 2007, 2007, 2007, 2009, 2010, 2010, 2010, 2010, 2006, 2006, 20…
+$ TRAIN   &lt;chr&gt; "train", "train", "train", "train", "train", "train", "train",…</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># getwd()</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(training_set, "C:/RxFire/Regen/Regeneration_2_16Sept24/train.csv")</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(testing_set, "C:/RxFire/Regen/Regeneration_2_16Sept24/test.csv")</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(standlist, "C:/RxFire/Regen/Regeneration_2_16Sept24/train_and_test.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/KingBlkMouth\.github\.io\/Regen_Regression\.github\.io\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
