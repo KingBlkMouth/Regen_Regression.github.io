@@ -1,0 +1,931 @@
+---
+title: "1 Import Clean"
+execute: 
+  freeze: auto
+---
+
+*Libraries*
+```{r}
+#| label: Libraries
+#| message: false
+#| warning: false
+#| code-fold: true
+#| echo: false
+
+rm(list = ls())                                                      
+gc()                                                                                 
+
+# Data tidying and acces
+library(tidyverse, quietly = T)       # Easy to read syntax and data manipulation                   
+library(RSQLite)                      # Access SQLite dbs   
+library(magrittr)                     # Pipes and math functions    
+# library(readxl)                     # Read xlsx 
+# library(writexl)                    # write xlsx     
+                                                   
+# yaImpute and related                           
+library(yaImpute)                     # RF imputation     
+library(vegan)                        # Something to do the yaImpute 
+library(randomForest)                 # RF package that yaImpute uses                                   
+                                                     
+# plots and tables                          
+# library(esquisse)                     # Quick data visualization   
+# library(knitr)                        # Better html tables
+# library(DT)                           # Data tables for Java script tables in HTML
+                                                      
+# library(kableExtra)                   # Better html tables, change sizes        
+# library(feather)                      # Faster data retrieval    
+
+# Geography
+library(sf)                           # Simple Features/vector data
+# library(terra)                        # Raster functions
+# library(spatstat)                     # Spatial stats
+
+
+# No sci-notation. 
+options(scipen = 999)
+```
+
+
+```{r}
+#| code-fold: true
+
+clean_mem <- function() {
+  x <- ls(envir = .GlobalEnv)
+  # ls()[!(ls() %in% keep)]
+  rm(list = x[!(x %in% keep)], envir = .GlobalEnv)
+  gc()
+}
+keep <- c("keep", "clean_mem", "clean_na_cols")
+
+clean_na_cols <- function(df){
+  df <- df[, colSums(is.na(df)) < nrow(df)]
+}
+```
+
+
+# Intro
+
+
+**This is the first document in a data pipeline from raw input data to Random Forests imputation. 
+This page will deal with filtering raw data from FIA up until the point I can run it in FVS.**
+
+
+
+
+
+# Pseudo Code
+
+1. Subset fia plots by FOA buffer
+
+  - Extract the CN, latitude, and longitude of all FIA plots from the WA FIA.db. 
+  - ~~save the CN list to a csv~~
+  - ~~Import the list to ArcGIS Pro (AGP)~~
+  - Create an sf object from the lat/long
+  - Set the Geodetic Coordinate system to match the FIA data (NAD83)
+  - set the projected Coordinates system to match the 60k buffer. (Albers_Conic_Equal_Area)
+  - Filter the FIA plots by the OkWen 60km buffer. **Not the FOA_60km_Buffer**
+  - ~~save the subset to "C:/RxFire/Regen/Regen2_08Aug24/60k_buffer_fiaplots.csv"~~
+  
+2. Get all plots from these EcoRegions in WA. 
+ 
+  - Pull all CNs from the 60km buffer and their ECORegion codes from the FIA PLOT table. 
+  - Create a list of all unique EcoRegions inside the Buffer
+  - Pull every plot in WA that is coded with an Ecoregion in that list. 
+  - Pull the conditions for plots with the correct EcoRegion from the COND table. 
+  - Subset the list to ensure that we have single condition plots. 
+  - Filter out plots that are on Non-Forest land.
+  - Filter out plots that have artificial regeneration. 
+  - Filter out plots that are coded as non-forest. i.e. Ag, Range, Beach, windbreak
+  - Filter out plots with fire damage. 
+  - Check out the trees per plot. 
+  
+
+
+3. Filter from the SubPlot table. 
+
+  - Copy Kralicek and ensure that microplot conditions match subplot conditions. 
+    + Filtering twice is probably redundant, if they are single cond, they should be the same condition. 
+  
+  - control for microcond == subpcond. 
+  - control for near(SUBPCOND_PROP, 1, tol = .025) & near(MICRCOND_PROP, 1, tol = .025)
+  - Filter for FPAGs that start with A, N, or W. These are Artificial, Non-Veg, and Water
+  - fix ecoregion codes that were errors. 
+
+There are 104 CNs that do not have a habitat type code. Last time, I dropped them because we had more data.  
+I could go into the veg tables and determine the proper code, but that might be laborious. 
+
+
+
+
+
+
+# 1 Subset fia Plots. 
+
+
+There were some Latitude and Longitudes that were entered as NA. They were dropped. 
+
+
+- Import the latitude and longitude of all FIA plots from the WA FIA.db. 
+- save the CN list to a csv. 
+- Import the list to ArcGIS Pro (AGP)
+- Clip the FIA plots by the 60km buffer
+- save the subset to "C:/RxFire/Regen/Regen2_08Aug24/60k_buffer_fiaplots.csv"
+
+```{r}
+# Pulling in all Plots in WA. 
+con <- dbConnect(RSQLite::SQLite() , "C:/RxFire/Data/_FIADB_WA.db")
+CNs <- dbGetQuery(con, "select CN, lat, lon from PLOT")
+dbDisconnect(con)
+# str(CNs)
+# Dropping NAs and writing the Lat long to csv so that I can extract the plots inside of the 60km buffer in AGP. 
+CNs <- CNs |> drop_na()
+# write_csv(CNs, "C:/RxFire/Regen/Regen2_08Aug24/WA_fiaplots.csv")
+```
+
+In AGP, I clipped the Lat/Lon CN list by the 60km Buffer, then saved the new list as *./60k_buffer_fiaplots.csv*. 
+
+I later decided to subset the data in R. That way all of the metadata is right here. 
+
+
+
+```{r}
+## For reference, here is the set from AGP
+Buffer_plots <- read_csv("C:/RxFire/Regen/Regeneration_2_16Sept24/60k_buffer_fiaplots.csv", 
+                         col_types = "cnnn")
+Buffer_plots$CN <- as.character(Buffer_plots$CN)
+# Buffer_plots |> head()
+
+# This is the full set of FIA plots from the FIA db
+# WA_fiaplots <- read_csv("C:/RxFire/Regen/Regen2_08Aug24/WA_fiaplots.csv",
+#                         col_types = "cnn")
+
+wa_plots_sf <- st_as_sf(CNs, coords = c("LON", "LAT"))
+# NAD83 (EPSG:4269) EPSG that matches the FIA data
+st_crs(wa_plots_sf) <- 4269
+# st_geometry(wa_plots_sf)
+
+
+# Creating the shape file
+## OkWen 60k buffer
+# "C:/RxFire/GIS/gisData/OkWen_60k_buffer_shp/OkWen_60k_Buffer_shp.shp"
+## FOA 60k buffer
+# "C:/Users/cmeck/Desktop/D_Anal/Spatial_Stats_wR/All_FOAs_shp/OkWen_cFOAs_Albers_60km_Buffer.shp"
+
+pathshp <- "C:/RxFire/GIS/gisData/OkWen_60k_buffer_shp/OkWen_60k_Buffer_shp.shp"
+buffer60 <- st_read(pathshp, quiet = TRUE)
+# st_geometry(buffer60)
+
+# Setting the FIA locations to project to the shape file
+wa_plots_sf <- st_transform(wa_plots_sf, st_crs(buffer60))
+
+# Checking the map
+# ggplot() + geom_sf(data = buffer60) + geom_sf(data = WA_fiaplots[1:1000,])
+
+
+# Finding CNs in the buffer
+y <- st_filter(wa_plots_sf, buffer60)
+
+# Checking the output map
+# ggplot() + geom_sf(data = buffer60) + geom_sf(data = y[1:1000,]) + 
+#   labs(title = "Y")
+
+
+## Checking that the R method matches the AGP method
+rcns <- NULL
+rcns <- data.frame(CN = y$CN)
+
+agpcns <- Buffer_plots |> select(CN)
+
+
+# rcns |> nrow() == agpcns |> nrow()
+
+inner_join(rcns, agpcns, by = "CN") %>% nrow()
+```
+
+The CNs from R are the same as the CNs from AGP. 
+
+
+
+
+
+
+
+# 2 EcoRegions
+
+- Pull all CNs from the 60km buffer and their ECORegion codes from the FIA PLOT table. 
+  + Removing the short CNs that code for older plots not of the current design. 
+
+Ecoregions in the FVS Ready come from PLOT.ECOSUBCD in FIA. 
+
+In the full FIA db, there are plots that predate the current plot design. 
+We cannot use those plots as they do not have a uniform design. 
+Those plots are coded with CNs that have fewer characters. 
+
+```{r}
+# Plots inside the 60km buffer from WA FIA
+Buffer_plots <- read_csv("C:/RxFire/Regen/Regeneration_2_16Sept24/60k_buffer_fiaplots.csv", 
+                         col_types = c("c", "c", "c", "c")) |> select(CN)
+Buffer_plots$CN <- as.character(Buffer_plots$CN)
+# str(Buffer_plots)
+# Removing those plots with shorter CNs.
+Buffer_plots <- Buffer_plots |> filter(nchar(CN) > 9)
+# Tracking the number of plots
+n_plots_in_60k <- n_distinct(Buffer_plots$CN)
+n_plots_in_60k
+```
+
+There are 6,800 CNs that are within the 60km buffer and of the current design. 
+The design codes that indicate a plot with the current design in WA are 501 or 502. 
+
+See Appendix G for design codes. 
+
+___
+
+
+- Create a list of all unique EcoRegions inside the Buffer
+- Pull every plot in WA that is coded with an Ecoregion in that list. 
+  + I had to include conditions for design code to keep the older plots out again. 
+
+
+```{r}
+keep <- append(keep, c("Buffer_plots", "n_plots_in_60k")) |> unique()
+clean_mem()
+
+# Ecoregions matching those from plots inside the 60km buffer
+con <- dbConnect(RSQLite::SQLite() , "C:/RxFire/Data/_FIADB_WA.db")
+WA_ecos <- dbGetQuery(con, "SELECT CN, ECOSUBCD FROM PLOT")
+buffer_ecos <- left_join(Buffer_plots, WA_ecos, join_by(CN == CN))
+
+# Unique EcoRegions inside 60 km buffer
+buffer_ecos <- unique(buffer_ecos$ECOSUBCD)
+buffer_ecos <- str_c("'", buffer_ecos, "'")
+buffer_ecos <- str_flatten_comma(buffer_ecos)
+
+# All plots with those same EcoRegion Codes
+eco_cns <- dbGetQuery(con, 
+  str_c("select CN from PLOT where ECOSUBCD in (", buffer_ecos, ") and DESIGNCD != 559 and DESIGNCD != 558"))
+
+dbDisconnect(con)
+
+n_plots_in_buffer_ecos <- eco_cns %>% n_distinct()
+n_plots_in_buffer_ecos
+```
+
+13,380 plots of the current design that are in Ecoregions that are also within the 60km buffer. 
+
+
+___
+
+
+- Pull the conditions for plots with the correct EcoRegion from the COND table. 
+
+```{r}
+# Getting the conditions of those plots with matching Ecos. 
+con <- dbConnect(RSQLite::SQLite() , "C:/RxFire/Data/_FIADB_WA.db")
+
+cns <- str_c("'", eco_cns$CN, "'")
+cns <- str_flatten_comma(cns)
+eco_conds <- dbGetQuery(con, str_c("select * from COND where PLT_CN in (", cns, ")"))
+
+dbDisconnect(con)
+
+eco_conds <- clean_na_cols(eco_conds)
+
+keep <- append(keep, "eco_conds")
+
+n_distinct(eco_conds$PLT_CN)
+```
+
+___
+
+
+
+The field *CONDID* codes for the existence of more than one condition on a single plot. 
+If a plot has more than one condition, then it will have more than one CONDID. 
+
+The field FORTYPCD being greater than one ensures that it is a measured forest plot?
+
+- Subset the list to ensure that we have single condition plots. 
+```{r}
+single_cond <- eco_conds |> filter(CONDPROP_UNADJ == 1 & FORTYPCD > 0)
+
+n_distinct(single_cond$PLT_CN)
+```
+
+
+```{r}
+# eco_conds |> select(PLT_CN, CONDID) |> group_by(PLT_CN) |> 
+#   summarise(
+#     n = n(), 
+#     groups = "drop"
+#   ) |> arrange(desc(n)) |> head()
+```
+
+
+```{r}
+# single_cond <- eco_conds |> select(PLT_CN, CONDID) |> group_by(PLT_CN) |> 
+#   summarise(
+#     n = n(), 
+#     groups = "drop"
+#   ) |> filter(n == 1) |> select(PLT_CN)
+# 
+# single_cond <- left_join(single_cond, eco_conds, join_by(PLT_CN))
+```
+
+~~9,965~~, 4,400 single condition plots with EcoRegions inside of the buffer, and of the current plot design. 
+
+___
+
+
+This section became redundant after Missoula. 
+
+- Filter out plots that are on Non-Forest land.
+
+2-38 of the FIA db users guide has a table that outlines the COND_STATUS_CD meanings. 
+
+1. Accessible forest land. 
+2. NonForest land, less than 10% cover. 
+3. NonCencus Water, small water bodies. 
+4. Census Water, large water bodies. 
+5. Nonsampled possibly forested. 
+
+```{r}
+# single_cond <- single_cond |> filter(
+#   COND_STATUS_CD == 1 | COND_STATUS_CD == 2 | is.na(COND_STATUS_CD))
+```
+
+There are 9,016 single condition plots that were sampled and were not water. 
+
+
+```{r}
+# single_cond |> filter(
+#   COND_STATUS_CD == 1 | is.na(COND_STATUS_CD)) |> nrow()
+```
+
+
+___
+
+
+- Filter out plots that have artificial regeneration. 
+
+2-45 of the FIA guide. STDORGCD  is for natural (0) vs artificial (1) regeneration. 
+
+```{r}
+# single_cond |> filter(STDORGCD == 0 | is.na(STDORGCD)) |> nrow()
+# single_cond |> filter(STDORGCD == 0) |> nrow()
+
+# single_cond <- single_cond |> filter(STDORGCD == 0)
+```
+
+8,451 of those single condition plots are either coded as having natural regeneration or were not coded either way. 
+3,835 were coded as having Natural regeneration. 
+I am proceeding with the larger subset. 
+
+___
+
+- Filter out plots that are coded as non-forest. i.e. Ag, Range, Beach, windbreak
+
+2.5.50 PRESNFCD is Present nonforest code. A code indicating the current nonforest land use for conditions
+that were previously classified as forest but are now classified as nonforest.
+
+```{r}
+# single_cond <- single_cond |> filter(is.na(PRESNFCD))
+```
+
+3,835 plots are not coded for non forest uses. That is the same number that were coded as having natural regen. 
+
+___
+
+#### Checking the KindCD
+
+- Ensuring there are no periodic plots. 
+
+```{r}
+# Adding the PLOT table to see the KINDCD. 
+con <- dbConnect(RSQLite::SQLite() , "C:/RxFire/Data/_FIADB_WA.db")
+wa_plot <- dbGetQuery(con, "select * from PLOT")
+dbDisconnect(con)
+
+scns <- single_cond |> select(PLT_CN)
+
+single_plot <- left_join(scns, wa_plot, join_by(PLT_CN == CN))
+
+n_distinct(single_plot$PLT_CN)
+```
+
+
+2.4.16 KINDCD is Sample kind code. A code indicating the type of plot installation. Database users may also
+want to examine DESIGNCD to obtain additional information about the kind of plot being
+
+0. Periodic inventory plot.
+1. Initial installation of a National design plot.
+2. Remeasurement of previously installed National design plot.
+3. Replacement of previously installed National design plot.
+4. Modeled periodic inventory plot (Northeastern and North Central only).
+
+```{r}
+single_plot |> group_by(KINDCD) |> 
+  summarise(n = n())
+```
+
+There are no periodic plots. 
+The only KINDCD of plots are for Initial and Re-measurement plots. 
+
+No change from single_cond. 
+
+___
+
+- Filter out plots with fire damage. 
+
+DSTRBCDs 1 - 3 are coded for fire as:
+  
+  30. Fire prescribed or Natural
+  31. Ground Fire
+  32. Crown Fire
+
+
+```{r}
+single_cond <- single_cond |> filter(DSTRBCD1 != 30 & DSTRBCD2 != 30 & DSTRBCD3 != 30)
+single_cond <- single_cond |> filter(DSTRBCD1 != 31 & DSTRBCD2 != 31 & DSTRBCD3 != 31)
+single_cond <- single_cond |> filter(DSTRBCD1 != 32 & DSTRBCD2 != 32 & DSTRBCD3 != 32)
+```
+
+```{r}
+30 %in% unique(single_cond$DSTRBCD1) |> sort()
+# 31 %in% unique(single_cond$DSTRBCD1) |> sort()
+# 32 %in% unique(single_cond$DSTRBCD1) |> sort()
+# 
+# 30 %in% unique(single_cond$DSTRBCD2) |> sort()
+# 31 %in% unique(single_cond$DSTRBCD2) |> sort()
+# 32 %in% unique(single_cond$DSTRBCD2) |> sort()
+# 
+# 30 %in% unique(single_cond$DSTRBCD3) |> sort()
+# 31 %in% unique(single_cond$DSTRBCD3) |> sort()
+# 32 %in% unique(single_cond$DSTRBCD3) |> sort()
+```
+
+```{r}
+n_distinct(single_cond$PLT_CN)
+```
+
+
+~~3,552~~, 4,106 plots that do not have fire damage. 
+
+
+___
+
+- Checking to see if these plots have trees. 
+
+```{r}
+cns <- single_cond |> select(PLT_CN)
+cns <- str_c("'", cns$PLT_CN, "'")
+cns <- str_flatten_comma(cns)
+
+con <- dbConnect(RSQLite::SQLite() , "C:/RxFire/Data/_FIADB_WA.db")
+trees <- dbGetQuery(con, str_c("select * from TREE where PLT_CN in (", cns, ")"))
+seedlings <- dbGetQuery(con, str_c("select * from SEEDLING where PLT_CN in (", cns, ")"))
+dbDisconnect(con)
+# names(seedlings)
+# names(trees) |> sort()
+
+trees <- clean_na_cols(trees)
+
+t <- trees |> select(PLT_CN, TREECOUNT = TPA_UNADJ, SPCD)
+seedlings <- seedlings |> select(PLT_CN, TREECOUNT, SPCD)
+```
+
+```{r}
+t <- add_row(t, seedlings)
+t |> nrow()
+t <- t |> filter(!is.na(TREECOUNT))
+t |> nrow()
+
+
+t <- t |> group_by(PLT_CN) |> 
+  summarise(n = n(), 
+            tpa = sum(TREECOUNT))
+t |> arrange(tpa) |> head()
+t |> nrow()
+```
+~~3,531 of 3,552 plots have trees?~~
+~~There are also a bunch of records with NULL tpas. They are likely dead trees, at least the one I checked was dead.~~
+
+4089 plot_cns with trees. 
+
+Second time through there were 3535 plots with trees that could be dead. 
+
+~~There could be plots that only have seedlings.~~
+
+```{r}
+tcns <- t |> select(PLT_CN)
+cns <- single_cond |> select(PLT_CN)
+missing <- anti_join(cns, tcns, by = "PLT_CN")
+missing |> nrow()
+missing |> head()
+
+good_cns <- unique(tcns)
+```
+
+There are 13 empty plots. I cannot find anything wrong with these plots. 
+They simply do not have trees. 
+After going back to look at the trees and changing some things there are 17. That means that there were 4 that only 
+had dead trees. 
+
+
+
+
+
+
+
+
+# 3. SubPlot Table. 
+
+- control for microcond == subpcond. 
+- control for near(SUBPCOND_PROP, 1, tol = .025) & near(MICRCOND_PROP, 1, tol = .025)
+- control ecoregion !startsWith(FPAG, "A") & !startsWith(FPAG, "N") & !startsWith(FPAG, "W")
+- fix ecoregion codes that were errors. 
+
+```{r}
+# cns <- single_cond |> select(PLT_CN)
+# single_plot <- left_join(cns, single_plot, join_by(PLT_CN))
+# 
+# s_plot <- single_plot |> mutate(
+#   FPAG = str_remove_all(str_sub(ECOSUBCD, 1, 4), " ")
+# )
+# sum(is.na(s_plot$FPAG))
+# 
+# key <- s_plot |> select(PLT_CN, FPAG)
+# 
+# single_cond <- left_join(key, single_cond, by = "PLT_CN")
+```
+
+```{r}
+fpag_cond <- single_cond |> mutate(
+  FPAG = str_remove_all(str_sub(HABTYPCD1, 1, 4), " ")
+)
+
+nofpag <- fpag_cond |> filter(is.na(FPAG))
+
+nofpag |> nrow()
+fpag_cond %>% nrow()
+```
+
+```{r}
+fpag_cond <- fpag_cond |> filter(TRTCD1 != 30 & TRTCD2 != 30 & TRTCD3 != 30)
+# fpag_cond <- fpag_cond |> filter(TRTCD1 != 31 & DSTRBCD2 != 31 & DSTRBCD3 != 31)
+# fpag_cond <- fpag_cond |> filter(TRTCD1 != 32 & DSTRBCD2 != 32 & DSTRBCD3 != 32)
+fpag_cond %>% nrow()
+```
+
+```{r}
+# fpag_cond |> group_by(TRTCD1, TRTCD2, TRTCD3) |>
+#   summarise(n = n())
+```
+
+4075 Plots on the second time through. 
+
+
+There are 104 CNs that do not have a habitat type code. Last time, I dropped them because we had more data.  
+I could go into the veg tables and determine the proper code, but that might be laborious. 
+
+I am dropping them for now. 
+
+
+
+```{r}
+fpag_cond <- fpag_cond |> filter(!is.na(FPAG))
+n_distinct(fpag_cond$PLT_CN)
+```
+
+3959
+
+
+
+
+```{r}
+keep <- append(keep, c("hab_key", "plots", "fpag_cond"))
+clean_mem()
+```
+
+```{r}
+PLT_CN <- NULL
+PLT_CN <- str_c("'", fpag_cond$PLT_CN, "'")
+PLT_CN <- str_flatten_comma(PLT_CN)
+
+con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Data/_FIADB_WA.db")
+zsubplot <- dbGetQuery(con, str_c("select * from subplot WHERE PLT_CN IN (", PLT_CN, ")"))
+zsubcond <- dbGetQuery(con, str_c("select * from subp_cond WHERE PLT_CN IN (", PLT_CN, ")"))
+dbDisconnect(con)
+
+zsubcond <- clean_na_cols(zsubcond)
+zsubplot <- clean_na_cols(zsubplot)
+
+nrow(zsubcond)
+nrow(zsubplot)
+```
+13,792 subplots from 3,448 plots, all 4 subplots per plot were pulled. 
+
+15836 from 3959 on the second time through. 
+
+
+```{r}
+t <- fpag_cond |> select(PLT_CN, CONDID, FPAG) |> unique()
+
+zsubcond <- left_join(t, zsubcond, join_by(PLT_CN, CONDID))
+
+zsubplot <- zsubplot |> filter(
+  (MICRCOND == SUBPCOND)
+)
+```
+
+Since they are all single condition plots, filtering for subplots where the microplot and subplot share the same 
+condition produces the same number of plots. 
+
+
+```{r}
+t <- zsubcond |> 
+  filter(
+    near(SUBPCOND_PROP, 1, tol = .025) & near(MICRCOND_PROP, 1, tol = .025)
+    )
+```
+
+Again, they are all one condition, so they are all within a quarter percent of the same condition. 
+Last time I did this, I filtered for this earlier in the process. 
+I was under the impression that the FVS_PlotInit_Plot table was only composed of single condition stands and 
+I joined the final filtering with that table. 
+
+
+```{r}
+zsubcond <- zsubcond |> filter(
+  !startsWith(FPAG, "A") & !startsWith(FPAG, "N") & !startsWith(FPAG, "W")
+)
+
+fpag_cond <- fpag_cond |> filter(
+  !startsWith(FPAG, "A") & !startsWith(FPAG, "N") & !startsWith(FPAG, "W")
+)
+```
+
+There were 2 stands removed here that were not removed by the earlier non-veg, water, and artificial filtering. 
+Now there are 3,446 plots and 13,784 subplots. 
+
+
+15828 and 3957 on the second time through. 
+
+```{r}
+keep <- append(keep, c("zsubcond"))
+clean_mem()
+```
+
+
+
+# Habitat Type exploration
+
+
+
+```{r}
+unique(zsubcond$FPAG) |> noquote() |> sort()
+```
+
+In the last iteration of this, I looked up the following plot in the tree and P2Veg tables to find the most likely 
+Habitat type. I decided on a conifer/alpine/grass model. 
+
+Assuming that the 104 missing plots above have those data in the tables, that is what I would have to do to set 
+habitat type for each one. 
+
+```{r}
+# Fixing the FPAG that was not entered correctly.
+
+zsubcond <- zsubcond |> mutate(
+  FPAG = ifelse(FPAG == "PIAL", "CAGO", FPAG)
+)
+
+fpag_cond <- fpag_cond |> mutate(
+  FPAG = ifelse(FPAG == "PIAL", "CAGO", FPAG)
+)
+```
+
+
+```{r}
+# Looking at the descriptions for habitat type. 
+PLT_CN <- NULL
+PLT_CN <- str_c("'", fpag_cond$PLT_CN, "'")
+PLT_CN <- str_flatten_comma(PLT_CN)
+
+hab <- NULL
+hab <- str_c("'", fpag_cond$HABTYPCD1, "'")
+hab <- str_flatten_comma(hab)
+
+con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Data/_FIADB_WA.db")
+hab_key <- dbGetQuery(con, str_c("select HABTYPCD, PUB_CD, COMMON_NAME from REF_HABTYP_DESCRIPTION WHERE HABTYPCD IN (", hab, ")"))
+plots <- dbGetQuery(con, str_c("select * from PLOT WHERE CN IN (", PLT_CN, ")"))
+dbDisconnect(con)
+
+# plots <- clean_na_cols(plots)
+t <- fpag_cond |> select(PLT_CN, HABTYPCD1, HABTYPCD1_PUB_CD) |> unique()
+
+HABTYPCD1 <- t |> select(HABTYPCD1) |> unique() |> drop_na()
+
+t <- left_join(t, hab_key, join_by(HABTYPCD1 == HABTYPCD), relationship = "many-to-many") 
+
+
+
+t <- t |> select(HABTYPCD1, COMMON_NAME) |> unique()
+
+t |> group_by(HABTYPCD1) |> summarise(n = n()) |> arrange(desc(n)) |> head()
+```
+
+350 unique Habitat type codes come from the conditions table and 722 descriptions come from the reference table. 
+
+```{r}
+t |> unique() |> filter(HABTYPCD1 == "CHF221")
+
+t |> unique() |> filter(HABTYPCD1 == "CCF221")
+```
+
+Looking at a few of the many to many relationships by habitat type, 
+they appear to be mostly just different spellings and minor species in the general area. 
+
+```{r}
+hab_key <- hab_key |> select(HABTYPCD, COMMON_NAME) |> unique()
+hab_key <- hab_key |> group_by(HABTYPCD) |> mutate(
+  n_row = row_number()
+)
+hab_key2 <- hab_key |> filter(n_row == 1)
+```
+
+Accounting for multiple descriptions of each habitat, there are 308 descriptions in the reference data. 
+
+```{r}
+x <- hab_key2 |> select(HABTYPCD)
+y <-  HABTYPCD1 |> rename(HABTYPCD = HABTYPCD1)
+
+anti_join(y, x, join_by(HABTYPCD))$HABTYPCD |> noquote()
+```
+
+The 42 above Habitat types are in the conditions table, but not in the reference data. 
+
+```{r}
+t <- hab_key |> filter(n_row > 1) |> select(HABTYPCD)
+t <- left_join(t, hab_key, by = "HABTYPCD", relationship = "many-to-many")
+t  |> head(n = 20)
+```
+
+Above are some of the set that have repeats. 
+
+
+## FPAs
+
+I don't need to do this here, but I want to see what the descriptions look like for the FPAs. 
+
+```{r}
+fpag_cond <- fpag_cond |> clean_na_cols()
+fpag_cond |> select(FPAG) |> n_distinct()
+# fpag_cond |> names()
+```
+
+138 unique FPAGs in this set of plots and subplots. They are single condition, so they are all the same per plot. 
+141 second time through. 
+
+```{r}
+# Getting all of the ecoregion and FPA codes in one place. 
+fpas <- fpag_cond |> select(PLT_CN, HABTYPCD1, FPAG)
+fpas <- left_join(fpas, plots, join_by(PLT_CN == CN))
+fpas <- fpas |> select(PLT_CN, HABTYPCD1, FPAG, ECOSUBCD)
+fpas <- fpas |> mutate(
+  FPA = str_remove_all(
+    str_sub(FPAG, 1, 3), 
+    " "), 
+  EcoRegion = str_remove_all(
+    str_sub(ECOSUBCD, 1, -2), 
+    " ")
+) |> relocate(PLT_CN, FPAG, FPA, EcoRegion)
+fpas |> head()
+```
+
+```{r}
+n_distinct(fpas$FPA)
+```
+68 unique FPAs, then 69.
+
+```{r}
+unique(fpas$EcoRegion)
+```
+6, level 3 EcoRegions. 
+
+
+
+### descriptions
+
+```{r}
+hab_key2 <- hab_key |> mutate(FPA = str_remove_all(
+    str_sub(HABTYPCD, 1, 3), 
+    " ")) |> ungroup() |> select(FPA, COMMON_NAME)
+hab_key2 |> head()
+```
+
+
+```{r}
+t <- hab_key2 |> group_by(FPA) |> mutate(row = row_number()) 
+
+t |> group_by(FPA) |> 
+  summarise(
+    n = n()
+  ) |> arrange(desc(n))
+```
+
+
+```{r}
+t |> filter(FPA == "CFS")
+```
+
+
+
+
+
+
+# Trying sci names
+
+```{r}
+hab <- NULL
+hab <- str_c("'", fpag_cond$HABTYPCD1, "'")
+hab <- str_flatten_comma(hab)
+
+con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Data/_FIADB_WA.db")
+hab_key <- dbGetQuery(con, str_c("select HABTYPCD, PUB_CD, SCIENTIFIC_NAME, COMMON_NAME from REF_HABTYP_DESCRIPTION WHERE HABTYPCD IN (", hab, ")"))
+
+dbDisconnect(con)
+
+hab_key |> head()
+```
+
+```{r}
+hab_key2 <- hab_key |> mutate(FPA = str_remove_all(
+    str_sub(HABTYPCD, 1, 3), 
+    " ")) |> ungroup() |> select(FPA, SCIENTIFIC_NAME) 
+# 722 rows
+
+hab_key2 <- hab_key2 |> unique()
+# 295 rows
+
+hab_key2 |> head()
+```
+
+
+
+```{r}
+t <- hab_key2 |> group_by(FPA) |> mutate(row = row_number()) 
+
+t |> group_by(FPA) |> 
+  summarise(
+    n = n()
+  ) |> arrange(desc(n))
+```
+
+```{r}
+x <- t |> filter(FPA == "CDS")
+x$SCIENTIFIC_NAME
+```
+
+
+```{r}
+x <- t |> filter(FPA == "CCF")
+x$SCIENTIFIC_NAME
+
+```
+
+
+The Scientific names are less variable. 
+The plant associations of a couple of FPAs are pretty variable. 
+However, the major tree species is mostly consistent. 
+Most of the variability comes from the understory as we exprected. 
+I am not sure if there is a good way to capture variability in FPA regeneration for these varying plant associations. 
+
+
+
+
+# Save
+
+
+```{r}
+# These are the correct plots to save
+t <- zsubcond |> select(PLT_CN) |> unique()
+x <- fpag_cond |> select(PLT_CN) |> unique()
+# 
+# anti_join(x,t,join_by(PLT_CN))
+# anti_join(t,x,join_by(PLT_CN))
+```
+
+1_Import_Clean.csv
+
+I want to save the PLT_CN, Subplot_cn, and FPAG for these plots
+
+```{r}
+filtered <- zsubcond |> select(PLT_CN, SUBP, FPAG) |> mutate(STANDPLOT_CN = str_c(PLT_CN, "_", SUBP)) |> select(-SUBP)
+getwd()
+# write_csv(filtered, "./1_Import_Clean2.csv")
+
+n_distinct(filtered$PLT_CN)
+n_distinct(filtered$STANDPLOT_CN)
+```
+
+

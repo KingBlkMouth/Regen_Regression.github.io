@@ -1,0 +1,14 @@
+---
+title: "Regeneration with Regression"
+execute: 
+  freeze: auto
+---
+
+
+**This is the second site published regarding regeneration for the project POC3.**
+
+The previous site covered the initial model exploration. 
+Here, the initial steps have been refined and the model is being optimized. 
+The input data has changed from the FIA's FVS Ready data to a custom translation of raw FIA data to FVS Ready format. The imputation yaImpute is still being used, but the focus has changed to running the data with regression 
+instead of classification. 
+  

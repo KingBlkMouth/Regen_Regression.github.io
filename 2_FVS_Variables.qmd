@@ -1,0 +1,677 @@
+---
+title: "2 FVS Vars"
+execute: 
+  freeze: auto
+---
+
+*Libraries*
+```{r}
+#| label: Libraries
+#| message: false
+#| warning: false
+#| code-fold: true
+#| output: false
+
+rm(list = ls())                                                      
+gc()                                                                                 
+
+# Data tidying and acces
+library(tidyverse, quietly = T)       # Easy to read syntax and data manipulation                   
+library(RSQLite)                      # Access SQLite dbs   
+library(magrittr)                     # Pipes and math functions    
+# library(readxl)                     # Read xlsx 
+# library(writexl)                    # write xlsx     
+                                                   
+# yaImpute and related                           
+# library(yaImpute)                     # RF imputation     
+# library(vegan)                        # Something to do the yaImpute 
+# library(randomForest)                 # RF package that yaImpute uses                                   
+                                                     
+# plots and tables                          
+# library(esquisse)                     # Quick data visualization   
+# library(knitr)                        # Better html tables
+# library(DT)                           # Data tables for Java script tables in HTML
+                                                      
+# library(kableExtra)                   # Better html tables, change sizes        
+# library(feather)                      # Faster data retrieval    
+
+# Geography
+# library(sf)                           # Simple Features/vector data
+# library(terra)                        # Raster functions
+# library(spatstat)                     # Spatial stats
+
+
+# No sci-notation. 
+options(scipen = 999)
+```
+
+*Functions*
+```{r}
+#| code-fold: true
+#| label: Functions
+
+clean_mem <- function() {
+  x <- ls(envir = .GlobalEnv)
+  # ls()[!(ls() %in% keep)]
+  rm(list = x[!(x %in% keep)], envir = .GlobalEnv)
+  gc()
+}
+keep <- c("keep", "clean_mem", "clean_na_cols", "db_list", "add_commas")
+
+clean_na_cols <- function(df){
+  df <- df[, colSums(is.na(df)) < nrow(df)]
+}
+
+db_list <- function(df, CN_col){
+  name <- NULL
+  name <- df |> select({{CN_col}})
+  name <- name |> mutate(CN_col = str_c("'", {{CN_col}}, "'")) 
+  name <- str_flatten_comma(name$CN_col)
+  # name <- str_flatten_comma(name[, CN_col])
+  name
+}
+
+add_commas <- function(n) {
+  t <- prettyNum(n, ",",scientific=FALSE)
+  return(noquote(t))
+}
+```
+
+
+
+
+
+
+
+# Intro
+
+**This is the second document in a data pipeline from raw input data to Random Forests imputation. 
+This page will deal with running FVS to get the RF predictor variables from FVS, 
+then further filtering the data by Stem Exclusion and inventory cycle.**
+
+
+The standlist that I will read in has been filtered for the following: 
+*See 1_Import_Clean for specifics.*
+
+There were 7,168 plots within the 60k buffer. *7,168 plots*
+
+- Current plot design *6,800 plots*
+- Eco-regions (level 4) in WA that exist inside the OkWen 60km Buffer, not the FOA 60 km buffer. *13,380 plots*
+- Single condition plots. *9,965 plots*
+- Forest or Savanna/not water or Un-sampled. *9,016 plots*
+  + I wasn't sure here, Non-Forest in this code means less than 10% cover. **These were included.**
+  + *4,400 plots* were only Accessible Forest
+- Artificial regen  *8,451 plots*
+- Conditions such as Pasture, Range, Beaches and Windbreaks *3,835 plots*
+- Fire damage *3,552 plots*
+  + 3,531 of these have trees. 
+- Habtypcd exists  *3,448 plots*
+
+There are 104 CNs that do not have a habitat type code. I dropped them. 
+I could go into the veg tables and determine an alternative code, but that might be laborious. 
+
+On those 3,448 plots, there were *13,792 subplots*, 4 for each plot. 
+
+- microcond == subpcond *13,792 subplots*
+- FPAG/Habtypcd1 indicates Artificial, Non-Veg, or Water *13,784 subplots, 3,446 plots *
+
+There was one plot that was coded PIAL. I changed that by looking at the P2Veg and tree tables, then selecting the 
+most appropriate code. 
+
+
+- Inside those subplots, there were 350 unique habitat type codes that had 722 descriptions in the various publications. 
+  + 399 of the 722 had the same descriptions in different publications. 
+- There were 42 habitat type codes that were not in the reference data. 
+  + 308 codes were unique and in the reference data. 
+- Of those that had repeat descriptions, they mostly had the same major trees, but there was variation in the grass/forb/shrubs. 
+- There were 138 FPAGs
+- There were 68 FPAs
+- The same 6 EcoRegions are present. 
+
+
+
+
+
+
+# Import
+
+The saved list of filtered plots is at "C:/RxFire/Regen/Regeneration_2_16Sept24/1_Import_Clean.csv". 
+
+
+```{r}
+standlist <- read_csv("./1.5_dbCreation_standlist.csv", 
+                      col_types = "ccc")
+standlist |> glimpse()
+```
+
+
+
+# FVS
+
+FVS runs faster if I subset the FIA database. It makes a call to the database for each stand, so a smaller database means 
+less searching for matching CNs. I have not done that here, yet. The current iteration is running off of the full WA db. 
+
+```{r}
+#| code-fold: true
+#| eval: false
+
+# rm(list = ls())
+
+library(RSQLite)
+library(tidyverse, quietly = T, warn.conflicts = F)
+library(readxl)
+
+options(scipen = 999)
+
+
+# 1. Set paths ---------------------------------------------------------------
+## Set all the file paths and names in this section. Then, run the rest of the script in sections 2. 
+
+## Set the working directory
+fvs_wd <- "C:/RxFire/Regen/FVS"
+
+## Where are the FVS executables? FVSbin? 
+#  Include the /FVS prefix to variant.exe. 
+FVSbin <-  "C:/FVSbin_v5.1/FVS"
+
+# name = regen_MMDDYY_HHMM
+name <- str_c("regen_", 
+              strftime(Sys.Date(),"%m%d%y"), 
+              "_", 
+              strftime(Sys.time(),"%H%M"))
+
+getwd()
+## Set the path to the stand input database here, aka the output db from 3_CNs_to_FVS:
+inputDatabase <- 'C:/RxFire/Regen/Regeneration_2_16Sept24/homemade_fvs_db_17sept24.db'
+# Homemade_v1 C:/RxFire/Regen/Regeneration_2_16Sept24/homemade_fvs_db.db
+# State Original DB
+
+
+# 1.2 Standlist from xlsx -------------------------------------------------
+
+standlist <- read_csv("C:/RxFire/Regen/Regeneration_2_16Sept24/1.5_dbCreation_standlist.csv", 
+                      col_types = "ccc") |> select(
+                        CN = STANDPLOT_CN
+                      ) 
+# standlist <- standlist[1:100, ]
+
+## I don't think I need to have the actual Variant. This is just to read the initial conditions. 
+standlist$FVSVariant <- "EC"
+
+
+
+
+
+# 2. Batch file Creation -----------------------------------------------------
+## Run everything in section 2. There shouldn't be anything to change.
+#  Except, maybe createInputFile(group_stands$CN[s], if CN was read in as Stand_CN. 
+
+int <- Sys.time()
+
+create_dir <- function(dir) {
+    if (!dir.exists(dir)) {
+      print(paste("Making Run directory: ", dir))
+      dir.create(dir)
+      } else(
+        print(str_c(dir, ", already exists"))
+      )
+}
+
+# Create directory where FVS runs will be sent:
+RunDirectory <- str_c(fvs_wd, '/', name)
+create_dir(RunDirectory)
+
+# Create input Directory
+inputDirectory <- str_c(RunDirectory, "/In")
+create_dir(inputDirectory)
+
+# Create Cmd Directory
+CmdDirectory <- str_c(RunDirectory, "/Cmd")
+create_dir(CmdDirectory)
+
+## The path to the FVS output database is set here:
+outputDatabase <- str_c(RunDirectory, "/", name, ".db")
+
+
+## This function creates the string for a single stand in FVS.
+createInputFile <- function(stand, managementID, inputDatabase, outputDatabase){
+  # Create .key file
+  input <- paste0('STDIDENT\n',                     
+                  stand, '\n',                     
+                  'STANDCN\n',                     
+                  stand, '\n',                     
+                  'MGMTID\n',                     
+                  managementID,                     
+                  '\n',                             
+                  'NUMCYCLE          1\n', # Set time intervals. 
+                  # 0 = Change all cycles | Cycle length to one year
+                  'TIMEINT           0         1\n',
+                  'SCREEN\n',               
+                  ## Database in    
+                  'DATABASE\n',
+                  'DSNIN\n',                                                
+                  inputDatabase, '\n',  
+                  ## Stand
+                  'StandSQL\n',                                             
+                  'SELECT * FROM FVS_PLOTINIT_PLOT\n',
+                  # 'SELECT * FROM FVS_PlotInit\n',  # For a different table name                   
+                  "WHERE  STANDPLOT_CN  = '%STAND_CN%'\n",                     
+                  'EndSQL\n',                                                    
+                  'DSNIN\n',                                          
+                  inputDatabase, '\n',                                             
+                  ## Tree
+                  'TreeSQL\n',
+                  'SELECT * FROM FVS_TREEINIT_PLOT\n',
+                  # 'SELECT * FROM FVS_TreeInit\n',                              
+                  "WHERE  STANDPLOT_CN  = '%STAND_CN%'\n",                            
+                  'EndSQL\n',                                                          
+                  'END\n',   
+                  ##
+                  'STRCLASS\n',
+                  # year of compute 0 = Every cycle
+                  'COMPUTE           0\n',                                                                        # Compute below here
+                  # # acancov defined when str_class is used, after thin Canopy
+                  'CC = bcancov\n',
+                  'END\n',                                                                                            # Compute ends
+                  'DATABASE\n',                                                                                     # DB Out Starts
+                  'DSNOUT\n',                                      
+                  outputDatabase, '\n',
+                  'SUMMARY           2\n',
+                  'StrClsDB\n',
+                  'COMPUTDB\n',
+                  'END\n',
+                  'Process\n\n')                                    
+                   
+  
+}
+
+write(str_c("set RScript=", " \"", "C:/Program Files/R/R-4.4.1/bin/Rscript.exe", "\"",
+            "\n \n",
+            "cd ", inputDirectory, "\n\n"), paste0(RunDirectory, '\\test.bat'), append = "TRUE")
+
+
+
+for (g in unique(standlist$FVSVariant)) {
+  masterkeys <- NULL
+  group_stands <- subset(standlist, FVSVariant == g)
+  for (s in 1:nrow(group_stands)) {
+    
+    keywords <- createInputFile(stand = group_stands$CN[s], managementID = group_stands$CN[s], 
+                                inputDatabase = inputDatabase,
+                                outputDatabase = outputDatabase
+                                )
+    
+    masterkeys <- paste0(masterkeys, keywords)
+  }
+  # Print to the key file
+  masterkeys <- paste0(masterkeys, "\nSTOP\n")
+  # "\n STOP?\n" or "\nSTOP\n", outfile has errors 1 & 2, invalid keyword & no Stop
+  file_name <- str_sub(g, end = -5)
+  write(masterkeys, file = str_c(inputDirectory, '\\', g, '.key'))
+  
+  ## Create the .in file ##
+  fvs_in <- paste0(g, ".key\n",
+                   g, ".fvs\n",
+                   g, ".out\n",
+                   g, ".trl\n",
+                   g, ".sum\n")
+  
+  fvs_in_file <- paste0(inputDirectory, '\\', g, '.in')
+  write(fvs_in, file = fvs_in_file)
+  fvs_bat <- paste0(FVSbin, unique(group_stands$FVSVariant), ".exe < ", g, ".in >",
+                    RunDirectory, "/Cmd/", g, ".txt", " 2>&1", "\n",
+                    # Send each CMD file to this script
+                    "%RScript%"," C:/RxFire/Scripts/ErrorProcessing/RcmdProcess.R ",
+                    "\"", RunDirectory, "/Cmd/", g, ".txt", "\"", "\n")
+  
+  write(fvs_bat, paste0(RunDirectory, '\\test.bat'), append = "TRUE")
+}
+
+# Summarize the OUT files
+fvs_errors <- str_c("\nREM This one cleans in extra files out and summarizes the output the Run Directory \n",
+                    "%RScript%"," C:/RxFire/Scripts/ErrorProcessing/RfvsProcess.R ",
+                    "\"", RunDirectory, "/In", "\"")
+
+write(fvs_errors, paste0(RunDirectory, '\\test.bat'), append = "TRUE")
+
+# write("PAUSE", paste0(inputDirectory, '\\test.bat'), append = "TRUE")
+
+con <- dbConnect(RSQLite::SQLite(), outputDatabase)
+dbWriteTable(conn = con, name = "standlist", value = standlist, overwrite = T)
+dbDisconnect(con)
+
+out <- Sys.time()
+
+print(out - int)
+
+# Run this Batch file
+shell.exec(str_c(RunDirectory, '\\test.bat'))
+```
+
+I am copying some stuff from the above code here. That way I don't need to run fvs each time. 
+
+___
+
+I accidentally overwrote the last db and the copy while altering the imputation data. 
+I also had not yet added the changes from Missoula, so I am going through it now and fixing all of it. 
+*9/17/24*
+
+___
+
+```{r}
+# outputDatabase <- "C:/RxFire/Regen/FVS/regen_080724_1644/regen_080724_1644.db"
+
+outputDatabase <- "C:/RxFire/Regen/FVS/regen_091724_2118/regen_091724_2118.db"
+```
+*32 minutes to run.*
+
+*11 min to run on second time through. I ran it at night this time.*
+
+
+# Extract variables
+
+In this case, the output table compute has the before anything CC and Year. 
+The other tables have an start and end year. 
+So, using the compute table makes it easy to select the correct Year without setting INV_Year in the database. 
+
+```{r}
+con <- dbConnect(RSQLite::SQLite(), outputDatabase)
+
+key <- dbGetQuery(con, "select CaseID, StandID, Variant from FVS_Cases")
+cc <- dbGetQuery(con, "select CaseID, Year, CC from FVS_Compute")
+ba_sdi <- dbGetQuery(con, "select CaseID, Year, BA, SDI from FVS_Summary2")
+stem <- dbGetQuery(con, "select CaseID, Year, Structure_Class from FVS_StrClass where Removal_Code == 0 ")
+
+dbDisconnect(con)
+
+xVars <- left_join(key, cc, join_by(CaseID))
+xVars <- left_join(xVars, ba_sdi, join_by(CaseID, Year))
+xVars <- left_join(xVars, stem, join_by(CaseID, Year))
+
+xVars |> nrow()
+```
+
+The above number should match the number of subplots from the standlist, ~~13,784.~~
+
+13,366 after translating FIA to FVS. This method removed empty plots. 
+
+15,369 after incorporating Missoula's changes.
+
+
+```{r}
+keep <- append(keep, c("xVars", "standlist"))
+
+clean_mem()
+```
+
+
+
+
+
+# Filter
+
+- Filter out Stem Exclusion from stucture class. 
+- Add tags for single visit of earlier visit. 
+
+
+```{r}
+standlist <- read_csv("./1.5_dbCreation_standlist.csv", 
+                      col_types = "ccc")
+
+
+```
+
+~~Starting subplot count: **13,784**~~
+
+~~Starting subplot count: **13,366**~~
+
+Starting subplot count: **15,369**
+
+
+```{r}
+stem <- xVars |> select(-CaseID)
+
+stem <- stem |> mutate(
+  s_class = str_sub(Structure_Class, -2,-1)
+) 
+
+stem <- stem |> filter(!is.na(Year))
+
+nrow(stem)
+```
+
+- ~~**13,016**~~
+- ~~**13,366**~~
+- **15,369**
+
+In the first FVS run I used the FVS_Ready data. I wanted to make some progress. 
+In the output database, there are 768 NAs. These were the rows that were not present in the FVS Ready data. 
+This will be fixed when I create the new database to pull from. 
+
+```{r}
+# These subplots have no living trees
+noTrees <- stem |> filter(is.na(s_class)) |> select(StandID, BA)
+sum(noTrees$BA)
+keep <- append(keep, "noTrees")
+
+# The NAs were from joining the StrClass table to the full standlist
+stem <- stem |> filter(!is.na(s_class)) |> select(-Structure_Class)
+glimpse(stem)
+```
+
+- ~~**12,403**~~
+- ~~**13,320**~~
+- **15,320**
+
+~~613 rows did not get read by the structure class table. 
+These appear to be subplots that do not have trees or only have dead trees.~~
+
+~~I am setting these aside for now. Maybe I will leave them in later, I am not sure.~~
+
+There were many more subplots lost with the FVS Ready. 
+This has something to do with the History codes. 
+
+
+
+## Stem Exclusion
+
+```{r}
+regPlots <- stem |> filter(s_class != "SE")
+unique(regPlots$s_class)
+```
+
+~~**8,545 Subplots**~~
+
+**9,253**
+
+```{r}
+add_commas((nrow(stem) - nrow(regPlots)))
+nrow(regPlots) %>% add_commas()
+```
+
+- ~~3,858 plots were classed as Stem Exclusion.~~
+- ~~4,067~~ plots were classed as Stem Exclusion.
+- 4,683 lost, 10,637 kept
+
+
+```{r}
+regPlots |> filter(s_class == "BG") |> select(CC, BA, SDI) |> summary()
+```
+
+Here is the FVS Essentials (p.81) quip about stem exclusion:
+
+*Initially defined strata must have over 5 percent canopy cover or they are rejected.
+Nominal stratum diameter and height are computed by averaging the nine sample trees
+centered on the 70th percentile tree. Once the strata are defined, the stand is classified as
+bare ground (BG), stand initiation (SI), stem exclusion (SE), understory reinitiation (UR),
+young forest multistrata (YM), old forest single stratum (OS), or old forest multistrata
+(OM) as a function of the number of strata, the nominal diameter of trees in the strata,
+and stocking.*
+
+
+```{r}
+#| include: false
+
+keep <- append(keep, "regPlots")
+clean_mem()
+```
+
+
+
+
+
+
+# Inventory Cycle
+
+*Get PLT_CN and pull the PLOT ids*
+```{r}
+cns <- regPlots |> select(StandID) |> mutate(
+  PLT_CN = str_sub(StandID, 1, -3), 
+  SUBP = str_sub(StandID, -1, -1)
+    )
+
+plt_cn <- db_list(cns, PLT_CN)
+
+con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Data/_FIADB_WA.db")
+plots <- dbGetQuery(con, str_c("select * from PLOT where CN in (", plt_cn, ")"))
+dbDisconnect(con)
+plots <- plots |> rename(PLT_CN = CN)
+
+t_plots <- left_join(cns, plots, join_by(PLT_CN))
+t_plots <- t_plots |> mutate(PLOTid = str_c(PLOT, "_", SUBP)) |> relocate(StandID, PLOTid)
+t_plots |> nrow() %>% add_commas()
+```
+
+
+*Making sure that PLOTid works*
+```{r}
+t_plots |> head()
+```
+
+
+
+```{r}
+
+# For each PLOTid, find the years of each visit. 
+a <- t_plots |> 
+  select(StandID, PREV_PLT_CN, INVYR, PLOTid) |> 
+  group_by(PLOTid, INVYR) |> 
+  summarise(
+    n = n(), 
+    .groups = "drop") |> 
+  
+  arrange(PLOTid, desc(INVYR)) |> select(-n)
+
+# Add a tag for first or second visit
+a <- a |> group_by(PLOTid) |> 
+  mutate(
+    instance = str_c("visit_", row_number())
+    )
+
+# Make it wider to see where there was only one visit*
+plot_yr <- a |> select(PLOTid, INVYR, instance) |> 
+  pivot_wider(
+    names_from = instance, values_from = INVYR)
+
+plot_yr |> nrow() %>% add_commas()
+plot_yr |> head()
+```
+
+- 7,241 PLOTs with 10,637 visits. 
+
+*Number of visits*
+```{r}
+v1 <- a |> filter(instance == "visit_1")
+sum(!is.na(plot_yr$visit_1)) %>% add_commas()
+## [1] 6064
+v2 <- a |> filter(instance == "visit_2")
+sum(!is.na(plot_yr$visit_2)) %>% add_commas()
+## [1] 2481
+```
+
+- ~~There were 6064 individual PLOTs for those 8,545 visits and 2,481 had earlier visits.~~
+- ~~There were 6,374 individual PLOTs for those 9,253 visits and 2,879 had earlier visits.~~
+- 7,241 PLOTs, 3,396 had earlier visits. 
+
+
+```{r}
+plots_2vis <- plot_yr |> filter(!is.na(visit_2)) |> select(PLOTid)
+plots_1vis <- plot_yr |> filter(is.na(visit_2)) |> select(PLOTid)
+
+plots_2vis <- left_join(plots_2vis, t_plots, join_by(PLOTid))
+plots_1vis <- left_join(plots_1vis, t_plots, join_by(PLOTid))
+
+plots_2vis <- plots_2vis |> 
+  group_by(PLOTid, StandID, INVYR) |> 
+  summarise(
+    n = n(), 
+    .groups = "drop") |> 
+  arrange(PLOTid, desc(INVYR)) |> 
+  group_by(PLOTid) |> 
+  mutate(instance = str_c("visit_", row_number())) |> 
+  ungroup()
+
+# write_csv(splots_2vis, "C:/RxFire/Regen/Regen_Notes/Subplots_w2visits.csv")
+
+plots_2vis <- plots_2vis |> 
+  filter(instance == "visit_2") |> select(StandID, INVYR, instance)
+
+plots_1vis <- plots_1vis |> 
+  group_by(PLOTid, StandID, INVYR) |> 
+  summarise(
+    n = n(), 
+    .groups = "drop") |>
+  arrange(PLOTid, desc(INVYR)) |> 
+  group_by(PLOTid) |> 
+  mutate(instance = str_c("visit_", row_number())) |> 
+  ungroup()
+
+# write_csv(splots_1vis, "C:/RxFire/Regen/Regen_Notes/Subplots_w1visit.csv")
+
+plots_1vis <- plots_1vis |> 
+  filter(instance == "visit_1") |> select(StandID, INVYR, instance)
+
+
+summary(plots_2vis)
+```
+
+```{r}
+nrow(plots_1vis) %>% add_commas()
+nrow(plots_2vis) %>% add_commas()
+
+(nrow(plots_1vis) + nrow(plots_2vis)) %>% add_commas()
+```
+
+- ~~2481 with 2 visits and  3583 with one.~~
+- ~~That makes 6,064 plots that are either earlier or only have single visits.~~
+- 3,396 with two, 3,845 with one of 7,241. 
+
+
+~~2,879 with 2 visits and 3,495 with one. That makes 6,374 plots that are either earlier or only have single visits.
+In other words, we have 6,374 subplots for our training set and 2,879 for testing.~~
+
+7,241 for training and 3,396 test. 
+
+
+# 7,241 subplots
+
+
+
+
+```{r}
+training_set <- add_row(plots_2vis, plots_1vis) |> select(-instance)
+testing_set <- anti_join(t_plots, training_set, join_by(StandID, INVYR)) |> select(StandID, INVYR)
+
+training_set$TRAIN <- "train"
+testing_set$TRAIN <- "test"
+
+standlist <- add_row(training_set, testing_set)
+
+glimpse(standlist)
+
+# getwd()
+# write_csv(training_set, "C:/RxFire/Regen/Regeneration_2_16Sept24/train.csv")
+# write_csv(testing_set, "C:/RxFire/Regen/Regeneration_2_16Sept24/test.csv")
+# write_csv(standlist, "C:/RxFire/Regen/Regeneration_2_16Sept24/train_and_test.csv")
+```
+

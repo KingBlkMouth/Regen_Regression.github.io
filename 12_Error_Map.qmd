@@ -1,0 +1,487 @@
+---
+title: "12 Error Map"
+execute: 
+  freeze: auto
+---
+
+**12Sept24**
+
+
+*Libraries*
+```{r}
+#| label: Libraries
+#| message: false
+#| warning: false
+#| code-fold: true
+#| output: false
+
+rm(list = ls())                                                      
+gc()                                                                                 
+
+# Data tidying and acces
+library(tidyverse, quietly = T)       # Easy to read syntax and data manipulation                   
+library(RSQLite)                      # Access SQLite dbs   
+library(magrittr)                     # Pipes and math functions    
+# library(readxl)                     # Read xlsx 
+# library(writexl)                    # write xlsx     
+                                                   
+# yaImpute and related                           
+library(randomForest)                 # RF package that yaImpute uses
+library(yaImpute)                     # RF imputation
+library(vegan)                        # Something to do the yaImpute
+
+                                                     
+# plots and tables                          
+# library(esquisse)                     # Quick data visualization   
+library(knitr)                        # Better html tables
+# library(DT)                           # Data tables for Java script tables in HTML
+# library(stars)
+library(kableExtra)                   # Better html tables, change sizes
+# library(feather)                      # Faster data retrieval    
+
+# Geography
+library(sf)                           # Simple Features/vector data
+library(terra)                        # Raster functions
+library(spatstat)                     # Spatial stats
+
+
+library(tcltk)                        # Fix file paths
+
+# No sci-notation. 
+options(scipen = 999)
+options(width = 125)
+```
+
+*Functions*
+```{r}
+#| code-fold: true
+#| label: Functions
+
+clean_mem <- function() {
+  x <- ls(envir = .GlobalEnv)
+  # ls()[!(ls() %in% keep)]
+  rm(list = x[!(x %in% keep)], envir = .GlobalEnv)
+  gc()
+}
+
+clean_na_cols <- function(df){
+  df <- df[, colSums(is.na(df)) < nrow(df)]
+}
+
+# path <- r"(C:\RxFire\Regen\FVS\regen_080724_1644\regen_080724_1644.db)"
+clean_paths <- function(path) {
+  str_replace_all(path, "\\\\", "/")
+}
+
+db_list <- function(df, CN_col){
+  name <- NULL
+  name <- df |> select({{CN_col}})
+  name <- name |> mutate(CN_col = str_c("'", {{CN_col}}, "'")) 
+  name <- str_flatten_comma(name$CN_col)
+  # name <- str_flatten_comma(name[, CN_col])
+  name
+}
+
+nas_to_zeroes <- function(df){
+  df <- df |> mutate_all(~replace(., is.na(.), 0))
+  df
+}
+
+rmsd_spp <-spprmsd_spp <- function(imp_df, spp) {
+  
+  rmsd_t <- imp_df %>% drop_na() %>% select(contains(spp)) %>% select(contains("TD"))
+  
+  v1 <- rmsd_t %>% select(ends_with("TD")) %>% names()
+  v2 <- rmsd_t %>% select(ends_with(".o")) %>% names()
+  
+  rmsd_t <- rmsd_t %>% mutate(sq_dev = (rmsd_t[,v1] - rmsd_t[,v2])^2) 
+  
+  return(sqrt(mean(rmsd_t$sq_dev)))
+}
+
+
+keep <- c("keep", "clean_mem", "clean_na_cols", "clean_paths", "db_list", "nas_to_zeroes", "rmsd_spp") %>% unique()
+```
+
+**Created on**
+```{r}
+ymd(as_date(file.info("10_Error_Map.qmd")$ctime))
+```
+
+___
+
+
+**Last modified on**
+```{r}
+ymd(as_date(file.info("10_Error_Map.qmd")$atime))
+```
+
+
+
+
+
+
+# Import
+
+# AGP TreeMap
+
+```{r}
+agp_nc_tm <- read_csv(clean_paths(r"(C:\RxFire\Regen\Regeneration_2_16Sept24\agp_nc_tm_plots.csv)"), 
+                      show_col_types = F)
+
+agp_nc_tm <- agp_nc_tm %>% select(CN) %>% unique()
+
+
+cns <- db_list(agp_nc_tm, CN)
+
+con <- dbConnect(RSQLite::SQLite(), clean_paths(r"(C:\RxFire\Data\SQLite_FIADB_ENTIRE.db)"))
+agp_nc_seedlings <- dbGetQuery(con, str_c("select * from SEEDLING where PLT_CN in (", cns, ")"))
+agp_nc_trees <- dbGetQuery(con, str_c("select * from TREE where PLT_CN in (", cns, ")"))
+agp_nc_plots <- dbGetQuery(con, str_c("select * from PLOT where CN in (", cns, ")"))
+
+species_ref <- dbGetQuery(con, "select * from REF_SPECIES")
+species_grp_ref <- dbGetQuery(con, "select * from REF_SPECIES_GROUP")
+
+dbDisconnect(con)
+
+agp_nc_seedlings <- clean_na_cols(agp_nc_seedlings)
+names(agp_nc_seedlings)
+
+
+
+
+species_ref2 <- species_ref %>% select(SPCD, COMMON_NAME, SPECIES_SYMBOL)
+species_grp_ref2 <- species_grp_ref %>% select(SPGRPCD, grp_name = NAME, CLASS)
+
+agp_nc_seedlings <- agp_nc_seedlings %>% mutate(
+  STANDPLOT_CN = str_c(PLT_CN, "_", SUBP)
+    ) %>% relocate(STANDPLOT_CN)
+
+agp_nc_seedlings <- left_join(agp_nc_seedlings, species_ref2, join_by(SPCD))
+agp_nc_seedlings <- agp_nc_seedlings %>% relocate(SPCD, SPECIES_SYMBOL, .after = SPGRPCD) %>% 
+  select_if(~ !is.numeric(.) || sum(.) != 0)
+agp_nc_seedlings <- clean_na_cols(agp_nc_seedlings)
+
+agp_nc_seedlings <- left_join(agp_nc_seedlings, species_grp_ref2, join_by(SPGRPCD)) %>% 
+  relocate(SPGRPCD, grp_name, .after = SPECIES_SYMBOL)
+
+agp_nc_seedlings <- agp_nc_seedlings %>% select(STANDPLOT_CN, TPA_UNADJ, SPCD, SPECIES_SYMBOL, COMMON_NAME, SPGRPCD, grp_name, CLASS,
+                        TREECOUNT, PLT_CN, SUBP)
+
+
+keep <- append(keep, 
+               c("agp_nc_seedlings", "agp_nc_tm", "species_ref", "rf_5_seeds")) %>% unique()
+```
+
+
+```{r}
+clean_mem()
+```
+
+
+
+# RandomForests. 
+
+
+
+```{r}
+load(str_c("RF_26AUG24_1seedlings", ".Rdata"))
+
+rf_5_seeds <- rf_yai
+rm(rf_yai)
+
+rf_imputation <- impute.yai((rf_5_seeds))
+
+rf_5_data <- rf_imputation %>% drop_na() %>% select(ends_with("TD.o"), ends_with("TD"), contains("max"))
+
+keep <- append(keep, "rf_5_data")
+
+rm(rf_imputation, rf_5_seeds)
+
+
+rmsd(rf_5_data)
+```
+
+
+
+# RMSD
+
+```{r}
+rmsd <- rmsd(rf_5_data)
+rmsd
+```
+
+
+
+
+## RMSD Calc
+
+**In the rmsd function, rmsd is calculated after dropping the NA values from the full dataframe.**
+
+**In 5_TD_Imp.qmd, I matched the imputations RMSD, but I had done so after dropping NAs from the dataset and for 
+the ancillary data. Above, I tried to pull out the needed columns and then drop NAs. 
+That caused the difference in RMSD.**
+
+
+```{r}
+#| eval: false
+rmsd_spp <-spprmsd_spp <- function(imp_df, spp) {
+  
+  rmsd_t <- imp_df %>% drop_na() %>% select(contains(spp)) %>% select(contains("TD"))
+  
+  v1 <- rmsd_t %>% select(ends_with("TD")) %>% names()
+  v2 <- rmsd_t %>% select(ends_with(".o")) %>% names()
+  
+  rmsd_t <- rmsd_t %>% mutate(sq_dev = (rmsd_t[,v1] - rmsd_t[,v2])^2) 
+  
+  # l <- list(v1, sqrt(mean(rmsd_t$sq_dev)))
+  print(paste0("RMSD for ", v1, " is ", sqrt(mean(rmsd_t$sq_dev))))
+  # print(sqrt(mean(rmsd_t$sq_dev)))
+  # return(sqrt(mean(rmsd_t$sq_dev)))
+}
+```
+
+
+```{r}
+rmsd_spp(rf_5_data, "ABLA")
+```
+
+
+# Distributions
+
+```{r}
+load("raw_TDs_forHist.Rdata")
+# load("rf_TDs_forHist.Rdata")
+
+raw_tds %>% head()
+```
+
+
+```{r}
+
+df <- raw_tds
+spp_vector <- c("ABAM", "THPL", "TSHE")
+
+hist_spps <- function(df, spp_vector) {
+  
+  df2 <- df %>% select(contains(spp_vector[1]))
+  
+  if (length(spp_vector) == 1) {
+    print(df2)
+  }
+  if (length(spp_vector) > 1) {
+    for(i in 2:length(spp_vector)) { 
+      spp <- df %>% select(contains(spp_vector[i]))
+      
+      df2 <- cbind(df2, spp)
+    }
+  }
+  
+  plot_variables <- names(df2)
+  # ?pivot_longer
+  df3 <- df2 %>% pivot_longer(
+    cols = plot_variables,
+    values_to = "TDs", 
+    names_to = "Species"
+  )
+  
+  p <- df3 %>% ggplot() + 
+    aes(x = TDs, fill = Species) + 
+    geom_histogram(
+      alpha = 0.5, 
+      position = "identity", 
+      bins = 30
+    ) + 
+    labs(title = plot_variables) + 
+    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  
+  print(p)
+}
+
+hist_spps(df = raw_tds, spp_vector = c("ABLA", "ABGR", "TSHE"))
+```
+
+#### Side by side bar plots
+
+```{r}
+df <- raw_tds
+spp_vector <- c("ABAM", "THPL", "TSHE")
+
+bar_spps <- function(df, spp_vector) {
+  
+  df2 <- df %>% select(contains(spp_vector[1]))
+  
+  if (length(spp_vector) == 1) {
+    print(df2)
+  }
+  if (length(spp_vector) > 1) {
+    for(i in 2:length(spp_vector)) { 
+      spp <- df %>% select(contains(spp_vector[i]))
+      
+      df2 <- cbind(df2, spp)
+    }
+  }
+  
+  plot_variables <- names(df2)
+  # ?pivot_longer
+  df3 <- df2 %>% pivot_longer(
+    cols = plot_variables,
+    values_to = "TDs", 
+    names_to = "Species"
+  )
+  
+  p <- df3 %>% ggplot() + 
+    aes(x = TDs, fill = Species) + 
+    geom_histogram(
+      # alpha = 0.5, 
+      position = "dodge", 
+      bins = 30
+    ) + 
+    labs(title = plot_variables) + 
+    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  
+  print(p)
+}
+
+bar_spps(df = raw_tds, spp_vector = c("ABLA", "ABGR", "TSHE"))
+```
+
+
+#### log plots
+
+```{r}
+df <- raw_tds
+spp_vector <- c("ABAM", "THPL", "TSHE")
+
+hist_spps <- function(df, spp_vector, hist_bar = "histogram", log_tds = F, keep_zeroes = T) {
+  # df cleaning
+  df2 <- df %>% select(contains(spp_vector[1]))
+  
+  if (length(spp_vector) == 1) {
+    print(df2)
+  }
+  if (length(spp_vector) > 1) {
+    for(i in 2:length(spp_vector)) { 
+      spp <- df %>% select(contains(spp_vector[i]))
+      
+      df2 <- cbind(df2, spp)
+    }
+  }
+  
+  plot_variables <- names(df2)
+  # ?pivot_longer
+  df3 <- df2 %>% pivot_longer(
+    cols = plot_variables,
+    values_to = "TDs", 
+    names_to = "Species"
+  )
+  
+  # keep_zeroes
+  if (keep_zeroes == F) {
+    df3 <- df3 %>% filter(TDs > 0)
+  }
+  
+  # log_tds
+  if (log_tds == T) {
+    df3$TDs <- log(df3$TDs + 1)
+  }
+  
+  # hist_bar
+  if (hist_bar == "histogram") {
+    
+    p <- df3 %>% ggplot() + 
+      aes(x = TDs, fill = Species) + 
+      geom_histogram(
+        alpha = 0.5,
+        position = "dodge", 
+        bins = 30
+      ) + 
+      labs(title = plot_variables) + 
+      theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+    
+    print(p)
+  }
+  
+  if (hist_bar == "bar") {
+    
+    p <- df3 %>% ggplot() + 
+      aes(x = TDs, fill = Species) + 
+      geom_histogram(
+        # alpha = 0.5, 
+        position = "dodge", 
+        bins = 30
+      ) + 
+      labs(title = str_flatten_comma(plot_variables)) + 
+      theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+    
+    print(p)
+  }
+  
+}
+# df, spp_vector, hist_bar = "histogram", log_tds = F
+hist_spps(df = raw_tds, spp_vector = c("ABLA", "ABGR", "TSHE"))
+
+hist_spps(df = raw_tds, spp_vector = c("ABLA", "ABGR", "TSHE"), hist_bar = "bar", log_tds = T)
+
+hist_spps(df = raw_tds, 
+          spp_vector = c("ABLA", "ABGR", "TSHE"), 
+          hist_bar = "bar", 
+          log_tds = T, 
+          keep_zeroes = F)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+# install.packages("plotrix")
+# require(plotrix)
+# 
+# 
+# multhist(df2, main = "t", col = c("blue", "red", "green")) 
+# legend("topright",                      # Position of the legend
+#        legend = names(df2),    # Labels for the legend
+#        fill = c("blue", "red", "green"))
+```
+
+```{r}
+# par(mar=c(7,4,4,6))
+# testcol<-color.gradient(c(0,1),0,c(1,0),nslices=5)
+# col.labels<-c("Cold","Warm","Hot")
+# # this will put the labels at the intersections
+# # col.labels<-c("","Cold","","Warm","","Warmer","","Hot","")
+# color2D.matplot(matrix(rnorm(100),nrow=10),c(1,0),0,c(0,1),
+# main="Test color legends")
+# color.legend(11,6,11.8,9,col.labels,testcol,gradient="y")
+# color.legend(10.2,2,11,5,col.labels,testcol,align="rb",gradient="y")
+# color.legend(0.5,-2,3.5,-1.2,col.labels,testcol)
+# color.legend(7,-1.8,10,-1,col.labels,testcol,align="rb",col=testcol[c(1,3,5)])
+# par(mar=c(5,4,4,2))
+
+```
+
+
+# End
+

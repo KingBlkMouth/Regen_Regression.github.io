@@ -1,0 +1,317 @@
+---
+title: "9 RF Reg"
+execute: 
+  freeze: auto
+---
+
+**04Sept24**
+
+# Intro
+
+To run RF with the species grouped by species group code instead of species code, 
+I will need to pull the imputation data before it is widened into seedling densities, convert the codes, then widen the data. 
+I will need to do the same for the BAs. 
+That work was first done in 3_rf_prep. 
+
+
+
+
+
+*Libraries*
+```{r}
+#| label: Libraries
+#| message: false
+#| warning: false
+#| code-fold: true
+#| output: false
+
+rm(list = ls())                                                      
+gc()                                                                                 
+
+# Data tidying and access
+library(tidyverse, quietly = T)       # Easy to read syntax and data manipulation                   
+library(RSQLite)                      # Access SQLite dbs   
+library(magrittr)                     # Pipes and math functions    
+# library(readxl)                     # Read xlsx 
+# library(writexl)                    # write xlsx     
+library(BAMMtools)                    # Natural Breaks
+library(fedmatch)                     # Clean strings
+library(janitor)                      # Clean headers
+
+# yaImpute and related                           
+library(yaImpute)                     # RF imputation     
+library(vegan)                        # Something to do the yaImpute 
+library(randomForest)                 # RF package that yaImpute uses                                   
+                                                     
+# plots and tables                          
+# library(esquisse)                     # Quick data visualization   
+library(knitr)                        # Better html tables
+# library(DT)                           # Data tables for Java script tables in HTML
+                                                   
+library(kableExtra)                   # Better html tables, change sizes
+# library(feather)                      # Faster data retrieval    
+
+# Geography
+# library(sf)                           # Simple Features/vector data
+# library(terra)                        # Raster functions
+# library(spatstat)                     # Spatial stats
+
+
+library(tcltk)                        # Fix file paths
+
+# No sci-notation. 
+options(scipen = 999)
+options(width = 125)
+```
+
+*Functions*
+```{r}
+#| code-fold: true
+#| label: Functions
+
+clean_mem <- function() {
+  x <- ls(envir = .GlobalEnv)
+  # ls()[!(ls() %in% keep)]
+  rm(list = x[!(x %in% keep)], envir = .GlobalEnv)
+  gc()
+}
+
+clean_na_cols <- function(df){
+  df <- df[, colSums(is.na(df)) < nrow(df)]
+}
+
+# path <- r"(C:\RxFire\Regen\FVS\regen_080724_1644\regen_080724_1644.db)"
+clean_paths <- function(path) {
+  str_replace_all(path, "\\\\", "/")
+}
+
+db_list <- function(df, CN_col){
+  name <- NULL
+  name <- df |> select({{CN_col}})
+  name <- name |> mutate(CN_col = str_c("'", {{CN_col}}, "'")) 
+  name <- str_flatten_comma(name$CN_col)
+  # name <- str_flatten_comma(name[, CN_col])
+  name
+}
+
+nas_to_zeroes <- function(df){
+  df <- df |> mutate_all(~replace(., is.na(.), 0))
+  df
+}
+
+keep <- c("keep", "clean_mem", "clean_na_cols", "clean_paths", "db_list", "nas_to_zeroes")
+```
+
+
+
+
+
+
+
+
+
+
+# RF regression
+
+```{r}
+con <- dbConnect(RSQLite::SQLite(), clean_paths(r"(C:\RxFire\Regen\Regeneration_2_16Sept24\homemade_fvs_db_17sept24.db)"))
+
+imp_data <- dbGetQuery(con, "select * from imp_data")
+dbDisconnect(con)
+
+
+imp_data_nc <- imp_data |> filter(EcoRegion == "M242D" & TRAIN == T) |> select(-c(EcoRegion, ECO_NAME, eco_code, 
+                                 STAND_CN, TRAIN, largest_1, largest_2, largest_3, max_spp1, max_spp2, max_spp3, FPAG))
+
+imp_data_nc <- imp_data_nc |> filter(total_TD != 0)
+
+y_resp <- imp_data_nc |> select(STANDPLOT_CN, contains("TD"))
+
+x_pred <- imp_data_nc |> select(STANDPLOT_CN, !contains("TD"))
+
+
+
+# Prep
+y <- y_resp
+
+CNs <- imp_data_nc |> select(STANDPLOT_CN)
+
+y <- y %>% select_if(~ !is.numeric(.) || sum(.) != 0)
+
+# X Variables
+x <- left_join(CNs, x_pred, join_by(STANDPLOT_CN))
+
+x <- x %>% select_if(~ !is.numeric(.) || sum(.) != 0)
+# No Oaks in BA either
+
+x <- as.data.frame(x)
+y <- as.data.frame(y)
+
+x <- x |> column_to_rownames("STANDPLOT_CN")
+y <- y |> column_to_rownames("STANDPLOT_CN")
+
+y <- droplevels(y)
+x <- droplevels(x)
+
+################################################################################################
+
+# n = 0
+# while(n != 10){
+#     rf <- try(
+#       yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = T, rfMode = "regression"), 
+#       silent = T)
+#     
+#     if (class(rf) == "try-error") {
+#       print(n)     
+#       cat("ERROR1: ", rf, "\n")
+#       n <- n + 1
+#       } else {
+#         break
+#       }
+# }
+# 
+# rf_reg_noclass <- rf
+```
+
+
+```{r}
+
+# save(rf_reg_noclass, file = "./rf_reg_noclass_spet18.R")
+
+load(file = "./rf_reg_noclass_spet18.R")
+
+rf_reg_summary <- yaiRFsummary(rf_reg_noclass)
+
+rf_reg_summary$forestAttributes
+```
+
+
+```{r}
+oobe <- rf_reg_summary$forestAttributes
+oobe <- oobe %>% rownames_to_column("SYMBL") %>% 
+  select(SYMBL, var_exp = error)
+oobe
+```
+
+
+
+
+```{r}
+
+rf_reg_noclass_imp <- impute(rf_reg_noclass)
+rf_reg_noclass_imp <- rf_reg_noclass_imp |> 
+  drop_na() |> 
+  select(order(colnames(rf_reg_noclass_imp))) |> 
+  select(contains("TD"))
+
+rf_reg_noclass_imp |> head(n = 10)
+```
+
+```{r}
+rmsd <- rmsd(rf_reg_noclass_imp)
+rmsd <- rmsd %>% rownames_to_column("SYMBL")
+
+rmsd
+```
+
+
+
+
+
+
+
+
+
+# error v. n plots
+
+
+```{r}
+cols_tds <- imp_data_nc %>% select(contains("_TD")) %>% select_if(~ sum(.)>0) %>% names()
+
+df <- tribble(
+  ~SYMBL, ~n_plots
+)
+
+
+for (i in 1:length(cols_tds)) {  ## length(cols_tds)
+  t <- imp_data_nc %>% select(STANDPLOT_CN, cols_tds[i]) %>% filter(!!sym(cols_tds[i]) > 0)
+  
+  tdf <- tribble(
+  ~SYMBL, ~ n_plots, 
+  cols_tds[i], nrow(t)
+  )
+  
+  df <- add_row(df, tdf)
+}
+df
+```
+
+```{r}
+#| message: false
+
+error <- left_join(df, oobe, join_by(SYMBL))
+error <- left_join(error, rmsd, join_by(SYMBL))
+error %>% head()
+```
+
+
+```{r}
+error %>% filter(!is.na(var_exp)) %>% ggplot() + 
+  aes(x = reorder(SYMBL, -n_plots), y = var_exp, size = n_plots) + 
+  geom_point() +
+  guides(x =  guide_axis(angle = 60)) + 
+  labs(title = "Variation Explained") + 
+  xlab("Species")
+
+error %>% filter(is.na(var_exp))
+```
+
+```{r}
+error %>% filter(!is.na(rmsd)) %>% ggplot() + 
+  aes(x = reorder(SYMBL, -n_plots), y = rmsd, size = n_plots) + 
+  geom_point() +
+  guides(x =  guide_axis(angle = 60)) + 
+  labs(title = "RMSD") + 
+  xlab("Species")
+
+```
+
+```{r}
+cols_tds <- imp_data_nc %>% select(contains("_TD")) %>% select_if(~ sum(.)>0) %>% names()
+
+df <- tribble(
+  ~SYMBL, ~std_dev
+)
+
+
+for (i in 1:length(cols_tds)) {  ## length(cols_tds)
+  t <- imp_data_nc %>% select(STANDPLOT_CN, cols_tds[i]) %>% filter(!!sym(cols_tds[i]) > 0)
+  
+  tdf <- tribble(
+  ~SYMBL, ~std_dev, 
+  cols_tds[i], sd(t[,2])
+  )
+  
+  df <- add_row(df, tdf)
+}
+df
+
+error <- left_join(error, df, join_by(SYMBL))
+```
+
+```{r}
+error %>% filter(!is.na(std_dev)) %>% ggplot() + 
+  aes(x = reorder(SYMBL, -n_plots), y = std_dev, size = n_plots) + 
+  geom_point() +
+  guides(x =  guide_axis(angle = 60)) + 
+  labs(title = "Standard Deviation") + 
+  xlab("Species")
+
+```
+
+
+
+```{r}
+yaiVarImp(rf_reg_noclass)
+```
+

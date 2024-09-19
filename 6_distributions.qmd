@@ -1,0 +1,1163 @@
+---
+title: "6 Histos"
+execute: 
+  freeze: auto
+---
+
+**Tu. 27AUG24**
+
+
+The following graphs are organized by Density, Log transformation, then raw. 
+Each set shows two sets of histograms, one that contains the excess zeroes and one that doesn't. 
+This was done to see the distributions when zeroes dominate the graphs. 
+In the graphs containing zeroes, it is impossible to see how they compare where zeroes are present for all 
+but a few species. 
+
+I put the variables that I created first, total TD and rare TD. 
+Total TD is the sum of all TPAs and rare is the sum of those species that were removed to run yaImpute. 
+They were the rarest species in the list of species that had the largest or second largest tpa per subplot. 
+I experimented with the number of species to include and cut the list when I could get yai() to run most of the time. 
+
+**I went back and filtered the test set to N. Cascades. Disregard any further warnings about that.**
+
+**Check the filtration and see if I updated the database after Missoula. I don't think I did.**
+
+
+*Libraries*
+```{r}
+#| label: Libraries
+#| message: false
+#| warning: false
+#| code-fold: true
+#| output: false
+
+rm(list = ls())                                                      
+gc()                                                                                 
+
+# Data tidying and acces
+library(tidyverse, quietly = T)       # Easy to read syntax and data manipulation                   
+library(RSQLite)                      # Access SQLite dbs   
+library(magrittr)                     # Pipes and math functions    
+# library(readxl)                     # Read xlsx 
+# library(writexl)                    # write xlsx     
+                                                   
+# yaImpute and related                           
+library(yaImpute)                     # RF imputation     
+library(vegan)                        # Something to do the yaImpute 
+library(randomForest)                 # RF package that yaImpute uses                                   
+                                                     
+# plots and tables                          
+# library(esquisse)                     # Quick data visualization   
+library(knitr)                        # Better html tables
+# library(DT)                           # Data tables for Java script tables in HTML
+                                                   
+library(kableExtra)                   # Better html tables, change sizes
+# library(feather)                      # Faster data retrieval    
+
+# Geography
+# library(sf)                           # Simple Features/vector data
+# library(terra)                        # Raster functions
+# library(spatstat)                     # Spatial stats
+
+
+library(tcltk)                        # Fix file paths
+
+# No sci-notation. 
+options(scipen = 999)
+options(width = 125)
+```
+
+*Functions*
+```{r}
+#| code-fold: true
+#| label: Functions
+
+clean_mem <- function() {
+  x <- ls(envir = .GlobalEnv)
+  # ls()[!(ls() %in% keep)]
+  rm(list = x[!(x %in% keep)], envir = .GlobalEnv)
+  gc()
+}
+
+clean_na_cols <- function(df){
+  df <- df[, colSums(is.na(df)) < nrow(df)]
+}
+
+# path <- r"(C:\RxFire\Regen\FVS\regen_080724_1644\regen_080724_1644.db)"
+clean_paths <- function(path) {
+  str_replace_all(path, "\\\\", "/")
+}
+
+db_list <- function(df, CN_col){
+  name <- NULL
+  name <- df |> select({{CN_col}})
+  name <- name |> mutate(CN_col = str_c("'", {{CN_col}}, "'")) 
+  name <- str_flatten_comma(name$CN_col)
+  # name <- str_flatten_comma(name[, CN_col])
+  name
+}
+
+nas_to_zeroes <- function(df){
+  df <- df |> mutate_all(~replace(., is.na(.), 0))
+  df
+}
+
+keep <- c("keep", "clean_mem", "clean_na_cols", "clean_paths", "db_list", "nas_to_zeroes")
+```
+
+
+
+# Import
+
+*Loading data*
+```{r}
+#| code-fold: true
+
+load("raw_TDs_forHist.Rdata")
+load("rf_TDs_forHist.Rdata")
+```
+
+
+# Test Plots
+
+*Plot Histos*
+```{r}
+#| layout-ncol: 2
+#| fig-width: 10
+#| code-fold: true
+
+hist(log(rf_tds$ABAM_TD + 1))
+hist(log(raw_tds$ABAM_TD + 1))
+```
+
+*Data Prep*
+```{r}
+#| code-fold: true
+
+t <- rf_tds |> select(ABAM_TD) |> 
+  mutate(
+    source = "RF_Imputed") |> 
+  rownames_to_column("STANDPLOT_CN")
+
+t2 <- raw_tds |> select(STANDPLOT_CN, ABAM_TD) |> 
+  mutate(source = "test_set")
+
+t3 <- rf_tds |> select(ABAM_TD.o) |>
+  rename(ABAM_TD = ABAM_TD.o) |> 
+  mutate(source = "RF_Observed") |> 
+  rownames_to_column("STANDPLOT_CN")
+
+t <- add_row(t, t2)
+t <- add_row(t, t3) |> drop_na()
+```
+
+
+
+
+
+
+
+
+
+
+
+# Plots by species
+
+
+*Fixing the TD columns from the test set to match the RF set*
+```{r}
+#| code-fold: true
+
+load("raw_TDs_forHist.Rdata")
+
+raw_tds |> ncol()
+CNs <- raw_tds |> select(STANDPLOT_CN) 
+
+y_rare_str <- c("ALRH2_TD", "POBAT_TD", "PSMA_TD",  "BEPA_TD", "ALRU2_TD", "LALY_TD",  "LAOC_TD",  "PIMO3_TD", "PRVI_TD",  
+            "ACMA3_TD", "POTR5_TD", "PREM_TD",  "ACGL_TD",  "PIAL_TD",  "CHNO_TD",  "TABR2_TD", "PIEN_TD",  "THPL_TD",  
+            "PIPO_TD",  "PICO_TD", "ABCO_TD", "CONU4_TD", "PRAV_TD", "QUGA4_TD", "PISI_TD")
+
+y_rare <- raw_tds |> select(any_of(y_rare_str))
+
+y_rare <- y_rare |> mutate(
+  rare_TD = rowSums(y_rare[grep("_TD", names(y_rare))])
+)
+
+raw_tds$rare_TD <- y_rare$rare_TD
+
+raw_tds <- raw_tds |> select(!any_of(y_rare_str))
+
+raw_tds <- raw_tds |> mutate(
+  total_TD = rowSums(raw_tds[grep("_TD", names(raw_tds))])
+)
+
+raw_tds <- raw_tds %>% 
+  select_if(~ !is.numeric(.) || sum(.) != 0) 
+
+rf_tds <- rf_tds |> 
+  select(-c(Other_TD, Other_TD.o))
+
+raw_tds |> ncol()
+```
+
+Those numbers are the before and after of putting species into the rare category for the test set, 22 before and 10 
+columns left after binning. 
+
+
+*Showing the columns of test and RF*
+```{r}
+#| code-fold: true
+
+spp_list <- rf_tds |> select(!contains(".o")) |> names() |> sort()
+spp_list_raw <- raw_tds |> select(-STANDPLOT_CN) |> names() |> sort()
+
+spp_list <- spp_list[spp_list != "PISI_TD"]
+spp_list <- spp_list[spp_list != "ABPR_TD"]
+spp_list <- spp_list[spp_list != "total_TD"]
+spp_list <- spp_list[spp_list != "rare_TD"]
+
+spp_list <- append(c("total_TD", "rare_TD"), spp_list)
+
+spp_list |> noquote()
+# spp_list_raw |> noquote()
+```
+
+
+
+
+
+
+**I did not filter the test set for N.C.**
+
+# Density Graphs 
+
+This set of graphs shows the density. The test set and training sets have different row counts. 
+There are more plots in the training set than the test set. 
+
+The training set is output from yaImpute and contains the bootstrap replicates. 
+Not accounting for the replicates, there were 1498 subplots in the training set, but with replicates there are 2044. 
+
+There were 756 subplots in the test set that contained seedlings in N.C. of the 2879 total subplots in the test set. 
+
+The RMSD estimates come from the full list of imputed variables. 
+Each yai run and imputation results in an observed and imputed value for each cell that was used in calculating the 
+distance between subplots. 
+If a given variable is left out of the tree, then it doesn't have a value. 
+If a given subplot is replicated in the bootstrapping process, it could have two different values. 
+So, RMSD is calculated for each variable based on the rows that contain values. 
+There could be different numbers of rows for each variable's RMSD calculation. 
+
+On page 5 of this set, in the seedling imputation I show an example. 
+There were ~550 rows in the imputed dataset that had no NAs, but ~1100 in the ABAM_TD and ABAM_TD.o columns. 
+RMSD calculated on those 1100 rows matched the value given by yaImpute. 
+
+*The above explanation is what I understand from experimentation and reading, but I have no citation.*
+
+
+Each graph is created in a similar manner to the RMSD calculation. 
+I pulled the columns for observed and imputed from the Random Forest run, then pulled that species from the 
+test set and removed all NAs and added a column for where each came from, then added the three dataframes together. 
+
+**I could add the number of records for each set in a subtitle.**
+
+
+
+## Log(x + 1) With zeroes
+
+
+The Imputed v Observed histograms tend to line up most closely. 
+Only total TD is noticeably different. 
+There are more zeroes in the imputed data for total and more tpas on the lower end. 
+
+Imputed v the test set are also surprisingly close. 
+This match up doesn't appear to bias toward Imputed having more or less across the board. 
+Sometimes imputed is higher, and other times not. 
+
+Since imputed vs observed are closely matched, Observed v the test set have the same characteristics. 
+
+
+
+- Space
+
+  + Space
+
+
+- Space
+
+  + Space
+  
+- Space
+
+  + Space
+  
+  
+- Space
+
+  + Space
+
+
+```{r}
+#| layout-ncol: 3
+#| fig-width: 10
+#| fig-asp: 0.618
+#| column: screen
+#| code-fold: true
+
+
+# i <- 2
+
+for (i in 1:length(spp_list)) {  ## length(spp_list)
+  a <- rf_tds |> select(contains(spp_list[i])) |> names()
+  
+  t <- rf_tds |> select(a[1]) |> 
+    rename(x = str_c(spp_list[i])) |> 
+    mutate(
+      source = "RF_Imputed") |> 
+    rownames_to_column("STANDPLOT_CN")
+  
+  t2 <- rf_tds |> select(a[2]) |>
+    rename(x = str_c(spp_list[i], ".o")) |> 
+    mutate(source = "RF_Observed") |> 
+    rownames_to_column("STANDPLOT_CN")
+  
+  
+  t3 <- raw_tds |> select(STANDPLOT_CN, spp_list[i]) |> 
+    rename(x = str_c(spp_list[i])) |> 
+    mutate(source = "test_set")
+  
+  
+  t <- add_row(t, t2)
+  t <- add_row(t, t3) |> drop_na()
+  
+  p1 <- t |> filter(source == "RF_Imputed" | source == "RF_Observed") |> 
+    ggplot(aes(log(x + 1), fill = source)) + 
+     geom_histogram(
+       aes(y = after_stat(density)),
+       alpha = 0.5,
+       position = 'identity', 
+       bins = 30) + 
+    labs(title = spp_list[i]) + 
+    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  
+  p2 <- t |> filter(source == "RF_Imputed" | source == "test_set") |> 
+    ggplot(aes(log(x + 1), fill = source)) + 
+     geom_histogram(
+       aes(y = after_stat(density)),
+       alpha = 0.5, 
+       position = 'identity', 
+       bins = 30) + 
+    labs(title = spp_list[i]) + 
+    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  
+  p3 <- t |> filter(source == "RF_Observed" | source == "test_set") |> 
+    ggplot(aes(log(x + 1), fill = source)) + 
+     geom_histogram(
+       aes(y = after_stat(density)),
+       alpha = 0.5, 
+       position = 'identity', 
+       bins = 30) + 
+    labs(title = spp_list[i]) + 
+    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  
+  print(p1)
+  print(p2)
+  print(p3)
+    
+}
+
+```
+
+
+
+
+
+
+
+## Log(x) Without Zeroes
+
+For this set, I focused on the non-zero values. 
+
+Imputed values are higher on the lower end than observed. 
+APBR was not imputed and PISI was apparently not present. 
+
+Imputed vs. the test set are not wildly different, and don't appear at glance to be biased. 
+There are per species differences in the densities, but overall either one is over or under the other at various places.
+The shape of these histograms are comparable. 
+
+I probably didn't need all three graphs. Observed and imputed line up well, so the observed vs test set figures are 
+similar to the imputed vs. test set ones. 
+
+
+
+
+
+
+- Space
+
+  + Space
+
+
+- Space
+
+  + Space
+  
+- Space
+
+  + Space
+  
+  
+- Space
+
+  + Space
+
+
+
+
+```{r}
+#| layout-ncol: 3
+#| fig-width: 10
+#| fig-asp: 0.618
+#| column: screen
+#| code-fold: true
+
+
+i <- 1
+
+for (i in 1:length(spp_list)) {  ## length(spp_list)
+  a <- rf_tds |> select(contains(spp_list[i])) |> names()
+  
+  t <- rf_tds |> select(a[1]) |> 
+    rename(x = str_c(spp_list[i])) |> 
+    mutate(
+      source = "RF_Imputed") |> 
+    rownames_to_column("STANDPLOT_CN")
+  
+  t2 <- rf_tds |> select(a[2]) |>
+    rename(x = str_c(spp_list[i], ".o")) |> 
+    mutate(source = "RF_Observed") |> 
+    rownames_to_column("STANDPLOT_CN")
+  
+  
+  t3 <- raw_tds |> select(STANDPLOT_CN, spp_list[i]) |> 
+    rename(x = str_c(spp_list[i])) |> 
+    mutate(source = "test_set")
+  
+  
+  t <- add_row(t, t2)
+  t <- add_row(t, t3) |> drop_na()
+  
+  t <- t |> filter(x > 0)
+  
+  p1 <- t |> filter(source == "RF_Imputed" | source == "RF_Observed") |> 
+    ggplot(aes(log(x), fill = source)) + 
+     geom_histogram(
+       aes(y = after_stat(density)),
+       alpha = 0.5,
+       position = 'identity', 
+       bins = 30) + 
+    labs(title = spp_list[i]) + 
+    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  
+  p2 <- t |> filter(source == "RF_Imputed" | source == "test_set") |> 
+    ggplot(aes(log(x), fill = source)) + 
+     geom_histogram(
+       aes(y = after_stat(density)),
+       alpha = 0.5, 
+       position = 'identity', 
+       bins = 30) + 
+    labs(title = spp_list[i]) + 
+    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  
+  p3 <- t |> filter(source == "RF_Observed" | source == "test_set") |> 
+    ggplot(aes(log(x), fill = source)) + 
+     geom_histogram(
+       aes(y = after_stat(density)),
+       alpha = 0.5, 
+       position = 'identity', 
+       bins = 30) + 
+    labs(title = spp_list[i]) + 
+    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  
+  print(p1)
+  print(p2)
+  print(p3)
+    
+}
+
+```
+
+
+
+
+
+## Raw Density Graphs
+
+
+### x With zeroes
+
+
+
+
+**I was originally going to summarise all of these. 
+Now, I am keeping these in to create space between the sets of graphs.**
+
+**Observed v Imputed**
+
+- ABAM
+  + 
+  
+- General
+  + 
+  
+**Imputed v Test**
+
+- ABAM
+  + 
+  
+- General
+  + 
+
+**Observed v Test**
+
+- ABAM
+  + 
+  
+- General
+  + 
+  
+- Space
+
+ + Space
+
+
+
+
+```{r}
+#| layout-ncol: 3
+#| fig-width: 10
+#| fig-asp: 0.618
+#| column: screen
+#| code-fold: true
+
+
+# i <- 2
+
+for (i in 1:length(spp_list)) {  ## length(spp_list)
+  a <- rf_tds |> select(contains(spp_list[i])) |> names()
+  
+  t <- rf_tds |> select(a[1]) |> 
+    rename(x = str_c(spp_list[i])) |> 
+    mutate(
+      source = "RF_Imputed") |> 
+    rownames_to_column("STANDPLOT_CN")
+  
+  t2 <- rf_tds |> select(a[2]) |>
+    rename(x = str_c(spp_list[i], ".o")) |> 
+    mutate(source = "RF_Observed") |> 
+    rownames_to_column("STANDPLOT_CN")
+  
+  
+  t3 <- raw_tds |> select(STANDPLOT_CN, spp_list[i]) |> 
+    rename(x = str_c(spp_list[i])) |> 
+    mutate(source = "test_set")
+  
+  
+  t <- add_row(t, t2)
+  t <- add_row(t, t3) |> drop_na()
+  
+  p1 <- t |> filter(source == "RF_Imputed" | source == "RF_Observed") |> 
+    ggplot(aes(x, fill = source)) + 
+     geom_histogram(
+       aes(y = after_stat(density)),
+       alpha = 0.5,
+       position = 'identity', 
+       bins = 30) + 
+    labs(title = spp_list[i]) + 
+    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  
+  p2 <- t |> filter(source == "RF_Imputed" | source == "test_set") |> 
+    ggplot(aes(x, fill = source)) + 
+     geom_histogram(
+       aes(y = after_stat(density)),
+       alpha = 0.5, 
+       position = 'identity', 
+       bins = 30) + 
+    labs(title = spp_list[i]) + 
+    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  
+  p3 <- t |> filter(source == "RF_Observed" | source == "test_set") |> 
+    ggplot(aes(x, fill = source)) + 
+     geom_histogram(
+       aes(y = after_stat(density)),
+       alpha = 0.5, 
+       position = 'identity', 
+       bins = 30) + 
+    labs(title = spp_list[i]) + 
+    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  
+  print(p1)
+  print(p2)
+  print(p3)
+    
+}
+
+```
+
+
+
+
+
+
+
+
+### x Without Zeroes
+
+
+
+
+**I was originally going to summarise all of these. 
+Now, I am keeping these in to create space between the sets of graphs.**
+
+  
+- Space
+
+ + Space
+
+- Space
+
+ + Space
+
+
+- Space
+
+ + Space
+
+
+- Space
+
+ + Space
+
+- Space
+
+ + Space
+
+
+
+
+```{r}
+#| layout-ncol: 3
+#| fig-width: 10
+#| fig-asp: 0.618
+#| column: screen
+#| code-fold: true
+
+
+# i <- 2
+
+for (i in 1:length(spp_list)) {  ## length(spp_list)
+  a <- rf_tds |> select(contains(spp_list[i])) |> names()
+  
+  t <- rf_tds |> select(a[1]) |> 
+    rename(x = str_c(spp_list[i])) |> 
+    mutate(
+      source = "RF_Imputed") |> 
+    rownames_to_column("STANDPLOT_CN")
+  
+  t2 <- rf_tds |> select(a[2]) |>
+    rename(x = str_c(spp_list[i], ".o")) |> 
+    mutate(source = "RF_Observed") |> 
+    rownames_to_column("STANDPLOT_CN")
+  
+  
+  t3 <- raw_tds |> select(STANDPLOT_CN, spp_list[i]) |> 
+    rename(x = str_c(spp_list[i])) |> 
+    mutate(source = "test_set")
+  
+  
+  t <- add_row(t, t2)
+  t <- add_row(t, t3) |> drop_na()
+  
+  t <- t |> filter(x > 0)
+  
+  p1 <- t |> filter(source == "RF_Imputed" | source == "RF_Observed") |> 
+    ggplot(aes(x, fill = source)) + 
+     geom_histogram(
+       aes(y = after_stat(density)),
+       alpha = 0.5,
+       position = 'identity', 
+       bins = 30) + 
+    labs(title = spp_list[i]) + 
+    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  
+  p2 <- t |> filter(source == "RF_Imputed" | source == "test_set") |> 
+    ggplot(aes(x, fill = source)) + 
+     geom_histogram(
+       aes(y = after_stat(density)),
+       alpha = 0.5, 
+       position = 'identity', 
+       bins = 30) + 
+    labs(title = spp_list[i]) + 
+    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  
+  p3 <- t |> filter(source == "RF_Observed" | source == "test_set") |> 
+    ggplot(aes(x, fill = source)) + 
+     geom_histogram(
+       aes(y = after_stat(density)),
+       alpha = 0.5, 
+       position = 'identity', 
+       bins = 30) + 
+    labs(title = spp_list[i]) + 
+    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  
+  print(p1)
+  print(p2)
+  print(p3)
+    
+}
+
+```
+
+
+
+
+
+
+
+# Frequency Graphs
+
+## Log transformation graphs
+
+### Log(x) Without Zeroes 
+
+
+
+
+
+
+
+
+
+
+
+
+- Space
+
+  + Space
+
+
+- Space
+
+  + Space
+  
+- Space
+
+  + Space
+  
+  
+- Space
+
+  + Space
+
+
+
+
+
+
+
+```{r}
+#| layout-ncol: 3
+#| fig-width: 10
+#| fig-asp: 0.618
+#| column: screen
+#| code-fold: true
+
+
+i <- 1
+
+for (i in 1:length(spp_list)) {  ## length(spp_list)
+  a <- rf_tds |> select(contains(spp_list[i])) |> names()
+  
+  t <- rf_tds |> select(a[1]) |> 
+    rename(x = str_c(spp_list[i])) |> 
+    mutate(
+      source = "RF_Imputed") |> 
+    rownames_to_column("STANDPLOT_CN")
+  
+  t2 <- rf_tds |> select(a[2]) |>
+    rename(x = str_c(spp_list[i], ".o")) |> 
+    mutate(source = "RF_Observed") |> 
+    rownames_to_column("STANDPLOT_CN")
+  
+  
+  t3 <- raw_tds |> select(STANDPLOT_CN, spp_list[i]) |> 
+    rename(x = str_c(spp_list[i])) |> 
+    mutate(source = "test_set")
+  
+  
+  t <- add_row(t, t2)
+  t <- add_row(t, t3) |> drop_na()
+  
+  t <- t |> filter(x > 0)
+  
+  p1 <- t |> filter(source == "RF_Imputed" | source == "RF_Observed") |> 
+    ggplot(aes(log(x), fill = source)) + 
+     geom_histogram(
+       alpha = 0.5,
+       position = 'identity', 
+       bins = 30) + 
+    labs(title = spp_list[i]) + 
+    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  
+  p2 <- t |> filter(source == "RF_Imputed" | source == "test_set") |> 
+    ggplot(aes(log(x), fill = source)) + 
+     geom_histogram(
+       alpha = 0.5, 
+       position = 'identity', 
+       bins = 30) + 
+    labs(title = spp_list[i]) + 
+    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  
+  p3 <- t |> filter(source == "RF_Observed" | source == "test_set") |> 
+    ggplot(aes(log(x), fill = source)) + 
+     geom_histogram(
+       alpha = 0.5, 
+       position = 'identity', 
+       bins = 30) + 
+    labs(title = spp_list[i]) + 
+    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  
+  print(p1)
+  print(p2)
+  print(p3)
+    
+}
+
+```
+
+
+### log(x + 1) with zeroes 
+
+
+The imputed values contain many more zeroes than the observed.
+
+In fact, it looks like there are just more plots in the imputed
+
+
+
+**I was originally going to summarise all of these. 
+Now, I am keeping these in to create space between the sets of graphs.**
+
+
+
+- Space
+
+  + Space
+
+
+- Space
+
+  + Space
+  
+- Space
+
+  + Space
+  
+  
+- Space
+
+  + Space
+
+
+
+
+```{r}
+#| layout-ncol: 3
+#| fig-width: 10
+#| fig-asp: 0.618
+#| column: screen
+#| code-fold: true
+
+
+# i <- 2
+
+for (i in 1:length(spp_list)) {  ## length(spp_list)
+  a <- rf_tds |> select(contains(spp_list[i])) |> names()
+  
+  t <- rf_tds |> select(a[1]) |> 
+    rename(x = str_c(spp_list[i])) |> 
+    mutate(
+      source = "RF_Imputed") |> 
+    rownames_to_column("STANDPLOT_CN")
+  
+  t2 <- rf_tds |> select(a[2]) |>
+    rename(x = str_c(spp_list[i], ".o")) |> 
+    mutate(source = "RF_Observed") |> 
+    rownames_to_column("STANDPLOT_CN")
+  
+  
+  t3 <- raw_tds |> select(STANDPLOT_CN, spp_list[i]) |> 
+    rename(x = str_c(spp_list[i])) |> 
+    mutate(source = "test_set")
+  
+  
+  t <- add_row(t, t2)
+  t <- add_row(t, t3) |> drop_na()
+  
+  p1 <- t |> filter(source == "RF_Imputed" | source == "RF_Observed") |> 
+    ggplot(aes(log(x + 1), fill = source)) + 
+     geom_histogram(
+       alpha = 0.5,
+       position = 'identity', 
+       bins = 30) + 
+    labs(title = spp_list[i]) + 
+    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  
+  p2 <- t |> filter(source == "RF_Imputed" | source == "test_set") |> 
+    ggplot(aes(log(x + 1), fill = source)) + 
+     geom_histogram(
+       alpha = 0.5, 
+       position = 'identity', 
+       bins = 30) + 
+    labs(title = spp_list[i]) + 
+    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  
+  p3 <- t |> filter(source == "RF_Observed" | source == "test_set") |> 
+    ggplot(aes(log(x + 1), fill = source)) + 
+     geom_histogram(
+       alpha = 0.5, 
+       position = 'identity', 
+       bins = 30) + 
+    labs(title = spp_list[i]) + 
+    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  
+  print(p1)
+  print(p2)
+  print(p3)
+    
+}
+
+```
+
+
+
+
+
+## Raw Graphs
+
+
+### x Without Zeroes
+
+
+
+
+**I was originally going to summarise all of these. 
+Now, I am keeping these in to create space between the sets of graphs.**
+
+  
+- Space
+
+ + Space
+
+- Space
+
+ + Space
+
+
+- Space
+
+ + Space
+
+
+- Space
+
+ + Space
+
+- Space
+
+ + Space
+
+
+
+
+```{r}
+#| layout-ncol: 3
+#| fig-width: 10
+#| fig-asp: 0.618
+#| column: screen
+#| code-fold: true
+
+
+# i <- 2
+
+for (i in 1:length(spp_list)) {  ## length(spp_list)
+  a <- rf_tds |> select(contains(spp_list[i])) |> names()
+  
+  t <- rf_tds |> select(a[1]) |> 
+    rename(x = str_c(spp_list[i])) |> 
+    mutate(
+      source = "RF_Imputed") |> 
+    rownames_to_column("STANDPLOT_CN")
+  
+  t2 <- rf_tds |> select(a[2]) |>
+    rename(x = str_c(spp_list[i], ".o")) |> 
+    mutate(source = "RF_Observed") |> 
+    rownames_to_column("STANDPLOT_CN")
+  
+  
+  t3 <- raw_tds |> select(STANDPLOT_CN, spp_list[i]) |> 
+    rename(x = str_c(spp_list[i])) |> 
+    mutate(source = "test_set")
+  
+  
+  t <- add_row(t, t2)
+  t <- add_row(t, t3) |> drop_na()
+  
+  t <- t |> filter(x > 0)
+  
+  p1 <- t |> filter(source == "RF_Imputed" | source == "RF_Observed") |> 
+    ggplot(aes(x, fill = source)) + 
+     geom_histogram(
+       alpha = 0.5,
+       position = 'identity', 
+       bins = 30) + 
+    labs(title = spp_list[i]) + 
+    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  
+  p2 <- t |> filter(source == "RF_Imputed" | source == "test_set") |> 
+    ggplot(aes(x, fill = source)) + 
+     geom_histogram(
+       alpha = 0.5, 
+       position = 'identity', 
+       bins = 30) + 
+    labs(title = spp_list[i]) + 
+    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  
+  p3 <- t |> filter(source == "RF_Observed" | source == "test_set") |> 
+    ggplot(aes(x, fill = source)) + 
+     geom_histogram(
+       alpha = 0.5, 
+       position = 'identity', 
+       bins = 30) + 
+    labs(title = spp_list[i]) + 
+    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  
+  print(p1)
+  print(p2)
+  print(p3)
+    
+}
+
+```
+
+
+### x With zeroes
+
+
+
+
+**I was originally going to summarise all of these. 
+Now, I am keeping these in to create space between the sets of graphs.**
+
+**Observed v Imputed**
+
+- ABAM
+  + 
+  
+- General
+  + 
+  
+**Imputed v Test**
+
+- ABAM
+  + 
+  
+- General
+  + 
+
+**Observed v Test**
+
+- ABAM
+  + 
+  
+- General
+  + 
+  
+- Space
+
+ + Space
+
+
+
+
+```{r}
+#| layout-ncol: 3
+#| fig-width: 10
+#| fig-asp: 0.618
+#| column: screen
+#| code-fold: true
+
+
+# i <- 2
+
+for (i in 1:length(spp_list)) {  ## length(spp_list)
+  a <- rf_tds |> select(contains(spp_list[i])) |> names()
+  
+  t <- rf_tds |> select(a[1]) |> 
+    rename(x = str_c(spp_list[i])) |> 
+    mutate(
+      source = "RF_Imputed") |> 
+    rownames_to_column("STANDPLOT_CN")
+  
+  t2 <- rf_tds |> select(a[2]) |>
+    rename(x = str_c(spp_list[i], ".o")) |> 
+    mutate(source = "RF_Observed") |> 
+    rownames_to_column("STANDPLOT_CN")
+  
+  
+  t3 <- raw_tds |> select(STANDPLOT_CN, spp_list[i]) |> 
+    rename(x = str_c(spp_list[i])) |> 
+    mutate(source = "test_set")
+  
+  
+  t <- add_row(t, t2)
+  t <- add_row(t, t3) |> drop_na()
+  
+  p1 <- t |> filter(source == "RF_Imputed" | source == "RF_Observed") |> 
+    ggplot(aes(x, fill = source)) + 
+     geom_histogram(
+       alpha = 0.5,
+       position = 'identity', 
+       bins = 30) + 
+    labs(title = spp_list[i]) + 
+    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  
+  p2 <- t |> filter(source == "RF_Imputed" | source == "test_set") |> 
+    ggplot(aes(x, fill = source)) + 
+     geom_histogram(
+       alpha = 0.5, 
+       position = 'identity', 
+       bins = 30) + 
+    labs(title = spp_list[i]) + 
+    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  
+  p3 <- t |> filter(source == "RF_Observed" | source == "test_set") |> 
+    ggplot(aes(x, fill = source)) + 
+     geom_histogram(
+       alpha = 0.5, 
+       position = 'identity', 
+       bins = 30) + 
+    labs(title = spp_list[i]) + 
+    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  
+  print(p1)
+  print(p2)
+  print(p3)
+    
+}
+
+```
+
+
+
+
+

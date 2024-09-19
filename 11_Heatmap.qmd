@@ -1,0 +1,1071 @@
+---
+title: "11- 1st Map "
+execute: 
+  freeze: auto
+---
+
+**06Sept24**
+
+
+*Libraries*
+```{r}
+#| label: Libraries
+#| message: false
+#| warning: false
+#| code-fold: true
+#| output: false
+
+rm(list = ls())                                                      
+gc()                                                                                 
+
+# Data tidying and acces
+library(tidyverse, quietly = T)       # Easy to read syntax and data manipulation                   
+library(RSQLite)                      # Access SQLite dbs   
+library(magrittr)                     # Pipes and math functions    
+# library(readxl)                     # Read xlsx 
+# library(writexl)                    # write xlsx     
+                                                   
+# yaImpute and related                           
+library(randomForest)                 # RF package that yaImpute uses
+library(yaImpute)                     # RF imputation
+library(vegan)                        # Something to do the yaImpute
+
+                                                     
+# plots and tables                          
+# library(esquisse)                     # Quick data visualization   
+library(knitr)                        # Better html tables
+# library(DT)                           # Data tables for Java script tables in HTML
+# library(stars)
+library(kableExtra)                   # Better html tables, change sizes
+# library(feather)                      # Faster data retrieval    
+
+# Geography
+library(sf)                           # Simple Features/vector data
+library(terra)                        # Raster functions
+library(spatstat)                     # Spatial stats
+
+
+library(tcltk)                        # Fix file paths
+
+# No sci-notation. 
+options(scipen = 999)
+options(width = 125)
+```
+
+*Functions*
+```{r}
+#| code-fold: true
+#| label: Functions
+
+clean_mem <- function() {
+  x <- ls(envir = .GlobalEnv)
+  # ls()[!(ls() %in% keep)]
+  rm(list = x[!(x %in% keep)], envir = .GlobalEnv)
+  gc()
+}
+
+clean_na_cols <- function(df){
+  df <- df[, colSums(is.na(df)) < nrow(df)]
+}
+
+# path <- r"(C:\RxFire\Regen\FVS\regen_080724_1644\regen_080724_1644.db)"
+clean_paths <- function(path) {
+  str_replace_all(path, "\\\\", "/")
+}
+
+db_list <- function(df, CN_col){
+  name <- NULL
+  name <- df |> select({{CN_col}})
+  name <- name |> mutate(CN_col = str_c("'", {{CN_col}}, "'")) 
+  name <- str_flatten_comma(name$CN_col)
+  # name <- str_flatten_comma(name[, CN_col])
+  name
+}
+
+nas_to_zeroes <- function(df){
+  df <- df |> mutate_all(~replace(., is.na(.), 0))
+  df
+}
+
+keep <- c("keep", "clean_mem", "clean_na_cols", "clean_paths", "db_list", "nas_to_zeroes")
+```
+
+**Created on**
+```{r}
+ymd(as_date(file.info("9_Heatmap.qmd")$ctime))
+```
+
+
+# Intro
+
+I am building a map that shows the difference in regeneration density between our Randon Forest imputation and those 
+seedlings that were imputed in TreeMap 2014. 
+
+There will be: 
+
+  - a layer showing the seedling density as predicted by TreeMap
+  - a layer showing the seedling density as predicted by Random Forest
+  - and a layer showing the difference between those layers. 
+  
+For the TreeMap layer, I need to extract the TM CNs from the FIA db and save them as a list of seedlings counts and CNs, 
+then join them to TreeMap. 
+
+For the Random Forest layer, I need to extract the TM CNs imputed seedlings from the imputed values and join those to 
+the Raster of TM CNs. 
+
+After that, I can use Raster calculator to make the difference layer. 
+
+
+
+
+
+
+
+# TreeMap Seedlings
+
+Pseudo-Code
+
+- Import TreeMap 2014 csv for the nation
+- Extract the Lat and Long from the FIA db
+- Filter the Lat and Long to find all TM CNs in Okwen 60km buffer. 
+- Pull seedling data for TM plots in Buffer
+
+```{r}
+clean_mem()
+```
+
+
+*Import TreeMap 2014 csv for the nation*
+```{r}
+#| eval: false
+
+## These are the TM 2014 National Plots. 
+tm_fiaplots <- read_csv("C:/RxFire/GIS/gisData/TreeMap2014/TL_CN_Lookup.txt", show_col_types = FALSE)
+tm_fiaplots$CN <- as.character(tm_fiaplots$CN)
+tm_fiaplots |> head()
+
+tm_fiaplots <- tm_fiaplots %>% select(CN) %>% unique()
+```
+
+
+
+
+#### Extract by mask
+
+*Add OkWen Polygon*
+```{r}
+#| eval: false
+
+# Path to OkWen shape
+pathshp <- "C:/RxFire/GIS/gisData/OkWen_60k_buffer_shp/OkWen_60k_Buffer_shp.shp"
+buffer60 <- st_read(pathshp, quiet = TRUE)
+st_geometry(buffer60)
+
+```
+*Add TM 2014 Raster*
+```{r}
+#| eval: false
+
+# "C:\RxFire\GIS\gisData\TreeMap2014\national_c2014_tree_list.tif"
+tm_2014 <- rast("c:/RxFire/GIS/gisData/TreeMap2014/national_c2014_tree_list.tif")
+
+buffer_extent <- ext(buffer60)
+
+# delete all cells outside of buffer. 
+OkWen_TM <- crop(tm_2014, buffer_extent)
+
+# Remove pixels outside of polygon. 
+OkWen_TM <- terra::mask(OkWen_TM, vect(buffer60))
+
+
+plot(OkWen_TM)
+```
+
+```{r}
+#| eval: false
+
+tl_ids <- as.data.frame(OkWen_TM) %>% unique()
+tl_ids$tl_id <- as.numeric(tl_ids$tl_id)
+
+tm_fiaplots <- read_csv("C:/RxFire/GIS/gisData/TreeMap2014/TL_CN_Lookup.txt", show_col_types = FALSE)
+tm_fiaplots$CN <- as.character(tm_fiaplots$CN)
+
+Okwen_CNs <- left_join(tl_ids, tm_fiaplots, join_by(tl_id)) %>% select(CN) %>% drop_na()
+```
+
+
+*Get list of TreeMap CNs*
+```{r}
+#| eval: false
+
+cns <- db_list(Okwen_CNs, CN)
+
+con <- dbConnect(RSQLite::SQLite(), clean_paths(r"(C:\RxFire\Data\SQLite_FIADB_ENTIRE.db)"))
+tm_seedlings <- dbGetQuery(con, str_c("select * from SEEDLING where PLT_CN in (", cns, ")"))
+
+species_ref <- dbGetQuery(con, "select * from REF_SPECIES")
+species_grp_ref <- dbGetQuery(con, "select * from REF_SPECIES_GROUP")
+
+dbDisconnect(con)
+
+species_ref2 <- species_ref %>% select(SPCD, COMMON_NAME, SPECIES_SYMBOL)
+species_grp_ref2 <- species_grp_ref %>% select(SPGRPCD, grp_name = NAME, CLASS)
+
+tm_seedlings <- tm_seedlings %>% mutate(
+  STANDPLOT_CN = str_c(PLT_CN, "_", SUBP)
+    ) %>% relocate(STANDPLOT_CN)
+
+tm_seedlings <- left_join(tm_seedlings, species_ref2, join_by(SPCD))
+tm_seedlings <- tm_seedlings %>% relocate(SPCD, SPECIES_SYMBOL, .after = SPGRPCD) %>% 
+  select_if(~ !is.numeric(.) || sum(.) != 0)
+tm_seedlings <- clean_na_cols(tm_seedlings)
+
+tm_seedlings <- left_join(tm_seedlings, species_grp_ref2, join_by(SPGRPCD)) %>% 
+  relocate(SPGRPCD, grp_name, .after = SPECIES_SYMBOL)
+
+tm_seedlings <- tm_seedlings %>% select(STANDPLOT_CN, TPA_UNADJ, SPCD, SPECIES_SYMBOL, COMMON_NAME, SPGRPCD, grp_name, CLASS,
+                        TREECOUNT, PLT_CN, SUBP)
+
+
+keep <- append(keep, 
+               c("tm_seedlings", "buffer_extent", "buffer60", "tm_fiaplots", "species_ref")
+) %>% unique()
+
+clean_mem()
+
+tm_seedlings %>% head()
+```
+
+
+
+
+**tm_seedlings is the dataframe of all seedlings on TM 2014 plots in OkWen.**
+
+I only have RF imputation data for North Cascades in recent imputations. 
+These should have been subset by that shp. 
+
+
+
+
+
+
+
+
+
+
+# N Cascades TM
+
+1. All TM CNs
+2. Extract all tl_ids from N.Cascades
+3. Pull the CNs from the TM lookup table
+4. Make a list of CNs in N.Cascades
+5. Extract those CN's Seedlings from the FIADB
+  - Add the species codes
+
+
+
+*Import TreeMap 2014 csv for the nation*
+```{r}
+## These are the TM 2014 National Plots. 
+tm_fiaplots <- read_csv(clean_paths(r"(C:\RxFire\GIS\gisData\TreeMap2014\TM_tiff_CNs_and_PredCNs.csv)"), 
+                        col_types = "nnncc")
+tm_fiaplots |> head()
+
+tm_fiaplots <- tm_fiaplots %>% select(CN) %>% unique()
+```
+
+
+
+
+#### Extract by mask
+
+*Add N.Cascades Polygon*
+```{r}
+#| eval: false
+
+# Path to OkWen shape
+pathshp <- clean_paths(r"(C:\RxFire\Regen\Regeneration_2_16Sept24\N_Cascades_in_Ok60_SHP\N_Cascades_SHP.shp)")
+buffer_nc <- st_read(pathshp, quiet = TRUE)
+st_geometry(buffer_nc)
+```
+
+*Add TM 2014 Raster*
+```{r}
+#| eval: false
+
+# "C:\RxFire\GIS\gisData\TreeMap2014\national_c2014_tree_list.tif"
+tm_2014 <- rast("c:/RxFire/GIS/gisData/TreeMap2014/national_c2014_tree_list.tif")
+
+# crs(tm_2014)
+buffer_nc <- st_transform(buffer_nc, crs(tm_2014))
+
+buffer_extent <- ext(buffer_nc)
+
+# delete all cells outside of buffer. 
+nc_TM <- crop(tm_2014, buffer_extent)
+
+# Remove pixels outside of polygon. 
+nc_TM <- terra::mask(nc_TM, vect(buffer_nc))
+
+
+plot(nc_TM)
+```
+
+That plot is all of the TM 2014 pixels in N.Cascades. 
+
+
+
+```{r}
+#| eval: false
+
+tl_ids <- as.data.frame(nc_TM) %>% unique()
+tl_ids$tl_id <- as.numeric(tl_ids$tl_id)
+
+tm_fiaplots <- read_csv(clean_paths(r"(C:\RxFire\GIS\gisData\TreeMap2014\TM_tiff_CNs_and_PredCNs.csv)"), 
+                        col_types = "nnncc")
+
+nc_CNs <- left_join(tl_ids, tm_fiaplots, join_by(tl_id)) %>% select(CN) %>% drop_na() %>% unique()
+```
+
+*Finding out why these plots aren't showing up.*
+```{r}
+#| eval: false
+
+agp_nc_tm <- read_csv(clean_paths(r"(C:\RxFire\Regen\Regeneration_2_16Sept24\agp_nc_tm_plots.csv)"), 
+                      show_col_types = F)
+
+agp_nc_tm <- agp_nc_tm %>% select(CN) %>% unique()
+
+cns <- db_list(agp_nc_tm, CN)
+
+con <- dbConnect(RSQLite::SQLite(), clean_paths(r"(C:\RxFire\Data\SQLite_FIADB_ENTIRE.db)"))
+
+agp_nc_seedlings <- dbGetQuery(con, str_c("select * from SEEDLING where PLT_CN in (", cns, ")"))
+agp_nc_trees <- dbGetQuery(con, str_c("select * from TREE where PLT_CN in (", cns, ")"))
+agp_nc_plots <- dbGetQuery(con, str_c("select * from PLOT where CN in (", cns, ")"))
+# agp_nc_conds <- dbGetQuery(con, str_c("select PLT_CN, FORTYPCD, FLDTYPCD from COND where PLT_CN in (", cns, ")"))
+
+dbDisconnect(con)
+
+agp_nc_seedlings %>% select(PLT_CN) %>% unique()
+agp_nc_trees %>% select(PLT_CN) %>% unique()
+agp_nc_plots %>% select(CN) %>% unique()
+```
+
+
+3964 CNs from agp, 3083 from R? 
+3320 have seedlings, 2486 in R. 
+3964 have trees and are plots, 3083 from R. 
+
+```{r}
+#| eval: false
+
+3964-3320
+3083-2486
+agp_nc_tm$CN <- as.character(agp_nc_tm$CN)
+
+# x not in y
+anti_join(nc_CNs, agp_nc_tm, join_by(CN))
+anti_join(agp_nc_tm, nc_CNs, join_by(CN))
+# inner join only keeps rows that occur in both x and y
+inner_join(agp_nc_tm, nc_CNs, join_by(CN))
+```
+
+
+2788 CNs from R do not have a matching CN from AGP, so 295 do. 
+
+**I am not sure what is happening, but I am going to assume that the list from AGP is correct.**
+
+# Starting again
+
+```{r}
+clean_mem()
+```
+
+*Get list of TreeMap CNs*
+```{r}
+agp_nc_tm <- read_csv(clean_paths(r"(C:\RxFire\Regen\Regeneration_2_16Sept24\agp_nc_tm_plots.csv)"), 
+                      show_col_types = F)
+
+agp_nc_tm <- agp_nc_tm %>% select(CN) %>% unique()
+
+
+cns <- db_list(agp_nc_tm, CN)
+
+con <- dbConnect(RSQLite::SQLite(), clean_paths(r"(C:\RxFire\Data\SQLite_FIADB_ENTIRE.db)"))
+agp_nc_seedlings <- dbGetQuery(con, str_c("select * from SEEDLING where PLT_CN in (", cns, ")"))
+agp_nc_trees <- dbGetQuery(con, str_c("select * from TREE where PLT_CN in (", cns, ")"))
+agp_nc_plots <- dbGetQuery(con, str_c("select * from PLOT where CN in (", cns, ")"))
+
+species_ref <- dbGetQuery(con, "select * from REF_SPECIES")
+species_grp_ref <- dbGetQuery(con, "select * from REF_SPECIES_GROUP")
+
+dbDisconnect(con)
+
+agp_nc_seedlings <- clean_na_cols(agp_nc_seedlings)
+names(agp_nc_seedlings)
+
+agp_nc_seedlings %>% select(PLT_CN) %>% unique() %>% nrow()
+agp_nc_trees %>% select(PLT_CN) %>% unique() %>% nrow()
+agp_nc_plots %>% select(CN) %>% unique() %>% nrow()
+```
+- 3320 have seedlings
+- 3964 have trees
+- 3964 are plots in the FIADB
+
+COUNTCHKCD_RMRS
+Seedling count check code, Rocky Mountain Research Station. A code indicating if the
+seedling count was estimated. Only populated by certain FIA work units (SURVEY.RSCD =
+22).
+
+AGECD_RMRS
+Seedling age code, Rocky Mountain Research Station. A code used in the field indicating
+which seedling counts require total age information to be collected. Only populated by
+certain FIA work units (SURVEY.RSCD = 22).
+
+```{r}
+#| collapse: true
+
+nrow(agp_nc_seedlings)
+
+sum(is.na(agp_nc_seedlings$AGECD_RMRS))
+sum(is.na(agp_nc_seedlings$COUNTCHKCD_RMRS))
+
+sum(is.na(agp_nc_seedlings$COUNTCHKCD_RMRS))/nrow(agp_nc_seedlings)
+```
+
+- 91% of TM plots in NC do not have these fields populated. 
+- 68% with the agp data? 
+
+  
+```{r}
+species_ref2 <- species_ref %>% select(SPCD, COMMON_NAME, SPECIES_SYMBOL)
+species_grp_ref2 <- species_grp_ref %>% select(SPGRPCD, grp_name = NAME, CLASS)
+
+agp_nc_seedlings <- agp_nc_seedlings %>% mutate(
+  STANDPLOT_CN = str_c(PLT_CN, "_", SUBP)
+    ) %>% relocate(STANDPLOT_CN)
+
+agp_nc_seedlings <- left_join(agp_nc_seedlings, species_ref2, join_by(SPCD))
+agp_nc_seedlings <- agp_nc_seedlings %>% relocate(SPCD, SPECIES_SYMBOL, .after = SPGRPCD) %>% 
+  select_if(~ !is.numeric(.) || sum(.) != 0)
+agp_nc_seedlings <- clean_na_cols(agp_nc_seedlings)
+
+agp_nc_seedlings <- left_join(agp_nc_seedlings, species_grp_ref2, join_by(SPGRPCD)) %>% 
+  relocate(SPGRPCD, grp_name, .after = SPECIES_SYMBOL)
+
+agp_nc_seedlings <- agp_nc_seedlings %>% select(STANDPLOT_CN, TPA_UNADJ, SPCD, SPECIES_SYMBOL, COMMON_NAME, SPGRPCD, grp_name, CLASS,
+                        TREECOUNT, PLT_CN, SUBP)
+
+
+keep <- append(keep, 
+               c("tm_seedlings", "agp_nc_seedlings", "buffer_extent", "buffer60", "tm_fiaplots", "species_ref")
+) %>% unique()
+
+clean_mem()
+
+agp_nc_seedlings %>% head()
+agp_nc_seedlings %>% nrow()
+```
+
+- R, 13435 tree records in NC. 
+- AGP, 13704
+
+
+
+
+
+
+
+
+
+# randomForest's Seedlings
+
+
+This imputation was done in 5_TD_imp done for North Cascades. 
+
+**X variables:**
+
+[1] "CC"       "SDI"      "LAT"      "LON"      "ELEV"     "Northing" "Easting"  "SLOPE"    "BAp"      "f"        "p"       
+[12] "PIPO_BA"  "PSME_BA"  "ABAM_BA"  "TSME_BA"  "ABGR_BA"  "PICO_BA"  "LALY_BA"  "PIAL_BA"  "PIEN_BA"  "ABLA_BA"  "LAOC_BA" 
+[23] "THPL_BA"  "ALRU2_BA" "TSHE_BA"  "TABR2_BA" "CHNO_BA"  "POBAT_BA" "ABPR_BA"  "BEPA_BA"  "PREM_BA"  "POTR5_BA" "PIMO3_BA"
+[34] "ACGL_BA"  "ACMA3_BA" "Other_BA" "ALRH2_BA" "PRVI_BA" 
+
+**Y Variables were all of the usual predictors with these species clumped into rare:**
+
+[1] ALRH2_TD POBAT_TD PSMA_TD  BEPA_TD  ALRU2_TD LALY_TD  LAOC_TD  PIMO3_TD PRVI_TD  ACMA3_TD POTR5_TD PREM_TD  ACGL_TD 
+[14] PIAL_TD  CHNO_TD  TABR2_TD PIEN_TD  THPL_TD  PIPO_TD  PICO_TD 
+
+
+```{r}
+load(str_c("RF_26AUG24_1seedlings", ".Rdata"))
+
+rf_imputation <- impute(rf_yai)
+rf_imputation <- rf_imputation %>% rownames_to_column("STANDPLOT_CN")
+
+rf_imputation %>% head(n = 10)
+```
+
+**I am removing the bootstrap replicates.**
+
+```{r}
+rf_imputation <- rf_imputation %>% filter(!str_detect(STANDPLOT_CN, "[.]"))
+
+rf_imputation %>% nrow()
+```
+There were 1498 rows in the original dataset. 
+
+
+
+
+
+
+### How to crosswalk these
+
+```{r}
+nc_CNs <- agp_nc_seedlings %>% select(STANDPLOT_CN) %>% unique()
+rf_CNs <- rf_imputation %>% select(STANDPLOT_CN) %>% unique() %>% as.data.frame()
+
+nc_CNs %>% nrow()
+rf_CNs %>% nrow()
+
+# all rows in x that don’t have a match in y
+inner_join(nc_CNs, rf_CNs, join_by(STANDPLOT_CN)) %>% head()
+
+```
+
+There are only 600 subplots that overlap in the area. These can be directly translated. 
+
+
+```{r}
+anti_join(nc_CNs, rf_CNs, join_by(STANDPLOT_CN)) %>% nrow()
+```
+
+The other 7,774 subplots need to be translated from the RF imputation to the TM stands. 
+
+
+```{r}
+agp_nc_seedlings  %>% head()
+```
+
+
+### Seedling counts
+
+
+```{r}
+t <- agp_nc_seedlings %>% group_by(SPECIES_SYMBOL) %>% 
+  summarise(
+    # n = n(), 
+    tm_sum_tpa = sum(TPA_UNADJ) %>% round()
+    ) %>% arrange(desc(tm_sum_tpa))
+
+sum(t$n)
+
+t %>% head()
+```
+
+
+
+```{r}
+a <- rf_imputation %>% 
+  # select_if(is.numeric) %>% 
+  select(ends_with("TD")) %>%
+  pivot_longer(cols = everything(), names_to = "SPECIES_SYMBOL", values_to = "TPA")
+
+a <- a %>% group_by(SPECIES_SYMBOL) %>% 
+  summarise(
+    # n = n(), 
+    imp_sum_tpa = sum(TPA) %>% round()
+  ) %>% 
+  arrange(desc(imp_sum_tpa))
+
+a <- a %>% mutate(SPECIES_SYMBOL = str_remove(SPECIES_SYMBOL, "_TD"))
+a %>% head()
+```
+
+```{r}
+b <- rf_imputation %>% 
+  select_if(is.numeric) %>% 
+  select(ends_with("TD.o")) %>%
+  drop_na() %>% 
+  pivot_longer(cols = everything(), names_to = "SPECIES_SYMBOL", values_to = "TPA")
+b <- b %>% group_by(SPECIES_SYMBOL) %>% 
+  summarise(
+    # n = n(), 
+    obs_sum_tpa = sum(TPA) %>% round()
+  ) %>% 
+  arrange(desc(obs_sum_tpa))
+
+b <- b %>% mutate(SPECIES_SYMBOL = str_remove(SPECIES_SYMBOL, "_TD.o"))
+b %>% head()
+```
+
+```{r}
+x <- left_join(t, a, join_by(SPECIES_SYMBOL))
+x <- left_join(x, b, join_by(SPECIES_SYMBOL))
+x %>% drop_na()
+```
+
+
+
+
+
+
+# Joining imp and TM
+
+
+There are more CNs in the TM data than in the imputation data. 
+I could join these by FOR_TYP code, or by grouping species by species group code. 
+
+If I run these with species groupings, then I am disregarding the imputation. 
+
+
+
+
+
+### AGP
+
+
+
+
+```{r}
+agp_nc_tm <- read_csv(clean_paths(r"(C:\RxFire\Regen\Regeneration_2_16Sept24\agp_nc_tm_plots.csv)"), 
+                      show_col_types = F)
+
+agp_nc_tm <- agp_nc_tm %>% select(CN) %>% unique()
+
+cns <- db_list(agp_nc_tm, CN)
+
+con <- dbConnect(RSQLite::SQLite(), clean_paths(r"(C:\RxFire\Data\SQLite_FIADB_ENTIRE.db)"))
+agp_nc_conds <- dbGetQuery(con, str_c("select PLT_CN, FORTYPCD, FLDTYPCD from COND where PLT_CN in (", cns, ")"))
+dbDisconnect(con)
+
+zt <- agp_nc_conds %>% mutate(
+  both_nas = ifelse(is.na(FORTYPCD) & is.na(FLDTYPCD), T, F),
+  either_nas = ifelse(is.na(FORTYPCD) | is.na(FLDTYPCD), T, F)
+)
+
+sum(zt$both_nas)
+sum(zt$either_nas)
+```
+
+
+
+In this set, if FLDTYPCD is empty then so is FORTYPCD. I am not sure why this is. 
+My understanding from John Shaw was that FORTYP or FLDTYP would be there if it was a forested plot. 
+
+```{r}
+agp_nc_conds %>% nrow()
+agp_nc_conds <- agp_nc_conds %>% drop_na()
+agp_nc_conds %>% nrow()
+```
+
+## Making them alike
+
+I need plt_cn, species and tpa. 
+
+```{r}
+agp_nc_seed_counts <- agp_nc_seedlings %>% group_by(PLT_CN, SPECIES_SYMBOL) %>% 
+  summarise(
+    .groups =  "drop", 
+    # n = n(), 
+    agp_sum_tpa = sum(TPA_UNADJ) %>% round()
+  ) %>% arrange(desc(agp_sum_tpa))
+
+agp_nc_seed_counts %>% nrow()
+agp_nc_seed_counts %>% head()
+```
+
+```{r}
+agp_nc_seed_counts <- left_join(agp_nc_seed_counts, agp_nc_conds, join_by(PLT_CN))
+agp_nc_seed_counts %>% nrow()
+agp_nc_seed_counts %>% head()
+
+```
+
+
+
+
+
+### RF
+
+```{r}
+rf_imputation <- rf_imputation %>% mutate(PLT_CN = str_remove(STANDPLOT_CN, "_.")) %>% relocate(PLT_CN)
+cns <- rf_imputation %>% select(PLT_CN) %>% unique()
+
+cns <- db_list(cns, PLT_CN)
+
+con <- dbConnect(RSQLite::SQLite(), clean_paths(r"(C:\RxFire\Data\SQLite_FIADB_ENTIRE.db)"))
+rf_nc_conds <- dbGetQuery(con, str_c("select PLT_CN, FORTYPCD, FLDTYPCD from COND where PLT_CN in (", cns, ")"))
+dbDisconnect(con)
+
+
+zt <- rf_nc_conds %>% mutate(
+  both_nas = ifelse(is.na(FORTYPCD) & is.na(FLDTYPCD), T, F),
+  either_nas = ifelse(is.na(FORTYPCD) | is.na(FLDTYPCD), T, F)
+)
+
+sum(zt$both_nas)
+sum(zt$either_nas)
+
+
+rf_nc_conds %>% head()
+```
+
+
+
+```{r}
+rf_imputation <- rf_imputation %>% mutate(PLT_CN = str_remove(STANDPLOT_CN, "_.")) %>% relocate(PLT_CN)
+
+rf_nc_seed_counts <- rf_imputation %>% 
+  # select_if(is.numeric) %>% 
+  select(PLT_CN, ends_with("TD")) %>%
+  pivot_longer(cols = -c(PLT_CN), names_to = "SPECIES_SYMBOL", values_to = "TPA")
+
+rf_nc_seed_counts <- rf_nc_seed_counts %>% group_by(PLT_CN, SPECIES_SYMBOL) %>% 
+  summarise(
+    # n = n(), 
+    imp_sum_tpa = sum(TPA) %>% round(), 
+    .groups = "drop"
+  ) %>% 
+  arrange(desc(imp_sum_tpa))
+
+rf_nc_seed_counts <- rf_nc_seed_counts %>% mutate(SPECIES_SYMBOL = str_remove(SPECIES_SYMBOL, "_TD"))
+
+rf_nc_seed_counts <- left_join(rf_nc_seed_counts, rf_nc_conds, join_by(PLT_CN))
+
+
+rf_nc_seed_counts %>% nrow()
+rf_nc_seed_counts %>% head()
+```
+
+
+
+# Alike?
+
+```{r}
+rf_nc_seed_counts %>% head()
+
+agp_nc_seed_counts %>% head()
+```
+
+
+
+
+
+
+
+```{r}
+t <- agp_nc_seedlings %>% group_by(PLT_CN) %>% 
+  reframe(
+    SPECIES_SYMBOL = "total", 
+    agp_sum_tpa = sum(TPA_UNADJ) %>% round(), 
+    # FORTYPCD= FORTYPCD, 
+    # FLDTYPCD= FLDTYPCD
+  ) %>% arrange(desc(agp_sum_tpa))
+
+t <- left_join(t, agp_nc_conds, join_by(PLT_CN))
+
+agp_nc_seed_counts <- add_row(agp_nc_seed_counts, t)
+
+agp_nc_seed_counts %>% arrange(desc(agp_sum_tpa)) %>% head()
+```
+
+```{r}
+t <- agp_nc_seed_counts %>% mutate(
+  diff = ifelse(
+    FORTYPCD == FLDTYPCD, T, F
+  )
+)
+
+nrow(t)- sum(t$diff)
+```
+
+
+2842 plots have field and forest types that don't match. 
+I am joining these best on FORTYPCD. 
+
+```{r}
+
+
+# t <- left_join(agp_nc_seed_counts, rf_nc_seed_counts, join_by(SPECIES_SYMBOL, FORTYPCD, FLDTYPCD))
+```
+
+
+
+Joining by forest type won't do. I am not sure how to transfer the regeneration plots onto the TM plots. 
+This has been an issue in the back of my mind since starting the project. 
+
+If we limited the predictor variables to exclude overstory species, then I could impute the seedlings directly onto the 
+TM plots. 
+
+
+
+
+
+
+
+# Summary
+
+TreeMap 2014 comes with a tiff representing FIA plots assigned to LandFire pixels by Dr. Riley's algorithm. 
+Each pixel has a plot CN representing an FIA forested plot, and 
+each CN links to the FIA database where TREE, SEEDLING, and PLOT table data can be found. 
+
+The regeneration data comes from a Random Forests imputation of FIA data found in and around the Okanogan and Wenatchee 
+National Forests. All of the same data can be extracted for each imputed CN. 
+Based on the predictor variables, the yaImpute program uses RF to find the most similar CN to the original and 
+writes the seedling densities from the most similar plot to the new plot. 
+
+The RF CNs and the TM CNs do not match. They cannot be cross-walked by plot CN or location. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+keep <- c("keep", "clean_mem", "clean_na_cols", "clean_paths", "db_list", "nas_to_zeroes")
+
+keep <- append(keep, 
+               c("agp_total_td", "rf_total_td"))
+```
+
+
+
+
+
+
+# AGP
+
+In agp: 
+
+- added the FIA points from the plot table in WA
+- added the TM 2014 raster
+- clipped both by NC. 
+- created Thiessen Polygons from the FIA points
+- clipped the polygons by NC
+- polygon to raster on Thiessen polys
+- combine Thiessen Poly raster and TM raster. 
+- joined tables from Thiessen poly raster and TM raster to combined raster
+    + I had to make copies of each raster after joining. It wouldn't let me join two tables to the original 
+
+- Exported the combined and joined table to "C:/RxFire/Regen/Regeneration_2_16Sept24/Combined_TM_FIA_Raster_attributes.csv"
+
+```{r}
+combined_tm_fia <- read_csv("C:/RxFire/Regen/Regeneration_2_16Sept24/Combined_TM_FIA_Raster_attributes.csv", 
+                            show_col_types = F)
+
+combined_tm_fia <- combined_tm_fia %>% select(OBJECTID, TM_OBJECTID = OBJECTID_1, FIA_OBJECTID = OBJECTID_12, 
+                                              tl_id = N_Cascades_TM, TM_CN = CN, FIA_CN = PLT_CN)
+
+combined_tm_fia %>% head()
+```
+
+```{r}
+cns_tm  <- combined_tm_fia %>% select(CN = TM_CN) %>% unique()
+cns_fia <- combined_tm_fia %>% select(CN = FIA_CN) %>% unique()
+
+cns <- add_row(cns_fia, cns_tm) %>% unique()
+cns %>% nrow()
+
+# cns <- db_list(cns, CN)
+
+# con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Data/SQLite_FIADB_ENTIRE.db")
+# 
+# dbDisconnect(con)
+```
+
+
+```{r}
+library(writexl)
+```
+
+
+
+
+```{r}
+# Widening the data
+agp_nc_seedlings_wide <- agp_nc_seed_counts %>% 
+  select(PLT_CN, SYMBL = SPECIES_SYMBOL, TPA = agp_sum_tpa) |> 
+  pivot_wider(names_from = SYMBL, 
+                 values_from = TPA,
+                 values_fill = 0,
+                 names_glue = "{SYMBL}_{'TD'}")
+
+# Un-grouping to avoid future messages
+agp_nc_seedlings_wide <- agp_nc_seedlings_wide |> ungroup()
+agp_nc_seed_counts <- agp_nc_seed_counts |> ungroup()
+
+# Ensuring there are no NAs introduced while widening
+agp_nc_seedlings_wide <- nas_to_zeroes(agp_nc_seedlings_wide)
+
+agp_nc_seedlings_wide |> head()
+```
+
+
+```{r}
+# rf_imputation %>% names()
+```
+
+```{r}
+rf_imp_density <- rf_imputation %>% 
+  select(PLT_CN, ends_with("_TD"), max_spp1, max_spp2) %>%  
+  group_by(PLT_CN) %>% 
+  summarise_if(is.numeric, sum)
+
+
+# t <-  rf_imputation %>% drop_na() %>%
+#   select(PLT_CN, max_spp1) %>% unique()
+
+rf_imp_density %>% nrow()
+rf_imp_density %>% head()
+```
+
+There are multiple imputed values for max species. This would create duplicates in the data and be hard to represent. 
+I am just doing the TDs. 
+
+
+```{r}
+# names(rf_imp_density) %>% sort()
+```
+```{r}
+# names(agp_nc_seedlings_wide) %>% sort()
+# n_distinct(agp_nc_seedlings_wide$PLT_CN)
+
+
+```
+
+```{r}
+agp_total_td <- agp_nc_seedlings_wide %>% select(CN = PLT_CN, total_TD)
+rf_total_td <- rf_imp_density %>% select(CN = PLT_CN, total_TD)
+
+agp_total_td$CN <- as.character(agp_total_td$CN)
+cns_tm$CN <- as.character(cns_tm$CN)
+
+rf_total_td$CN <- as.character(rf_total_td$CN)
+cns_fia$CN <- as.character(cns_fia$CN)
+
+# rf_total_td <- left_join(cns_tm, rf_total_td, join_by(CN))
+# agp_total_td <- left_join(cns_fia, agp_total_td, join_by(CN))
+```
+
+
+```{r}
+agp_total_td %>% arrange(CN) %>% head()
+```
+
+```{r}
+rf_total_td %>% head()
+```
+
+```{r}
+inner_join(agp_total_td, rf_total_td, join_by(CN)) %>% head()
+```
+
+
+
+```{r}
+getwd()
+# write_csv(rf_total_td, file = "C:/RxFire/Regen/Regeneration_2_16Sept24/rf_total_td.csv")
+# write_csv(agp_total_td, file = "C:/RxFire/Regen/Regeneration_2_16Sept24/tm_total_td.csv")
+
+write_xlsx(rf_total_td, path = "C:/RxFire/Regen/Regeneration_2_16Sept24/rf_total_td.xlsx")
+write_xlsx(agp_total_td, path = "C:/RxFire/Regen/Regeneration_2_16Sept24/tm_total_td.xlsx")
+```
+
+
+
+# RMSE AGP
+
+In agp, 
+
+- the count of cells was 4,428,554. 
+- the sum of sqrt((TM - FIA)^2) was 6,620,551.
+- the sum of sqrt((TM - FIA)^2) * count was 9,473,997,745
+
+```{r}
+9473997745/4428554
+```
+
+The real RMSE for NC using total_TD was 1.494969 between the expected value of TM and the observed value of RF. 
+
+$$
+RMSE = \sqrt( \frac{\sum[((exp - obs)^2)* Count]}{\sum(count)} )
+$$
+
+
+91,053,123,635
+
+60,303,424,142,659
+
+```{r}
+sqrt((91053123635)/4428554)
+```
+
+```{r}
+sqrt((60303424142659)/4428554)
+```
+
+
+
+There is something wrong with the counts. In agp the TM totals are rounded. 
+
+
+
+
+
+
+
+
+
+
+
+
+# End 
+
+```{r}
+#| eval: false
+
+ggplot() + 
+  geom_raster(data = OkWen_TM, aes(x = x, y = y))
+
+ok_60_df <- as.data.frame(OkWen_TM, xy = T) %>% na.omit()
+
+ggplot() +
+  geom_raster(data = ok_60_df, aes(x = x, y = y)) + 
+  geom_sf(data = buffer60, fill = NA)
+```
+
+
+
+
+
+
+
+
+```{r}
+# con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Data/_FIADB_WA.db")
+# 
+# wa_fia_plots <- dbGetQuery(con, "select CN, LAT, LON from PLOT")
+# dbDisconnect(con)
+# 
+# write_csv(wa_fia_plots, file = ("C:/RxFire/GIS/gisData/FIA_PLOTS_WA/FIA_Plots_WA.csv"))
+```
+
+
+
+
+
+
+
+
+

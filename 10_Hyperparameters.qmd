@@ -1,0 +1,202 @@
+---
+title: "10 Hyper Params"
+execute: 
+  freeze: auto
+---
+
+**Tu. 27AUG24**
+
+*Libraries*
+```{r}
+#| label: Libraries
+#| message: false
+#| warning: false
+#| code-fold: true
+#| output: false
+
+rm(list = ls())                                                      
+gc()                                                                                 
+
+# Data tidying and acces
+library(tidyverse, quietly = T)       # Easy to read syntax and data manipulation                   
+library(RSQLite)                      # Access SQLite dbs   
+library(magrittr)                     # Pipes and math functions    
+# library(readxl)                     # Read xlsx 
+# library(writexl)                    # write xlsx     
+                                                   
+# yaImpute and related                           
+library(yaImpute)                     # RF imputation     
+library(vegan)                        # Something to do the yaImpute 
+library(randomForest)                 # RF package that yaImpute uses                                   
+                                                     
+# plots and tables                          
+# library(esquisse)                     # Quick data visualization   
+library(knitr)                        # Better html tables
+# library(DT)                           # Data tables for Java script tables in HTML
+                                                   
+library(kableExtra)                   # Better html tables, change sizes
+# library(feather)                      # Faster data retrieval    
+
+# Geography
+# library(sf)                           # Simple Features/vector data
+# library(terra)                        # Raster functions
+# library(spatstat)                     # Spatial stats
+
+
+library(tcltk)                        # Fix file paths
+
+# No sci-notation. 
+options(scipen = 999)
+options(width = 125)
+```
+
+*Functions*
+```{r}
+#| code-fold: true
+#| label: Functions
+
+clean_mem <- function() {
+  x <- ls(envir = .GlobalEnv)
+  # ls()[!(ls() %in% keep)]
+  rm(list = x[!(x %in% keep)], envir = .GlobalEnv)
+  gc()
+}
+
+clean_na_cols <- function(df){
+  df <- df[, colSums(is.na(df)) < nrow(df)]
+}
+
+# path <- r"(C:\RxFire\Regen\FVS\regen_080724_1644\regen_080724_1644.db)"
+clean_paths <- function(path) {
+  str_replace_all(path, "\\\\", "/")
+}
+
+db_list <- function(df, CN_col){
+  name <- NULL
+  name <- df |> select({{CN_col}})
+  name <- name |> mutate(CN_col = str_c("'", {{CN_col}}, "'")) 
+  name <- str_flatten_comma(name$CN_col)
+  # name <- str_flatten_comma(name[, CN_col])
+  name
+}
+
+nas_to_zeroes <- function(df){
+  df <- df |> mutate_all(~replace(., is.na(.), 0))
+  df
+}
+
+keep <- c("keep", "clean_mem", "clean_na_cols", "clean_paths", "db_list", "nas_to_zeroes")
+```
+
+
+
+# Import
+
+
+```{r}
+con <- dbConnect(RSQLite::SQLite(), 
+                 clean_paths(r"(C:\RxFire\Regen\Regeneration_2_16Sept24\homemade_fvs_db_17sept24.db)"))
+
+imp_data <- dbGetQuery(con, "select * from imp_data")
+dbDisconnect(con)
+
+
+load(file = "./rf_reg_noclass_spet18.R")
+
+rf_reg_summary <- yaiRFsummary(rf_reg_noclass)
+
+rf_reg_summary$forestAttributes
+```
+
+
+
+
+
+
+# ntree
+
+```{r}
+imp_data_nc <- imp_data |> filter(EcoRegion == "M242D" & TRAIN == T) |> select(-c(EcoRegion, ECO_NAME, eco_code, 
+                                 STAND_CN, TRAIN, largest_1, largest_2, largest_3, max_spp1, max_spp2, max_spp3, FPAG))
+
+imp_data_nc <- imp_data_nc |> filter(total_TD != 0)
+
+y_resp <- imp_data_nc |> select(STANDPLOT_CN, contains("TD"))
+
+x_pred <- imp_data_nc |> select(STANDPLOT_CN, !contains("TD"))
+
+
+
+# Prep
+y <- y_resp
+
+CNs <- imp_data_nc |> select(STANDPLOT_CN)
+
+y <- y %>% select_if(~ !is.numeric(.) || sum(.) != 0)
+
+# X Variables
+x <- left_join(CNs, x_pred, join_by(STANDPLOT_CN))
+
+x <- x %>% select_if(~ !is.numeric(.) || sum(.) != 0)
+# No Oaks in BA either
+
+x <- as.data.frame(x)
+y <- as.data.frame(y)
+
+x <- x |> column_to_rownames("STANDPLOT_CN")
+y <- y |> column_to_rownames("STANDPLOT_CN")
+
+y <- droplevels(y)
+x <- droplevels(x)
+
+################################################################################################
+
+# n = 0
+# while(n != 10){
+#     rf <- try(
+#       yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = T, rfMode = "regression"), 
+#       silent = T)
+#     
+#     if (class(rf) == "try-error") {
+#       print(n)     
+#       cat("ERROR1: ", rf, "\n")
+#       n <- n + 1
+#       } else {
+#         break
+#       }
+# }
+# 
+# rf_reg_noclass <- rf
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# End
+
+Notes:
+
+- 
+- 
+-
+ 
+ 
+ 
+ 

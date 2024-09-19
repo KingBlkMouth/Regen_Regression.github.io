@@ -1,0 +1,1931 @@
+---
+title: "5 TD Imp"
+execute: 
+  freeze: auto
+---
+
+**26AUG24**
+
+*Libraries*
+```{r}
+#| label: Libraries
+#| message: false
+#| warning: false
+#| code-fold: true
+#| output: false
+
+rm(list = ls())                                                      
+gc()                                                                                 
+
+# Data tidying and acces
+library(tidyverse, quietly = T)       # Easy to read syntax and data manipulation                   
+library(RSQLite)                      # Access SQLite dbs   
+library(magrittr)                     # Pipes and math functions    
+# library(readxl)                     # Read xlsx 
+# library(writexl)                    # write xlsx     
+                                                   
+# yaImpute and related                           
+library(yaImpute)                     # RF imputation     
+library(vegan)                        # Something to do the yaImpute 
+library(randomForest)                 # RF package that yaImpute uses                                   
+                                                     
+# plots and tables                          
+# library(esquisse)                     # Quick data visualization   
+library(knitr)                        # Better html tables
+# library(DT)                           # Data tables for Java script tables in HTML
+                                                   
+library(kableExtra)                   # Better html tables, change sizes
+# library(feather)                      # Faster data retrieval    
+
+# Geography
+# library(sf)                           # Simple Features/vector data
+# library(terra)                        # Raster functions
+# library(spatstat)                     # Spatial stats
+
+
+library(tcltk)                        # Fix file paths
+
+# No sci-notation. 
+options(scipen = 999)
+options(width = 125)
+```
+
+*Functions*
+```{r}
+#| code-fold: true
+#| label: Functions
+
+clean_mem <- function() {
+  x <- ls(envir = .GlobalEnv)
+  # ls()[!(ls() %in% keep)]
+  rm(list = x[!(x %in% keep)], envir = .GlobalEnv)
+  gc()
+}
+
+clean_na_cols <- function(df){
+  df <- df[, colSums(is.na(df)) < nrow(df)]
+}
+
+# path <- r"(C:\RxFire\Regen\FVS\regen_080724_1644\regen_080724_1644.db)"
+clean_paths <- function(path) {
+  str_replace_all(path, "\\\\", "/")
+}
+
+db_list <- function(df, CN_col){
+  name <- NULL
+  name <- df |> select({{CN_col}})
+  name <- name |> mutate(CN_col = str_c("'", {{CN_col}}, "'")) 
+  name <- str_flatten_comma(name$CN_col)
+  # name <- str_flatten_comma(name[, CN_col])
+  name
+}
+
+nas_to_zeroes <- function(df){
+  df <- df |> mutate_all(~replace(., is.na(.), 0))
+  df
+}
+
+keep <- c("keep", "clean_mem", "clean_na_cols", "clean_paths", "db_list", "nas_to_zeroes")
+```
+
+
+# Import
+"C:\RxFire\Regen\Regeneration_2_16Sept24\.Rproj.user"
+*Import imp_data, fix names*
+```{r}
+imp_db <- clean_paths(r"(C:\RxFire\Regen\Regeneration_2_16Sept24\homemade_fvs_db2.db)")
+
+con <- dbConnect(RSQLite::SQLite(), imp_db)
+
+imp_data <- dbGetQuery(con, "select * from imp_data")
+
+dbDisconnect(con)
+
+imp_data <- imp_data |> rename(Other_BA = '2TREE_BA', Other_TD = '2TB_TD')
+
+
+eco_names <- tribble(~Eco3, ~ECO_NAME, 
+        "242A",  "Puget Tr.", 
+        "342I",  "Columbia B.", 
+        "M242B", "W.Cascades", 
+        "M242C", "E.Cascades", 
+        "M242D", "N.Cascades", 
+        "M333A", "Ok. High")
+
+```
+
+
+### Northing & E
+
+*Testing Northing and Easting*
+```{r}
+degrees <- seq(0, 360, 45)
+direction <- c("N", "NE", "E", "SE", "S", "SW", "W", "NW", "N")
+
+northness <- cos(degrees * pi/180)
+eastness <- sin(degrees * pi/180)
+
+data.frame(degrees = degrees, 
+           Northing = round(northness, 2), 
+           Easting = round(eastness, 2), 
+           direction = direction)
+```
+*Transform Aspect to Northing and Easting*
+```{r}
+imp_data <- imp_data |> mutate(
+  Northing = round(cos(ASPECT * pi/180), 8), 
+  Easting = round(sin(ASPECT * pi/180), 8)
+    ) |> relocate(Northing, Easting, .after = ASPECT) 
+
+imp_data |> select(ASPECT, Northing, Easting) |> 
+  arrange(ASPECT) |> filter(
+    ASPECT == 0 | ASPECT == 90 | ASPECT == 180 | ASPECT == 270 | ASPECT == 360) |> 
+  unique()
+
+imp_data <- imp_data |> select(-ASPECT)
+```
+
+
+
+# Data Prep
+
+
+#### X & Y vars
+
+*Separating the predictors from the responses for N.C., print all variables*
+```{r}
+n_cascades <- imp_data |> filter(EcoRegion == "M242D") |> select(-EcoRegion)
+names(n_cascades)
+x_pred <- n_cascades[,1:47]
+```
+
+
+*Y Variables*
+```{r}
+y_resp <- n_cascades[, c(1, 48:ncol(n_cascades))]
+names(y_resp)
+```
+
+#### F.P.A.G
+
+*Separate FPAG*
+```{r}
+x_pred <- x_pred |> mutate(
+  f = str_sub(FPAG, 1, 1),
+  p = str_sub(FPAG, 2, 2),
+  a = str_sub(FPAG, 3, 3),
+  g = str_sub(FPAG, 4, 4),
+) |> select(-FPAG) |> relocate(f, p, a, g, .after = SLOPE)
+```
+
+
+#### Sort by BA
+
+*Ordering BA variables most to least prevalent*
+```{r}
+# Select numeric columns
+t <- x_pred  |> select_if(is.numeric)
+# Remove empties
+t <- t[, colSums(t) != 0]
+# Get sum of BA by Species
+t2 <- sapply(t[,9:ncol(t)], sum)
+# Sort a list by most BA
+t2 <- t2 |> sort(decreasing = T)
+t2 |> names() |> noquote()
+```
+
+
+
+
+
+*Seedlings in decreasing order of prevalence*
+```{r}
+t <- y_resp  |> select_if(is.numeric)
+t <- t[, colSums(t) != 0]
+
+ty <- sapply(t[,1:ncol(t)], sum)
+ty <- ty |> sort(decreasing = T)
+
+b <- names(ty)
+b
+```
+
+N.Cascades drops from 35 to 29 columns after removing empty Seedling categories. 
+
+
+#### n_largest
+
+*Find most common seedling species per subplot*
+```{r}
+# Function for finding the nth most prevalent species by TD.
+## Where b is the sorted list of all species by TD. 
+n_largest <- function(x = b, n) {
+  
+  # In descending order, prevelance
+  x1 <- sort(x, decreasing = TRUE)
+  # Select the nth most prevelant. 
+  x1[n]
+}
+
+
+
+y <- y_resp |> select(-STANDPLOT_CN)
+b <- names(y)
+
+# For the i through nth most trees in each subplot
+for (i in 1:3) {
+    # set the new column name to largest_n
+    c_value <- str_c("largest_", i)
+    
+    # For each subplot the largest_n is the nth place in a descending list by TD unless all are zero. 
+    y <- y %>%
+      rowwise() %>%
+      mutate(!!c_value := n_largest(c_across(all_of(b)), i)) |>
+      ungroup()
+}
+```
+
+
+### Max Spp 1 & 2
+
+
+*Set species names for each of the most prevelant*
+```{r}
+# The name of the species with the largest TD is the column name where the TD matches the largest_n
+y$max_spp1 <- sapply(1:nrow(y), function(x) colnames(y)[which(y[x, b] == y$largest_1[x])][1])
+y$max_spp2 <- sapply(1:nrow(y), function(x) colnames(y)[which(y[x, b] == y$largest_2[x])][1])
+# The largest is always the largest or zero, but the second sometimes matches the first where either are zero or equal. 
+# The alternate second and third replace the incorrect species names with the second name in the list.
+# So, where spp1 and spp2 are both 75, spp1 is the first name in the list, and spp2 is the second name in the list. 
+y$alt_spp2 <- sapply(1:nrow(y), function(x) colnames(y)[which(y[x, b] == y$largest_2[x])][2])
+y$max_spp3 <- sapply(1:nrow(y), function(x) colnames(y)[which(y[x, b] == y$largest_3[x])][1])
+y$alt_spp3 <- sapply(1:nrow(y), function(x) colnames(y)[which(y[x, b] == y$largest_3[x])][2])
+```
+
+*Fix the zero columns*
+```{r}
+# Replace the species names where they are equal with the alternates
+y <- y |> mutate(
+  max_spp2 = if_else(largest_1 == largest_2, alt_spp2, max_spp2),
+  max_spp3 = if_else(largest_2 == largest_3, alt_spp3, max_spp3)
+  ) |> select(-c(alt_spp2, alt_spp3))#, alt_spp3
+
+# Set the species names to zero if there were no trees counted for that nth largest. 
+yfull <- y |> mutate(
+  max_spp1 = ifelse(largest_1 == 0, "zero", max_spp1),
+  max_spp2 = ifelse(largest_2 == 0, "zero", max_spp2),
+  max_spp3 = ifelse(largest_3 == 0, "zero", max_spp3)
+  )
+# Replace the CNs
+yfull$STANDPLOT_CN <- y_resp$STANDPLOT_CN
+
+# Put it back in front
+yfull <- yfull |> relocate(STANDPLOT_CN)
+
+# Look at one full example
+# yfull |> filter(STANDPLOT_CN == "22954484010497_4") 
+# Look at some examples of the results. 
+yfull[4:8, 36:ncol(yfull)]
+```
+
+*Calculate the sum of all TDs per subplot*
+```{r}
+yfull <- yfull |> mutate(
+  total_TD = rowSums(yfull[grep("_TD", names(yfull))])
+)
+```
+
+
+
+*Interim Save point with max_spp and largest spp in y*
+```{r}
+# t <- left_join(x_pred, yfull, join_by(STANDPLOT_CN))
+# 
+# con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Regen/Regeneration_2_16Sept24/homemade_fvs_db.db")
+# 
+# dbWriteTable(con, "imp_data_2", t)
+# 
+# dbDisconnect(con)
+```
+
+
+# Plots 
+
+### Largest Species
+
+```{r}
+#| layout-ncol: 2
+#| code-fold: true
+
+yfull  |> filter(total_TD > 0) |> group_by(max_spp1) |> 
+  summarise(
+    n = n(), 
+    sum_tpa = round(sum(largest_1))
+  ) |> arrange(desc(sum_tpa)) |> 
+  ggplot() + 
+  aes(x = fct_reorder(max_spp1,-sum_tpa), y = sum_tpa, fill = max_spp1) +
+  geom_col(show.legend = FALSE) + 
+  scale_x_discrete(guide = guide_axis(angle = 45)) + 
+  labs(
+    title = "N trees in largest_spp in N.C. above zero"
+  )
+
+
+yfull |> filter(total_TD > 0)  |> group_by(max_spp1) |> 
+  summarise(
+    n = n(), 
+    sum_tpa = round(sum(largest_1))
+  ) |> arrange(desc(n)) |> 
+  ggplot() + 
+  aes(x = fct_reorder(max_spp1,-n), y = n, fill = max_spp1) +
+  geom_col(show.legend = FALSE) + 
+  scale_x_discrete(guide = guide_axis(angle = 45)) + 
+  labs(
+    title = "N Plots in largest_spp in N.C. above zero"
+  )
+```
+
+In N.Cascades, there ABAM and TSHE, then another between ABLA and PSME. 
+
+There are two ways I can think about this. One is which species has the most trees. 
+The other is which species is most often the largest species. 
+
+*Species with fewest trees*
+```{r}
+#| code-fold: true
+
+yfull  |> filter(total_TD > 0) |> group_by(max_spp1) |> 
+  summarise(
+    n = n(), 
+    sum_tpa = round(sum(largest_1))
+  ) |> arrange(sum_tpa) |> head()
+```
+
+*Species with fewest plots*
+```{r}
+#| code-fold: true
+
+yfull  |> filter(total_TD > 0) |> group_by(max_spp1) |> 
+  summarise(
+    n = n(), 
+    sum_tpa = round(sum(largest_1))
+  ) |> arrange(n) |> head()
+```
+
+
+
+
+### 2nd Largest Species
+
+```{r}
+#| code-fold: true
+#| layout-ncol: 2
+
+yfull |> filter(total_TD > 0)  |> group_by(max_spp2) |> 
+  summarise(
+    n = n(), 
+    sum_tpa = round(sum(largest_2))
+  ) |> arrange(desc(sum_tpa)) |> 
+  ggplot() + 
+  aes(x = fct_reorder(max_spp2,-sum_tpa), y = sum_tpa, fill = max_spp2) +
+  geom_col(show.legend = FALSE) + 
+  scale_x_discrete(guide = guide_axis(angle = 45)) + 
+  labs(
+    title = "N trees in largest_spp2 in N.C., Total TD above zero"
+  )
+
+
+yfull |> filter(total_TD > 0) |> group_by(max_spp2) |> 
+  summarise(
+    n = n(), 
+    sum_tpa = round(sum(largest_2))
+  ) |> arrange(desc(n)) |> 
+  ggplot() + 
+  aes(x = fct_reorder(max_spp2,-n), y = n, fill = max_spp2) +
+  geom_col(show.legend = FALSE) + 
+  scale_x_discrete(guide = guide_axis(angle = 45)) + 
+  labs(
+    title = "N Plots in largest_spp2 in N.C., Total TD above zero"
+  )
+```
+*Species with fewest trees*
+```{r}
+#| code-fold: true
+yfull |> filter(total_TD > 0)  |> group_by(max_spp2) |> 
+  summarise(
+    n = n(), 
+    sum_tpa = round(sum(largest_2))
+  ) |> arrange(sum_tpa) |> head()
+```
+
+*Species with fewest plots*
+```{r}
+#| code-fold: true
+yfull |> filter(total_TD > 0)  |> group_by(max_spp2) |> 
+  summarise(
+    n = n(), 
+    sum_tpa = round(sum(largest_2))
+  ) |> arrange(n) |> head()
+```
+
+### 3rd Largest Species
+
+```{r}
+#| code-fold: true
+#| layout-ncol: 2
+
+yfull |> filter(total_TD > 0)  |> group_by(max_spp3) |> 
+  summarise(
+    n = n(), 
+    sum_tpa = round(sum(largest_3))
+  ) |> arrange(desc(sum_tpa)) |> 
+  ggplot() + 
+  aes(x = fct_reorder(max_spp3,-sum_tpa), y = sum_tpa, fill = max_spp3) +
+  geom_col(show.legend = FALSE) + 
+  scale_x_discrete(guide = guide_axis(angle = 45)) + 
+  labs(
+    title = "N trees in largest_spp3 in N.C., Total TD above zero"
+  )
+
+
+yfull |> filter(total_TD > 0) |> group_by(max_spp3) |> 
+  summarise(
+    n = n(), 
+    sum_tpa = round(sum(largest_3))
+  ) |> arrange(desc(n)) |> 
+  ggplot() + 
+  aes(x = fct_reorder(max_spp3,-n), y = n, fill = max_spp3) +
+  geom_col(show.legend = FALSE) + 
+  scale_x_discrete(guide = guide_axis(angle = 45)) + 
+  labs(
+    title = "N Plots in largest_spp3 in N.C., Total TD above zero"
+  )
+```
+*Species with fewest trees*
+```{r}
+#| code-fold: true
+yfull |> filter(total_TD > 0)  |> group_by(max_spp3) |> 
+  summarise(
+    n = n(), 
+    sum_tpa = round(sum(largest_3))
+  ) |> arrange(sum_tpa) |> head()
+```
+
+*Species with fewest plots*
+```{r}
+#| code-fold: true
+yfull |> filter(total_TD > 0)  |> group_by(max_spp3) |> 
+  summarise(
+    n = n(), 
+    sum_tpa = round(sum(largest_3))
+  ) |> arrange(n) |> head()
+```
+
+
+
+# Seedlings vs Overstory
+
+#### Max Species 1 & 2
+
+*Largest Species lists*
+```{r}
+#| code-fold: true
+spp1 <- unique(yfull$max_spp1)
+spp2 <- unique(yfull$max_spp2)
+```
+
+*Combined 1 & 2, but unique*
+```{r}
+#| code-fold: true
+spp12 <- append(spp1, spp2) |> unique()
+spp12 |> sort() |> noquote()
+```
+
+Above is all of the species that are present in either the most or second most common seedlings for each subplot in N.C. 
+
+
+#### Overstory species in seedlings
+
+*Names of columns where the overstory matches species in understory*
+```{r}
+# Matching the seedling names to the overstory names
+regen_species <- str_replace_all(spp12, "_TD", "_BA")
+# length(regen_species)
+
+# removing 'zero'
+regen_species <- regen_species[2:length(regen_species)]
+regen_species |> sort() |> noquote()
+```
+*Get names of Overstory spp*
+```{r}
+overstory <- x_pred |> select(ends_with("_BA")) 
+remove_1 <- names(overstory)
+overstory <- overstory[, colSums(overstory) != 0]
+remove_2 <- names(overstory)
+
+overstory <- names(overstory)
+overstory |> sort() |> noquote()
+```
+```{r}
+remove <-  remove_1[!(remove_1 %in% remove_2)]
+```
+
+
+#### Overstory not in regen
+
+*Find where Overstory spp & regen spp do not overlap*
+```{r}
+remove <- append(remove, 
+                 overstory[!(overstory %in% regen_species)])
+remove |> sort() |> str_flatten_comma() |> noquote()
+```
+These species do not have seedlings, but do have overstory in NC. 
+
+  - CONU4_BA, MAFU_BA, PISI_BA
+  - the others are empty in N.Cascades
+
+```{r}
+t <- x_pred |> select(ends_with("_BA")) 
+t <- t[, colSums(t) != 0]
+
+t$CONU4_BA |> sum()
+t$MAFU_BA |> sum()
+t$PISI_BA |> sum()
+```
+There are only a couple of CONU4 AND MAFU, but there are a few PISI. 
+
+
+#### Regen species not in overstory
+
+```{r}
+regen_species[!(regen_species %in% overstory)] |> sort()
+```
+
+PSMA has seedlings, but no overstory. 
+
+  
+```{r}
+imp_data[imp_data$PSMA_TD > 0, ] |> select(STANDPLOT_CN, PSMA_TD)
+```
+
+There are two subplots from the same stand that have PSMA.  
+
+___
+
+I am pretty sure that 2TB and 2 TREE are the same, but I need to go back and find out where the names were introduced. 
+PSMA is the only species that is not present in the overstory, but is in the understory. 
+
+From the FIA.REF_SPECIES 2Tree is an unknown live tree, and 2TB is unknown dead tree. However, these are not always 
+coded as dead. 
+
+**I went back up and made them the same**
+
+___
+
+
+# Histos
+
+
+```{r}
+#| code-fold: true
+#| layout-ncol: 2
+
+yfull_above0 <- yfull |> filter(total_TD > 0)
+
+hist(log(yfull$total_TD + 1), 
+     breaks = "Scott")
+hist(yfull_above0$total_TD, 
+     breaks = "Scott")
+```
+
+I am not sure what I was trying to learn here. 
+
+
+
+
+# ________________
+
+
+
+# RF Original Y
+
+This test is on the North Cascades. 
+I have removed all subplots that do not have seedlings. 
+There were 1498 subplots available for imputation. 
+
+I had tried to run the model with everything that I could, but there were issues. 
+yaImpute, flags an error if there are "empty classes". 
+These do not actually have to be empty. 
+I think, it errs if the subset taken for imputation, doesn't contain all of the classes. 
+So, there needs to be enough factors in each class to ensure that 
+we get at least one of each after the random sample is taken. 
+To fix this, I grouped the least common seedling species into a group named other. 
+
+The y variables for this imputation were the seedlings TPAs of the largest two species, and their names, 
+plus the total TPA for the subplot. 
+
+
+
+
+As for the X variables, most were included. The main list was CC, SDI, lat, lon, elevation, aspect, slope, FPAG, 
+and BA of the stand. The X variables also included the species BA per acre of every species present in the 
+Ecoregion. 
+While troubleshooting the issue, I removed A & G from FPAG in the X variables list. 
+This may not have been necessary, but there were empty spaces in those columns as FPAGs do not need to have more than 2 
+letters. 
+
+*Clean Memory*
+```{r}
+#| code-fold: true
+keep <- append(keep, 
+               c("yfull", "x_pred", "y_resp", "remove", "imp_data", "n_cascades")) |> 
+  unique()
+
+clean_mem()
+```
+
+
+## RF
+
+
+**Adjust n1 and n2 to get RF to work.**
+
+  - n1 is the number from max_spp1 to remove 
+  - n2 is the number from max_spp2 to keep. 
+  - 3 and 19 are working in N.C. 
+
+
+
+*Run RandomForest*
+```{r}
+#| label: RF original
+
+n1 <- 3
+n2 <- 19
+
+# Prep
+y_above0 <- yfull |> filter(total_TD > 0)
+
+CNs_wRegen <- y_above0 |> select(STANDPLOT_CN)
+
+# X Variables
+x_above0 <- left_join(CNs_wRegen, x_pred, join_by(STANDPLOT_CN))
+
+x <- x_above0 |> 
+  select(-c(a,g)) |> 
+  mutate(
+    f = factor(f), 
+    p = factor(p)
+  ) |> 
+  relocate(f, p, .after = BAp) |> 
+  select(!all_of(remove))
+
+
+# Y variables
+
+t <- y_above0 |> group_by(max_spp1) |> 
+  summarise(
+    n = n(), 
+    tpa = sum(largest_1)
+  ) |> 
+  arrange(n)
+
+td_remove <- t[1:n1,]$max_spp1 |> as.character()
+
+
+y_rare <- y_above0 |> select(all_of(td_remove))
+
+y_rare <- y_rare |> mutate(
+  rare_TD = rowSums(y_rare[grep("_TD", names(y_rare))])
+)
+
+y_above0$rare_TD <- y_rare$rare_TD
+
+y_above0 <- y_above0 |> select(!all_of(td_remove))
+
+
+
+
+
+y <- y_above0 |> select(STANDPLOT_CN, max_spp1, max_spp2, largest_1, largest_2, total_TD)
+
+y_vars <- names(y)
+
+spp2_list <- y |> group_by(max_spp2) |> summarise(
+  n = n()
+) |> arrange(desc(n))
+
+spp2_list <- spp2_list$max_spp2[1:n2]
+
+y <- y |> mutate(
+  max_spp1 = ifelse(
+    max_spp1 %in% td_remove, "rare", max_spp1
+  ),
+  
+  max_spp2 = ifelse(
+    max_spp2 %in% spp2_list, max_spp2, "Other"
+  )
+)
+
+y <- y |> mutate(
+  max_spp1 = factor(max_spp1),
+  max_spp2 = factor(max_spp2)
+  )
+
+
+
+
+
+x <- as.data.frame(x)
+y <- as.data.frame(y)
+
+
+x <- x |> column_to_rownames("STANDPLOT_CN")
+y <- y |> column_to_rownames("STANDPLOT_CN")
+
+y <- droplevels(y)
+x <- droplevels(x)
+
+# rf_yai <- yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = T)
+```
+
+
+
+```{r}
+# rf_yai <- yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = T)
+# save(rf_yai, file = str_c("RF_26AUG24_original_Y", ".Rdata"))
+load(str_c("RF_26AUG24_original_Y", ".Rdata"))
+```
+
+
+
+
+
+# Eval 1
+
+Those columns that end in ".o" are the observed values for that CN.
+The others are the imputed values for that CN. 
+
+
+
+
+### *Imputed*
+
+```{r}
+# rf_dia_i <- impute(rf_dia, ancillaryData = y)
+
+rf_imp_test <- impute(rf_yai)
+
+rf_imp_test |> head()
+
+```
+
+```{r}
+rf_imp_test |> rownames_to_column("CN") |> filter(CN == "12965572010497_4")
+```
+
+```{r}
+rf_imp_test |> drop_na() |> nrow()
+```
+
+```{r}
+518/1498
+```
+About 35% of the data were imputed in this run. 
+
+```{r}
+t <- rf_imp_test |> drop_na() |> select(order(colnames(rf_imp_test))) |> head(n = 10)
+tc <- t |> select(!where(is.numeric))
+t <- t |> select(where(is.numeric))
+t <- t[, colSums(t) != 0]
+t <- cbind(t,tc)
+t 
+```
+
+
+
+
+```{r}
+rf_original_preds_eval <- yaiRFsummary(rf_yai)
+```
+
+### *OOBe*
+
+```{r}
+rf_original_preds_eval$forestAttributes |> kable()
+```
+
+
+### *Importance*
+
+```{r}
+importance <- rf_original_preds_eval$scaledImportance
+importance
+```
+
+### *RMSD*
+
+
+```{r}
+rmsd(rf_imp_test) |> kable() |> scroll_box(width = "500px", height = "500px")
+```
+
+*The output for rmsd makes me think that is classifying by standplot cn. 
+Why else would it have the predictor variables?*
+
+
+
+*Here are the Predictor and response variables used in the above imputation again.*
+```{r}
+x |> names() |> noquote()
+```
+
+```{r}
+y |> names() |> noquote()
+```
+
+
+
+
+## Ancillary data
+
+Copying the St.Joe example in the yaImpute paper, I am adding the original TDs back onto the imputation. 
+
+```{r}
+y_ancil <- y_above0
+
+y_ancil <- y_ancil |> mutate(
+  max_spp1 = factor(max_spp1), 
+  max_spp2 = factor(max_spp2)
+) |> select(-c(max_spp3, largest_3))
+
+y_ancil <- y_ancil |> column_to_rownames("STANDPLOT_CN")
+
+y_ancil <- y_ancil |> as.data.frame()
+
+rf_imp_ancillary <- impute(rf_yai, ancillaryData = y_ancil) |> drop_na()
+# rf_imp_ancillary |> head()
+rf_imp_ancillary |> select(order(colnames(rf_imp_ancillary))) |> head()
+```
+
+```{r}
+rmsd(rf_imp_ancillary) |> head(n =10)
+```
+
+
+
+
+### Var importance
+
+```{r}
+x |> names()
+```
+
+
+```{r}
+yaiVarImp(rf_yai)
+```
+
+
+### Terminal Buckets
+
+```{r}
+load("example_imputation.Rdata")
+# a <- t[8:9,]
+# a <-  a %>% select_if(~ !is.numeric(.) || sum(.) != 0)
+a
+```
+
+The above example shows why I think that the CNs are in the terminal buckets. 
+These two CNs are nearest neighbors in real and Random Forest's Space. 
+Each has been selected as the others nearest neighbor(assuming), and all of the observed values from one are written as 
+the imputed values for the other and vice versa. 
+
+
+
+# Factor Proportions
+
+```{r}
+max_1 <- rf_imp_test |> select(max_spp1, max_spp1.o) |> 
+  drop_na() |> 
+  mutate(
+    equal = ifelse(max_spp1 == max_spp1.o, T, F)
+  )
+
+max_1$equal |> mean()
+1 - (max_1$equal |> mean())
+```
+
+
+```{r}
+max_2 <- rf_imp_test |> select(max_spp2, max_spp2.o) |> 
+  drop_na() |> 
+  mutate(
+    equal = ifelse(max_spp2 == max_spp2.o, T, F)
+  )
+
+max_2$equal |> mean()
+1 - (max_2$equal |> mean())
+```
+
+**These proportions are slightly higher than those from OOBe, 
+OOBe for max spp 1 vs prop was .116 v .120, and for max spp 2 it was .154 v .164.**
+
+
+
+## Heat maps
+
+
+### Max spp 1
+
+```{r}
+#| code-fold: true
+#| fig-width: 10
+
+rf_imp_test |> select(max_spp1, max_spp1.o) |> 
+                  mutate(
+                    max_spp1 =  as.character(max_spp1), 
+                    max_spp1.o =  as.character(max_spp1.o),
+                    num = 1) |>
+              group_by(max_spp1, max_spp1.o) |>
+              summarise(
+                     num = sum(num),
+                     .groups = "drop") |>
+  drop_na() |>
+  arrange(max_spp1, max_spp1.o) |> 
+  ggplot() +
+      aes(x = max_spp1, y = max_spp1.o, fill = num) +
+  # aes(x = max_spp1, y = max_spp1.o, fill = max_spp1.o) +
+      
+  geom_tile() +
+  scale_x_discrete(guide = guide_axis(angle = 50)) +
+  scale_fill_gradient(low = "white", high = "red") +
+  geom_text(aes(label = num), color = "black", size = 4)
+
+```
+
+
+
+
+
+
+### Max spp 2
+
+```{r}
+#| code-fold: true
+#| fig-width: 10
+
+rf_imp_test |> select(max_spp2, max_spp2.o) |> 
+                  mutate(
+                    max_spp2 =  as.character(max_spp2), 
+                    max_spp2.o =  as.character(max_spp2.o),
+                    equal = 1) |>  
+              group_by(max_spp2, max_spp2.o) |> 
+              summarise(
+                     num = sum(equal), 
+                     .groups = "drop") |> 
+  drop_na() |>
+  arrange(max_spp2, max_spp2.o) |> 
+  ggplot() +
+      aes(x = max_spp2, y = max_spp2.o, fill = num) +
+        geom_tile() +
+  scale_x_discrete(guide = guide_axis(angle = 50)) +
+  # scale_fill_gradient(low = "white", high = "red") +
+  # scale_fill_gradient2(low = "white", mid = "yellow", high = "red", midpoint = 100) +
+  scale_fill_gradientn(
+                       colors = c("white", "red"),
+                       # values = c(0, 15, 75, 855)
+                       ) +
+  geom_text(aes(label = num), color = "black", size = 4)
+
+```
+
+**Same as above, but without zero**
+
+```{r}
+#| code-fold: true
+#| fig-width: 10
+
+rf_imp_test |> select(max_spp2, max_spp2.o) |> 
+                  mutate(
+                    max_spp2 =  as.character(max_spp2), 
+                    max_spp2.o =  as.character(max_spp2.o),
+                    equal = 1) |>  
+              group_by(max_spp2, max_spp2.o) |> 
+              summarise(
+                     num = sum(equal), 
+                     .groups = "drop") |> 
+  drop_na() |>
+  arrange(max_spp2, max_spp2.o) |> 
+  filter(max_spp2 != "zero" & max_spp2.o != "zero") |> 
+  ggplot() +
+      aes(x = max_spp2, y = max_spp2.o, fill = num) +
+        geom_tile() +
+  scale_x_discrete(guide = guide_axis(angle = 50)) +
+  # scale_fill_gradient(low = "white", high = "red") +
+  # scale_fill_gradient2(low = "white", mid = "yellow", high = "red", midpoint = 100) +
+  scale_fill_gradientn(
+                       colors = c("white", "red"),
+                       # values = c(0, 15, 75, 855)
+                       ) +
+  geom_text(aes(label = num), color = "black", size = 4)
+
+```
+
+
+
+
+
+### f
+
+```{r}
+#| code-fold: true
+#| fig-width: 10
+
+rf_imp_test |> select(f, f.o) |> 
+                  mutate(
+                    f =  as.character(f), 
+                    f.o =  as.character(f.o),
+                    equal = 1) |>  
+              group_by(f, f.o) |> 
+              summarise(
+                     num = sum(equal), 
+                     .groups = "drop") |> 
+  drop_na() |>
+  ggplot() +
+      aes(x = f, y = f.o, fill = num) +
+        geom_tile() +
+  scale_x_discrete(guide = guide_axis(angle = 50)) +
+  scale_fill_gradient(low = "white", high = "red") +
+  geom_text(aes(label = num), color = "black", size = 4)
+
+```
+
+
+### p
+
+```{r}
+#| code-fold: true
+#| fig-width: 10
+
+rf_imp_test |> select(p, p.o) |> 
+                  mutate(
+                    p =  as.character(p), 
+                    p.o =  as.character(p.o),
+                    equal = 1) |>  
+              group_by(p, p.o) |> 
+              summarise(
+                     num = sum(equal), 
+                     .groups = "drop") |> 
+  drop_na() |> 
+  ggplot() +
+      aes(x = p, y = p.o, fill = num) +
+        geom_tile() +
+  scale_x_discrete(guide = guide_axis(angle = 50)) +
+  scale_fill_gradient(low = "white", high = "red") +
+  geom_text(aes(label = num), color = "black", size = 4)
+
+```
+
+```{r}
+unique(as.character(rf_imp_test$p)) |> noquote()
+```
+
+- D doug fir
+- A Alpine
+- M Mountain Hemlock
+- F Silver fir
+- Q *Probably Oak(Quercus), this isn't in the Wenatchee guide*
+- E Sub-alpine fir
+- W Grand Fir
+- C W. Hemlock
+- P Ponderosa
+
+
+
+
+
+
+
+
+
+
+The graphs were perhaps a waste of time, but I thought I could perhaps show something. 
+
+It could be interesting to see what happens when using the species groups as opposed to actual seedlings. 
+
+
+
+# ________________
+
+
+
+
+# RF Seedlings
+
+
+```{r}
+#| label: RF Seeds
+
+# n1 larger = more spp in rare, 20 works often, 
+n1 <- 20
+# n2 larger = more spp2 in other
+n2 <- 12
+
+# Prep
+y_above0 <- yfull |> filter(total_TD > 0)
+# Cleaning columns
+y_not_numeric <- y_above0 |> select(!where(is.numeric))
+y_numeric <- y_above0 |> select(where(is.numeric))
+y_numeric <- y_numeric[, colSums(y_numeric) != 0]
+y_above0 <- cbind(y_not_numeric, y_numeric)
+
+
+
+CNs_wRegen <- y_above0 |> select(STANDPLOT_CN)
+
+# X Variables
+x_above0 <- left_join(CNs_wRegen, x_pred, join_by(STANDPLOT_CN))
+
+x <- x_above0 |> select(-c(a,g)) |> 
+  mutate(
+    f = factor(f), 
+    p = factor(p)
+  ) |> relocate(f, p, .after = BAp) |> 
+  select(!all_of(remove))
+
+
+# Y variables
+
+t <- y_above0 |> group_by(max_spp1) |> 
+  summarise(
+    n = n(), 
+    tpa = sum(largest_1)
+  ) |> 
+  arrange(n)
+
+### n1
+td_remove <- t[1:n1,]$max_spp1 |> as.character()
+
+
+y_rare <- y_above0 |> select(all_of(td_remove))
+
+y_rare |> names() |> noquote()
+
+y_rare <- y_rare |> mutate(
+  rare_TD = rowSums(y_rare[grep("_TD", names(y_rare))])
+)
+
+y_above0$rare_TD <- y_rare$rare_TD
+
+y_above0 <- y_above0 |> select(!all_of(td_remove))
+
+
+
+
+
+y <- y_above0
+# y <- y_above0 |> select(-c(max_spp1, max_spp2, largest_1, largest_2, total_TD))
+y <- y_above0 |> select(-c(max_spp3, largest_3))
+
+y_vars <- names(y)
+
+spp2_list <- y |> group_by(max_spp2) |> summarise(
+  n = n()
+) |> arrange(desc(n))
+
+
+#### n2
+spp2_list <- spp2_list$max_spp2[1:n2]
+
+y <- y |> mutate(
+  max_spp1 = ifelse(
+    max_spp1 %in% td_remove, "rare", max_spp1
+  ),
+  
+  max_spp2 = ifelse(
+    max_spp2 %in% spp2_list, max_spp2, "other"
+  )
+)
+
+y <- y |> mutate(
+  max_spp1 = factor(max_spp1),
+  max_spp2 = factor(max_spp2)
+  )
+
+
+
+
+
+x <- as.data.frame(x)
+y <- as.data.frame(y)
+
+
+x <- x |> column_to_rownames("STANDPLOT_CN")
+y <- y |> column_to_rownames("STANDPLOT_CN")
+
+y <- droplevels(y)
+x <- droplevels(x)
+
+# rf_yai <- yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = T)
+```
+
+
+
+```{r}
+# rf_yai <- yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = T)
+# save(rf_yai, file = str_c("RF_26AUG24_1seedlings", ".Rdata"))
+load(str_c("RF_26AUG24_1seedlings", ".Rdata"))
+```
+
+
+
+
+
+# Eval 2 
+
+### *Imputed*
+
+```{r}
+# rf_dia_i <- impute(rf_dia, ancillaryData = y)
+
+rf_imp_test <- impute(rf_yai)
+
+rf_imp_test <- rf_imp_test |> select(order(colnames(rf_imp_test))) 
+
+rf_imp_test |> head()
+```
+
+```{r}
+rf_imp_test |> rownames_to_column("CN") |> filter(CN == "40220711010497_1" | CN == "40220711010497_2" | CN == "40220711010497_3" | CN == "40220711010497_4")
+```
+
+The first time through: 
+
+Subplot 1 was not imputed; it is only a reference subplot. Subplots 2, 3, & 4 had observed and imputed values. 
+Even though 2, 3, & 4 had ABAM BA originally, it was overwritten in imputation as the same as 1. 
+Only 1 had ABAM TD observed, the others were imputed, but all had ABAM BA observed in the predictors.  
+
+```{r}
+rf_td_preds_eval <- yaiRFsummary(rf_yai)
+```
+
+### *OOBe*
+
+```{r}
+rf_td_preds_eval$forestAttributes
+```
+
+### *Importance*
+
+```{r}
+importance <- rf_td_preds_eval$scaledImportance
+importance |> head()
+```
+
+
+### *RMSD*
+
+```{r}
+#| layout-ncol: 5
+rd <- rmsd(rf_imp_test) |> 
+  select(where(is.numeric)) |> 
+  rownames_to_column("CN") |> 
+  drop_na()
+
+rd[1:10,]
+rd[11:20,]
+rd[21:30,]
+rd[31:40,]
+rd[41:49,]
+```
+
+NAs above were categorical variables. 
+
+
+
+```{r}
+x |> names() |> noquote()
+```
+
+```{r}
+y |> names() |> noquote()
+```
+
+
+
+
+## Ancillary data
+
+```{r}
+y_ancil <- y_above0
+
+y_ancil <- y_ancil |> mutate(
+  max_spp1 = factor(max_spp1), 
+  max_spp2 = factor(max_spp2)
+) |> select(-c(max_spp3, largest_3))
+
+y_ancil <- y_ancil |> column_to_rownames("STANDPLOT_CN")
+
+y_ancil <- y_ancil |> as.data.frame()
+
+rf_imp_ancillary <- impute(rf_yai, ancillaryData = y_ancil) |> drop_na()
+y_ancillary_imp <- rf_imp_ancillary |> select(order(colnames(rf_imp_ancillary))) 
+y_ancillary_imp |> head()
+y_ancillary_imp |> nrow()
+```
+
+
+*Just looking at an example to see what is imputed where*
+```{r}
+y_ancillary_imp |> 
+  rownames_to_column("sCN") |> 
+  mutate(CN = str_sub(sCN, 1, 15)) |> 
+  filter(CN == "13199766010497_") %>% select_if(~ !is.numeric(.) || sum(.) != 0)
+```
+
+It looks like subplots 1, 3, & 4 were all imputed to the same stand. The imputed values are all the same for this set, 
+except subplot 2. 
+
+
+
+#### Checking RMSD 
+
+**RMSD is calculated from the data that does not contain NAs.** 
+
+The ancillary data was added to the yai object, and a new imputation was performed on the old prediction tree. 
+The resulting dataframe uses the same distance measures from the original yai run, but contains the 
+y data that we are actually interested in. 
+
+The replicates and bootstrap variables that were left out in the original run (and therefore the ancillary imputation) 
+come out as NAs in the imputed data. 
+For each variable, 
+if it was used in the trees that best predicted that subplot as being in the same terminal node(bucket) as itself, 
+it comes out as a value in the imputed data. 
+If not, it comes out as an NA. 
+
+The RMSD of each variable is calculated from the full list of observed and imputed values for that variable. 
+In the example case, there were ~1106 rows of subplots and bootstrap replicates that contained values and ~900 where 
+that variable was left out of the tree.
+
+The RMSD for this variable was calcuted on the 1106 rows that contained values. 
+
+
+```{r}
+# Selecting the first and second columns, ABAM imputed and observed
+t <- y_ancillary_imp[,1:2]
+# Finding the squared difference
+t <- t |> mutate(sq_dev = (ABAM_TD - ABAM_TD.o)^2)
+# Root Meaning the squared difference
+sqrt(mean(t$sq_dev))
+```
+*Pulling the RMSD from the yaImpute*
+```{r}
+t3 <- rmsd(rf_imp_ancillary) |> rownames_to_column("spp")
+t3 |> filter(spp == "ABAM_TD")
+```
+
+
+*Pulling an example*
+```{r}
+t  |> rownames_to_column("CN") |> filter(str_detect(CN, "^40220711010497"))
+```
+
+Subplots 2, 3, & 4 were all imputed from 1 at 1's observed value. 1 was imputed from somewhere else. 
+
+
+
+*Looking at the CNs used to impute to each plot, (I think)*
+```{r}
+t <- foruse(rf_yai, kth = 1, targetsOnly = T)
+t <- t |> rownames_to_column("CN") |> as.data.frame()
+t3 <- NULL
+t3 <- data.frame(CN = t$CN, 
+                 use = t$use,
+                 dist = t$dist)
+
+t3 %>% head()
+```
+
+
+```{r}
+a <- y_ancillary_imp |> 
+  rownames_to_column("CN") |> 
+  filter(CN == "24155367010900_2" | CN == "12965290010497_2") %>% 
+  select_if(~ !is.numeric(.) || sum(.) != 0) 
+
+b <- c("Used", "Imputed")
+cbind(b,a)
+```
+
+I think that yaImpute is using the standplot_cns in the terminal buckets. 
+That would mean that the margin function is determining the if each tree is correct by whether or not the proportion of 
+of each bucket that is the correct CN is larger than the proportion of the largest incorrect CN. 
+
+These appear to be the out of bag stands used for OOBe. 
+
+I am not sure if yaImpute is using the TDs from all species for each selected nearest neighbor stand, or if they are 
+being recomputed for each species, but it seems like the former. 
+
+There also appears to be something going on with the stands that are not being used to impute. 
+In the table above, the Used row has imputed values. 
+These pseudo imputations remind me of something I read in the documentation, but I can't remember the specifics right now. 
+
+
+
+
+
+
+### Var importance
+
+```{r}
+x |> names()
+```
+
+
+```{r}
+yaiVarImp(rf_yai)
+```
+
+
+
+
+
+# **27AUG24**
+
+I went up and fixed the code, so that it would knit, then added the factor eval and clarified the code for readability. 
+Then I looked at the way yaImpute is probably imputing all variables from one CN to another. 
+It may be better for us to use prediction rather than imputation. 
+
+
+
+# Factor Proportions
+
+```{r}
+max_1 <- rf_imp_test |> select(max_spp1, max_spp1.o) |> 
+  drop_na() |> 
+  mutate(
+    equal = ifelse(max_spp1 == max_spp1.o, T, F)
+  )
+
+max_1$equal |> mean()
+1 - (max_1$equal |> mean())
+```
+OOBe from above, 0.1241656
+
+```{r}
+max_2 <- rf_imp_test |> select(max_spp2, max_spp2.o) |> 
+  drop_na() |> 
+  mutate(
+    equal = ifelse(max_spp2 == max_spp2.o, T, F)
+  )
+
+max_2$equal |> mean()
+1 - (max_2$equal |> mean())
+```
+OOBe from above, 0.1615487
+
+**As before, these proportions are a little higher than the OOBe**
+
+
+
+## Heat maps
+
+
+### Max spp 1
+
+```{r}
+#| code-fold: true
+#| fig-width: 10
+
+rf_imp_test |> select(max_spp1, max_spp1.o) |> 
+                  mutate(
+                    max_spp1 =  as.character(max_spp1), 
+                    max_spp1.o =  as.character(max_spp1.o),
+                    num = 1) |>
+              group_by(max_spp1, max_spp1.o) |>
+              summarise(
+                     num = sum(num),
+                     .groups = "drop") |>
+  drop_na() |>
+  arrange(max_spp1, max_spp1.o) |> 
+  ggplot() +
+      aes(x = max_spp1, y = max_spp1.o, fill = num) +
+  # aes(x = max_spp1, y = max_spp1.o, fill = max_spp1.o) +
+      
+  geom_tile() +
+  scale_x_discrete(guide = guide_axis(angle = 50)) +
+  scale_fill_gradient(low = "white", high = "red") +
+  geom_text(aes(label = num), color = "black", size = 4)
+
+```
+
+
+
+
+
+
+### Max spp 2
+
+```{r}
+#| code-fold: true
+#| fig-width: 10
+
+rf_imp_test |> select(max_spp2, max_spp2.o) |> 
+                  mutate(
+                    max_spp2 =  as.character(max_spp2), 
+                    max_spp2.o =  as.character(max_spp2.o),
+                    equal = 1) |>  
+              group_by(max_spp2, max_spp2.o) |> 
+              summarise(
+                     num = sum(equal), 
+                     .groups = "drop") |> 
+  drop_na() |>
+  arrange(max_spp2, max_spp2.o) |> 
+  ggplot() +
+      aes(x = max_spp2, y = max_spp2.o, fill = num) +
+        geom_tile() +
+  scale_x_discrete(guide = guide_axis(angle = 50)) +
+  # scale_fill_gradient(low = "white", high = "red") +
+  # scale_fill_gradient2(low = "white", mid = "yellow", high = "red", midpoint = 100) +
+  scale_fill_gradientn(
+                       colors = c("white", "red"),
+                       # values = c(0, 15, 75, 855)
+                       ) +
+  geom_text(aes(label = num), color = "black", size = 4)
+
+```
+
+**Same as above, but without zero**
+
+```{r}
+#| code-fold: true
+#| fig-width: 10
+
+rf_imp_test |> select(max_spp2, max_spp2.o) |> 
+                  mutate(
+                    max_spp2 =  as.character(max_spp2), 
+                    max_spp2.o =  as.character(max_spp2.o),
+                    equal = 1) |>  
+              group_by(max_spp2, max_spp2.o) |> 
+              summarise(
+                     num = sum(equal), 
+                     .groups = "drop") |> 
+  drop_na() |>
+  arrange(max_spp2, max_spp2.o) |> 
+  filter(max_spp2 != "zero" & max_spp2.o != "zero") |> 
+  ggplot() +
+      aes(x = max_spp2, y = max_spp2.o, fill = num) +
+        geom_tile() +
+  scale_x_discrete(guide = guide_axis(angle = 50)) +
+  # scale_fill_gradient(low = "white", high = "red") +
+  # scale_fill_gradient2(low = "white", mid = "yellow", high = "red", midpoint = 100) +
+  scale_fill_gradientn(
+                       colors = c("white", "red"),
+                       # values = c(0, 15, 75, 855)
+                       ) +
+  geom_text(aes(label = num), color = "black", size = 4)
+
+```
+
+
+
+
+
+### f
+
+
+
+```{r}
+#| code-fold: true
+#| fig-width: 10
+
+rf_imp_test |> select(f, f.o) |> 
+                  mutate(
+                    f =  as.character(f), 
+                    f.o =  as.character(f.o),
+                    equal = 1) |>  
+              group_by(f, f.o) |> 
+              summarise(
+                     num = sum(equal), 
+                     .groups = "drop") |> 
+  drop_na() |>
+  ggplot() +
+      aes(x = f, y = f.o, fill = num) +
+        geom_tile() +
+  scale_x_discrete(guide = guide_axis(angle = 50)) +
+  scale_fill_gradient(low = "white", high = "red") +
+  geom_text(aes(label = num), color = "black", size = 4)
+
+```
+
+
+### p
+
+```{r}
+#| code-fold: true
+#| fig-width: 10
+
+rf_imp_test |> select(p, p.o) |> 
+                  mutate(
+                    p =  as.character(p), 
+                    p.o =  as.character(p.o),
+                    equal = 1) |>  
+              group_by(p, p.o) |> 
+              summarise(
+                     num = sum(equal), 
+                     .groups = "drop") |> 
+  drop_na() |> 
+  ggplot() +
+      aes(x = p, y = p.o, fill = num) +
+        geom_tile() +
+  scale_x_discrete(guide = guide_axis(angle = 50)) +
+  scale_fill_gradient(low = "white", high = "red") +
+  geom_text(aes(label = num), color = "black", size = 4)
+
+```
+
+
+
+
+
+# Distributions
+
+```{r}
+keep <- append(keep, 
+               c("test_set", 'trees', 'plots', 'rf_imp_ancillary', 'rf_imp_test', 'rf_yai')) |> unique()
+clean_mem()
+```
+
+
+```{r}
+test_set <- read_csv("C:/RxFire/Regen/Regeneration_2_16Sept24/test.csv")
+
+con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Regen/Regeneration_2_16Sept24/homemade_fvs_db2.db")
+trees <- dbGetQuery(con, "select * from fvs_treeinit_plot")
+plots <- dbGetQuery(con, "select * from fvs_plotinit_plot")
+dbDisconnect(con)
+
+t <- trees |> select(STANDPLOT_CN) |> mutate(STAND_CN = str_sub(STANDPLOT_CN, 1,-3)) |> unique()
+plt_cn <- db_list(t, STAND_CN)
+
+
+
+# Getting the Species reference information
+con <- dbConnect(RSQLite::SQLite(), "C:\\RxFire\\Data\\_FIADB_WA.db")
+
+fix <- dbGetQuery(con, str_c("select PLT_CN, SUBP, TREE, STATUSCD from TREE where PLT_CN in (", 
+                             plt_cn, ")")) |> unique()
+
+fix <- fix |> mutate(STANDPLOT_CN = str_c(PLT_CN, "_", SUBP))
+
+# Pulling in the species reference table
+plants_ref <- dbGetQuery(
+  con, "select SPECIES_SYMBOL, SPCD, COMMON_NAME, W_SPGRPCD from REF_SPECIES"
+  )
+plant_gr_ref <- dbGetQuery(
+  con, "select SPGRPCD, NAME from REF_SPECIES_GROUP"
+  ) 
+dbDisconnect(con)
+
+# Cleaning Species reference up
+plants_ref <- plants_ref |> rename(SPGRPCD = W_SPGRPCD, SYMBL = SPECIES_SYMBOL)
+plants_ref <- left_join(plants_ref, plant_gr_ref, by = join_by(SPGRPCD))
+plants <- plants_ref |> select(SYMBL, SPCD)
+
+
+test_trees <- left_join(test_set, trees, join_by(StandID == STANDPLOT_CN))
+test_plots <- left_join(test_set, plots, join_by(StandID == STANDPLOT_CN))
+
+con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Data/_FIADB_WA.db")
+
+# aspect <- dbGetQuery(con, "select aspect, slope, plt_cn, subp from SUBPLOT")
+ecosubcd <- dbGetQuery(con, "select CN, ecosubcd from PLOT")
+
+dbDisconnect(con)
+
+test_plots <- left_join(test_plots, ecosubcd, join_by(STAND_CN == CN)) |> relocate(ECOSUBCD)
+
+test_plots <- test_plots |> mutate(
+  EcoRegion = str_remove_all(
+    str_sub(ECOSUBCD, 1, -2), 
+    " ")) |> select(-ECOSUBCD) |> 
+  relocate(EcoRegion)
+
+# M242D", "N.Cascades",
+
+test_plots <- test_plots |> filter(EcoRegion == "M242D")
+CNs <- test_plots |> select(StandID)
+
+test_trees <- left_join(CNs, test_trees, join_by(StandID))
+```
+
+
+
+### Seedling Densities
+
+
+
+```{r}
+# Separating the seedlings from the rest
+seedling_densities <- test_trees |>  filter(DBH == 0.1) |> 
+  rename(STANDPLOT_CN = StandID) |> 
+  group_by(STANDPLOT_CN, SPECIES) |> 
+# Add up the TPA per species on each subplot. 
+  summarise(
+    TPA = sum(TREE_COUNT), 
+    .groups = "drop")
+
+
+
+# Prepare to join
+seedling_densities <- seedling_densities |> mutate(SPECIES = as.numeric(SPECIES))
+# Join seedlings and species reference
+seedling_densities <- left_join(seedling_densities, plants, join_by("SPECIES" == "SPCD"))
+# Removing an extra col. 
+seedling_densities <- seedling_densities |> select(-c(SPECIES))
+
+test_trees <- test_trees |> rename(STANDPLOT_CN = StandID)
+
+tcns <- test_trees |> select(STANDPLOT_CN, TREE)
+fix <- fix |> select(STANDPLOT_CN, TREE, STATUSCD) |> unique()
+fix$TREE <- as.character(fix$TREE)
+fix <- left_join(tcns, fix, join_by(STANDPLOT_CN, TREE))
+
+ltrees <- test_trees |> filter(DBH > 0.1 | is.na(DBH))
+seeds <- test_trees |> filter(DBH == 0.1)
+
+fix <- left_join(ltrees, fix, join_by(STANDPLOT_CN, TREE))
+fix <- fix |> mutate(
+  HISTORY = ifelse(STATUSCD != 1, 8, 1)
+)
+# fix |> filter(HISTORY == 8)
+
+trees_dead <- fix |> filter(HISTORY == 8) |> select(-STATUSCD)
+trees_live <- fix |> filter(HISTORY == 1) |> select(-STATUSCD)
+trees_live <- add_row(trees_live, seeds)
+
+
+
+trees_live$STANDPLOT_CN |> n_distinct() 
+```
+```{r}
+seeds$STANDPLOT_CN |> n_distinct()
+```
+
+
+
+
+
+```{r}
+# Widening the data
+seedling_wide <- seedling_densities |> pivot_wider(names_from = SYMBL, 
+                 values_from = TPA,
+                 values_fill = 0,
+                 names_glue = "{SYMBL}_{'TD'}")
+
+# Un-grouping to avoid future messages
+seedling_wide <- seedling_wide |> ungroup()
+seedling_densities <- seedling_densities |> ungroup()
+
+# Ensuring there are no NAs introduced while widening
+seedling_wide <- nas_to_zeroes(seedling_wide)
+
+seedling_wide |> head()
+```
+
+
+### Comparison
+
+
+
+
+```{r}
+rf_tds <- rf_imp_test |> select(all_of(contains("TD")))
+
+raw_tds <- seedling_wide
+
+# save(raw_tds, file = "raw_TDs_forHist.Rdata")
+# save(rf_tds, file = "rf_TDs_forHist.Rdata")
+```
+
+```{r}
+t.test(log(rf_tds$ABAM_TD + 1), log(raw_tds$ABAM_TD + 1))
+```
+
+
+```{r}
+#| layout-ncol: 2
+
+hist(log(rf_tds$ABAM_TD + 1))
+hist(log(raw_tds$ABAM_TD + 1))
+```
+
+
+```{r}
+t <- rf_tds |> select(ABAM_TD) |> 
+  mutate(
+    source = "RF_Imputed") |> 
+  rownames_to_column("STANDPLOT_CN")
+
+t2 <- raw_tds |> select(STANDPLOT_CN, ABAM_TD) |> 
+  mutate(source = "test_set")
+
+t3 <- rf_tds |> select(ABAM_TD.o) |>
+  rename(ABAM_TD = ABAM_TD.o) |> 
+  mutate(source = "RF_Observed") |> 
+  rownames_to_column("STANDPLOT_CN")
+
+t <- add_row(t, t2)
+t <- add_row(t, t3) |> drop_na()
+```
+
+
+
+
+
+```{r}
+#| layout-ncol: 3
+
+
+t |> filter(source == "RF_Imputed" | source == "RF_Observed") |> 
+  ggplot(aes(log(ABAM_TD + 1), fill = source)) + 
+   geom_histogram(
+     alpha = 0.5, 
+     aes(y = ..density..), 
+     position = 'identity', 
+     bins = 30) 
+
+t |> filter(source == "RF_Imputed" | source == "test_set") |> 
+  ggplot(aes(log(ABAM_TD + 1), fill = source)) + 
+   geom_histogram(
+     alpha = 0.5, 
+     aes(y = ..density..), 
+     position = 'identity', 
+     bins = 30)
+
+t |> filter(source == "RF_Observed" | source == "test_set") |> 
+  ggplot(aes(log(ABAM_TD + 1), fill = source)) + 
+   geom_histogram(
+     alpha = 0.5, 
+     aes(y = ..density..), 
+     position = 'identity', 
+     bins = 30)
+
+```
+
+
+# End
+
+
+
+# Notes
+ 
+  - sprintf for loops and hyper-parameter tests. 
+  - more trees for rare or common, 
+  - pLAY WITH N-TREE AND SEE WHERE THERE ARE DIMINISHING RETURNS. 
+  - Correcting aspect may have not been enough, 
+  it could be better to do the fraction of available light from slope and aspect. 
+  - Find notes about adding forest type
+  - ensure that I am using the latest filtering
+  - Check the heat maps with species groups and forest type. 
+  - Try and get the TDs to work alone. 
+  - Try running this as a prediction instead of an imputation. 
+  
+ 
+ 
+ 
+ 
+# scratch
+
+```{r}
+# rf_imp_ancillary |> group_by(max_spp1.o) |> 
+#   summarise(n = n())
+```
+
+
+
+
+
+
+
+```{r}
+# t <- rf_imp_test |> group_by(max_spp1) |> 
+#   summarise(n = n())
+# t
+# sum(t$n)
+```
+
+
+
+
+
+```{r}
+# rf_imp_test$ABLA_TD.o |> n_distinct()
+# 
+# |> group_by(max_spp1) |> 
+#   summarise(n = n())
+# t
+# sum(t$n)
+```
+

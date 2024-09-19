@@ -1,0 +1,1367 @@
+---
+title: "1.5 DB Create"
+execute: 
+  freeze: auto
+---
+
+
+*Rachel's Original Code*
+```{r}
+#| code-fold: true
+#| label: Rachels FIA code
+#| eval: false
+
+library(RSQLite)
+library(sqldf)
+library(DBI)
+library(data.table)
+library(dplyr)
+
+
+options(scipen = 999)
+## Set working directory as the master folder with all FIA SQLite databases within their 
+## individual folders. Named: FIADBs.
+setwd("C:\\Users\\Houtmanr\\FVS_Tradeoffs\\rFVSProcessing\\FIADBs")
+
+# This file lists all unique stand identifiers (Plot_CN) values for the study area
+### ENTER CORRECT STAND TABLE PATHWAY HERE ###
+target_stands <- read.table("C:/Users/houtmanr/FVS_Tradeoffs/rFVSProcessing/FIADBs/Stands_byVariantR1_Carbon_2014.csv", sep = ",", header = TRUE)
+target_stands <- as.data.table(unique(target_stands["CN"]))
+target_stands <-setkey(target_stands, CN)
+
+fuel_stands <- as.data.table(read.table("C:/Users/houtmanr/FVS_Tradeoffs/rFVSProcessing/FVSInputFiles/DWM_table_with_mangrove_v5.csv", sep = ",", header = TRUE))
+fuel_stands_filtered <- fuel_stands[fuel_stands$ObsCN %in% target_stands$CN,]
+
+states <- list.dirs()
+states <- grep("SQLit", states, value = TRUE)
+
+tree_header <- c("STAND_CN", "INVYR", "STATUSCD", "Tree_count", "SPCD", "DBH", "HT", "ACTUALHT", "CR", "SUBP",
+                 "TREE", "AGENTCD", "Species", "History", "CrRatio")
+
+# This loop iterates through every state database and extracts the tree data from FIA
+tree_table <- NULL
+for(db in 1:length(states)){
+  # connect to the sqlite file
+  dbtitle <- list.files(path = states[db], full.names = FALSE)
+  dbname <- paste0(states[db], "\\", dbtitle)
+  con = dbConnect(RSQLite::SQLite(), dbname=dbname)
+  # get a list of all tables
+  alltables = dbListTables(con)
+  alltables
+
+  tree <- as.data.table(dbGetQuery(con, 'select PLT_CN, INVYR, STATUSCD, TPA_UNADJ, SPCD, DIA, HT, ACTUALHT, CR, SUBP, TREE, AGENTCD from TREE'))
+  target_stands$CN <- as.character(target_stands$CN)
+  tree_filtered <- merge(tree, target_stands, by.x = "PLT_CN", by.y = "CN") 
+
+  tree_filtered[, ':=' (Species = (SPCD), History = 1, CrRatio = CR )]
+  tree_filtered[AGENTCD != 'NULL', ':=' (History = 8)]
+  
+  tree_characteristics = c("PLT_CN", "INVYR", "STATUSCD", "TPA_UNADJ", "SPCD", "DIA", "HT", "ACTUALHT", "CR", "SUBP", "TREE", "AGENTCD","Species", "History", "CrRatio")
+  tree_table <- rbind(tree_table, tree_filtered[, tree_characteristics, with=FALSE])
+  cat("The trees in ", states[db], " have been found.")
+  dbDisconnect(con)
+}
+
+forest_type <- as.data.table(dbGetQuery(con, 'select * FROM REF_FOREST_TYPE'))
+
+names(tree_table) <- tree_header
+plots <- length(unique(tree_table$STAND_CN))
+
+# This loop iterates through the stand characteristics and builds an input stand table for FVS
+stand_header <- c("STAND_CN", "INV_YEAR", "CASE", "BASAL_AREA_FACTOR", "INV_PLOT_SIZE", "BRK_DBH")
+stand_table <- NULL
+fine_fuels_table <- NULL
+coarse_fuels_table <- NULL
+for(db in 1:length(states)){
+  # connect to the sqlite file
+  dbtitle <- list.files(path = states[db], full.names = FALSE)
+  dbname <- paste0(states[db], "\\", dbtitle)
+  con = dbConnect(RSQLite::SQLite(), dbname=dbname[1])
+  # get a list of all tables
+  alltables = dbListTables(con)
+  
+  plot_table <- as.data.table(dbGetQuery(con, 'select CN, INVYR from PLOT'))
+  plot_filtered <- plot_table[CN %in% target_stands$CN,]
+  plot_filtered <- setkey(plot_filtered, CN)
+  
+  plot_filtered <- as.data.table(plot_filtered[, ':=' (INV_YEAR = 2014, CASE = (INVYR), INVYR = NULL, BASAL_AREA_FACTOR = 0, INV_PLOT_SIZE = 1, BRK_DBH = 999)])
+  stand_table <- rbind(stand_table, plot_filtered)
+  stand_table <-setkey(stand_table,CN)
+  
+  # Fuels
+  fwd_table <- as.data.table(dbGetQuery(con, 'select PLT_CN, INVYR, FWD_SM_CARBON_COND, FWD_SM_DRYBIO_COND,FWD_MD_CARBON_COND, FWD_MD_DRYBIO_COND, FWD_LG_CARBON_COND, FWD_LG_DRYBIO_COND, LITTER_CARBON, LITTER_BIOMASS, DUFF_CARBON, DUFF_BIOMASS from COND_DWM_CALC'))
+  fwd_table_complete <- as.data.table(dbGetQuery(con, 'select * from COND_DWM_CALC'))
+  fwd_filtered <- unique(fwd_table[PLT_CN %in% fuel_stands_filtered$PredCN,])
+  # Add Fuels data
+  fwd_table$Fuel_0_25_H <- fwd_table$FWD_SM_DRYBIO_COND/2000
+  fwd_table$Fuel_25_1_H <- fwd_table$FWD_MD_DRYBIO_COND/2000
+  fwd_table$Fuel_1_3_H <- fwd_table$FWD_LG_DRYBIO_COND/2000
+  
+  fine_fuels_table <- rbind(fine_fuels_table, fwd_filtered)
+
+  cwd_table <- as.data.table(dbGetQuery(con, 'select PLT_CN, DRYBIO_AC_COND, DECAYCD, TRANSDIA from DWM_COARSE_WOODY_DEBRIS'))
+  cwd_table <-as.data.table(dbGetQuery(con, 'select * from DWM_COARSE_WOODY_DEBRIS'))
+  cwd_fuels <- cwd_table[PLT_CN %in% fuel_stands_filtered$PredCN,]
+  
+  groupcwd <- group_by(cwd_fuels, PLT_CN)
+  coarsefuels = as.data.table(summarize(groupcwd, 
+                                        Fuel_3_6_H = sum(DRYBIO_AC_COND[DECAYCD %in% c(1,2,3) & TRANSDIA >= 3 & TRANSDIA < 6])/2000,
+                                        Fuel_6_12_H = sum(DRYBIO_AC_COND[DECAYCD %in% c(1,2,3) & TRANSDIA >= 6 & TRANSDIA < 12])/2000,
+                                        Fuel_12_20_H = sum(DRYBIO_AC_COND[DECAYCD %in% c(1,2,3) & TRANSDIA >= 12 & TRANSDIA < 20])/2000,
+                                        Fuel_20_35_H = sum(DRYBIO_AC_COND[DECAYCD %in% c(1,2,3) & TRANSDIA >= 20 & TRANSDIA < 35])/2000,
+                                        Fuel_35_50_H = sum(DRYBIO_AC_COND[DECAYCD %in% c(1,2,3) & TRANSDIA >= 35 & TRANSDIA < 50])/2000,
+                                        Fuel_gt_50_H = sum(DRYBIO_AC_COND[DECAYCD %in% c(1,2,3) & TRANSDIA >= 50])/2000,
+                                        Fuel_3_6_S = sum(DRYBIO_AC_COND[DECAYCD %in% c(4,5) & TRANSDIA >= 3 & TRANSDIA < 6])/2000,
+                                        Fuel_6_12_S = sum(DRYBIO_AC_COND[DECAYCD %in% c(4,5) & TRANSDIA >= 6 & TRANSDIA < 12])/2000,
+                                        Fuel_12_20_S = sum(DRYBIO_AC_COND[DECAYCD %in% c(4,5) & TRANSDIA >= 12 & TRANSDIA < 20])/2000,
+                                        Fuel_20_35_S = sum(DRYBIO_AC_COND[DECAYCD %in% c(4,5) & TRANSDIA >= 20 & TRANSDIA < 35])/2000,
+                                        Fuel_35_50_S = sum(DRYBIO_AC_COND[DECAYCD %in% c(4,5) & TRANSDIA >= 35 & TRANSDIA < 50])/2000,
+                                        Fuel_gt_50_S = sum(DRYBIO_AC_COND[DECAYCD %in% c(4,5) & TRANSDIA >= 50])/2000))
+  
+  coarse_fuels_table <- rbind(coarse_fuels_table, coarsefuels)
+  
+  cat("The stands in ", states[db], " have been found.\n")
+  dbDisconnect(con)
+}
+
+## Original stand data from Fuel Map.
+fuel_stands_filtered$PredCN <- as.character(fuel_stands_filtered$PredCN)
+fuel_stands_filtered$ObsCN <- as.character(fuel_stands_filtered$ObsCN)
+
+coarse_fuels_table_stands <- merge(fuel_stands_filtered[,c("PredCN", "ObsCN")], coarse_fuels_table,  by.x = "PredCN", by.y = "PLT_CN")
+fine_fuels_table_stands <- merge(fuel_stands_filtered[,c("PredCN", "ObsCN")], fine_fuels_table,  by.y = "PLT_CN", by.x = "PredCN")
+names(stand_table) <- stand_header
+
+## Add fuel variables to the stand data
+
+fuel_stands_filtered$Fuel_0_25_H <- 2*fuel_stands_filtered$FWD_SM_CARBON_COND/2000
+fuel_stands_filtered$Fuel_25_1_H <- 2*fuel_stands_filtered$FWD_MD_CARBON_COND/2000
+fuel_stands_filtered$Fuel_1_3_H <- 2*fuel_stands_filtered$FWD_LG_CARBON_COND/2000
+fuel_stands_filtered$Fuel_Litter <- 2*fuel_stands_filtered$LITTER_CARBON/2000
+fuel_stands_filtered$Fuel_Duff <- 2*fuel_stands_filtered$DUFF_CARBON/2000
+
+colnames(fuel_stands_filtered)[4] <- "STAND_CN"
+fuel_stands_filtered$X.1 <- NULL
+fuel_stands_filtered$X <- NULL
+fuel_stands_filtered <- setkey(fuel_stands_filtered, STAND_CN)
+stand_table <- setkey(stand_table, STAND_CN)
+
+# Add fine fuels.
+stands_with_finefuels <-merge(stand_table, fuel_stands_filtered[,c("STAND_CN","Fuel_0_25_H","Fuel_25_1_H","Fuel_1_3_H","Fuel_Litter","Fuel_Duff")])
+
+stands_with_finefuels <- setkey(stands_with_finefuels, STAND_CN)
+
+colnames(coarse_fuels_table_stands)[2] <- "STAND_CN"
+coarse_fuels_table_stands <- setkey(coarse_fuels_table_stands, STAND_CN)
+stands_with_fuels <- left_join(stands_with_finefuels, coarse_fuels_table_stands)
+stands_with_fuels$PredCN <- NULL
+
+# Remove NA values when writing files (FVS does NOT like them)
+### UPDATE YOUR OUTPUT FILE NAMES HERE ###
+write.csv(tree_table, file = "tree_table_R1_Carbon_2014.csv", na = "", row.names = FALSE)
+write.csv(stands_with_fuels, file = "stand_table_R1_Carbon2014.csv", na = "", row.names = FALSE)
+```
+
+*Libraries*
+```{r}
+#| label: Libraries
+#| message: false
+#| warning: false
+#| code-fold: true
+#| output: false
+
+rm(list = ls())                                                      
+gc()                                                                                 
+
+# Data tidying and acces
+library(tidyverse, quietly = T)       # Easy to read syntax and data manipulation                   
+library(RSQLite)                      # Access SQLite dbs   
+library(magrittr)                     # Pipes and math functions    
+# library(readxl)                     # Read xlsx 
+# library(writexl)                    # write xlsx     
+                                                   
+# yaImpute and related                           
+# library(yaImpute)                     # RF imputation     
+# library(vegan)                        # Something to do the yaImpute 
+# library(randomForest)                 # RF package that yaImpute uses                                   
+                                                     
+# plots and tables                          
+# library(esquisse)                     # Quick data visualization   
+# library(knitr)                        # Better html tables
+# library(DT)                           # Data tables for Java script tables in HTML
+                                                      
+# library(kableExtra)                   # Better html tables, change sizes        
+# library(feather)                      # Faster data retrieval    
+
+# Geography
+# library(sf)                           # Simple Features/vector data
+# library(terra)                        # Raster functions
+# library(spatstat)                     # Spatial stats
+
+# Rachel's libraries
+# library(RSQLite)       # Already loaded                    
+library(sqldf)                                        
+# library(DBI)                                        
+library(data.table)                                        
+                                 
+
+
+# No sci-notation. 
+options(scipen = 999)
+```
+
+*Functions*
+```{r}
+#| code-fold: true
+#| label: Functions
+
+clean_mem <- function() {
+  x <- ls(envir = .GlobalEnv)
+  # ls()[!(ls() %in% keep)]
+  rm(list = x[!(x %in% keep)], envir = .GlobalEnv)
+  gc()
+}
+keep <- c("keep", "clean_mem", "clean_na_cols")
+
+clean_na_cols <- function(df){
+  df <- df[, colSums(is.na(df)) < nrow(df)]
+  print(df)
+}
+
+db_list <- function(df, CN_col){
+  name <- NULL
+  name <- df |> select({{CN_col}})
+  name <- name |> mutate(CN_col = str_c("'", {{CN_col}}, "'")) 
+  name <- str_flatten_comma(name$CN_col)
+  # name <- str_flatten_comma(name[, CN_col])
+  name
+}
+```
+
+
+
+**Breaking down Rachel's code**
+
+:::{.callout-note collapse="true"}
+
+Pseudo code
+
+1. setup
+
+- scientific notation off
+- set wd to folder with FIADB. 
+- read in standlist (?TM)
+- ensure there are no repeat plt_cns
+- add a key for quicker sorting and filtering
+- read in fuelmap DWM table (?FM)
+- find FM's Observed PLT_CNs in standlist (TM's) CNs
+- list files DBs in folder
+- filter for sqlite db names
+
+
+2. Tree table
+
+- Create header for tree table. 
+- Ensure blank tree table to write to
+- For each database in the list of state dbs
+  + connect to the state db
+  + get the list of tables
+  + set tree to those columns needed for FVS from FIA TREE table
+  + join standlist and TREE table
+  + Change FIA.TREE.SPCD to Species, Set History to 1, and Change CR to CrRatio
+  + Where AgentCD is not null set History to 8 
+  + list the columns to select
+  + select the columns
+  + concatenate and print the stats in db have been found
+  + Disconnect and start the loop over. 
+  
+- Find forest type reference in a db, this is confusing, there is no connection
+- set the tree table names
+- find all plots with trees in the tree list. 
+
+
+3. Plots table 
+
+- set the stand header
+- ensure a blank canvas with NULL stand & fuels tables
+- For each db in the list of DBs
+  a. connect
+  + find the db path and connect to it
+  + list the tables
+  b. set tables
+  + select CN and invyr from plot
+  + find all standlist in plot table by CN
+  + set a key for sorting and filtering quickly
+  c. alter tables
+  + Set := INV_YEAR = 2014: Adds a new column INV_YEAR with all entries set to 2014.
+  + CASE = (INVYR): Adds a new column CASE and sets its values to be the same as those in the existing column INVYR.
+  + INVYR = NULL: Removes the INVYR column from the data.table.
+  + BASAL_AREA_FACTOR = 0: Adds a new column BASAL_AREA_FACTOR with all entries set to 0.
+  + INV_PLOT_SIZE = 1: Adds a new column INV_PLOT_SIZE with all entries set to 1.
+  + BRK_DBH = 999: Adds a new column BRK_DBH with all entries set to 999.
+  d. make the stand table
+  + add the stand info from each db to the stand table
+  e. Fine Fuels
+  + fine woody debris is list of columns from COND_DWM_CALC
+  + Complete is * from COND_DWM_CALC
+  + find the FM pred CNs in the db
+  + Set the FVS variables from the FIA variables and correct Tons to lbs
+  + Add our CN's fwd to the the fine fuels table
+  f. Course Fuels
+  + get columns from DWM_Coarse Woody degris
+  + get * from DWM_Coarse Woody degris
+  + filter db for our Pred cns
+  g. fix CWD table
+  + group CWD by PLT_CN
+  + set each FVS fuel group to the sum of fuels with diameters at correct size and correct for tons to lbs. 
+  + add this states data to the new table
+  + concatenate and print complete
+  + disconnect and start the next state
+  
+4. New db 
+
+- correct CNs to chr
+- add coarse fuel data from FM to TM
+- add fine fuel data from FM to TM
+- set column names
+- add fuel to the new stand table
+  + I am not sure why FWD and stuff are being multiplied by 2
+- Set CN to STAND_CN for FVS
+- Set X and X.1 to Null
+- Set a key to sort and filter
+- add fine fuels to new stand table
+- join the fine and coarse fuel tables
+- Remove PredCN and NA values
+- write new db. 
+
+
+
+## Part 1
+
+```{r}
+#| eval: false
+
+options(scipen = 999)
+## Set working directory as the master folder with all FIA SQLite databases within their 
+## individual folders. Named: FIADBs.
+setwd("C:\\Users\\Houtmanr\\FVS_Tradeoffs\\rFVSProcessing\\FIADBs")
+
+# This file lists all unique stand identifiers (Plot_CN) values for the study area
+### ENTER CORRECT STAND TABLE PATHWAY HERE ###
+target_stands <- read.table(
+  "C:/Users/houtmanr/FVS_Tradeoffs/rFVSProcessing/FIADBs/Stands_byVariantR1_Carbon_2014.csv", sep = ",", header = TRUE
+  )
+target_stands <- as.data.table(unique(target_stands["CN"]))
+target_stands <- setkey(target_stands, CN)
+
+fuel_stands <- as.data.table(
+  read.table(
+    "C:/Users/houtmanr/FVS_Tradeoffs/rFVSProcessing/FVSInputFiles/DWM_table_with_mangrove_v5.csv", sep = ",", header = TRUE
+    )
+  )
+fuel_stands_filtered <- fuel_stands[fuel_stands$ObsCN %in% target_stands$CN,]
+
+states <- list.dirs()
+states <- grep("SQLit", states, value = TRUE)
+```
+
+
+## Part 2
+
+
+2. Tree table
+
+- Create header for tree table. 
+- Ensure blank tree table to write to
+- For each database in the list of state dbs
+  + connect to the state db
+  + get the list of tables
+  + set tree to those columns needed for FVS from FIA TREE table
+  + join standlist and TREE table
+  + Change FIA.TREE.SPCD to Species, Set History to 1, and Change CR to CrRatio
+  + Where AgentCD is not null set History to 8 
+  + list the columns to select
+  + select the columns
+  + concatenate and print the stats in db have been found
+  + Disconnect and start the loop over. 
+  
+- Find forest type reference in a db, this is confusing, there is no connection
+- set the tree table names
+- find all plots with trees in the tree list. 
+
+
+
+```{r}
+#| eval: false
+
+
+tree_header <- c(
+  "STAND_CN", "INVYR", "STATUSCD", "Tree_count", "SPCD", "DBH", "HT", "ACTUALHT", "CR", "SUBP", "TREE", "AGENTCD", 
+  "Species", "History", "CrRatio"
+  )
+
+# This loop iterates through every state database and extracts the tree data from FIA
+tree_table <- NULL
+for(db in 1:length(states)){
+  # connect to the sqlite file
+  dbtitle <- list.files(path = states[db], full.names = FALSE)
+  dbname <- paste0(states[db], "\\", dbtitle)
+  con = dbConnect(RSQLite::SQLite(), dbname=dbname)
+  # get a list of all tables
+  alltables = dbListTables(con)
+  alltables
+
+  tree <- as.data.table(
+    dbGetQuery(
+      con, 'select PLT_CN, INVYR, STATUSCD, TPA_UNADJ, SPCD, DIA, HT, ACTUALHT, CR, SUBP, TREE, AGENTCD from TREE'
+      )
+    )
+  
+  target_stands$CN <- as.character(target_stands$CN)
+  tree_filtered <- merge(tree, target_stands, by.x = "PLT_CN", by.y = "CN") 
+
+  tree_filtered[, ':=' (Species = (SPCD), History = 1, CrRatio = CR )]
+  tree_filtered[AGENTCD != 'NULL', ':=' (History = 8)]
+  
+  tree_characteristics = c(
+    "PLT_CN", "INVYR", "STATUSCD", "TPA_UNADJ", "SPCD", "DIA", "HT", "ACTUALHT", "CR", "SUBP", "TREE", "AGENTCD", 
+    "Species", "History", "CrRatio"
+    )
+  
+  tree_table <- rbind(tree_table, tree_filtered[, tree_characteristics, with=FALSE])
+  cat("The trees in ", states[db], " have been found.")
+  dbDisconnect(con)
+}
+
+forest_type <- as.data.table(dbGetQuery(con, 'select * FROM REF_FOREST_TYPE'))
+
+names(tree_table) <- tree_header
+plots <- length(unique(tree_table$STAND_CN))
+```
+
+
+
+## Part 3
+
+
+3. Plots table 
+
+- set the stand header
+- ensure a blank canvas with NULL stand & fuels tables
+- For each db in the list of DBs
+  a. connect
+  + find the db path and connect to it
+  + list the tables
+  b. set tables
+  + select CN and invyr from plot
+  + find all standlist in plot table by CN
+  + set a key for sorting and filtering quickly
+  c. alter tables
+  + Set := INV_YEAR = 2014: Adds a new column INV_YEAR with all entries set to 2014.
+  + CASE = (INVYR): Adds a new column CASE and sets its values to be the same as those in the existing column INVYR.
+  + INVYR = NULL: Removes the INVYR column from the data.table.
+  + BASAL_AREA_FACTOR = 0: Adds a new column BASAL_AREA_FACTOR with all entries set to 0.
+  + INV_PLOT_SIZE = 1: Adds a new column INV_PLOT_SIZE with all entries set to 1.
+  + BRK_DBH = 999: Adds a new column BRK_DBH with all entries set to 999.
+  d. make the stand table
+  + add the stand info from each db to the stand table
+  e. Fine Fuels
+  + fine woody debris is list of columns from COND_DWM_CALC
+  + Complete is * from COND_DWM_CALC
+  + find the FM pred CNs in the db
+  + Set the FVS variables from the FIA variables and correct Tons to lbs
+  + Add our CN's fwd to the the fine fuels table
+  f. Course Fuels
+  + get columns from DWM_Coarse Woody degris
+  + get * from DWM_Coarse Woody degris
+  + filter db for our Pred cns
+  g. fix CWD table
+  + group CWD by PLT_CN
+  + set each FVS fuel group to the sum of fuels with diameters at correct size and correct for tons to lbs. 
+  + add this states data to the new table
+  + concatenate and print complete
+  + disconnect and start the next state
+  
+```{r}
+#| eval: false
+
+# This loop iterates through the stand characteristics and builds an input stand table for FVS
+stand_header <- c("STAND_CN", "INV_YEAR", "CASE", "BASAL_AREA_FACTOR", "INV_PLOT_SIZE", "BRK_DBH")
+stand_table <- NULL
+fine_fuels_table <- NULL
+coarse_fuels_table <- NULL
+for(db in 1:length(states)){
+  # connect to the sqlite file
+  dbtitle <- list.files(path = states[db], full.names = FALSE)
+  dbname <- paste0(states[db], "\\", dbtitle)
+  con = dbConnect(RSQLite::SQLite(), dbname=dbname[1])
+  # get a list of all tables
+  alltables = dbListTables(con)
+  
+  plot_table <- as.data.table(dbGetQuery(con, 'select CN, INVYR from PLOT'))
+  plot_filtered <- plot_table[CN %in% target_stands$CN,]
+  plot_filtered <- setkey(plot_filtered, CN)
+  
+  plot_filtered <- as.data.table(
+    plot_filtered[
+      , ':=' (
+      INV_YEAR = 2014, CASE = (INVYR), INVYR = NULL, BASAL_AREA_FACTOR = 0, INV_PLOT_SIZE = 1, BRK_DBH = 999
+      )
+      ]
+    )
+  stand_table <- rbind(stand_table, plot_filtered)
+  stand_table <-setkey(stand_table,CN)
+  
+  # Fuels
+  fwd_table <- as.data.table(
+    dbGetQuery(con, paste0(
+               'select ',
+               'PLT_CN, INVYR, FWD_SM_CARBON_COND, FWD_SM_DRYBIO_COND,FWD_MD_CARBON_COND, FWD_MD_DRYBIO_COND,', 
+               'FWD_LG_CARBON_COND, FWD_LG_DRYBIO_COND, LITTER_CARBON, LITTER_BIOMASS, DUFF_CARBON, DUFF_BIOMASS ', 
+               'from COND_DWM_CALC'
+               ))
+  )
+  
+  fwd_table_complete <- as.data.table(dbGetQuery(con, 'select * from COND_DWM_CALC'))
+  fwd_filtered <- unique(fwd_table[PLT_CN %in% fuel_stands_filtered$PredCN,])
+  # Add Fuels data
+  fwd_table$Fuel_0_25_H <- fwd_table$FWD_SM_DRYBIO_COND/2000
+  fwd_table$Fuel_25_1_H <- fwd_table$FWD_MD_DRYBIO_COND/2000
+  fwd_table$Fuel_1_3_H <- fwd_table$FWD_LG_DRYBIO_COND/2000
+  
+  fine_fuels_table <- rbind(fine_fuels_table, fwd_filtered)
+
+  cwd_table <- as.data.table(dbGetQuery(con, 'select PLT_CN, DRYBIO_AC_COND, DECAYCD, TRANSDIA from DWM_COARSE_WOODY_DEBRIS'))
+  cwd_table <- as.data.table(dbGetQuery(con, 'select * from DWM_COARSE_WOODY_DEBRIS'))
+  cwd_fuels <- cwd_table[PLT_CN %in% fuel_stands_filtered$PredCN,]
+  
+  groupcwd <- group_by(cwd_fuels, PLT_CN)
+  
+  coarsefuels = as.data.table(
+    summarize(groupcwd, 
+              Fuel_3_6_H =   sum(DRYBIO_AC_COND[DECAYCD %in% c(1,2,3) & TRANSDIA >= 3  & TRANSDIA < 6])/2000,
+              Fuel_6_12_H =  sum(DRYBIO_AC_COND[DECAYCD %in% c(1,2,3) & TRANSDIA >= 6  & TRANSDIA < 12])/2000,
+              Fuel_12_20_H = sum(DRYBIO_AC_COND[DECAYCD %in% c(1,2,3) & TRANSDIA >= 12 & TRANSDIA < 20])/2000,
+              Fuel_20_35_H = sum(DRYBIO_AC_COND[DECAYCD %in% c(1,2,3) & TRANSDIA >= 20 & TRANSDIA < 35])/2000,
+              Fuel_35_50_H = sum(DRYBIO_AC_COND[DECAYCD %in% c(1,2,3) & TRANSDIA >= 35 & TRANSDIA < 50])/2000,
+              Fuel_gt_50_H = sum(DRYBIO_AC_COND[DECAYCD %in% c(1,2,3) & TRANSDIA >= 50])/2000, 
+              
+              Fuel_3_6_S =   sum(DRYBIO_AC_COND[DECAYCD %in% c(4,5)   & TRANSDIA >= 3  & TRANSDIA < 6])/2000,
+              Fuel_6_12_S =  sum(DRYBIO_AC_COND[DECAYCD %in% c(4,5)   & TRANSDIA >= 6  & TRANSDIA < 12])/2000,
+              Fuel_12_20_S = sum(DRYBIO_AC_COND[DECAYCD %in% c(4,5)   & TRANSDIA >= 12 & TRANSDIA < 20])/2000,
+              Fuel_20_35_S = sum(DRYBIO_AC_COND[DECAYCD %in% c(4,5)   & TRANSDIA >= 20 & TRANSDIA < 35])/2000,
+              Fuel_35_50_S = sum(DRYBIO_AC_COND[DECAYCD %in% c(4,5)   & TRANSDIA >= 35 & TRANSDIA < 50])/2000,
+              Fuel_gt_50_S = sum(DRYBIO_AC_COND[DECAYCD %in% c(4,5)   & TRANSDIA >= 50])/2000
+              )
+    )
+  
+  coarse_fuels_table <- rbind(coarse_fuels_table, coarsefuels)
+  
+  cat("The stands in ", states[db], " have been found.\n")
+  dbDisconnect(con)
+}
+
+```
+
+
+
+## Part 4
+
+4. New db 
+
+- correct CNs to chr
+- add coarse fuel data from FM to TM
+- add fine fuel data from FM to TM
+- set column names
+- add fuel to the new stand table
+  + I am not sure why FWD and stuff are being multiplied by 2
+- Set CN to STAND_CN for FVS
+- Set X and X.1 to Null
+- Set a key to sort and filter
+- add fine fuels to new stand table
+- join the fine and coarse fuel tables
+- Remove PredCN and NA values
+- write new db. 
+
+
+  
+```{r}
+#| eval: false
+
+colnames(fuel_stands_filtered)[4] <- "STAND_CN"
+fuel_stands_filtered$X.1 <- NULL
+fuel_stands_filtered$X <- NULL
+fuel_stands_filtered <- setkey(fuel_stands_filtered, STAND_CN)
+stand_table <- setkey(stand_table, STAND_CN)
+
+# Add fine fuels.
+stands_with_finefuels <- merge(
+  stand_table, 
+  fuel_stands_filtered[, c("STAND_CN","Fuel_0_25_H","Fuel_25_1_H","Fuel_1_3_H","Fuel_Litter","Fuel_Duff")])
+
+stands_with_finefuels <- setkey(stands_with_finefuels, STAND_CN)
+
+colnames(coarse_fuels_table_stands)[2] <- "STAND_CN"
+coarse_fuels_table_stands <- setkey(coarse_fuels_table_stands, STAND_CN)
+stands_with_fuels <- left_join(stands_with_finefuels, coarse_fuels_table_stands)
+stands_with_fuels$PredCN <- NULL
+
+# Remove NA values when writing files (FVS does NOT like them)
+### UPDATE YOUR OUTPUT FILE NAMES HERE ###
+write.csv(tree_table, file = "tree_table_R1_Carbon_2014.csv", na = "", row.names = FALSE)
+write.csv(stands_with_fuels, file = "stand_table_R1_Carbon2014.csv", na = "", row.names = FALSE)
+```
+
+
+```{r}
+#| eval: false
+
+## Original stand data from Fuel Map.
+fuel_stands_filtered$PredCN <- as.character(fuel_stands_filtered$PredCN)
+fuel_stands_filtered$ObsCN <- as.character(fuel_stands_filtered$ObsCN)
+
+coarse_fuels_table_stands <- merge(
+  fuel_stands_filtered[, c("PredCN", "ObsCN")], 
+  coarse_fuels_table,  by.x = "PredCN", by.y = "PLT_CN"
+  )
+fine_fuels_table_stands <- merge(
+  fuel_stands_filtered[,c("PredCN", "ObsCN")], 
+  fine_fuels_table,  by.y = "PLT_CN", by.x = "PredCN"
+  )
+names(stand_table) <- stand_header
+
+## Add fuel variables to the stand data
+
+fuel_stands_filtered$Fuel_0_25_H <- 2*fuel_stands_filtered$FWD_SM_CARBON_COND/2000
+fuel_stands_filtered$Fuel_25_1_H <- 2*fuel_stands_filtered$FWD_MD_CARBON_COND/2000
+fuel_stands_filtered$Fuel_1_3_H <- 2*fuel_stands_filtered$FWD_LG_CARBON_COND/2000
+fuel_stands_filtered$Fuel_Litter <- 2*fuel_stands_filtered$LITTER_CARBON/2000
+fuel_stands_filtered$Fuel_Duff <- 2*fuel_stands_filtered$DUFF_CARBON/2000
+
+colnames(fuel_stands_filtered)[4] <- "STAND_CN"
+fuel_stands_filtered$X.1 <- NULL
+fuel_stands_filtered$X <- NULL
+fuel_stands_filtered <- setkey(fuel_stands_filtered, STAND_CN)
+stand_table <- setkey(stand_table, STAND_CN)
+
+# Add fine fuels.
+stands_with_finefuels <- merge(
+  stand_table, 
+  fuel_stands_filtered[, c("STAND_CN","Fuel_0_25_H","Fuel_25_1_H","Fuel_1_3_H","Fuel_Litter","Fuel_Duff")]
+  )
+
+stands_with_finefuels <- setkey(stands_with_finefuels, STAND_CN)
+
+colnames(coarse_fuels_table_stands)[2] <- "STAND_CN"
+coarse_fuels_table_stands <- setkey(coarse_fuels_table_stands, STAND_CN)
+stands_with_fuels <- left_join(stands_with_finefuels, coarse_fuels_table_stands)
+stands_with_fuels$PredCN <- NULL
+
+# Remove NA values when writing files (FVS does NOT like them)
+### UPDATE YOUR OUTPUT FILE NAMES HERE ###
+write.csv(tree_table, file = "tree_table_R1_Carbon_2014.csv", na = "", row.names = FALSE)
+write.csv(stands_with_fuels, file = "stand_table_R1_Carbon2014.csv", na = "", row.names = FALSE)
+```
+
+
+:::
+
+
+
+# Re-Write
+
+
+### Pseudo code
+
+1. **setup**
+
+- Read in standlist from 1_Import_Clean.csv
+- Ensure there are no repeat plt_cns
+
+2. **Tree table**
+
+- Create header for tree table. 
+- Ensure blank tree table to write to
+- Connect to the state db
+- Set tree to those columns needed for FVS from FIA TREE table
+- Pull the standlist from the TREE table
+- Change FIA.TREE.SPCD to Species, Set History to 1, and Change CR to CrRatio
+- Where AgentCD is not null set History to 8 
+- Select the columns needed
+- Disconnect from the state db
+- Find forest type reference in a db, this is confusing, there is no connection
+- Set the tree table names
+- Find all plots with trees in the tree list. 
+
+
+3. **Plots table** 
+
+- Set the stand header
+- Ensure a blank canvas with NULL stand
+- Connect to db
+- Set tables
+- Select CN and invyr from plot
+- Find all standlist in plot table by CN
+  + Set := INV_YEAR = 2014: Adds a new column INV_YEAR with all entries set to 2014.
+  + CASE = (INVYR): Adds a new column CASE and sets its values to be the same as those in the existing column INVYR.
+  + INVYR = NULL: Removes the INVYR column from the data.table.
+  + BASAL_AREA_FACTOR = 0: Adds a new column BASAL_AREA_FACTOR with all entries set to 0.
+  + INV_PLOT_SIZE = 1: Adds a new column INV_PLOT_SIZE with all entries set to 1.
+  + BRK_DBH = 999: Adds a new column BRK_DBH with all entries set to 999.
+- Make the stand table
+- Disconnect
+
+4. **Seedlings table**
+
+- Copy the header for tree table. 
+- Ensure blank seed table to write to
+- Connect to the state db
+- Set seed to those columns needed for FVS from FIA SEEDLING table
+- Use the same standlist from the TREE table
+- Change FIA.SEEDLING.SPCD to Species, Set History to 1, and set CR & CrRatio to NA
+- Select the columns needed
+- Disconnect from the state db
+- Set the seed table names
+- Find all plots with trees in the seed table. 
+- Set the TREE id by adding a row number for each record in the seedlings table per stand. I copied FVS Ready and set all seedling IDs to 100100 + rownumber
+  + Probably should have done this by standplot_cn
+- Ensure the seedling and tree tables match. 
+- Add the seedling records to the tree table. 
+
+
+5. **New db** 
+
+- Add Standplot_cn to the tree table. 
+- Add Standplot_cn to the plot table by repeating the plot records 4 times for each plot, then 
+joining the plots to the tree table's Standplot_cn to ensure there are no empty of fake subplots introduced.
+- Make sure all tables have the same Plots and Subplots.
+- Set table names and types to match FVS. 
+- Create the blank DB. 
+- Set DB schema
+  + Setting table names and setting schema may have been redundant. However, the way I did it last time was to use the schema. This time, that did not translate the column types to the DB & it caused errors due to Species being numeric. I do not know why setting the schema did not work.  
+- Add the tables to the db, then copy them so the new schema and delete the interim tables. 
+  + This is also redundant. Again, last time, this was how I ensured the proper data types for FVS, but it didn't work the same this time. 
+
+
+
+## Parts 1-3
+
+```{r}
+# Part 1 Setup
+
+standlist <- read_csv("./1_Import_Clean2.csv", 
+                      col_types = "ccc")
+
+standlist <- standlist |> mutate(
+  SUBP = str_sub(STANDPLOT_CN, -1, -1)
+) |> 
+  relocate(SUBP, .after = PLT_CN)
+
+target_stands <- standlist |> select(CN = PLT_CN) |> unique() |> as.data.table()
+
+target_stands <- setkey(target_stands, CN)
+
+
+plt_cn <- NULL
+plt_cn <- str_c("'", target_stands$CN, "'")
+plt_cn <- str_flatten_comma(plt_cn)
+
+
+# Part 2 Tree Table ------------------------------------------------------------------------------------------------
+
+tree_header <- c(
+  "STAND_CN", "STATUSCD", "Tree_count", "SPCD", "DBH", "HT", "ACTUALHT", "CR", "SUBP", "TREE", "AGENTCD", 
+  "Species", "History", "CrRatio"
+  )
+
+# This loop iterates through every state database and extracts the tree data from FIA
+tree_table <- NULL
+
+# connect to the sqlite file
+con = dbConnect(RSQLite::SQLite(), "C:/RxFire/Data/_FIADB_WA.db")
+
+#######
+# Add statuscd to fix live or dead trees like: HISTORY = ifelse(STATUSCD != 1, 8, 1)  Live tree == 1, dead == 2, 
+# other = not there. 
+
+tree <- as.data.table(
+  dbGetQuery(
+    con, str_c('select PLT_CN, INVYR, STATUSCD, TPA_UNADJ, SPCD, DIA, HT, ACTUALHT, CR, SUBP, TREE, AGENTCD from TREE ', 
+               'where PLT_CN in (', plt_cn, ")")
+    )
+  )
+# n_distinct(tree$PLT_CN)
+# 3426 PLT_CNs have trees in the TREE table
+ 
+tree <- tree |> mutate(
+  Species = SPCD, 
+  History = ifelse(
+    !is.na(AGENTCD), 8, 1
+  ), 
+  CrRatio = CR
+) |> select(-INVYR)
+
+forest_type <- as.data.table(dbGetQuery(con, 'select * FROM REF_FOREST_TYPE'))
+dbDisconnect(con)
+
+names(tree) <- toupper(tree_header)
+
+# Part 3 Plot Table --------------------------------------------------------------------------------------------
+
+stand_header <- c("STAND_CN", "INV_YEAR", "CASE", "BASAL_AREA_FACTOR", "INV_PLOT_SIZE", "BRK_DBH")
+
+# connect to the sqlite file
+con <-  dbConnect(RSQLite::SQLite(), "C:/RxFire/Data/_FIADB_WA.db")
+
+plot_table <- as.data.table(dbGetQuery(con, str_c(
+  'select CN, INVYR from PLOT where CN in (', 
+  plt_cn, ")")
+  ))
+
+plot_table <- setkey(plot_table, CN)
+
+
+plot_table <- plot_table |>  
+  mutate(
+    INV_YEAR = 2014, 
+    CASE = (INVYR), 
+    INVYR = NA, 
+    BASAL_AREA_FACTOR = 0, 
+    INV_PLOT_SIZE = 1, 
+    BRK_DBH = 999
+  ) |> 
+  as.data.table() |> rename(STAND_CN = CN) |> select(-INVYR)
+
+```
+
+
+
+
+## Part 4
+
+```{r}
+# Part 4 Seedling Table ----------------------------------------------------------------------------------------
+
+tree_header <- c(
+  "STAND_CN", "STATUSCD", "Tree_count", "SPCD", "DBH", "HT", "ACTUALHT", "CR", "SUBP", "TREE", "AGENTCD", 
+  "Species", "History", "CrRatio"
+  )
+
+# This loop iterates through every state database and extracts the tree data from FIA
+seed <- NULL
+
+# connect to the sqlite file
+con <-  dbConnect(RSQLite::SQLite(), "C:/RxFire/Data/_FIADB_WA.db")
+
+seed <- as.data.table(
+  dbGetQuery(
+    con, str_c('select PLT_CN, INVYR, SUBP, TPA_UNADJ, SPCD from SEEDLING ', 
+               'where PLT_CN in (', plt_cn, ")")
+    )
+  ) 
+
+dbDisconnect(con)
+
+
+# These are not in the seedlings table: STATUSCD, DIA, HT, ACTUALHT, CR, SUBP, TREE, AGENTCD
+# n_distinct(seed$PLT_CN)
+# 2818 PLT_CNs have trees in the SEEDLINGS table
+ 
+seed <- seed |> mutate(
+  STAND_CN   =  PLT_CN,      
+  INVYR      =  INVYR,         
+  STATUSCD   =  1,         
+  Tree_count =  TPA_UNADJ,         
+  SPCD       =  SPCD,         
+  DBH        =  0.1,         
+  HT         =  NA,
+  ACTUALHT   =  NA,
+  CR         =  NA,
+  SUBP       =  SUBP,
+  TREE       =  NA,
+  AGENTCD    =  NA,
+  Species    = SPCD,
+  History    = 1,
+  CrRatio    = NA
+) |> select(
+  STAND_CN, INVYR, STATUSCD, Tree_count, SPCD, DBH, HT, ACTUALHT, 
+  CR, SUBP, TREE, AGENTCD, Species,History, CrRatio) |> 
+  select(-INVYR)
+
+names(seed) <- seed |> names() |> toupper()
+
+
+
+# Fixing the Tree column. 
+seed <- seed |> group_by(STAND_CN) |> 
+  mutate(
+    Nrow = row_number(), 
+    TREE = (100100 + Nrow)
+  ) |> ungroup() |> select(-Nrow)
+
+## Checking that it worked as planned. 
+# seed |> group_by(STAND_CN) |> 
+#   summarise(n = n()) |> 
+#   arrange(desc(n))
+# 
+# seed |> filter(STAND_CN == "40220797010497")
+# seed |> filter(STAND_CN == "22398336010497")
+# seed |> filter(STAND_CN == "645308766126144")
+
+fvs_tree <- add_row(tree, seed)
+# fvs_tree
+```
+
+
+
+
+
+## Part 5
+
+
+*Adding Standplot_cn to the tables*
+```{r}
+splt_cn <- fvs_tree |> select(STAND_CN, SUBP) |> mutate(STANDPLOT_CN = str_c(STAND_CN, "_", SUBP)) |> 
+  unique()
+
+fvs_tree <- fvs_tree |> mutate(STANDPLOT_CN = str_c(STAND_CN, "_", SUBP)) |> relocate(STANDPLOT_CN, .after = STAND_CN)
+```
+
+
+
+```{r}
+plot_table <- plot_table |> 
+  uncount(weights = 4, .id = "SUBP") |> 
+  mutate(STANDPLOT_CN = str_c(STAND_CN, "_", SUBP)) |> 
+  relocate(STANDPLOT_CN, .after = STAND_CN) |> 
+  select(-SUBP)
+
+plot_table <- left_join(splt_cn, plot_table, join_by(STANDPLOT_CN, STAND_CN))
+
+n_distinct(fvs_tree$STANDPLOT_CN)
+n_distinct(fvs_tree$STAND_CN)
+```
+There are fewer plots here than I started with, but I am pretty sure they were plots with dead trees. 
+
+```{r}
+plot_table |> filter(STAND_CN == "12981943010497")
+```
+
+
+I am not sure why I am getting a different number of trees here, 3434. 
+At the end of section 2 of 1_Import and Clean, 3,531 of 3,552 plots have trees. 
+There are a few less plots here, and I am surprised. 
+
+
+
+Rachel's code here is using CSVs, that might be easier than running with an Sqlite db. 
+
+```{r}
+plot_table <- plot_table |> rename(OYEAR = CASE) |> select(-SUBP)
+fvs_tree <- fvs_tree |> select(STAND_CN, STANDPLOT_CN, TREE, TREE_COUNT, HISTORY, SPECIES, DBH, HT, CR, CRRATIO)
+
+fvs_tree <- fvs_tree |> mutate(STAND_CN      =  as.character(STAND_CN),  
+                   STANDPLOT_CN  =  as.character(STANDPLOT_CN),
+                   TREE          =  as.character(TREE), 
+                   TREE_COUNT    =  as.numeric(TREE_COUNT), 
+                   HISTORY       =  as.numeric(HISTORY), 
+                   SPECIES       =  as.character(SPECIES), 
+                   DBH           =  as.numeric(DBH), 
+                   HT            =  as.numeric(HT), 
+                   CR            =  as.numeric(CR), 
+                   CRRATIO       =  as.numeric(CRRATIO)
+                     )
+# str(fvs_tree)
+```
+
+
+```{r}
+#| eval: false
+
+# Part 5 Create DB ---------------------------------------------------------------------------------
+getwd()
+
+
+# Just to make it easier to integrate this into the other scripts I am renaming the tables FVS_...
+
+
+con <- dbConnect(RSQLite::SQLite(), dbname = "./homemade_fvs_db_17sept24.db")
+
+
+
+dbWriteTable(conn = con, name = "FVS_PLOTINIT", value = plot_table, overwrite = T)
+dbWriteTable(conn = con, name = "FVS_TREEINIT", value = fvs_tree, overwrite = T)
+
+# Set the schema
+dbExecute(con, str_c("CREATE TABLE FVS_PLOTINIT_PLOT (",
+                     "STAND_CN TEXT, ",
+                     "STANDPLOT_CN TEXT, ",
+                     "INV_YEAR INTEGER, ",
+                     "OYEAR INTEGER, ",
+                     "BASAL_AREA_FACTOR REAL, ",
+                     "INV_PLOT_SIZE REAL, ",
+                     "BRK_DBH REAL)"))
+
+plot_table |> names()
+
+dbExecute(con, str_c("INSERT INTO FVS_PLOTINIT_PLOT SELECT * FROM FVS_PLOTINIT"))
+dbExecute(con, "DROP TABLE FVS_PLOTINIT")
+
+# 9.2 TREE SCHEMA ---------------------------------------------------------
+
+
+dbExecute(con, str_c("CREATE TABLE FVS_TREEINIT_PLOT ( ",
+                     "STAND_CN TEXT, ",
+                     "STANDPLOT_CN TEXT, ",
+                     "TREE TEXT, ",
+                     "TREE_COUNT REAL, ",
+                     "HISTORY	REAL, ",
+                     "SPECIES	TEXT, ",
+                     "DBH REAL, ",
+                     "HT REAL, ",
+                     "CR	REAL, ",
+                     "CRRATIO	REAL)"))
+
+
+dbExecute(con, str_c("INSERT INTO FVS_TREEINIT_PLOT SELECT * FROM FVS_TREEINIT"))
+dbExecute(con, "DROP TABLE FVS_TREEINIT")
+
+
+
+
+
+dbListTables(conn = con)
+dbDisconnect(con)
+
+# Remove NA values when writing files (FVS does NOT like them)
+### UPDATE YOUR OUTPUT FILE NAMES HERE ###
+# write.csv(tree_table, file = "tree_table_R1_Carbon_2014.csv", na = "", row.names = FALSE)
+# write.csv(stands_with_fuels, file = "stand_table_R1_Carbon2014.csv", na = "", row.names = FALSE)
+
+```
+
+
+
+
+```{r}
+# splt_cn <- splt_cn |> select(STAND_CN, STANDPLOT_CN)
+
+# write_csv(splt_cn, "./1.5_dbCreation_standlist.csv")
+```
+
+
+# Difference in nrows
+
+**Where is the difference**
+```{r}
+# end1.5 <- read_csv("./1.5_dbCreation_standlist.csv")
+# end1.0 <- read_csv("./1_Import_Clean2.csv", 
+#                       col_types = "ccc")
+
+# t <- anti_join(end1.0, end1.5, join_by(STANDPLOT_CN))
+# 
+# n_distinct(t$STANDPLOT_CN)
+# t %>% head()
+# 
+# cns <- db_list(t, PLT_CN)
+# 
+# con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Data/_FIADB_WA.db")
+# 
+# trees <- dbGetQuery(con, str_c("select * from TREE where PLT_CN in (", cns, ")"))
+# seeds <- dbGetQuery(con, str_c("select * from SEEDLING where PLT_CN in (", cns, ")"))
+# 
+# trees <- clean_na_cols(trees)
+# seeds <- clean_na_cols(seeds)
+# 
+# sum(is.na(trees$AGENTCD))
+# nrow(trees)
+# 
+# unique(trees$STATUSCD)
+# trees %>% filter(!is.na(AGENTCD))
+# 
+# t <- trees %>% filter(STATUSCD != 1 & !is.na(AGENTCD))
+
+```
+
+
+I went back up and found where the reduction in subplots came in, they are subplots that were created in the first script, 
+but didn't have matches in the tree table. The Plt CNs match but the standplot cns do not. 
+
+# Difference in .out file
+
+This is all much the same as the FVS Ready translation. However, there are fewer fields entered via this method. I would need to crossreference the .out files to see which fields FVS is reading from FVS_Ready if I wanted to know what the actual difference is. 
+
+
+
+::: {layout="[[10,5], [40,20], [26,13], [2,1]]"}
+
+```
+STANDSQL   STANDSQL COMMAND FOR INPUT DATA BASE: 
+                          C:/RxFire/Data/FIADB_NSA.db
+           SELECT * FROM FVS_PLOTINIT_PLOT
+           WHERE  STANDPLOT_CN  = '%Stand_CN%'
+
+           STAND-LEVEL DATA BASE READ:
+           INV_YEAR:               2014
+           REGION:                    1
+           FOREST:                   13
+            COMPOSITE LOC:          113
+           PLANT ASSOCIATION CODE USED IN THIS PROJECTION IS CPS241  
+ LEAVING HABTYP KODTYP,ITYPE,ICL5,KARD2 PCOM = 114 114 114 CPS241 CPS241  
+           HABITAT/PV_CODE:         670
+           PV REFERENCE CODE:       110
+           AGE:                      89
+           ASPECT:                202.0
+           SLOPE:                 28.00
+           ELEVFT:               5480.0 CONVERTED TO:   54.8
+           BASAL_AREA_FACTOR:     -24.0
+           INV_PLOT_SIZE:          300.
+           BRK_DBH:                 5.0
+           NUM_PLOTS:                 1
+           SAM_WT:          5614.369141
+           DG_TRANS:                  1
+           DG_MEASURE:               10
+           HTG_TRANS:                 1
+           HTG_MEASURE:              10
+           MORT_MEASURE:             10
+           PHYSIO_REGION:            22
+           STATE:                    16
+           COUNTY:                   17
+           FUEL_12_20_H:          3.181
+           FUEL_LITTER:           2.896
+           FUEL_DUFF:             7.991
+           END OF DATA BASE READ.
+
+
+
+********   FVS03 WARNING:  FOREST CODE INDICATES THE 
+GEOGRAPHIC LOCATION IS OUTSIDE THE RANGE OF THE MODEL.  
+DEFAULT CODE IS USED.
+
+********   FOREST CODE USED IN THIS PROJECTION IS 606
+           LOCATION:                113
+
+********   FVS03 WARNING:  FOREST CODE INDICATES THE 
+GEOGRAPHIC LOCATION IS OUTSIDE THE RANGE OF THE MODEL.  
+DEFAULT CODE IS USED.
+
+********   FOREST CODE USED IN THIS PROJECTION IS 606
+           LONGITUDE:         -116.1252
+           LATITUDE:            48.3026
+
+********   FVS33 WARNING:  PV CODE WAS NOT RECOGNIZED; 
+HABITAT/PLANT ASSOCIATION/ECOREGION SET TO DEFAULT CODE.
+
+********   FVS32 WARNING:  PV REFERENCE CODE WAS NOT RECOGNIZED; 
+HABITAT/PLANT ASSOCIATION/ECOREGION SET TO DEFAULT CODE.      
+```
+
+
+
+```
+STANDSQL   STANDSQL COMMAND FOR INPUT DATA BASE: 
+      C:/RxFire/Regen/Regen2_08Aug24/homemade_fvs_db2.db
+           SELECT * FROM FVS_PLOTINIT_PLOT
+           WHERE  STANDPLOT_CN  = '%STAND_CN%'
+
+           STAND-LEVEL DATA BASE READ:
+           INV_YEAR:               2014
+           BASAL_AREA_FACTOR:       0.0
+           INV_PLOT_SIZE:            1.
+           BRK_DBH:               999.0
+           END OF DATA BASE READ.
+           
+         
+********   FVS03 WARNING:  FOREST CODE INDICATES THE 
+GEOGRAPHIC LOCATION IS OUTSIDE THE RANGE OF THE MODEL.  
+DEFAULT CODE IS USED.
+
+********   FOREST CODE USED IN THIS PROJECTION IS 606
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```
+DSNIN      INPUT DATA BASE IS C:/RxFire/Data/FIADB_NSA.db
+
+TREESQL    TREESQL COMMAND FOR INPUT DATA BASE: 
+                          C:/RxFire/Data/FIADB_NSA.db
+           SELECT * FROM FVS_TREEINIT_PLOT
+           WHERE  STANDPLOT_CN  = '%Stand_CN%'
+           STAND_CN           WAS IGNORED
+           STAND_ID           WAS IGNORED
+           PLOT_CN            WAS IGNORED
+           STANDPLOT_CN       WAS IGNORED
+           STANDPLOT_ID       WAS IGNORED
+           PLOT_ID            WAS USED
+           TREE_CN            WAS IGNORED
+           TREE_ID            WAS USED
+           TAG_ID             WAS IGNORED
+           AZIMUTH            WAS IGNORED
+           DISTANCE           WAS IGNORED
+           SITE_TREE_FLAG     WAS IGNORED
+           TREE_COUNT         WAS USED
+           MORT_AGENT         WAS IGNORED
+           WDLND_STEMS        WAS IGNORED
+           HISTORY            WAS USED
+           SPECIES            WAS USED
+           DIAMETER           WAS USED
+           DIAMETER_HTCD      WAS IGNORED
+           DG                 WAS USED
+           HT                 WAS USED
+           HTG                WAS USED
+           HTTOPK             WAS USED
+           HTBOLE             WAS IGNORED
+           TPBOLE             WAS IGNORED
+           HTSAW              WAS IGNORED
+           TPSAW              WAS IGNORED
+           HT_TO_CROWN_BASE   WAS IGNORED
+           CRRATIO            WAS USED
+           UNCRRATIO          WAS IGNORED
+           CRCLASS            WAS IGNORED
+           DAMAGE1            WAS USED
+           SEVERITY1          WAS USED
+           DAMAGE2            WAS USED
+           SEVERITY2          WAS USED
+           DAMAGE3            WAS USED
+           SEVERITY3          WAS USED
+           DEFECT_CUBIC       WAS IGNORED
+           DEFECT_BOARD       WAS IGNORED
+           TREEVALUE          WAS USED
+           PRESCRIPTION       WAS USED
+           AGE                WAS USED
+           BH_YEARS           WAS IGNORED
+           SLOPE              WAS USED
+           ASPECT             WAS USED
+           PV_CODE            WAS USED
+           PV_REF_CODE        WAS IGNORED
+           TOPOCODE           WAS USED
+           SITEPREP           WAS USED
+           CREATED_BY         WAS IGNORED
+           CREATED_DATE       WAS IGNORED
+           CREATED_IN_INSTANC WAS IGNORED
+           MODIFIED_BY        WAS IGNORED
+           MODIFIED_DATE      WAS IGNORED
+           MODIFIED_IN_INSTAN WAS IGNORED
+           VERSION            WAS IGNORED
+           NUMBER ROWS PROCESSED:   18
+
+END        END OF DATA BASE OPTIONS.
+
+
+
+
+```
+
+
+
+
+
+```
+DSNIN      INPUT DATA BASE IS 
+      C:/RxFire/Regen/Regen2_08Aug24/homemade_fvs_db2.db
+
+TREESQL    TREESQL COMMAND FOR INPUT DATA BASE: 
+      C:/RxFire/Regen/Regen2_08Aug24/homemade_fvs_db2.db
+           SELECT * FROM FVS_TREEINIT_PLOT
+           WHERE  STANDPLOT_CN  = '%STAND_CN%'
+           STAND_CN           WAS IGNORED
+           STANDPLOT_CN       WAS IGNORED
+           TREE               WAS IGNORED
+           TREE_COUNT         WAS USED
+           HISTORY            WAS USED
+           SPECIES            WAS USED
+           DBH                WAS USED
+           HT                 WAS USED
+           CR                 WAS IGNORED
+           CRRATIO            WAS USED
+           NUMBER ROWS PROCESSED:   17
+           
+  
+```
+:::
+
+
+Columns read in FVS_ready TREE, but not in mine:
+
+These can be added easily:
+
+- Tree_ID is OURS.TREE
+- Plot_ID is OURS.SUBP
+- AGE is TREE.BHage or TREE.TOTAGE
+- SLOPE is SUBPLOT.SLOPE
+- ASPECT is SUBPLOT.ASPECT
+- HTTPOK is TREE.ACTUALHT
+
+These could be added:
+
+- DG
+- HTG
+- DAMAGE AND SEVERITY
+
+These are not important:
+
+- TREEVALUE *NULL in FVS Ready*
+- PRESCRIPTION *NULL in FVS Ready*
+- PV_CODE *NULL in FVS Ready*
+- TOPOCODE *NULL in FVS Ready*
+- SITEPREP *NULL in FVS Ready*
+
+
+
+Columns in FVS Ready Plot that are not in mine: 
+
+These might make a difference: 
+
+- HABITAT/PV_CODE:     
+- AGE:                 
+- ASPECT:              
+- SLOPE:               
+- ELEVFT:              
+- NUM_PLOTS:           
+- DG_TRANS:            
+- DG_MEASURE:          
+- HTG_TRANS:           
+- HTG_MEASURE:         
+- MORT_MEASURE:        
+- PHYSIO_REGION:       
+          
+
+These will not make a difference: 
+
+- PV REFERENCE CODE: 
+- SAM_WT:         
+- STATE:               
+- COUNTY:    
+
+These are not important for Regen:
+
+- FUEL_12_20_H:        
+- FUEL_LITTER:         
+- FUEL_DUFF:           
+
+These should be written from our map to tell FVS which area we are growing them in: 
+
+- REGION:              
+- FOREST:              
+- COMPOSITE LOC:  
+
+# End

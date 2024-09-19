@@ -1,0 +1,36 @@
+project:
+  type: website
+
+website:
+  title: "Regeneration_2_16Sept24"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - 1.0_Import_Clean.qmd
+      - 1.5_DB_Create.qmd
+      - 2_FVS_Variables.qmd
+      - 3_RandomForests_Prep.qmd
+      - 4_RF_by_Eco.qmd
+      - 5_TD_Imp.qmd
+      - 6_distributions.qmd
+      - 7_RF_GroupSpp_and_Counts.qmd
+      - 8_RF_Spp_Groups.qmd
+      - 9_RF_Regression.qmd
+      - 10_Hyperparameters.qmd
+      - 11_Heatmap.qmd
+      - 12_Error_Map.qmd
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+    grid: 
+      sidebar-width: 50px
+      margin-width: 150px
+      body-width: 1100px
+    df-print: kable
+
+
+

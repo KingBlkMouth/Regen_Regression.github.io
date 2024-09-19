@@ -1,0 +1,1313 @@
+---
+title: "8 RF Spp Groups"
+execute: 
+  freeze: auto
+---
+
+**04Sept24**
+
+# Intro
+
+To run RF with the species grouped by species group code instead of species code, 
+I will need to pull the imputation data before it is widened into seedling densities, convert the codes, then widen the data. 
+I will need to do the same for the BAs. 
+That work was first done in 3_rf_prep. 
+
+
+
+
+
+*Libraries*
+```{r}
+#| label: Libraries
+#| message: false
+#| warning: false
+#| code-fold: true
+#| output: false
+
+rm(list = ls())                                                      
+gc()                                                                                 
+
+# Data tidying and access
+library(tidyverse, quietly = T)       # Easy to read syntax and data manipulation                   
+library(RSQLite)                      # Access SQLite dbs   
+library(magrittr)                     # Pipes and math functions    
+# library(readxl)                     # Read xlsx 
+# library(writexl)                    # write xlsx     
+library(BAMMtools)                    # Natural Breaks
+library(fedmatch)                     # Clean strings
+library(janitor)                      # Clean headers
+
+# yaImpute and related                           
+library(yaImpute)                     # RF imputation     
+library(vegan)                        # Something to do the yaImpute 
+library(randomForest)                 # RF package that yaImpute uses                                   
+                                                     
+# plots and tables                          
+# library(esquisse)                     # Quick data visualization   
+library(knitr)                        # Better html tables
+# library(DT)                           # Data tables for Java script tables in HTML
+                                                   
+library(kableExtra)                   # Better html tables, change sizes
+# library(feather)                      # Faster data retrieval    
+
+# Geography
+# library(sf)                           # Simple Features/vector data
+# library(terra)                        # Raster functions
+# library(spatstat)                     # Spatial stats
+
+
+library(tcltk)                        # Fix file paths
+
+# No sci-notation. 
+options(scipen = 999)
+options(width = 125)
+```
+
+*Functions*
+```{r}
+#| code-fold: true
+#| label: Functions
+
+clean_mem <- function() {
+  x <- ls(envir = .GlobalEnv)
+  # ls()[!(ls() %in% keep)]
+  rm(list = x[!(x %in% keep)], envir = .GlobalEnv)
+  gc()
+}
+
+clean_na_cols <- function(df){
+  df <- df[, colSums(is.na(df)) < nrow(df)]
+}
+
+# path <- r"(C:\RxFire\Regen\FVS\regen_080724_1644\regen_080724_1644.db)"
+clean_paths <- function(path) {
+  str_replace_all(path, "\\\\", "/")
+}
+
+db_list <- function(df, CN_col){
+  name <- NULL
+  name <- df |> select({{CN_col}})
+  name <- name |> mutate(CN_col = str_c("'", {{CN_col}}, "'")) 
+  name <- str_flatten_comma(name$CN_col)
+  # name <- str_flatten_comma(name[, CN_col])
+  name
+}
+
+nas_to_zeroes <- function(df){
+  df <- df |> mutate_all(~replace(., is.na(.), 0))
+  df
+}
+
+keep <- c("keep", "clean_mem", "clean_na_cols", "clean_paths", "db_list", "nas_to_zeroes")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Import Data
+
+*Start with the paths to the 2_FVS DB and Standlist*
+```{r}
+clean_mem()
+
+# "C:/RxFire/Regen/FVS/regen_080724_1644/regen_080724_1644.db"
+# "C:/RxFire/Regen/Regeneration_2_16Sept24/homemade_fvs_db_17sept24.db"
+
+regen_db_path <- clean_paths(r"(C:\RxFire\Regen\FVS\regen_080724_1644\regen_080724_1644.db)")
+standlist <- clean_paths(r"(C:\RxFire\Regen\Regeneration_2_16Sept24\train.csv)")
+standlist <-  read_csv(standlist, col_types = "cn") 
+standlist |> nrow()
+```
+
+
+```{r}
+## *Get CC, BA, SDI, etc from 2_FVS_variables.db*
+
+stplt_cn <- db_list(standlist, StandID)
+# Get CC, BA, SDI and TPA. 
+con <- dbConnect(RSQLite::SQLite(), regen_db_path)
+
+comp <- dbGetQuery(con, 
+                   str_c("select CaseID, StandID, CC from FVS_Compute where StandID in (", 
+                              stplt_cn, ")"))
+summary <- dbGetQuery(con, 
+                      str_c("select CaseID, StandID, Tpa, BA, SDI from FVS_Summary2",
+                            " where Year = 2014 and StandID in (", 
+                            stplt_cn, ")"))
+dbDisconnect(con)
+
+pred <- left_join(comp, summary, join_by(CaseID, StandID))
+
+
+
+## **Pred is the fvs variables for all subplots in the training set.**
+
+
+## *Get FIA data from 1.5_Create DB*
+
+# connecting to the WA state FIA db
+fia_db_path <- clean_paths(r"(C:\RxFire\Regen\Regeneration_2_16Sept24\homemade_fvs_db.db)")
+con <- dbConnect(RSQLite::SQLite(), fia_db_path)
+
+# collecting the trees
+tree <- dbGetQuery(
+  con, 
+  str_c("select * from FVS_TREEINIT_PLOT where STANDPLOT_CN in (", 
+        stplt_cn, ")"))
+
+# collecting tne plots and subplots
+plot <- dbGetQuery(
+  con, 
+  str_c("select * from FVS_PLOTINIT_PLOT where STANDPLOT_CN in (", 
+        stplt_cn, ")"))
+
+dbDisconnect(con)
+
+
+## **Tree and Plot are from the created db, for all subplots in the training set.**
+
+
+
+
+## *Get FPAG from 1_Import and Clean Standlist*
+
+fpags <- read_csv("C:/RxFire/Regen/Regeneration_2_16Sept24/1_Import_Clean.csv", 
+                      col_types = "ccc")
+
+fpags <- left_join(standlist, fpags, join_by(StandID == STANDPLOT_CN))
+
+
+
+## *Get stand cn for wa.db*
+
+t <- tree |> select(STAND_CN) |> unique()
+plt_cn <- db_list(t, STAND_CN)
+
+
+# Getting the Species reference information
+con <- dbConnect(
+  RSQLite::SQLite(), "C:\\RxFire\\Data\\_FIADB_WA.db"
+  )
+
+# Pulling in the species reference table
+plants_ref <- dbGetQuery(
+  con, "select SPECIES_SYMBOL, SPCD, COMMON_NAME, W_SPGRPCD from REF_SPECIES"
+  )
+plant_gr_ref <- dbGetQuery(
+  con, "select SPGRPCD, NAME from REF_SPECIES_GROUP"
+  ) 
+dbDisconnect(con)
+
+# Cleaning Species reference up
+plants_ref <- plants_ref |> rename(SPGRPCD = W_SPGRPCD, SYMBL = SPECIES_SYMBOL)
+plants_ref <- left_join(plants_ref, plant_gr_ref, by = join_by(SPGRPCD)) |> rename(grp_name = NAME)
+plants <- plants_ref |> select(SYMBL, SPCD)
+
+
+
+grp_names <- tribble(
+            ~spgrpcd, ~grp_name,                     ~grp_abbr,
+            10,       'douglas fir',                 'PSME',                       
+            11,       'ponderosa and jeffrey pines', 'PIPO',                       
+            12,       'true fir',                    'ABIES',                       
+            13,       'western hemlock',             'TSHE',                       
+            15,       'western white pine',          'PIMO3',                       
+            17,       'sitka spruce',                'PIEN',                       
+            18,       'engelmann and other spruces', 'PIEN',                       
+            19,       'western larch',               'LAOC',                       
+            21,       'lodgepole pine',              'PICO',                       
+            22,       'western redcedar',            'THPL',                       
+            24,       'other western softwoods',     'SOFT',                       
+            44,       'cottonwood and aspen',        'POPL',                       
+            45,       'red alder',                   'ALNU',                       
+            46,       'oak',                         'QUERC',                       
+            47,       'other western hardwoods',     'HARD',                        
+            48,       'woodland hardwoods',          'ACGL'
+              )
+
+
+
+plants_ref <- plants_ref |> janitor::clean_names()
+plants_ref$grp_name <- clean_strings(plants_ref$grp_name)
+plants_ref$common_name <- clean_strings(plants_ref$common_name)
+
+plants_ref <- plants_ref |> select(symbl, spcd, common_name, spgrpcd)
+plants_ref <- left_join(plants_ref, grp_names, join_by(spgrpcd)) |> drop_na()
+```
+
+
+
+
+```{r}
+#### Fix Tree Hist
+con <- dbConnect(
+  RSQLite::SQLite(), "C:\\RxFire\\Data\\_FIADB_WA.db"
+  )
+
+fix <- dbGetQuery(con, str_c("select PLT_CN, SUBP, TREE, STATUSCD from TREE where PLT_CN in (",
+                             plt_cn, ")")) |> unique()
+
+dbDisconnect(con)
+
+
+tcns <- tree |> select(STANDPLOT_CN, TREE)
+fix <- fix |> mutate(STANDPLOT_CN = str_c(PLT_CN, "_", SUBP)) |> select(STANDPLOT_CN, TREE, STATUSCD) |> unique()
+fix$TREE <- as.character(fix$TREE)
+fix <- left_join(tcns, fix, join_by(STANDPLOT_CN, TREE))
+
+ltrees <- tree |> filter(DBH > 0.1 | is.na(DBH))
+seeds <- tree |> filter(DBH == 0.1)
+
+fix <- left_join(ltrees, fix, join_by(STANDPLOT_CN, TREE))
+fix <- fix |> mutate(
+  HISTORY = ifelse(STATUSCD != 1, 8, 1)
+)
+# fix |> filter(HISTORY == 8)
+
+trees_dead <- fix |> filter(HISTORY == 8) |> select(-STATUSCD)
+trees_live <- fix |> filter(HISTORY == 1) |> select(-STATUSCD)
+trees_live <- add_row(trees_live, seeds)
+
+
+## **There are still some issues with this. TREE_COUNT and DIA are not always filled in for dead species.**
+```
+
+
+```{r}
+CNs_live <- trees_live |> select(STANDPLOT_CN) |> unique()
+fpags <- left_join(CNs_live, fpags, join_by(STANDPLOT_CN == StandID))
+plot <- left_join(CNs_live, plot, join_by(STANDPLOT_CN))
+pred <- left_join(CNs_live, pred, join_by(STANDPLOT_CN == StandID))
+standlist <- left_join(CNs_live, standlist, join_by(STANDPLOT_CN == StandID))
+tree <- left_join(CNs_live, trees_live, join_by(STANDPLOT_CN))
+
+keep <- append(keep, c("CNs_live", "fpags", "plants", "plants_ref", "plot", 
+                       "pred", "standlist", "tree"))
+clean_mem()
+```
+
+*Are there any plots that only have dead trees*
+There were 157 subplots that only had dead trees. I removed them 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Seedling Density by spp grp
+
+*Getting the wider dataframe that shows subplots with seedling density by species.*
+```{r}
+# Separating the seedlings from the rest
+seedling_densities <- tree |>  filter(DBH == 0.1) |> 
+  group_by(STANDPLOT_CN, SPECIES) |> 
+# Add up the TPA per species on each subplot. 
+  summarise(
+    TPA = sum(TREE_COUNT), 
+    .groups = "drop")
+
+seedling_densities |> head()
+```
+
+*Adding species symbol to seedlings*
+```{r}
+# Prepare to join
+seedling_densities <- seedling_densities |> mutate(SPECIES = as.numeric(SPECIES))
+# Join seedlings and species reference
+seedling_densities <- left_join(seedling_densities, plants_ref, join_by("SPECIES" == "spcd"))
+
+seedling_densities <- seedling_densities |> janitor::clean_names()
+
+seedling_densities <- seedling_densities |> select(-c(symbl, common_name)) |> relocate(grp_name, .after = grp_abbr) 
+```
+
+
+                       
+```{r}
+seedling_densities |> select(spgrpcd, grp_abbr, grp_name) |> unique() |> arrange(spgrpcd)
+```
+
+*Widening the seedling counts*
+```{r}
+
+seedling_densities <- seedling_densities |> select(-c(grp_name, spgrpcd, species))
+
+# Widening the data
+seedling_wide <- seedling_densities |> pivot_wider(names_from = grp_abbr, 
+                 values_from = tpa,
+                 values_fn = {sum},
+                 values_fill = 0,
+                 names_glue = "{grp_abbr}_{'TD'}")
+
+# Un-grouping to avoid future messages
+seedling_wide <- seedling_wide |> ungroup()
+seedling_densities <- seedling_densities |> ungroup()
+
+# Ensuring there are no NAs introduced while widening
+# seedling_wide <- nas_to_zeroes(seedling_wide)
+
+seedling_wide |> head()
+```
+
+3,387 subplots have regeneration with 5,156 individual records of species and TPA. There were no NAs in seedlings. 
+
+### Putting them in order
+
+Putting them in order of most trees. 
+
+```{r}
+seedling_densities |> group_by(grp_abbr) |> 
+  summarise(
+    n = n(), 
+    tpa = sum(tpa)
+  ) |> 
+  arrange(tpa)
+
+order <- seedling_densities |> group_by(grp_abbr) |> 
+  summarise(
+    n = n(), 
+    tpa = sum(tpa)
+  ) |> 
+  arrange(desc(tpa)) |> select(grp_abbr)
+
+order_tpa <- order$grp_abbr
+```
+
+
+Putting them in order of most stands. 
+
+```{r}
+ seedling_densities |> group_by(grp_abbr) |> 
+  summarise(
+    n = n()
+  ) |> 
+  arrange(n)
+
+order <- seedling_densities |> group_by(grp_abbr) |> 
+  summarise(
+    n = n()
+  ) |> 
+  arrange(desc(n)) |> select(grp_abbr)
+```
+
+The only category of insignificance is sitka spruce with it existing on 2 subplots. 
+
+**From Pojar's Plants of the PNW**
+
+- In pure or mixed stands, ofter on moist well-drained sites such as alluvial plains, marine tracks, bogs, low to mid elev
+- Most closely related to white spruce and it hybridizes with it often. 
+
+**I am grouping it with Engelmann and other spruces.**
+
+
+
+
+**List of groups in descending order of number of plots**
+```{r}
+order <- order$grp_abbr
+order
+```
+**List of groups in descending order of number of trees**
+```{r}
+order_tpa
+```
+
+
+```{r}
+keep <- append(keep, c("seedling_wide", "order"))
+```
+
+
+
+
+
+___
+
+# Predictors
+
+
+*Listing out all plots and plots with seedlings*
+```{r}
+# clearing out the objects
+CNs <- NULL
+CNs_wSeedlings <- NULL
+# creating lists of subplots
+CNs <- pred |> select(STANDPLOT_CN) |> unique()
+CNs_wSeedlings <- seedling_wide |> select(standplot_cn)
+```
+
+
+
+
+
+
+Here is what I need:
+
+
+- BA/ac mature
+- Aspect
+- Slope
+- Elevation
+- Lat/long
+
+Here is what I have:
+
+- F.P.A.G.
+- BA stand
+- SDI
+- CC
+
+I also need ecoregion. I should have saved it in the previous pages. 
+
+```{r}
+pred <- pred |> select(-CaseID)
+
+t <- fpags |> select(STANDPLOT_CN, FPAG)
+preds <- left_join(pred, t, join_by(STANDPLOT_CN))
+
+rm(pred, t)
+keep <- append(keep, c("preds", "wa_fiadb")) |> unique()
+
+preds |> names() |> noquote()
+```
+
+```{r}
+wa_fiadb <- clean_paths(r"(C:\RxFire\Data\_FIADB_WA.db)")
+con <- dbConnect(RSQLite::SQLite(), wa_fiadb)
+
+aspect <- dbGetQuery(con, "select aspect, slope, plt_cn, subp from SUBPLOT")
+elev <- dbGetQuery(con, "select lat, lon, elev, ecosubcd, cn from PLOT")
+
+dbDisconnect(con)
+```
+
+```{r}
+t <- elev |> 
+  uncount(weights = 4, .id = "SUBP") |> 
+  mutate(STANDPLOT_CN = str_c(CN, "_", SUBP)) |> 
+  relocate(STANDPLOT_CN, .after = CN) |> 
+  select(-SUBP) |> rename(STAND_CN = CN)
+
+t <- left_join(preds, t, join_by(STANDPLOT_CN)) |> unique()
+preds <- t |> mutate(
+  EcoRegion = str_remove_all(
+    str_sub(ECOSUBCD, 1, -2), 
+    " ")) |> select(-ECOSUBCD) |> 
+  relocate(STANDPLOT_CN, STAND_CN, .after = EcoRegion) |> rename(BAp = BA)
+
+preds |> names() |> noquote()
+preds |> nrow()
+```
+
+
+```{r}
+aspect <- aspect |> mutate(
+  STANDPLOT_CN = str_c(PLT_CN, "_", SUBP)
+)
+
+aspect <- left_join(CNs, aspect, join_by(STANDPLOT_CN)) |> select(STANDPLOT_CN, ASPECT, SLOPE)
+preds <- left_join(preds, aspect, join_by(STANDPLOT_CN)) |> relocate(ASPECT, SLOPE, .after = ELEV) |> 
+  relocate(Tpa, .after = EcoRegion)
+
+preds |> names() |> noquote()
+preds |> nrow()
+```
+
+```{r}
+preds <- preds |> mutate(
+  Northing = round(cos(ASPECT * pi/180), 8), 
+  Easting = round(sin(ASPECT * pi/180), 8)
+    ) |> relocate(Northing, Easting, .after = ASPECT) 
+
+preds |> select(ASPECT, Northing, Easting) |> 
+  arrange(ASPECT) |> filter(
+    ASPECT == 0 | ASPECT == 90 | ASPECT == 180 | ASPECT == 270 | ASPECT == 360) |> 
+  unique()
+
+preds <- preds |> select(-ASPECT) |> relocate(STANDPLOT_CN, STAND_CN)
+```
+
+
+# BA by spp grp
+
+```{r}
+clean_mem()
+```
+**Set BA to above 5 in.**
+
+```{r}
+trees_L <- tree |> filter(DBH > 0.1)
+
+trees_L <- trees_L |> mutate(
+  BAac = ((DBH^2) * .005454) * TREE_COUNT 
+) |> relocate(BAac, .after = DBH)
+
+trees_L |> head()
+
+plants <- left_join(plants, plants_ref, join_by(SPCD == spcd)) |> drop_na() |> select(SPCD, grp_abbr)
+
+plants$SPCD <- as.character(plants$SPCD)
+trees_L <- left_join(trees_L, plants, join_by(SPECIES == SPCD))
+trees_L |> relocate(grp_abbr, .after = SPECIES) |> select(-SPECIES) |> head()
+```
+
+```{r}
+# trees_L |> group_by(STANDPLOT_CN) |> summarise(n = n())
+
+trees_L <- trees_L |> mutate(
+  size_class = ifelse(DBH >= 5, "M", "S"), 
+  size_class = ifelse(DBH > 20, "L", size_class), 
+  size_class = ifelse(DBH <= 20 & DBH >= 10, "ML", size_class), 
+  size_class = factor(size_class, levels = c("L", "ML", "M", "S"))
+)
+
+ba_trees <- trees_L |> group_by(STANDPLOT_CN, grp_abbr) |> 
+  summarise(
+    n = n(), 
+    BA = sum(BAac),
+    .groups = "drop"
+    )
+
+# ba_trees |> head()
+hist(ba_trees$BA, breaks = 109)
+
+```
+
+**I am not sure if I should just run this as BA per ac 
+
+```{r}
+# trees_L <- trees_L
+y <- preds |> select(STANDPLOT_CN, EcoRegion) 
+trees_L <- left_join(trees_L, y, join_by(STANDPLOT_CN))
+
+trees_L <- trees_L |> mutate(
+  size_class = ifelse(DBH >= 5, "M", "S"), 
+  size_class = ifelse(DBH > 20, "L", size_class), 
+  size_class = ifelse(DBH <= 20 & DBH >= 10, "ML", size_class), 
+  size_class = factor(size_class, levels = c("L", "ML", "M", "S"))
+)
+
+ba_trees <- trees_L |> group_by(STANDPLOT_CN, grp_abbr, EcoRegion) |> 
+  summarise(
+    n = n(), 
+    BA = sum(BAac),
+    .groups = "drop"
+    )
+
+order <- ba_trees |> group_by(grp_abbr) |> 
+  summarise(sum = sum(BA)) |> 
+  arrange(desc(sum))
+order <- order$grp_abbr
+
+ba_trees <- ba_trees |> mutate(
+  SYMBL = factor(grp_abbr, levels = order))
+  
+ecos <- unique(ba_trees$EcoRegion)
+for (i in 1:length(ecos)) {
+  print(
+  ba_trees |> filter(EcoRegion == ecos[i]) |> ggplot() + 
+  aes(x = SYMBL, y = BA, fill = SYMBL) + 
+  geom_col() + 
+  scale_x_discrete(guide = guide_axis(angle = 90)) + 
+  labs(title = ecos[i])
+)
+}
+```
+
+
+
+
+```{r}
+n_distinct(trees_L$STANDPLOT_CN)
+```
+
+
+
+## BA wider
+
+```{r}
+ba_trees <- trees_L |> group_by(STANDPLOT_CN, grp_abbr) |> 
+  summarise(
+    n = n(), 
+    BA = sum(BAac),
+    .groups = "drop"
+    )
+
+n_distinct(ba_trees$STANDPLOT_CN)
+
+ba_wide <- ba_trees |> select(-n) |> pivot_wider(names_from = grp_abbr, 
+                 values_from = BA,
+                 values_fill = 0,
+                 names_glue = "{grp_abbr}_{'BA'}") 
+
+ba_wide |> head()
+```
+
+
+
+
+
+
+
+```{r}
+y <- preds |> select(STANDPLOT_CN, EcoRegion) 
+ba_wide <- left_join(ba_wide, y, join_by(STANDPLOT_CN))
+ba_wide <- ba_wide |> relocate(EcoRegion, .after = STANDPLOT_CN)
+
+ba_wide |> head()
+```
+
+```{r}
+ba_wide <- left_join(ba_wide, preds, join_by(STANDPLOT_CN, EcoRegion)) |> 
+  relocate(STANDPLOT_CN, CC, SDI, FPAG, EcoRegion, LAT, LON, ELEV, Northing, Easting, SLOPE, BAp) |> 
+  select(-c(Tpa, STAND_CN))
+
+ba_wide |> head()
+```
+
+
+```{r}
+ba_wide |> nrow()
+```
+
+This is good. 
+All that is left, is to join the large trees and seedlings together. Then, clean up the zeroes. 
+Afterwards, I can run RF. 
+
+
+# Joining tables
+
+```{r}
+keep <- append(keep, c("ba_wide"))
+clean_mem()
+```
+
+
+
+```{r}
+ba_wide |> head()
+```
+
+```{r}
+seedling_wide |> head()
+```
+
+
+
+
+```{r}
+t <- left_join(CNs_live, ba_wide, join_by(STANDPLOT_CN))
+no_lts <- anti_join(CNs_live, ba_wide, join_by(STANDPLOT_CN))
+
+nrow(no_lts)
+```
+
+There are 245 subplots that do not have trees GTE 1.0" in DBH. 
+
+```{r}
+ts <- left_join(CNs_live, seedling_wide, join_by(STANDPLOT_CN == standplot_cn))
+
+no_sds <- anti_join(CNs_live, seedling_wide, join_by(STANDPLOT_CN == standplot_cn))
+```
+
+There are 2,828 subplots that do not have seedlings. 
+
+
+**ID and Predictors**
+```{r}
+imp_data <- left_join(CNs_live, ba_wide, join_by(STANDPLOT_CN))
+
+imp_data <- left_join(imp_data, seedling_wide, join_by(STANDPLOT_CN == standplot_cn))
+
+imp_data |> names() |> noquote()
+```
+**Response**
+```{r}
+imp_data <- nas_to_zeroes(imp_data)
+
+imp_data[, 28:ncol(imp_data)] |> names() |> noquote()
+```
+
+
+As far as getting the major overstory species by most prodigious seedlings per ecoregion, then matching those species' 
+overstory BAs to them, I have the code to find the seedlings in Regen_notes:imp by FPAG. 
+That is how I did this last time with diameter. I will continue with that in the next document as I think 
+it is best done in the imputation loop. At least, I think doing it there will allow for more flexibility should the 
+setup change. 
+
+```{r}
+#| eval: false
+
+
+con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Regen/Regeneration_2_16Sept24/homemade_fvs_db.db")
+# dbWriteTable(con, value = imp_data, name = "imp_data_groups", overwrite = T)
+dbDisconnect(con)
+```
+
+
+
+
+# RF Groups
+
+**Add a list of which species are grouped where**
+
+
+
+```{r}
+keep <- append(keep, "imp_data")
+
+rm(ba_wide, CNs_live, fpags, plants, plot, preds, seedling_wide, tree)
+
+clean_mem()
+```
+### Pred and Resp
+
+**For N.Cascades only**
+
+```{r}
+imp_data_nc <- imp_data |> filter(EcoRegion == "M242D") |> select(-EcoRegion)
+```
+
+
+```{r}
+y_resp <- imp_data_nc |> select(STANDPLOT_CN, contains("TD"))
+
+x_pred <- imp_data_nc |> select(STANDPLOT_CN, !contains("TD"))
+
+x_pred <- x_pred |> mutate(
+  f = str_sub(FPAG, 1, 1),
+  p = str_sub(FPAG, 2, 2),
+  a = str_sub(FPAG, 3, 3),
+  g = str_sub(FPAG, 4, 4),
+) |> select(-FPAG) |> relocate(f, p, a, g, .after = SLOPE)
+
+names(x_pred)
+```
+```{r}
+names(y_resp)
+```
+
+#### Add max spp
+
+```{r}
+# Function for finding the nth most prevalent species by TD.
+## Where b is the sorted list of all species by TD. 
+n_largest <- function(x = b, n) {
+  
+  # In descending order, prevelance
+  x1 <- sort(x, decreasing = TRUE)
+  # Select the nth most prevelant. 
+  x1[n]
+}
+
+
+
+y <- y_resp |> select(-STANDPLOT_CN)
+
+b <- names(y)
+
+# For the i through nth most trees in each subplot
+for (i in 1:3) {
+    # set the new column name to largest_n
+    c_value <- str_c("largest_", i)
+    
+    # For each subplot the largest_n is the nth place in a descending list by TD unless all are zero. 
+    y <- y %>%
+      rowwise() %>%
+      mutate(!!c_value := n_largest(c_across(all_of(b)), i)) |>
+      ungroup()
+}
+
+
+
+# The name of the species with the largest TD is the column name where the TD matches the largest_n
+y$max_spp1 <- sapply(1:nrow(y), function(x) colnames(y)[which(y[x, b] == y$largest_1[x])][1])
+y$max_spp2 <- sapply(1:nrow(y), function(x) colnames(y)[which(y[x, b] == y$largest_2[x])][1])
+# The largest is always the largest or zero, but the second sometimes matches the first where either are zero or equal. 
+# The alternate second and third replace the incorrect species names with the second name in the list.
+# So, where spp1 and spp2 are both 75, spp1 is the first name in the list, and spp2 is the second name in the list. 
+y$alt_spp2 <- sapply(1:nrow(y), function(x) colnames(y)[which(y[x, b] == y$largest_2[x])][2])
+y$max_spp3 <- sapply(1:nrow(y), function(x) colnames(y)[which(y[x, b] == y$largest_3[x])][1])
+y$alt_spp3 <- sapply(1:nrow(y), function(x) colnames(y)[which(y[x, b] == y$largest_3[x])][2])
+
+
+
+# Replace the species names where they are equal with the alternates
+y <- y |> mutate(
+  max_spp2 = if_else(largest_1 == largest_2, alt_spp2, max_spp2),
+  max_spp3 = if_else(largest_2 == largest_3, alt_spp3, max_spp3)
+  ) |> select(-c(alt_spp2, alt_spp3))#, alt_spp3
+
+# Set the species names to zero if there were no trees counted for that nth largest. 
+yfull <- y |> mutate(
+  max_spp1 = ifelse(largest_1 == 0, "zero", max_spp1),
+  max_spp2 = ifelse(largest_2 == 0, "zero", max_spp2),
+  max_spp3 = ifelse(largest_3 == 0, "zero", max_spp3)
+  )
+# Replace the CNs
+yfull$STANDPLOT_CN <- y_resp$STANDPLOT_CN
+
+# Put it back in front
+yfull <- yfull |> relocate(STANDPLOT_CN)
+
+yfull <- yfull |> mutate(
+  total_TD = rowSums(yfull[grep("_TD", names(yfull))])
+)
+
+
+yfull[4:8, 2:ncol(yfull)] %>% select_if(~ !is.numeric(.) || sum(.) != 0)
+```
+
+
+```{r}
+#| warning: false
+# n1 <- 4
+# n2 <- 8
+
+# Prep
+y <- yfull
+
+CNs <- imp_data |> select(STANDPLOT_CN)
+# y <- cbind(CNs, y)
+
+y <- y |> filter(total_TD != 0)
+CNs <- y |> select(STANDPLOT_CN)
+
+
+y <- y %>% select_if(~ !is.numeric(.) || sum(.) != 0)
+# There were no Oaks
+
+
+
+# X Variables
+x <- left_join(CNs, x_pred, join_by(STANDPLOT_CN))
+
+x <- x |> 
+  select(-c(a,g)) |> 
+  mutate(
+    f = factor(f), 
+    p = factor(p)
+  ) |> 
+  relocate(f, p, .after = BAp)
+
+
+
+x <- x %>% select_if(~ !is.numeric(.) || sum(.) != 0)
+# No Oaks in BA either
+
+# Y variables
+t <- y |> group_by(max_spp1) |>
+  summarise(
+    n = n(),
+    tpa = sum(largest_1)
+  ) |>
+  arrange(n) |> filter(n<10)
+
+
+# td_remove <- t[1:n1,]$max_spp1 |> as.character()
+
+
+# y_rare <- y |> select(all_of(td_remove))
+
+# y_rare <- y_rare |> select(all_of(names(y_rare))) |>
+#   mutate_if(is.factor, as.character) |> 
+#   mutate_if(is.character, as.numeric) 
+
+# y_rare <- y_rare |> mutate(
+#   rare_TD = rowSums(y_rare[grep("_TD", names(y_rare))])
+# )
+
+# y$rare_TD <- factor(y_rare$rare_TD)
+
+# y <- y |> select(!all_of(td_remove))
+
+# y_vars <- names(y)
+
+# spp2_list <- y |> group_by(max_spp2) |> summarise(
+#   n = n()
+# ) |> arrange(n)
+
+# spp2_list <- spp2_list$max_spp2[1:n2]
+
+# y <- y |> mutate(
+#   max_spp1 = ifelse(
+#     max_spp1 %in% td_remove, "rare1", max_spp1
+#   ),
+# 
+#   max_spp2 = ifelse(
+#     max_spp2 %in% spp2_list, "rare2", max_spp2
+#   )
+# )
+
+y <- y |> mutate(
+  max_spp1 = factor(max_spp1),
+  max_spp2 = factor(max_spp2)
+  )
+
+y <- y |> select(-c(largest_1, largest_2, largest_3, max_spp3))
+
+
+# y <- y |> select(STANDPLOT_CN, PISI_TD, max_spp1, max_spp2)
+
+
+x <- as.data.frame(x)
+y <- as.data.frame(y)
+
+x <- x |> column_to_rownames("STANDPLOT_CN")
+y <- y |> column_to_rownames("STANDPLOT_CN")
+
+y <- droplevels(y)
+x <- droplevels(x)
+
+################################################################################################
+
+n = 0
+while(n != 10){
+    rf <- try(
+      yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = T), 
+      silent = T)
+    
+    if (class(rf) == "try-error") {
+      print(n)     
+      cat("ERROR1: ", rf, "\n")
+      n <- n + 1
+      } else {
+        break
+      }
+}
+
+rf_groups_class <- rf
+
+################################################################################################
+
+n = 0
+while(n != 10){
+    rf <- try(
+      yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = T, rfMode = "regression"), 
+      silent = T
+      )
+    
+    if (class(rf) == "try-error") {
+      print(n)     
+      cat("ERROR1: ", rf, "\n")
+      n <- n + 1
+      } else {
+        break
+      }
+}
+
+rf_groups_reg <- rf
+```
+
+
+# Eval
+
+## Error
+
+*Loading the rf run from page 5 done with seedlings not as factors*
+```{r}
+load(str_c("RF_26AUG24_1seedlings", ".Rdata"))
+
+rf_5_seeds <- rf_yai
+```
+
+
+```{r}
+
+summary_seeds <- rf_5_seeds |> yaiRFsummary()
+summary_groups_class <- rf_groups_class |> yaiRFsummary()
+summary_groups_reg <- rf_groups_reg |> yaiRFsummary()
+
+
+summary_groups_class$forestAttributes
+```
+
+
+```{r}
+summary_groups_reg$forestAttributes
+```
+
+```{r}
+summary_seeds$forestAttributes
+```
+
+
+## Imputation
+
+```{r}
+rf_imp_seeds <- impute(rf_5_seeds)
+rf_imp_seeds <- rf_imp_seeds |> 
+  drop_na() |> 
+  select(order(colnames(rf_imp_seeds))) |> 
+  select(contains("TD"))
+
+rf_imp_seeds |> head(n = 10)
+```
+
+
+```{r}
+rf_imp_groups_class <- impute(rf_groups_class)
+rf_imp_groups_class <- rf_imp_groups_class |> 
+  drop_na() |> 
+  select(order(colnames(rf_imp_groups_class))) |> 
+  select(contains("TD"))
+
+rf_imp_groups_class |> head(n = 10)
+```
+
+
+```{r}
+rf_imp_groups_reg <- impute(rf_groups_reg)
+
+rf_imp_groups_reg <- rf_imp_groups_reg |> 
+  drop_na() |> 
+  select(order(colnames(rf_imp_groups_reg))) |> 
+  select(contains("TD"))
+
+rf_imp_groups_reg |> head(n = 10)
+```
+
+### Integers
+
+```{r}
+rf_imp_seeds_int <- (rf_imp_seeds/74.96528)
+
+rf_imp_seeds_int |> head(n = 10)
+```
+
+```{r}
+rf_imp_groups_class_int <- (rf_imp_groups_class/74.96528)
+
+rf_imp_groups_class_int |> head(n = 10)
+```
+
+```{r}
+rf_imp_groups_reg_int <- (rf_imp_groups_reg/74.96528)
+
+rf_imp_groups_reg_int |> head(n = 10)
+```
+
+
+#### Trying to figure out which is better
+
+**I ran out of time.**
+
+```{r}
+
+class_ab.i = rf_imp_groups_class_int$ABIES_TD
+class_ab.i <- class_ab.i[1:500]
+
+
+
+reg_ab.i = rf_imp_groups_reg_int$ABIES_TD
+reg_ab.i <- reg_ab.i[1:500]
+
+ab.o = rf_imp_groups_reg_int$ABIES_TD.o
+ab.o <- ab.o[1:500]
+
+test <- data.frame(
+  class_ab.i = class_ab.i,
+  reg_ab.i = reg_ab.i,
+  ab.o = ab.o
+)
+
+test <- test |> mutate(
+  sq_diff_class = (class_ab.i - ab.o)^2,
+  sq_diff_reg = (reg_ab.i - ab.o)^2,
+  mean.o = mean(ab.o)
+)
+
+plot(test$ab.o, test$class_ab.i)
+plot(test$ab.o, test$reg_ab.i)
+
+sum(test$sq_diff_class) |> sqrt()
+sum(test$sq_diff_reg) |> sqrt()
+```
+
+```{r}
+#| warning: false
+
+x1 <- 8
+y1 <- 200
+
+
+test |> ggplot() + 
+  aes(x = log(class_ab.i + 1)) + 
+  geom_histogram(bins = 30) + 
+  lims(
+    x = c(-1,x1),
+    y = c(0,y1)
+  )
+
+test |> ggplot() + 
+  aes(x = log(reg_ab.i + 1)) + 
+  geom_histogram(bins = 30) + 
+  lims(
+    x = c(0,x1), 
+    y = c(0,y1)
+  )
+
+
+test |> ggplot() + 
+  aes(x = log(ab.o + 1)) + 
+  geom_histogram(bins = 30) + 
+  lims(
+    x = c(0,x1), 
+    y = c(0,y1)
+  )
+
+```
+
+```{r}
+spp_list <- rf_imp_groups_reg_int |> names()
+```
+
+
+
+
+### RMSD
+
+```{r}
+#| layout-ncol: 3
+
+rmsd(rf_imp_seeds_int)
+rmsd(rf_imp_groups_class_int)
+rmsd(rf_imp_groups_reg_int)
+```
+
+
+
+```{r}
+#| layout-ncol: 3
+
+rmsd(rf_imp_seeds)
+rmsd(rf_imp_groups_class)
+rmsd(rf_imp_groups_reg)
+```
+
+
+
+# Zero OOBe
+
+```{r}
+summary_groups_class$forestAttributes
+```
+
+POPL_TD had zero error. 
+
+```{r}
+test_imp_groups_class <- impute(rf_groups_class)
+test_imp_groups_class <- test_imp_groups_class |> 
+  # drop_na() |> 
+  select(order(colnames(test_imp_groups_class))) |> 
+  select(contains("TD")) |>
+  select(contains("POPL"))
+
+test_imp_groups_class |> nrow()
+test_imp_groups_class |> drop_na() |> nrow()
+```
+2064 total rows and 1498 without NAs. That seams odd, there were 1498 rows in the original set. 
+Most of the time, that is not what happens. 
+
+```{r}
+test_imp_groups_class <- impute(rf_groups_class)
+test_imp_groups_class <- test_imp_groups_class |> 
+  # drop_na() |> 
+  select(order(colnames(test_imp_groups_class))) |> 
+  select(contains("TD")) |>
+  select(contains("ABIES"))
+
+test_imp_groups_class |> nrow()
+test_imp_groups_class |> drop_na() |> nrow()
+```
+
+
+```{r}
+test <- rf_imp_groups_class |> select(contains("POPL_TD"))
+test <- test |> mutate(
+  diff = POPL_TD - POPL_TD.o, 
+  sq_diff = diff^2
+)
+
+test |> filter(sq_diff > 0) |> head()
+
+test$sq_diff |> sqrt() |> mean()
+
+mean(test$diff)
+```
+
+```{r}
+test |> drop_na()
+```
+
+
+
+```{r}
+# tree_spp <- tree |> select(STANDPLOT_CN, SPECIES, TREE_COUNT) |>
+#   mutate(SPECIES = as.integer(SPECIES)) |> 
+#   group_by(STANDPLOT_CN, SPECIES) |> 
+#   summarise(TREE_COUNT = sum(TREE_COUNT))
+# 
+# nplots <- tree_spp |> select(STANDPLOT_CN, SPECIES) |> unique()  |> group_by(STANDPLOT_CN) |> 
+#   summarise(n = n())
+# 
+# tree_spp <- tree_spp |> group_by(SPECIES) |>
+#   summarise(
+#     n_plots = n(),
+#     sum_tpa = round(sum(TREE_COUNT))
+#   )
+# 
+# spp_table <- left_join(tree_spp, plants_ref, join_by(SPECIES == spcd)) |>
+#   arrange(spgrpcd, SPECIES)
+# 
+# 
+# spp_table
+# 
+# getwd()
+# write_csv(spp_table, "Full_OkWen_Species_to_Group.csv")
+```
+
+```{r}
+# sum(spp_table$n_plots)
+# 
+# sum(tree_spp$n_plots)
+# 
+# sum(tree_spp$sum_tpa)
+# sum(tree$TREE_COUNT)
+# 
+# sum(nplots$n)
+```
+
+
+
+
+
+```{r}
+# rf_yai
+```
+
+
+
+
+
+# End

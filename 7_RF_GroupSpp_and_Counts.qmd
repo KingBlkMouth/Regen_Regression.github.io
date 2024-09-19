@@ -1,0 +1,783 @@
+---
+title: "7 RF Groups & Counts"
+execute: 
+  freeze: auto
+---
+
+**03Sept24**
+
+*Libraries*
+```{r}
+#| label: Libraries
+#| message: false
+#| warning: false
+#| code-fold: true
+#| output: false
+
+rm(list = ls())                                                      
+gc()                                                                                 
+
+# Data tidying and access
+library(tidyverse, quietly = T)       # Easy to read syntax and data manipulation                   
+library(RSQLite)                      # Access SQLite dbs   
+library(magrittr)                     # Pipes and math functions    
+# library(readxl)                     # Read xlsx 
+# library(writexl)                    # write xlsx     
+library(BAMMtools)                    # Natural Breaks
+
+# yaImpute and related                           
+library(yaImpute)                     # RF imputation     
+library(vegan)                        # Something to do the yaImpute 
+library(randomForest)                 # RF package that yaImpute uses                                   
+                                                     
+# plots and tables                          
+# library(esquisse)                     # Quick data visualization   
+library(knitr)                        # Better html tables
+# library(DT)                           # Data tables for Java script tables in HTML
+                                                   
+library(kableExtra)                   # Better html tables, change sizes
+# library(feather)                      # Faster data retrieval    
+
+# Geography
+# library(sf)                           # Simple Features/vector data
+# library(terra)                        # Raster functions
+# library(spatstat)                     # Spatial stats
+
+
+library(tcltk)                        # Fix file paths
+
+# No sci-notation. 
+options(scipen = 999)
+options(width = 125)
+```
+
+*Functions*
+```{r}
+#| code-fold: true
+#| label: Functions
+
+clean_mem <- function() {
+  x <- ls(envir = .GlobalEnv)
+  # ls()[!(ls() %in% keep)]
+  rm(list = x[!(x %in% keep)], envir = .GlobalEnv)
+  gc()
+}
+
+clean_na_cols <- function(df){
+  df <- df[, colSums(is.na(df)) < nrow(df)]
+}
+
+# path <- r"(C:\RxFire\Regen\FVS\regen_080724_1644\regen_080724_1644.db)"
+clean_paths <- function(path) {
+  str_replace_all(path, "\\\\", "/")
+}
+
+db_list <- function(df, CN_col){
+  name <- NULL
+  name <- df |> select({{CN_col}})
+  name <- name |> mutate(CN_col = str_c("'", {{CN_col}}, "'")) 
+  name <- str_flatten_comma(name$CN_col)
+  # name <- str_flatten_comma(name[, CN_col])
+  name
+}
+
+nas_to_zeroes <- function(df){
+  df <- df |> mutate_all(~replace(., is.na(.), 0))
+  df
+}
+
+keep <- c("keep", "clean_mem", "clean_na_cols", "clean_paths", "db_list", "nas_to_zeroes")
+```
+
+
+# Import
+
+```{r}
+con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Regen/Regeneration_2_16Sept24/homemade_fvs_db.db")
+
+imp_data <- dbGetQuery(con, "select * from imp_data_2")
+
+dbDisconnect(con)
+
+imp_data <- imp_data %>% select_if(~ !is.numeric(.) || sum(.) != 0)
+```
+
+#### *Predictors*
+```{r}
+x_pred <- imp_data[, 1:44]
+
+x_pred |> names()
+```
+
+#### *Response*
+```{r}
+y_resp <- imp_data[, c(1, 45:ncol(imp_data))] 
+
+y_resp |> names()
+```
+
+
+
+
+
+
+# Counts as Factors
+
+
+*Getting the scaling factor to adjust TPAs to counts*
+```{r}
+t <- y_resp |> filter(total_TD > 0) |> select(total_TD) |> 
+  arrange(total_TD)
+
+scaling_factor <- t[1,1]
+```
+
+*Changing TDs to Counts*
+```{r}
+tds <- y_resp |> select(ends_with("_TD"))
+td_names <- tds |> names()
+
+# adjusting by the scaling factor
+counts <- tds / scaling_factor
+counts <- sapply(counts, as.integer)
+
+x_not_tds <- y_resp |> select(!ends_with("_TD"))
+
+y_resp_counts <- cbind(counts, x_not_tds)
+
+y_resp_counts |> filter(total_TD > 0) |> head()
+```
+
+
+## Breaks
+
+```{r}
+sapply(y_resp_counts, n_distinct)
+```
+
+For N.Cascades, only total_td has enough distinct counts to need groupings that would avoid the yaImpute factor limit. 
+
+
+```{r}
+ggplot(y_resp_counts) + 
+  aes(x = total_TD) + 
+  geom_histogram(bins = 30)
+```
+
+#### Natural jenks
+
+
+
+*Finding the values of Total_TD that will be classed as high TD*
+```{r}
+n <- 49
+
+t <- unique(y_resp_counts$total_TD)
+t <- t |> sort()
+t[n]
+t <- t[t > n]
+```
+
+
+*Finding the natural breaks for those values that exceed the 53 class limit*
+```{r}
+breaks <- getJenksBreaks(t, 4)
+breaks
+```
+*Plotting the values that will be classed as three classes of high.*
+```{r}
+ggplot() + 
+  aes(x = t) + 
+  geom_histogram(bins = 100) + 
+  geom_vline(xintercept = breaks)
+```
+*Changing the values inside the breaks*
+```{r}
+breaks
+
+y_resp_counts_grouped <- y_resp_counts |> 
+  mutate(
+    total_TD = ifelse(total_TD >= breaks[1] & total_TD < breaks[2], breaks[1], total_TD), 
+    total_TD = ifelse(total_TD >= breaks[2] & total_TD < breaks[3], breaks[2], total_TD), 
+    total_TD = ifelse(total_TD >= breaks[3], breaks[4], total_TD), 
+    total_TD = as.integer(total_TD)
+    )
+
+t <- y_resp_counts_grouped |> select(total_TD)
+```
+
+*Showing the difference in histograms between the dataframes with and without grouping by breaks.*
+```{r}
+#| layout-ncol: 2
+
+ggplot(t) + 
+  aes(x = total_TD) + 
+  geom_histogram(bins = 30) + 
+  labs(title = "With Breaks")
+  # geom_vline(xintercept = breaks)
+
+
+ggplot(y_resp_counts) + 
+  aes(x = total_TD) + 
+  geom_histogram(bins = 30) + 
+  labs(title = "With Out Breaks")
+```
+
+*Removing Columns*
+```{r}
+y_resp_counts_grouped <- y_resp_counts_grouped |> select(-c(largest_3, max_spp3))
+names <- y_resp_counts_grouped |> names()
+names
+```
+
+*Setting all columns to factors*
+```{r}
+t <- y_resp_counts_grouped |> mutate_if(is.integer, as.factor)
+t <- t |> mutate_if(is.character, as.factor)
+y_resp_factors <-  t
+
+y_resp_factors |> head()
+```
+
+
+```{r}
+summary(y_resp_factors)
+```
+
+
+
+
+The largest count in North Cascades is 328 seedlings for a single species and 362 of all species on a subplot. 
+
+```{r}
+#| layout-ncol: 3
+#| fig-width: 8
+#| fig-asp: .0618
+# i <- 1
+for (i in 30:length(td_names)) { 
+  
+  t <- y_resp |> select(td_names[i])
+  t <- t |> rename(x = td_names[i])
+  p3 <- t |> ggplot() +
+    aes(x = x) + 
+    geom_histogram(
+      # y = after_stat(count), 
+      bins = 30
+      ) + 
+    labs(title = str_c("Raw ", td_names[i]))
+  
+  
+  
+  t <- y_resp_factors |> select(td_names[i])
+  t <- t |> rename(x = td_names[i])
+  p <- t |> ggplot() +
+    aes(x = x, fill = x) + 
+    geom_bar(
+      # y = after_stat(count)
+      ) + 
+    labs(title = str_c("Factor ", td_names[i])) + 
+    scale_x_discrete(guide = guide_axis(angle = 90)) + 
+    theme(legend.position="none")
+  
+  t <- y_resp_counts_grouped |> select(td_names[i])
+  t <- t |> rename(x = td_names[i])
+  p2 <- t |> ggplot() +
+    aes(x = x) + 
+    geom_histogram(
+      # y = after_stat(count), 
+      bins = 53
+      ) + 
+    labs(title = str_c("Counts ", td_names[i]))
+  
+  print(p)
+  print(p2)
+  print(p3)
+  }
+
+```
+
+
+
+```{r}
+y_resp_factors$total_TD |> n_distinct()
+```
+
+# Empty Classes
+
+```{r}
+#| eval: false
+
+# This is the code for emply classes from randomForests adjusted to check my variables.
+nclass <- length(levels(y$max_spp1))
+## Check for empty classes:
+if (any(table(y) == 0)) {print("Can't have empty classes in y.")}
+```
+
+So, this variable is not empty without bootstrap = T. 
+However, it is when I run yaImpute with bootstrap. 
+
+
+```{r}
+y_resp_factors$max_spp1 |> n_distinct()
+y_resp_factors$max_spp2 |> n_distinct()
+```
+27 classes in max 1 and 26 in max 2. 
+
+```{r}
+# n1 <- 2
+n2 <- 5
+
+
+empty <- tribble(~run, ~good, ~var, ~n1, ~n2)
+
+for (n in 5:15) {
+  for (num in 3:8) {
+n1 <- num
+n2 <- n
+
+
+
+# Prep
+y <- y_resp_factors
+
+y <- y |> filter(total_TD != 0)
+CNs <- y |> select(STANDPLOT_CN)
+
+y <- y %>% select_if(~ !is.numeric(.) || sum(.) != 0)
+
+
+# Y variables
+t <- y |> group_by(max_spp1) |>
+  summarise(
+    n = n(),
+    tpa = sum(largest_1)
+  ) |>
+  arrange(n)
+
+td_remove <- t[1:n1,]$max_spp1 |> as.character()
+
+
+y_rare <- y |> select(all_of(td_remove))
+
+y_rare <- y_rare |> select(all_of(names(y_rare))) |> 
+  mutate_if(is.factor, as.character) |> 
+  mutate_if(is.character, as.numeric) 
+
+y_rare <- y_rare |> mutate(
+  rare_TD = rowSums(y_rare[grep("_TD", names(y_rare))])
+)
+
+y$rare_TD <- factor(y_rare$rare_TD)
+
+y <- y |> select(!all_of(td_remove))
+
+
+spp2_list <- y |> group_by(max_spp2) |> summarise(
+  n = n()
+) |> arrange(n)
+# n2 <- nrow(spp2_list) - n2
+spp2_list2 <- spp2_list$max_spp2[1:n2] |> as.character()
+
+y <- y |> mutate(
+  max_spp1 = ifelse(
+    max_spp1 %in% td_remove, "rare1", max_spp1
+  ),
+
+  max_spp2 = ifelse(
+    max_spp2 %in% spp2_list2, "rare2", max_spp2
+  )
+)
+
+y <- y |> mutate(
+  max_spp1 = factor(max_spp1),
+  max_spp2 = factor(max_spp2)
+  )
+
+y <- y |> select(-c(largest_1, largest_2))
+
+y <- as.data.frame(y)
+
+y <- y |> column_to_rownames("STANDPLOT_CN")
+
+y <- droplevels(y)
+
+y <- y |> select(max_spp1, max_spp2)
+y_vars <- names(y)
+
+# empty <- tribble(~run, ~good, ~var)
+
+for (v in 1:length(y_vars)) {
+  t <- y_vars[v]
+
+for (i in 1:25) {
+  a <- sample(
+    x = y[,v], 
+    size = nrow(y)/3,
+    replace = T)
+  
+  # print(table(a))
+  if (any(table(a) == 0)) {
+    # print(str_c(i, " Can't have empty classes in y."))
+    x = F
+    } else {
+    # print(str_c(i, " NO empty classes in y."))
+    x = T
+    }
+  z <- data.frame(run = i, good = x, var = t, n1 = num, n2 = n)
+  empty <- add_row(empty, z)
+}
+}
+}
+}
+
+
+
+t <- empty |> group_by(n1, n2) |> summarise(
+  prop_run = mean(good), 
+  .groups = "drop"
+) |> arrange(n1, desc(prop_run))
+
+t |> filter(n1 == 4) |> 
+  filter(prop_run > .2) |> arrange(desc(prop_run))
+```
+
+
+
+
+**I was testing which variables would run, then I made the Empty classes section and showed an example above. 
+I ran it on all of the variables to see how often they would run as well.**
+
+
+In a group of 1000 tests, Max species 1 & 2 could run in yaImpute about 33% of the time with 
+5 species grouped into rare and I forgot how many in max 2, about 9. 
+PISI could run about 27% of the time as a factor without adjusting the counts. 
+All other variables would run less than 1% of the time. 
+
+
+# RF factors
+
+**03Sept24**
+
+I am not sure that it will work out to run it with factors for counts. 
+It can be done, but I would need to run each species through the natural breaks algorithm to set the rarer counts into groups. 
+
+However, I did learn how to run yaImpute with regression for the y variables. 
+In the test case, the best variables were around 70% variation explained. 
+The worst had negative single digits. 
+
+I experimented with ntree and mtry. More trees is better, I can't remember what mtry did. It was a little different. 
+
+I did not learn how to set the proportion sampled in the bootstrap, but that would let 
+us use more of the data. 
+
+In my experiments, I learned that as factors only pipo could be run effectively. 
+It succeeded in passing the classes hurdle about 25% of the time. 
+Running as regression still allows for classes and changes the error to % variation explained. 
+
+I was not able to replicate the % variation explained. On its face, it sounds like r squared, but I couldn't get it to match up with the output data. 
+There could be some internal rules for degrees of freedom in RF. 
+I could check the source code for RF and yaImpute to see if I can find it. 
+
+I did not get around to trying RF with species groups. 
+Doing species groups and running with regression seems like the best bet right now. 
+We still won't get good numbers for some of the data, but perhaps with the hyper parameters, I could fix that. 
+
+
+```{r}
+keep <- append(keep, 
+               c('y_resp_factors', 'imp_data', 'x_pred', 'y_resp', 'y_resp_counts', 'y_resp_counts_grouped')
+               )
+
+clean_mem()
+```
+
+
+```{r}
+n1 <- 5
+n2 <- 9
+
+# Prep
+y <- y_resp_factors
+
+CNs <- imp_data |> select(STANDPLOT_CN)
+# y <- cbind(CNs, y)
+
+y <- y |> filter(total_TD != 0)
+CNs <- y |> select(STANDPLOT_CN)
+
+y <- y %>% select_if(~ !is.numeric(.) || sum(.) != 0)
+
+# X Variables
+x <- left_join(CNs, x_pred, join_by(STANDPLOT_CN))
+
+x <- x |> 
+  select(-c(a,g)) |> 
+  mutate(
+    f = factor(f), 
+    p = factor(p)
+  ) |> 
+  relocate(f, p, .after = BAp)
+
+
+x <- x %>% select_if(~ !is.numeric(.) || sum(.) != 0)
+
+
+# Y variables
+t <- y |> group_by(max_spp1) |>
+  summarise(
+    n = n(),
+    tpa = sum(largest_1)
+  ) |>
+  arrange(n)
+
+td_remove <- t[1:n1,]$max_spp1 |> as.character()
+
+
+y_rare <- y |> select(all_of(td_remove))
+
+y_rare <- y_rare |> select(all_of(names(y_rare))) |> 
+  mutate_if(is.factor, as.character) |> 
+  mutate_if(is.character, as.numeric) 
+
+y_rare <- y_rare |> mutate(
+  rare_TD = rowSums(y_rare[grep("_TD", names(y_rare))])
+)
+
+y$rare_TD <- factor(y_rare$rare_TD)
+
+y <- y |> select(!all_of(td_remove))
+
+y_vars <- names(y)
+
+spp2_list <- y |> group_by(max_spp2) |> summarise(
+  n = n()
+) |> arrange(n)
+
+spp2_list <- spp2_list$max_spp2[1:n2]
+
+y <- y |> mutate(
+  max_spp1 = ifelse(
+    max_spp1 %in% td_remove, "rare1", max_spp1
+  ),
+
+  max_spp2 = ifelse(
+    max_spp2 %in% spp2_list, "rare2", max_spp2
+  )
+)
+
+y <- y |> mutate(
+  max_spp1 = factor(max_spp1),
+  max_spp2 = factor(max_spp2)
+  )
+
+y <- y |> select(-c(largest_1, largest_2))
+
+# names(y)
+# y <- y |> select(STANDPLOT_CN, PIPO_TD)
+# y <- y |> select(STANDPLOT_CN, ABLA_TD)
+# y <- y |> select(STANDPLOT_CN, TSME_TD)
+# y <- y |> select(STANDPLOT_CN, PSME_TD)
+# y <- y |> select(STANDPLOT_CN, LALY_TD)
+# y <- y |> select(STANDPLOT_CN, PIEN_TD)
+# y <- y |> select(STANDPLOT_CN, PICO_TD)
+# y <- y |> select(STANDPLOT_CN, LAOC_TD)
+y <- y |> select(STANDPLOT_CN, PISI_TD, max_spp1, max_spp2)
+
+
+x <- as.data.frame(x)
+y <- as.data.frame(y)
+
+x <- x |> column_to_rownames("STANDPLOT_CN")
+y <- y |> column_to_rownames("STANDPLOT_CN")
+
+y <- droplevels(y)
+x <- droplevels(x)
+```
+
+
+```{r}
+rf_yai <- yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = T)
+
+t1 <- rf_yai |> yaiRFsummary()
+
+t1$forestAttributes
+```
+
+
+**I also figured out how to run yaImpute with regression, but I can't do it on this factor data.**
+
+
+
+
+# Scratch
+
+
+```{r}
+#| eval: false
+rf_yai <- yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = F)
+t1 <- rf_yai |> yaiRFsummary()
+
+t1$forestAttributes
+
+
+att1 <- t1$forestAttributes
+att1 |> rownames_to_column("spp") |> arrange(spp)
+
+rf_yai <- yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = T, rfMode = "regression")
+t2 <- rf_yai |> yaiRFsummary()
+
+att2 <- t2$forestAttributes
+```
+
+
+```{r}
+#| eval: false
+att1 |> rownames_to_column("spp") |> arrange(spp)
+att2 |> rownames_to_column("spp") |> arrange(spp)
+```
+
+
+```{r}
+#| eval: false
+rf_yai <- yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = F)
+
+t3 <- rf_yai |> yaiRFsummary()
+
+
+rf_yai <- yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = F, rfMode = "regression")
+
+t4 <- rf_yai |> yaiRFsummary()
+
+
+t3$forestAttributes
+t4$forestAttributes
+# t2$forestAttributes
+```
+
+
+
+
+## Regression variation
+
+```{r}
+#| eval: false
+rf_imp <- rf_yai |> impute()
+rf_imp <- rf_imp |> select(contains("_TD")) 
+rf_imp <- rf_imp |> select(order(colnames(rf_imp)))
+
+```
+
+
+#### ABAM_TD	32.32	%var explained
+
+```{r}
+#| eval: false
+t <- rf_imp[, 1:2]
+
+t <- t |> mutate(
+  # sq_dev = (ABAM_TD - ABAM_TD.o)^2, 
+  ssr = (ABAM_TD.o - ABAM_TD)^2,
+  sst = (ABAM_TD.o - mean(t$ABAM_TD.o))^2
+  )
+
+# Root Meaning the squared difference
+# sqrt(mean(t$sq_dev))
+
+ssr <- sum(t$ssr)
+sst <- sum(t$sst)
+
+1 - ssr/sst
+
+```
+
+```{r}
+#| eval: false
+t <- t |> drop_na()|> mutate(
+  
+  # ssres = (y_i - f_i)^2,
+  ssres = (ABAM_TD.o - ABAM_TD)^2,
+  
+  # sstot = (y_i - mean(t$y_i))^2,
+  sstot = (ABAM_TD.o - mean(t$ABAM_TD.o))^2, 
+  
+  # ssreg = (f_i - mean(t$y_i))^2,
+  ssreg = (ABAM_TD - mean(t$ABAM_TD.o))^2,
+  
+  # st = ssres + ssreg, 
+  st = ssres + ssreg
+  )
+
+r2 <- sum(t$ssreg)/sum(t$st)
+
+mean(t$ssreg)/mean(t$st)
+```
+
+
+# ntree
+
+
+```{r}
+#| eval: false
+rf_yai <- yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = F, rfMode = "regression", 
+              ntree = c(100, rep(10, 29)))
+
+t5 <- rf_yai |> yaiRFsummary()
+
+
+t4$forestAttributes
+t5$forestAttributes
+```
+
+
+
+```{r}
+#| eval: false
+rf_yai <- yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = F, rfMode = "regression", 
+              ntree = c(1000, rep(10, 29)))
+
+t6 <- rf_yai |> yaiRFsummary()
+
+
+t5$forestAttributes
+t6$forestAttributes
+```
+100 trees for pipo made about 17% of the error explained. 
+1000 trees made about 18%. 
+
+
+
+# mtry
+
+
+
+```{r}
+#| eval: false
+rf_yai <- yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = F, rfMode = "regression", 
+              ntree = c(1000, rep(10, 29)), 
+              mtry = 2
+              )
+
+t7 <- rf_yai |> yaiRFsummary()
+
+
+rf_yai <- yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = F, rfMode = "regression", 
+              ntree = c(1000, rep(10, 29)), 
+              mtry = 20
+              )
+
+t8 <- rf_yai |> yaiRFsummary()
+
+t6$forestAttributes
+t7$forestAttributes
+t8$forestAttributes
+```
+
+The response has five or fewer unique values.  Are you sure you want to do regression?
+Warning in randomForest.default(x = xRefs[, xN, FALSE], y = yone, proximity = FALSE,  :
+
+That error pops up for all RFs where that case exists, not just this one. 
+
+mtry of 2 was about 13% and at 20 it was about 18%. Default is about 6, sqrt of nrows or ncols. 
+
+
+# End

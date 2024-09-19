@@ -1,0 +1,982 @@
+---
+title: "4 RF Ecos"
+execute: 
+  freeze: auto
+---
+
+
+*Libraries*
+```{r}
+#| label: Libraries
+#| message: false
+#| warning: false
+#| code-fold: true
+#| output: false
+
+rm(list = ls())                                                      
+gc()                                                                                 
+
+# Data tidying and acces
+library(tidyverse, quietly = T)       # Easy to read syntax and data manipulation                   
+library(RSQLite)                      # Access SQLite dbs   
+library(magrittr)                     # Pipes and math functions    
+# library(readxl)                     # Read xlsx 
+# library(writexl)                    # write xlsx     
+                                                   
+# yaImpute and related                           
+library(yaImpute)                     # RF imputation     
+library(vegan)                        # Something to do the yaImpute 
+library(randomForest)                 # RF package that yaImpute uses                                   
+                                                     
+# plots and tables                          
+# library(esquisse)                     # Quick data visualization   
+# library(knitr)                        # Better html tables
+# library(DT)                           # Data tables for Java script tables in HTML
+                                                   
+# library(kableExtra)                   # Better html tables, change sizes        
+# library(feather)                      # Faster data retrieval    
+
+# Geography
+# library(sf)                           # Simple Features/vector data
+# library(terra)                        # Raster functions
+# library(spatstat)                     # Spatial stats
+
+
+library(tcltk)                        # Fix file paths
+
+# No sci-notation. 
+options(scipen = 999)
+```
+
+*Functions*
+```{r}
+#| code-fold: true
+#| label: Functions
+
+clean_mem <- function() {
+  x <- ls(envir = .GlobalEnv)
+  # ls()[!(ls() %in% keep)]
+  rm(list = x[!(x %in% keep)], envir = .GlobalEnv)
+  gc()
+}
+
+clean_na_cols <- function(df){
+  df <- df[, colSums(is.na(df)) < nrow(df)]
+}
+
+# path <- r"(C:\RxFire\Regen\FVS\regen_080724_1644\regen_080724_1644.db)"
+clean_paths <- function(path) {
+  str_replace_all(path, "\\\\", "/")
+}
+
+db_list <- function(df, CN_col){
+  name <- NULL
+  name <- df |> select({{CN_col}})
+  name <- name |> mutate(CN_col = str_c("'", {{CN_col}}, "'")) 
+  name <- str_flatten_comma(name$CN_col)
+  # name <- str_flatten_comma(name[, CN_col])
+  name
+}
+
+nas_to_zeroes <- function(df){
+  df <- df |> mutate_all(~replace(., is.na(.), 0))
+  df
+}
+
+keep <- c("keep", "clean_mem", "clean_na_cols", "clean_paths", "db_list", "nas_to_zeroes")
+```
+
+
+# Import
+
+
+```{r}
+#| eval: false
+
+rm(list = ls())
+```
+
+
+
+```{r}
+imp_db <- clean_paths(r"(./homemade_fvs_db2.db)")
+
+
+con <- dbConnect(RSQLite::SQLite(), imp_db)
+
+imp_data <- dbGetQuery(con, "select * from imp_data")
+
+eco_names <- tribble(~Eco3, ~ECO_NAME, 
+        "242A",  "Puget Tr.", 
+        "342I",  "Columbia B.", 
+        "M242B", "W.Cascades", 
+        "M242C", "E.Cascades", 
+        "M242D", "N.Cascades", 
+        "M333A", "Ok. High")
+```
+
+```{r}
+n_cascades <- imp_data |> filter(EcoRegion == "M242D") |> select(-EcoRegion)
+```
+
+# N. Cascades
+
+
+```{r}
+# n_cascades |> str()
+names(n_cascades)
+```
+
+
+*Separating the predictors from the responses*
+```{r}
+x_pred <- n_cascades[,1:46]
+names(x_pred)
+y_resp <- n_cascades[, c(1, 47:ncol(n_cascades))]
+
+# x |> str()
+```
+```{r}
+names(y_resp)
+```
+
+This is where I am not sure what to do. 
+  
+  - I can either run this as the full set of x and y, or try and select the overstory species by the seedlings. 
+  - RF will not take factors with empty classes, so at the least I have to split up the FPAGs into F.P.A.G.
+  - Should also remove the empty tree categories. 
+
+There is also the issue of stands that have overstory, but not under. If there is no regeneration, then those 
+stands should probably go into the probability of regeneration part of the model and not the regeneration after deciding if regen is to happen. 
+
+I would like to model the probability of regeneration in this model as well. In fact, I could just run the RF for that
+first. I was considering a logit, but RF would be faster to try. 
+
+
+
+
+
+How should I deal with the empty As and Gs. NAs would be the best way to deal with them, but I do not know how RF will take that. I could give them unique codes, but then I am adding data. I guess I can leave them as empty characters. 
+That feels wrong, but I can't think of a reason why it wouldn't work the same. 
+For now I will leave them as empties. 
+
+```{r}
+x_pred <- x_pred |> mutate(
+  f = str_sub(FPAG, 1, 1),
+  p = str_sub(FPAG, 2, 2),
+  a = str_sub(FPAG, 3, 3),
+  g = str_sub(FPAG, 4, 4),
+) |> select(-FPAG)
+```
+
+
+### NC largest BA spp
+
+```{r}
+t <- x_pred  |> select_if(is.numeric)
+t <- t[, colSums(t) != 0]
+
+t2 <- sapply(t[,9:ncol(t)], sum)
+t2 <- t2 |> sort(decreasing = T)
+t2
+```
+
+
+
+#### Most prevelant by stand
+
+```{r}
+#| eval: false
+
+j <- 5
+j <- NULL
+# rm(j)
+
+imps <- c()
+imps_err <- c()
+# for (j in 1:length(li_env)) {
+for (j in 1:50) { 
+  data <- get(li_env[j])
+  cns <- data |> select(STANDPLOT_CN) |> rownames_to_column("id")
+  data <- data |> select(-STANDPLOT_CN)
+  
+  
+  # refs <- rownames(data[1:nrow(data) - 1,])
+  refs <- rownames(data[1:(nrow(data)*.75),])
+
+  x <- data |> select(CC, BA, SDI, ELEVFT, SLOPE, ASPECT, PHYSCLCD)
+  
+  yfull <- data |> select(any_of(names_y))
+  y <- yfull #[refs,]
+  y <- y |> relocate(total_TD, .after = last_col())
+  
+  y_vars <- names(y)
+  b <- y_vars[!y_vars %in% "total_TD"]
+  
+  # loop to find the 3 columns with the most TPA
+  for (i in 1:2) {
+    
+    c_value <- str_c("largest_", i)
+    
+    y <- y %>%
+      rowwise() %>%
+      mutate(!!c_value := n_largest(c_across(all_of(b)), i)) |>
+      ungroup()
+  }
+  # Setting spp names to the largest columns
+  y$max_spp1 <- sapply(1:nrow(y), function(x) colnames(y)[which(y[x, b] == y$largest_1[x])][1])
+  y$max_spp2 <- sapply(1:nrow(y), function(x) colnames(y)[which(y[x, b] == y$largest_2[x])][1])
+  y$alt_spp2 <- sapply(1:nrow(y), function(x) colnames(y)[which(y[x, b] == y$largest_2[x])][2])
+  # y$max_spp3 <- sapply(1:nrow(y), function(x) colnames(y)[which(y[x, b] == y$largest_3[x])][1])
+  # y$alt_spp3 <- sapply(1:nrow(y), function(x) colnames(y)[which(y[x, b] == y$largest_3[x])][2])
+  
+  y <- y |> mutate(
+    max_spp2 = if_else(largest_1 == largest_2, alt_spp2, max_spp2),
+    # max_spp3 = if_else(largest_2 == largest_3, alt_spp3, max_spp3)
+    ) |> select(-c(alt_spp2))#, alt_spp3
+  
+  yfull <- y |> mutate(
+    max_spp1 = ifelse(largest_1 == 0, "zero", max_spp1),
+    max_spp2 = ifelse(largest_2 == 0, "zero", max_spp2),
+    # max_spp3 = ifelse(largest_3 == 0, "zero", max_spp3)
+    )
+  
+  y <- yfull[, y_vars] #refs
+  
+  vars_yrf <- c("total_TD")
+  vars_yrf <- append(vars_yrf, names(yfull)[!names(yfull) %in% y_vars])
+  
+  yrf <- yfull[, vars_yrf]#refs
+  
+  
+  x$PHYSCLCD <- factor(x$PHYSCLCD)
+  
+  yrf$max_spp1 <- factor(yrf$max_spp1)
+  yrf$max_spp2 <- factor(yrf$max_spp2)
+  # yrf$max_spp3 <- factor(yrf$max_spp3)
+  yrf <- droplevels(yrf)
+  # str(yrf)
+  
+  
+  cns$id <- as.integer(cns$id)
+  
+  x <- as.data.frame(x)
+  yrf <- as.data.frame(yrf)
+  y <- as.data.frame(y)
+  
+  x2 <- x |> rowid_to_column("id")
+  x2 <- left_join(x2, cns, by = "id") |> select(-id)
+  x <- x2 |> column_to_rownames("STANDPLOT_CN")
+  
+  yrf2 <- yrf |> rowid_to_column("id")
+  yrf2 <- left_join(yrf2, cns, by = "id") |> select(-id)
+  yrf <- yrf2 |> column_to_rownames("STANDPLOT_CN")
+
+  y <- y |> rowid_to_column("id")
+  y <- left_join(y, cns, by = "id") |> select(-id)
+  y <- y |> column_to_rownames("STANDPLOT_CN")
+  save(y, file = str_c("imps_0417/y_", j, ".Rdata"))
+  
+  # tryCatch({
+  #   rf_yai <- yai(x = x, y = yrf, method = "randomForest", k = k, bootstrap = T)
+  #   
+  #   assign(rf_i, rf_yai)
+  #   imps <- append(imps, rf_i)
+  #   
+  #   save(rf_i, file = str_c("imps_0417/",rf_i, ".Rdata"))
+  #   
+  #   }, error = function(cond){cat(
+  #     "ERROR ",conditionMessage(cond), "_",li_env[j], "_"
+  #     )})
+  
+  rf_yai <- yai(x = x, y = yrf, method = "randomForest", k = k, bootstrap = T)
+  save(rf_yai, file = str_c("imps_0417/", str_c("rf_", li_env[j]), ".Rdata"))
+  
+  
+  rf_i <- str_c("rf_", li_env[j])
+  imps <- append(imps, rf_i)
+}
+```
+
+
+
+*Seedlings in decreasing order*
+```{r}
+t <- y_resp  |> select_if(is.numeric)
+t <- t[, colSums(t) != 0]
+
+ty <- sapply(t[,1:ncol(t)], sum)
+ty <- ty |> sort(decreasing = T)
+
+b <- names(ty)
+b
+```
+
+N.Cascades drops from 35 to 28 columns after removing empty Seedling categories. 
+
+
+```{r}
+
+n_largest <- function(x = b, n) {
+  
+  # In descending order, prevelance
+  x1 <- sort(x, decreasing = TRUE)
+  # Select the nth most prevelant. 
+  x1[n]
+}
+
+
+# response <-  y
+
+y <- y_resp |> select(-STANDPLOT_CN)
+b <- names(y)
+
+for (i in 1:3) {
+    
+    c_value <- str_c("largest_", i)
+    
+    y <- y %>%
+      rowwise() %>%
+      mutate(!!c_value := n_largest(c_across(all_of(b)), i)) |>
+      ungroup()
+}
+
+```
+
+### Add species names for largest spp counts
+
+
+
+
+```{r}
+# Setting spp names to the largest columns
+y$max_spp1 <- sapply(1:nrow(y), function(x) colnames(y)[which(y[x, b] == y$largest_1[x])][1])
+y$max_spp2 <- sapply(1:nrow(y), function(x) colnames(y)[which(y[x, b] == y$largest_2[x])][1])
+y$alt_spp2 <- sapply(1:nrow(y), function(x) colnames(y)[which(y[x, b] == y$largest_2[x])][2])
+y$max_spp3 <- sapply(1:nrow(y), function(x) colnames(y)[which(y[x, b] == y$largest_3[x])][1])
+y$alt_spp3 <- sapply(1:nrow(y), function(x) colnames(y)[which(y[x, b] == y$largest_3[x])][2])
+
+y <- y |> mutate(
+  max_spp2 = if_else(largest_1 == largest_2, alt_spp2, max_spp2),
+  max_spp3 = if_else(largest_2 == largest_3, alt_spp3, max_spp3)
+  ) |> select(-c(alt_spp2, alt_spp3))#, alt_spp3
+
+yfull <- y |> mutate(
+  max_spp1 = ifelse(largest_1 == 0, "zero", max_spp1),
+  max_spp2 = ifelse(largest_2 == 0, "zero", max_spp2),
+  max_spp3 = ifelse(largest_3 == 0, "zero", max_spp3)
+  )
+
+yfull$STANDPLOT_CN <- y_resp$STANDPLOT_CN
+
+yfull <- yfull |> relocate(STANDPLOT_CN)
+
+yfull |> filter(STANDPLOT_CN == "22954484010497_4") 
+
+yfull[1:5, 36:41]
+```
+```{r}
+yfull <- yfull |> mutate(
+  total_TD = rowSums(yfull[grep("_TD", names(yfull))])
+)
+```
+
+# N.Cascades data
+
+```{r}
+#| layout-ncol: 2
+
+yfull  |> filter(total_TD > 0) |> group_by(max_spp1) |> 
+  summarise(
+    n = n(), 
+    sum_tpa = round(sum(largest_1))
+  ) |> arrange(desc(sum_tpa)) |> 
+  ggplot() + 
+  aes(x = fct_reorder(max_spp1,-sum_tpa), y = sum_tpa, fill = max_spp1) +
+  geom_col(show.legend = FALSE) + 
+  scale_x_discrete(guide = guide_axis(angle = 45)) + 
+  labs(
+    title = "N trees in largest_spp in N.C. above zero"
+  )
+
+
+yfull |> filter(total_TD > 0)  |> group_by(max_spp1) |> 
+  summarise(
+    n = n(), 
+    sum_tpa = round(sum(largest_1))
+  ) |> arrange(desc(n)) |> 
+  ggplot() + 
+  aes(x = fct_reorder(max_spp1,-n), y = n, fill = max_spp1) +
+  geom_col(show.legend = FALSE) + 
+  scale_x_discrete(guide = guide_axis(angle = 45)) + 
+  labs(
+    title = "N Plots in largest_spp in N.C. above zero"
+  )
+```
+
+In N.Cascades, there ABAM and TSHE, then another between ABLA and PSME. 
+
+There are two ways I can think about this. One is which species has the most trees. 
+The other is which species is most often the largest species. 
+
+#### Spp 2
+
+```{r}
+#| layout-ncol: 2
+
+yfull |> filter(total_TD > 0)  |> group_by(max_spp2) |> 
+  summarise(
+    n = n(), 
+    sum_tpa = round(sum(largest_2))
+  ) |> arrange(desc(sum_tpa)) |> 
+  ggplot() + 
+  aes(x = fct_reorder(max_spp2,-sum_tpa), y = sum_tpa, fill = max_spp2) +
+  geom_col(show.legend = FALSE) + 
+  scale_x_discrete(guide = guide_axis(angle = 45)) + 
+  labs(
+    title = "N trees in largest_spp2 in N.C. above zero"
+  )
+
+
+yfull |> filter(total_TD > 0) |> group_by(max_spp2) |> 
+  summarise(
+    n = n(), 
+    sum_tpa = round(sum(largest_2))
+  ) |> arrange(desc(n)) |> 
+  ggplot() + 
+  aes(x = fct_reorder(max_spp2,-n), y = n, fill = max_spp2) +
+  geom_col(show.legend = FALSE) + 
+  scale_x_discrete(guide = guide_axis(angle = 45)) + 
+  labs(
+    title = "N Plots in largest_spp2 in N.C. above zero"
+  )
+```
+
+
+#### Spp 3
+
+```{r}
+#| layout-ncol: 2
+
+yfull |> filter(total_TD > 0)  |> group_by(max_spp3) |> 
+  summarise(
+    n = n(), 
+    sum_tpa = round(sum(largest_3))
+  ) |> arrange(desc(sum_tpa)) |> 
+  ggplot() + 
+  aes(x = fct_reorder(max_spp3,-sum_tpa), y = sum_tpa, fill = max_spp3) +
+  geom_col(show.legend = FALSE) + 
+  scale_x_discrete(guide = guide_axis(angle = 45)) + 
+  labs(
+    title = "N trees in largest_spp3 in N.C. above zero"
+  )
+
+
+yfull |> filter(total_TD > 0) |> group_by(max_spp3) |> 
+  summarise(
+    n = n(), 
+    sum_tpa = round(sum(largest_3))
+  ) |> arrange(desc(n)) |> 
+  ggplot() + 
+  aes(x = fct_reorder(max_spp3,-n), y = n, fill = max_spp3) +
+  geom_col(show.legend = FALSE) + 
+  scale_x_discrete(guide = guide_axis(angle = 45)) + 
+  labs(
+    title = "N Plots in largest_spp3 in N.C. above zero"
+  )
+```
+
+### All species in the max two
+
+```{r}
+spp1 <- unique(yfull$max_spp1)
+spp2 <- unique(yfull$max_spp2)
+
+
+spp1 |> sort()
+```
+```{r}
+spp2 |> sort()
+```
+```{r}
+spp12 <- append(spp1, spp2) |> unique()
+spp12
+```
+
+*Names of columns where the overstory matches species in understory*
+```{r}
+regen_species <- str_replace_all(spp12, "_TD", "_BA")
+regen_species <- regen_species[2:29]
+regen_species
+```
+```{r}
+overstory <- names(x_pred)
+overstory <- overstory[10:45]
+```
+
+#### Overstory not in regen
+
+```{r}
+overstory[!(overstory %in% regen_species)] |> sort()
+```
+
+```{r}
+names(x_pred)
+```
+
+
+
+#### Regen species not in overstory
+
+```{r}
+regen_species[!(regen_species %in% overstory)] |> sort()
+```
+
+I am pretty sure that 2TB and 2 TREE are the same, but I need to go back and find out where the names were introduced. 
+PSMA is the only species that is not present in the overstory, but is in the understory. 
+
+From the FIA.REF_SPECIES 2Tree is an unknown live tree, and 2TB is unknown dead tree. 
+
+
+```{r}
+names(x_pred) |> sort()
+```
+
+
+
+
+
+
+
+```{r}
+yfull_above0 <- yfull |> filter(largest_1 > 0)
+```
+
+
+```{r}
+hist(log(yfull$total_TD + .1))
+hist(log(yfull_above0$total_TD))
+```
+
+
+
+
+
+
+
+
+
+
+# RF Test
+
+This test is on the North Cascades. 
+I have removed all subplots that do not have seedlings. 
+There were 1498 subplots available for imputation. 
+
+I had tried to run the model with everything that I could, but there were issues. 
+yaImpute, flags an error if there are "empty classes". 
+These do not actually have to be empty. 
+I think, it errs if the subset taken for imputation, doesn't contain all of the classes. 
+So, there needs to be enough factors in each class to ensure that 
+we get at least one of each after the random sample is taken. 
+To fix this, I grouped the least common seedling species into a group named other. 
+
+The y variables for this imputation were the seedlings TPAs of the largest two species, and their names, 
+plus the total TPA for the subplot. 
+
+
+
+
+As for the X variables, most were included. The main list was CC, SDI, lat, lon, elevation, aspect, slope, FPAG, 
+and BA of the stand. The X variables also included the species BA per acre of every species present in the 
+Ecoregion. 
+While troubleshooting the issue, I removed A & G from FPAG in the X variables list. 
+This may not have been necessary, but there were empty spaces in those columns as FPAGs do not need to have more than 2 
+letters. 
+
+
+
+```{r}
+yfull_above0 <- yfull |> filter(largest_1 > 0)
+
+CNs_wRegen <- yfull_above0 |> select(STANDPLOT_CN)
+
+x_abovr_zero <- left_join(CNs_wRegen, x_pred, join_by(STANDPLOT_CN))
+```
+
+
+```{r}
+x <- x_abovr_zero |> select(-c(a,g))
+
+x$f <- factor(x$f)
+x$p <- factor(x$p)
+##|> select(STANf##|> select(STANDPLOT_CN, CC, SDI, LAT, LON, ELEV, ASPECT, SLOPE, BAp)
+
+
+y <- yfull_above0 |> select(STANDPLOT_CN, max_spp1, max_spp2, largest_1, largest_2, total_TD)
+
+y_vars <- names(y)
+# y_vars <- y_vars[c(1:3, 5:6, 8)]
+
+
+
+# y$max_spp3 <- factor(y$max_spp3)
+
+y <- droplevels(y)
+x <- droplevels(x)
+
+# str(yrf)
+
+
+x <- as.data.frame(x)
+y <- as.data.frame(y)
+
+x <- x |> column_to_rownames("STANDPLOT_CN")
+y <- y |> column_to_rownames("STANDPLOT_CN")
+
+y <- droplevels(y)
+x <- droplevels(x)
+
+
+# y <- y |> select(max_spp1, largest_1, total_TD)
+# y <- y |> select(max_spp1, largest_1, total_TD)
+# y <- y |> select(max_spp1)
+# y <- y |> select(-max_spp2)
+
+spp2_list <- y |> group_by(max_spp2) |> summarise(
+  n = n()
+) |> arrange(desc(n))
+
+spp2_list <- spp2_list$max_spp2[1:10]
+
+y <- y |> mutate(
+  max_spp2 = ifelse(
+    max_spp2 %in% spp2_list, max_spp2, "Other"
+  )
+)
+
+
+
+y <- y |> mutate(
+  max_spp2 = ifelse(max_spp2 == "2TB_TD", "Other", max_spp2), 
+  max_spp2 = ifelse(max_spp2 == "TABR2_TD", "TABR_TD", max_spp2),
+  max_spp2 = factor(max_spp2)
+  )
+
+
+
+
+# y$max_spp2 <- droplevels(
+#   y$max_spp2
+# )
+```
+
+
+```{r}
+y$max_spp1 <- factor(y$max_spp1)
+# y$max_spp2 <- factor(y$max_spp2)
+
+
+# rf_yai <- yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = T)
+# save(rf_yai, file = str_c("imp_12AUG24_kitchenSink", ".Rdata"))
+load(str_c("imp_12AUG24_kitchenSink", ".Rdata"))
+```
+
+yaImpute may have rejected the data because:
+
+  - I had y\$spp2 <- factor(y\$spp2). That was the last thing I removed and it worked. 
+  - There was a variable name with a number at the front. 
+  - There was a variable name with a number in it. 
+
+
+save(rf_yai, file = str_c("imp_12AUG24_kitchenSink", ".Rdata")) is the test run. It has all of the BA and other preds, 
+but it is missing AG from FPAG. I thought they could be causing issues, even though they worked last time. 
+
+It was largest 1 & 2 with max spp 1 & 2, pluys total TD for the in the response variables. 
+I had originally wanted to use all of the TDs and run a kitchen sink, but I kept removing things to find the 
+no empty classes error. 
+
+```{r}
+# rf_dia_i <- impute(rf_dia, ancillaryData = y)
+
+rf_imp_test <- impute(rf_yai)
+
+rf_imp_test |> head()
+```
+
+
+```{r}
+yaiRFsummary(rf_yai)
+```
+
+
+```{r}
+y |> names()
+```
+
+
+```{r}
+rmsd(rf_imp_test)
+```
+
+
+# ancillary data
+
+```{r}
+y_ancil <- yfull_above0
+
+y_ancil <- y_ancil |> as.data.frame()
+
+rf_imp_ancillary <- impute(rf_yai, ancillaryData = y_ancil)
+```
+
+### Var imp
+
+```{r}
+x |> names()
+```
+
+
+```{r}
+yaiVarImp(rf_yai)
+```
+
+
+
+# Regen or Not
+
+I am planning on running RF here to see how it does just picking out if there are seedlings present on the subplot. 
+
+
+```{r}
+#| eval: false
+
+yfull_above0 <- yfull |> filter(largest_1 > 0)
+
+CNs_wRegen <- yfull_above0 |> select(STANDPLOT_CN)
+
+x_abovr_zero <- left_join(CNs_wRegen, x_pred, join_by(STANDPLOT_CN))
+```
+
+
+```{r}
+#| eval: false
+
+x <- x_abovr_zero |> select(-c(a,g))
+
+x$f <- factor(x$f)
+x$p <- factor(x$p)
+##|> select(STANf##|> select(STANDPLOT_CN, CC, SDI, LAT, LON, ELEV, ASPECT, SLOPE, BAp)
+
+
+y <- yfull_above0 |> select(STANDPLOT_CN, max_spp1, max_spp2, largest_1, largest_2, total_TD)
+
+y_vars <- names(y)
+# y_vars <- y_vars[c(1:3, 5:6, 8)]
+
+
+
+# y$max_spp3 <- factor(y$max_spp3)
+
+y <- droplevels(y)
+x <- droplevels(x)
+
+# str(yrf)
+
+
+x <- as.data.frame(x)
+y <- as.data.frame(y)
+
+x <- x |> column_to_rownames("STANDPLOT_CN")
+y <- y |> column_to_rownames("STANDPLOT_CN")
+
+y <- droplevels(y)
+x <- droplevels(x)
+
+
+# y <- y |> select(max_spp1, largest_1, total_TD)
+# y <- y |> select(max_spp1, largest_1, total_TD)
+# y <- y |> select(max_spp1)
+# y <- y |> select(-max_spp2)
+
+spp2_list <- y |> group_by(max_spp2) |> summarise(
+  n=n()
+) |> arrange(desc(n))
+
+spp2_list <- spp2_list$max_spp2[1:10]
+
+y <- y |> mutate(
+  max_spp2 = ifelse(
+    max_spp2 %in% spp2_list, max_spp2, "Other"
+  )
+)
+
+
+
+y <- y |> mutate(
+  max_spp2 = ifelse(max_spp2 == "2TB_TD", "Other", max_spp2), 
+  max_spp2 = ifelse(max_spp2 == "TABR2_TD", "TABR_TD", max_spp2),
+  max_spp2 = factor(max_spp2)
+  )
+
+
+
+
+# y$max_spp2 <- droplevels(
+#   y$max_spp2
+# )
+```
+
+
+```{r}
+#| eval: false
+
+# y$max_spp1 <- factor(y$max_spp1)
+# y$max_spp2 <- factor(y$max_spp2)
+
+
+# rf_yai <- yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = T)
+# save(rf_yai, file = str_c("imp_12AUG24_kitchenSink", ".Rdata"))
+
+```
+
+
+
+
+
+
+# Seedling imp
+
+Run the imputation on the seedling TPAs of the top species in a given ecoregion. 
+
+
+```{r}
+# imp_data
+
+x <- imp_data[, c(1:47)]
+xfp <-  x |> mutate(
+  f = str_sub(FPAG, 1, 1), 
+  p = str_sub(FPAG, 2, 2), 
+  f = factor(f), 
+  p = factor(p)
+) |> select(STANDPLOT_CN, f,p)
+
+x <- x |> select(-FPAG) |> filter(EcoRegion == "M242D") |> 
+  select(-EcoRegion) |> drop_na()
+cns <- x |> select(STANDPLOT_CN)
+
+x <- x |> column_to_rownames("STANDPLOT_CN")
+x <- x[, colSums(x) != 0]
+
+xfp <- left_join(cns, xfp)
+
+x$f <- xfp$f
+x$p <- xfp$p
+
+
+y <- imp_data[,c(1, 48:ncol(imp_data))] |> drop_na()
+y <- left_join(cns, y, join_by(STANDPLOT_CN))
+
+y <- y |> column_to_rownames("STANDPLOT_CN")
+y <- y[, colSums(y) != 0]
+
+b <- names(y)
+
+for (i in 1) {
+    
+    c_value <- str_c("largest_", i)
+    
+    y <- y %>%
+      rowwise() %>%
+      mutate(!!c_value := n_largest(c_across(all_of(b)), i)) |>
+      ungroup()
+}
+
+ # Setting spp names to the largest columns
+y$max_spp1 <- sapply(1:nrow(y), function(x) colnames(y)[which(y[x, b] == y$largest_1[x])][1])
+
+
+y <- y |> mutate(
+  max_spp1 = ifelse(largest_1 == 0, "zero", max_spp1),
+  max_spp1 = factor(max_spp1)
+  # max_spp2 = ifelse(largest_2 == 0, "zero", max_spp2),
+  # max_spp3 = ifelse(largest_3 == 0, "zero", max_spp3)
+  )
+
+y <- as.data.frame(y)
+rownames(y) <- cns$STANDPLOT_CN
+```
+
+
+
+```{r}
+str(y)
+
+levels(y$max_spp1)
+```
+
+```{r}
+# rf_yai <- yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = T)
+# save(rf_yai, file = str_c("imp_12AUG24_kitchenSink", ".Rdata"))
+
+# rf_seedling_TD <- yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = T)
+# rm(list = ls())
+load("./imp_12AUG24_kitchenSink.Rdata")
+
+rf_seedling_TD <- rf_yai
+rm(rf_yai)
+```
+
+```{r}
+str(y)
+```
+
+```{r}
+# test.rf <- randomForest(x = x, y = y, mtry = 3, 
+#                          importance = TRUE, na.action = na.omit) 
+```
+
+
+
+
+```{r}
+# max(y)/300
+```
+
+
+
+
+
+
+
+
+pLAY WITH N-TREE AND SEE WHERE THERE ARE DIMINISHING RETURNS. 
+
+
+
+End
+
+
+
+# scratch
+
+"C:\RxFire\Regen\Regen_Notes\trf.Rdata"
+```{r}
+# load(clean_paths(r"(C:\RxFire\Regen\Regen_Notes\trf.Rdata)"))
+
+# impute(trf)
+```
+
+
+
+```{r}
+# print(trf)
+```
+
+# Notes
+ 
+sprintf for loops and hyper-parameter tests. 
+
+  - more trees for rare or common, 
+ 
+ 
