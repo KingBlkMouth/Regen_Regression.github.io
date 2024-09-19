@@ -2,10 +2,13 @@
 .Rhistory
 .RData
 .Ruserdata
+.RDataTmp
+1_CNs_in_OkWen_Buffer
+rf_reg_noclass_spet18
 
 /.quarto/
 /_site/
 /docs/
 /_freeze/
-/imps_0402/
-/dfs_0403/
+/data/
+/Images/
