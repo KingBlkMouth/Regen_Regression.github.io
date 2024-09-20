@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Regeneration_2_16Sept24 - 5 TD Imp</title>
+<title>Regen 2 - 5 TD Imp</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -117,7 +117,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">Regeneration_2_16Sept24</span>
+    <span class="navbar-title">Regen 2</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -380,7 +380,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Import</h1>
 <p>“C:_2_16Sept24.Rproj.user” <em>Import imp_data, fix names</em></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>imp_db <span class="ot">&lt;-</span> <span class="fu">clean_paths</span>(r<span class="st">"(C:\RxFire\Regen\Regeneration_2_16Sept24\homemade_fvs_db2.db)"</span>)</span>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>imp_db <span class="ot">&lt;-</span> <span class="fu">clean_paths</span>(r<span class="st">"(C:\RxFire\Regen\Regeneration_2_16Sept24\data\homemade_fvs_db2.db)"</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), imp_db)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -791,7 +791,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># t &lt;- left_join(x_pred, yfull, join_by(STANDPLOT_CN))</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># con &lt;- dbConnect(RSQLite::SQLite(), "c:/RxFire/Regen/Regeneration_2_16Sept24/homemade_fvs_db.db")</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># con &lt;- dbConnect(RSQLite::SQLite(), "c:/RxFire/Regen/Regeneration_2_16Sept24/data/homemade_fvs_db.db")</span></span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
 <span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co"># dbWriteTable(con, "imp_data_2", t)</span></span>
 <span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
@@ -1447,8 +1447,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>          used  (Mb) gc trigger  (Mb) max used  (Mb)
-Ncells 2493189 133.2    4240835 226.5  4240835 226.5
-Vcells 5146917  39.3   10146329  77.5  7994109  61.0</code></pre>
+Ncells 2493195 133.2    4241652 226.6  4241652 226.6
+Vcells 5146950  39.3   10146329  77.5  7993210  61.0</code></pre>
 </div>
 </div>
 <section id="rf" class="level2">
@@ -1552,7 +1552,7 @@ Vcells 5146917  39.3   10146329  77.5  7994109  61.0</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># rf_yai &lt;- yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = T)</span></span>
 <span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="co"># save(rf_yai, file = str_c("RF_26AUG24_original_Y", ".Rdata"))</span></span>
-<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">str_c</span>(<span class="st">"RF_26AUG24_original_Y"</span>, <span class="st">".Rdata"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">str_c</span>(<span class="st">"data/RF_26AUG24_original_Y"</span>, <span class="st">".Rdata"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -4611,7 +4611,7 @@ Vcells 5146917  39.3   10146329  77.5  7994109  61.0</code></pre>
 <section id="terminal-buckets" class="level3">
 <h3 class="anchored" data-anchor-id="terminal-buckets">Terminal Buckets</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"example_imputation.Rdata"</span>)</span>
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/example_imputation.Rdata"</span>)</span>
 <span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a><span class="co"># a &lt;- t[8:9,]</span></span>
 <span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a><span class="co"># a &lt;-  a %&gt;% select_if(~ !is.numeric(.) || sum(.) != 0)</span></span>
 <span id="cb75-4"><a href="#cb75-4" aria-hidden="true" tabindex="-1"></a>a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -5127,7 +5127,7 @@ Vcells 5146917  39.3   10146329  77.5  7994109  61.0</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="co"># rf_yai &lt;- yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = T)</span></span>
 <span id="cb94-2"><a href="#cb94-2" aria-hidden="true" tabindex="-1"></a><span class="co"># save(rf_yai, file = str_c("RF_26AUG24_1seedlings", ".Rdata"))</span></span>
-<span id="cb94-3"><a href="#cb94-3" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">str_c</span>(<span class="st">"RF_26AUG24_1seedlings"</span>, <span class="st">".Rdata"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb94-3"><a href="#cb94-3" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">str_c</span>(<span class="st">"data/RF_26AUG24_1seedlings"</span>, <span class="st">".Rdata"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="eval-2" class="level1">
@@ -8411,23 +8411,23 @@ Vcells 5146917  39.3   10146329  77.5  7994109  61.0</code></pre>
 <span id="cb131-3"><a href="#cb131-3" aria-hidden="true" tabindex="-1"></a><span class="fu">clean_mem</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          used  (Mb) gc trigger  (Mb) max used  (Mb)
-Ncells 2544619 135.9    4240835 226.5  4240835 226.5
-Vcells 7477233  57.1   12255594  93.6 10146329  77.5</code></pre>
+Ncells 2544620 135.9    4241652 226.6  4241652 226.6
+Vcells 7477252  57.1   12255594  93.6 10146326  77.5</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb133"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb133-1"><a href="#cb133-1" aria-hidden="true" tabindex="-1"></a>test_set <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"C:/RxFire/Regen/Regeneration_2_16Sept24/test.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb133"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb133-1"><a href="#cb133-1" aria-hidden="true" tabindex="-1"></a>test_set <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"C:/RxFire/Regen/Regeneration_2_16Sept24/data/test.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Rows: 2879 Columns: 2
+<pre><code>Rows: 3396 Columns: 3
 ── Column specification ─────────────────────────────────────────────────────────────────────────────────────────────────────
 Delimiter: ","
-chr (1): StandID
+chr (2): StandID, TRAIN
 dbl (1): INVYR
 
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb135"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb135-1"><a href="#cb135-1" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), <span class="st">"c:/RxFire/Regen/Regeneration_2_16Sept24/homemade_fvs_db2.db"</span>)</span>
+<div class="sourceCode cell-code" id="cb135"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb135-1"><a href="#cb135-1" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), <span class="st">"c:/RxFire/Regen/Regeneration_2_16Sept24/data/homemade_fvs_db2.db"</span>)</span>
 <span id="cb135-2"><a href="#cb135-2" aria-hidden="true" tabindex="-1"></a>trees <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con, <span class="st">"select * from fvs_treeinit_plot"</span>)</span>
 <span id="cb135-3"><a href="#cb135-3" aria-hidden="true" tabindex="-1"></a>plots <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con, <span class="st">"select * from fvs_plotinit_plot"</span>)</span>
 <span id="cb135-4"><a href="#cb135-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span>
@@ -8530,13 +8530,13 @@ dbl (1): INVYR
 <span id="cb136-40"><a href="#cb136-40" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb136-41"><a href="#cb136-41" aria-hidden="true" tabindex="-1"></a>trees_live<span class="sc">$</span>STANDPLOT_CN <span class="sc">|&gt;</span> <span class="fu">n_distinct</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1300</code></pre>
+<pre><code>[1] 1321</code></pre>
 </div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb138"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb138-1"><a href="#cb138-1" aria-hidden="true" tabindex="-1"></a>seeds<span class="sc">$</span>STANDPLOT_CN <span class="sc">|&gt;</span> <span class="fu">n_distinct</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 756</code></pre>
+<pre><code>[1] 769</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -8558,12 +8558,7 @@ dbl (1): INVYR
 <div class="kable-table">
 <table class="caption-top table table-sm table-striped small">
 <colgroup>
-<col style="width: 9%">
-<col style="width: 4%">
-<col style="width: 5%">
-<col style="width: 4%">
-<col style="width: 5%">
-<col style="width: 5%">
+<col style="width: 8%">
 <col style="width: 4%">
 <col style="width: 4%">
 <col style="width: 4%">
@@ -8571,13 +8566,19 @@ dbl (1): INVYR
 <col style="width: 4%">
 <col style="width: 4%">
 <col style="width: 4%">
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 3%">
 <col style="width: 4%">
 <col style="width: 4%">
-<col style="width: 4%">
-<col style="width: 4%">
-<col style="width: 4%">
-<col style="width: 4%">
-<col style="width: 4%">
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 3%">
 <col style="width: 4%">
 <col style="width: 4%">
 </colgroup>
@@ -8605,6 +8606,7 @@ dbl (1): INVYR
 <th style="text-align: right;">CHNO_TD</th>
 <th style="text-align: right;">LALY_TD</th>
 <th style="text-align: right;">POTR5_TD</th>
+<th style="text-align: right;">POBAT_TD</th>
 </tr>
 </thead>
 <tbody>
@@ -8616,6 +8618,7 @@ dbl (1): INVYR
 <td style="text-align: right;">0.00000</td>
 <td style="text-align: right;">0.0000</td>
 <td style="text-align: right;">0.00000</td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -8655,6 +8658,7 @@ dbl (1): INVYR
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">174763139020004_3</td>
@@ -8664,6 +8668,7 @@ dbl (1): INVYR
 <td style="text-align: right;">0.00000</td>
 <td style="text-align: right;">0.0000</td>
 <td style="text-align: right;">0.00000</td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -8703,6 +8708,7 @@ dbl (1): INVYR
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">174763336020004_4</td>
@@ -8712,6 +8718,7 @@ dbl (1): INVYR
 <td style="text-align: right;">299.86113</td>
 <td style="text-align: right;">374.8264</td>
 <td style="text-align: right;">0.00000</td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -8751,6 +8758,7 @@ dbl (1): INVYR
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
 </tr>
 </tbody>
 </table>
@@ -8775,13 +8783,13 @@ dbl (1): INVYR
     Welch Two Sample t-test
 
 data:  log(rf_tds$ABAM_TD + 1) and log(raw_tds$ABAM_TD + 1)
-t = -4.7744, df = 1245.8, p-value = 0.000002016
+t = -4.4437, df = 1277.1, p-value = 0.00000961
 alternative hypothesis: true difference in means is not equal to 0
 95 percent confidence interval:
- -0.8935392 -0.3730712
+ -0.8430264 -0.3266357
 sample estimates:
 mean of x mean of y 
- 2.234129  2.867435 </code></pre>
+ 2.234129  2.818960 </code></pre>
 </div>
 </div>
 <div class="sourceCode cell-code" id="cb144"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb144-1"><a href="#cb144-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">log</span>(rf_tds<span class="sc">$</span>ABAM_TD <span class="sc">+</span> <span class="dv">1</span>))</span>

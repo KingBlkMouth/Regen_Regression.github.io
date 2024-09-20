@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Regeneration_2_16Sept24 - 7 RF Groups &amp; Counts</title>
+<title>Regen 2 - 7 RF Groups &amp; Counts</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -113,7 +113,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">Regeneration_2_16Sept24</span>
+    <span class="navbar-title">Regen 2</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -315,7 +315,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="import" class="level1">
 <h1>Import</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), <span class="st">"c:/RxFire/Regen/Regeneration_2_16Sept24/homemade_fvs_db.db"</span>)</span>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), <span class="st">"c:/RxFire/Regen/Regeneration_2_16Sept24/data/homemade_fvs_db.db"</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>imp_data <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con, <span class="st">"select * from imp_data_2"</span>)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -1382,7 +1382,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td style="text-align: right;">4</td>
 <td style="text-align: right;">13</td>
-<td style="text-align: right;">0.58</td>
+<td style="text-align: right;">0.66</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">0.66</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">0.66</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">4</td>
@@ -1396,38 +1406,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td style="text-align: right;">4</td>
-<td style="text-align: right;">15</td>
-<td style="text-align: right;">0.56</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">14</td>
+<td style="text-align: right;">10</td>
 <td style="text-align: right;">0.54</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: right;">4</td>
 <td style="text-align: right;">12</td>
 <td style="text-align: right;">0.52</td>
 </tr>
-<tr class="odd">
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">10</td>
-<td style="text-align: right;">0.50</td>
-</tr>
 <tr class="even">
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">8</td>
-<td style="text-align: right;">0.40</td>
-</tr>
-<tr class="odd">
 <td style="text-align: right;">4</td>
 <td style="text-align: right;">7</td>
 <td style="text-align: right;">0.34</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: right;">4</td>
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">0.24</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">0.32</td>
 </tr>
 </tbody>
 </table>
@@ -1455,8 +1450,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="fu">clean_mem</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          used  (Mb) gc trigger  (Mb) max used  (Mb)
-Ncells 2571385 137.4    4470980 238.8  4470980 238.8
-Vcells 4771132  36.5   10146329  77.5  8182184  62.5</code></pre>
+Ncells 2571559 137.4    4470994 238.8  4470994 238.8
+Vcells 4771590  36.5   10146329  77.5  8182078  62.5</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -1591,7 +1586,7 @@ Vcells 4771132  36.5   10146329  77.5  8182184  62.5</code></pre>
 <tr class="even">
 <td style="text-align: left;">max_spp1</td>
 <td style="text-align: right;">166</td>
-<td style="text-align: right;">0.1194927</td>
+<td style="text-align: right;">0.1321762</td>
 <td style="text-align: left;">OOB error rate</td>
 <td style="text-align: right;">22</td>
 <td style="text-align: left;">classification</td>
@@ -1599,7 +1594,7 @@ Vcells 4771132  36.5   10146329  77.5  8182184  62.5</code></pre>
 <tr class="odd">
 <td style="text-align: left;">max_spp2</td>
 <td style="text-align: right;">166</td>
-<td style="text-align: right;">0.1602136</td>
+<td style="text-align: right;">0.1515354</td>
 <td style="text-align: left;">OOB error rate</td>
 <td style="text-align: right;">18</td>
 <td style="text-align: left;">classification</td>

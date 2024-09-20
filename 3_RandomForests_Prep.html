@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Regeneration_2_16Sept24 - 3 RF Prep</title>
+<title>Regen 2 - 3 RF Prep</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -113,7 +113,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">Regeneration_2_16Sept24</span>
+    <span class="navbar-title">Regen 2</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -345,14 +345,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">clean_mem</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          used  (Mb) gc trigger  (Mb) max used  (Mb)
-Ncells 2242826 119.8    4074985 217.7  4074985 217.7
-Vcells 3858179  29.5    8388608  64.0  7003510  53.5</code></pre>
+Ncells 2242833 119.8    4075217 217.7  4075217 217.7
+Vcells 3858192  29.5    8388608  64.0  7003204  53.5</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># "C:/RxFire/Regen/FVS/regen_080724_1644/regen_080724_1644.db"</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># "C:/RxFire/Regen/FVS/regen_091724_2118/regen_091724_2118.db"</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>regen_db_path <span class="ot">&lt;-</span> <span class="fu">clean_paths</span>(r<span class="st">"(C:\RxFire\Regen\FVS</span><span class="sc">\r</span><span class="st">egen_091724_2118</span><span class="sc">\r</span><span class="st">egen_091724_2118.db)"</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>standlist <span class="ot">&lt;-</span> <span class="fu">clean_paths</span>(r<span class="st">"(./train_and_test.csv)"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>standlist <span class="ot">&lt;-</span> <span class="fu">clean_paths</span>(r<span class="st">"(./data/train_and_test.csv)"</span>)</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>standlist <span class="ot">&lt;-</span>  <span class="fu">read_csv</span>(standlist, <span class="at">col_types =</span> <span class="st">"cnc"</span>) </span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>standlist <span class="sc">|&gt;</span> <span class="fu">glimpse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -383,7 +383,7 @@ $ TRAIN   &lt;chr&gt; "train", "train", "train", "train", "train", "train", "tra
 <p><em>Get FIA data from 1.5_Create DB</em></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># connecting to the WA state FIA db</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>fia_db_path <span class="ot">&lt;-</span> <span class="fu">clean_paths</span>(r<span class="st">"(./homemade_fvs_db_17sept24.db)"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>fia_db_path <span class="ot">&lt;-</span> <span class="fu">clean_paths</span>(r<span class="st">"(./data/homemade_fvs_db_17sept24.db)"</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), fia_db_path)</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># collecting the trees</span></span>
@@ -415,13 +415,12 @@ $ TRAIN   &lt;chr&gt; "train", "train", "train", "train", "train", "train", "tra
 <p>1.965 subplots have dead trees</p>
 <p><em>Get FPAG from 1_Import and Clean Standlist</em></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fpags <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./1_Import_Clean2.csv"</span>, </span>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fpags <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./data/1_Import_Clean2.csv"</span>, </span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">col_types =</span> <span class="st">"ccc"</span>)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>fpags <span class="ot">&lt;-</span> <span class="fu">left_join</span>(standlist, fpags, <span class="fu">join_by</span>(StandID <span class="sc">==</span> STANDPLOT_CN))</span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># summary(fpags)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>▐</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> tree <span class="sc">|&gt;</span> <span class="fu">select</span>(STAND_CN) <span class="sc">|&gt;</span> <span class="fu">unique</span>()</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(t) <span class="sc">%&gt;%</span> <span class="fu">add_commas</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -495,8 +494,8 @@ $ TRAIN   &lt;chr&gt; "train", "train", "train", "train", "train", "train", "tra
 <span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="fu">clean_mem</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          used  (Mb) gc trigger  (Mb) max used  (Mb)
-Ncells 2361762 126.2    6165735 329.3  5703654 304.7
-Vcells 5353493  40.9   13387604 102.2 13387592 102.2</code></pre>
+Ncells 2361766 126.2    6166034 329.4  5703796 304.7
+Vcells 5353504  40.9   13387871 102.2 13387855 102.2</code></pre>
 </div>
 </div>
 <p><em>Are there any plots that only have dead trees</em> There were 157 subplots that only had dead trees. I removed them</p>
@@ -2859,7 +2858,7 @@ ELEV, ASPECT, Northing, Easting, SLOPE, BAp)`</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>standlist <span class="ot">&lt;-</span> standlist <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">TRAIN =</span> <span class="fu">ifelse</span>(TRAIN <span class="sc">==</span> <span class="st">"train"</span>, T, F))</span>
 <span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a>db_path <span class="ot">&lt;-</span> <span class="st">"c:/RxFire/Regen/Regeneration_2_16Sept24/homemade_fvs_db_17sept24.db"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a>db_path <span class="ot">&lt;-</span> <span class="st">"c:/RxFire/Regen/Regeneration_2_16Sept24/data/homemade_fvs_db_17sept24.db"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="add-plants" class="level2">
 <h2 class="anchored" data-anchor-id="add-plants">Add Plants</h2>

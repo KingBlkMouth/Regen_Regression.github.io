@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Regeneration_2_16Sept24 - 12 Error Map</title>
+<title>Regen 2 - 12 Error Map</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -113,7 +113,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">Regeneration_2_16Sept24</span>
+    <span class="navbar-title">Regen 2</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -341,7 +341,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="agp-treemap" class="level1">
 <h1>AGP TreeMap</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>agp_nc_tm <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">clean_paths</span>(r<span class="st">"(C:\RxFire\Regen\Regeneration_2_16Sept24</span><span class="sc">\a</span><span class="st">gp_nc_tm_plots.csv)"</span>), </span>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>agp_nc_tm <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">clean_paths</span>(r<span class="st">"(C:\RxFire\Regen\Regeneration_2_16Sept24\data/agp_nc_tm_plots.csv)"</span>), </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">show_col_types =</span> F)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>agp_nc_tm <span class="ot">&lt;-</span> agp_nc_tm <span class="sc">%&gt;%</span> <span class="fu">select</span>(CN) <span class="sc">%&gt;%</span> <span class="fu">unique</span>()</span>
@@ -393,15 +393,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">clean_mem</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          used  (Mb) gc trigger  (Mb) max used  (Mb)
-Ncells 3177819 169.8    6278812 335.4  4091928 218.6
-Vcells 5439413  41.5   56551318 431.5 61565952 469.8</code></pre>
+Ncells 3177819 169.8    6278774 335.4  4092004 218.6
+Vcells 5439418  41.5   56551329 431.5 61565971 469.8</code></pre>
 </div>
 </div>
 </section>
 <section id="randomforests." class="level1">
 <h1>RandomForests.</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">str_c</span>(<span class="st">"RF_26AUG24_1seedlings"</span>, <span class="st">".Rdata"</span>))</span>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">str_c</span>(<span class="st">"data/RF_26AUG24_1seedlings"</span>, <span class="st">".Rdata"</span>))</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>rf_5_seeds <span class="ot">&lt;-</span> rf_yai</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(rf_yai)</span>
@@ -587,7 +587,7 @@ Vcells 5439413  41.5   56551318 431.5 61565952 469.8</code></pre>
 <section id="distributions" class="level1">
 <h1>Distributions</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"raw_TDs_forHist.Rdata"</span>)</span>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/raw_TDs_forHist.Rdata"</span>)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co"># load("rf_TDs_forHist.Rdata")</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>raw_tds <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Regeneration_2_16Sept24 - 11- 1st Map</title>
+<title>Regen 2 - 11- 1st Map</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -142,7 +142,7 @@ window.Quarto = {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">Regeneration_2_16Sept24</span>
+    <span class="navbar-title">Regen 2</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -351,7 +351,7 @@ window.Quarto = {
 </div>
 <p><strong>Created on</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ymd</span>(<span class="fu">as_date</span>(<span class="fu">file.info</span>(<span class="st">"9_Heatmap.qmd"</span>)<span class="sc">$</span>ctime))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ymd</span>(<span class="fu">as_date</span>(<span class="fu">file.info</span>(<span class="st">"./9_Heatmap.qmd"</span>)<span class="sc">$</span>ctime))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] NA</code></pre>
 </div>
@@ -383,7 +383,7 @@ window.Quarto = {
 <div class="cell-output cell-output-stdout">
 <pre><code>          used  (Mb) gc trigger  (Mb) max used  (Mb)
 Ncells 3082257 164.7    5923328 316.4  4107955 219.4
-Vcells 4790191  36.6   10146329  77.5  6791170  51.9</code></pre>
+Vcells 4790195  36.6   10146329  77.5  6791174  51.9</code></pre>
 </div>
 </div>
 <p><em>Import TreeMap 2014 csv for the nation</em></p>
@@ -556,7 +556,7 @@ Vcells 4790191  36.6   10146329  77.5  6791170  51.9</code></pre>
 <p><em>Add N.Cascades Polygon</em></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Path to OkWen shape</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>pathshp <span class="ot">&lt;-</span> <span class="fu">clean_paths</span>(r<span class="st">"(C:\RxFire\Regen\Regeneration_2_16Sept24\N_Cascades_in_Ok60_SHP\N_Cascades_SHP.shp)"</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>pathshp <span class="ot">&lt;-</span> <span class="fu">clean_paths</span>(r<span class="st">"(C:\RxFire\Regen\Regeneration_2_16Sept24\data/N_Cascades_in_Ok60_SHP\N_Cascades_SHP.shp)"</span>)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>buffer_nc <span class="ot">&lt;-</span> <span class="fu">st_read</span>(pathshp, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">st_geometry</span>(buffer_nc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -591,7 +591,7 @@ Vcells 4790191  36.6   10146329  77.5  6791170  51.9</code></pre>
 </div>
 <p><em>Finding out why these plots aren’t showing up.</em></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>agp_nc_tm <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">clean_paths</span>(r<span class="st">"(C:\RxFire\Regen\Regeneration_2_16Sept24</span><span class="sc">\a</span><span class="st">gp_nc_tm_plots.csv)"</span>), </span>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>agp_nc_tm <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">clean_paths</span>(r<span class="st">"(C:\RxFire\Regen\Regeneration_2_16Sept24\data/agp_nc_tm_plots.csv)"</span>), </span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">show_col_types =</span> F)</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>agp_nc_tm <span class="ot">&lt;-</span> agp_nc_tm <span class="sc">%&gt;%</span> <span class="fu">select</span>(CN) <span class="sc">%&gt;%</span> <span class="fu">unique</span>()</span>
@@ -633,13 +633,13 @@ Vcells 4790191  36.6   10146329  77.5  6791170  51.9</code></pre>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">clean_mem</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          used  (Mb) gc trigger  (Mb) max used  (Mb)
-Ncells 3130880 167.3    5923328 316.4  4107955 219.4
-Vcells 4899673  37.4   10146329  77.5  6791170  51.9</code></pre>
+Ncells 3130885 167.3    5923328 316.4  4107955 219.4
+Vcells 4899679  37.4   10146329  77.5  6791174  51.9</code></pre>
 </div>
 </div>
 <p><em>Get list of TreeMap CNs</em></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>agp_nc_tm <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">clean_paths</span>(r<span class="st">"(C:\RxFire\Regen\Regeneration_2_16Sept24</span><span class="sc">\a</span><span class="st">gp_nc_tm_plots.csv)"</span>), </span>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>agp_nc_tm <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">clean_paths</span>(r<span class="st">"(C:\RxFire\Regen\Regeneration_2_16Sept24\data/agp_nc_tm_plots.csv)"</span>), </span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">show_col_types =</span> F)</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>agp_nc_tm <span class="ot">&lt;-</span> agp_nc_tm <span class="sc">%&gt;%</span> <span class="fu">select</span>(CN) <span class="sc">%&gt;%</span> <span class="fu">unique</span>()</span>
@@ -728,8 +728,8 @@ Vcells 4899673  37.4   10146329  77.5  6791170  51.9</code></pre>
 <span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a><span class="fu">clean_mem</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          used  (Mb) gc trigger  (Mb) max used  (Mb)
-Ncells 3188117 170.3    5923328 316.4  4107955 219.4
-Vcells 5466718  41.8   50606883 386.1 62429708 476.4</code></pre>
+Ncells 3188122 170.3    5923328 316.4  4107955 219.4
+Vcells 5466724  41.8   50606896 386.1 62429728 476.4</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>agp_nc_seedlings <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -865,7 +865,7 @@ Vcells 5466718  41.8   50606883 386.1 62429708 476.4</code></pre>
 <p><strong>Y Variables were all of the usual predictors with these species clumped into rare:</strong></p>
 <p>[1] ALRH2_TD POBAT_TD PSMA_TD BEPA_TD ALRU2_TD LALY_TD LAOC_TD PIMO3_TD PRVI_TD ACMA3_TD POTR5_TD PREM_TD ACGL_TD [14] PIAL_TD CHNO_TD TABR2_TD PIEN_TD THPL_TD PIPO_TD PICO_TD</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">str_c</span>(<span class="st">"RF_26AUG24_1seedlings"</span>, <span class="st">".Rdata"</span>))</span>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">str_c</span>(<span class="st">"data/RF_26AUG24_1seedlings"</span>, <span class="st">".Rdata"</span>))</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>rf_imputation <span class="ot">&lt;-</span> <span class="fu">impute</span>(rf_yai)</span>
 <span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>rf_imputation <span class="ot">&lt;-</span> rf_imputation <span class="sc">%&gt;%</span> <span class="fu">rownames_to_column</span>(<span class="st">"STANDPLOT_CN"</span>)</span>
@@ -2616,7 +2616,7 @@ Vcells 5466718  41.8   50606883 386.1 62429708 476.4</code></pre>
 <section id="agp" class="level3">
 <h3 class="anchored" data-anchor-id="agp">AGP</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>agp_nc_tm <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">clean_paths</span>(r<span class="st">"(C:\RxFire\Regen\Regeneration_2_16Sept24</span><span class="sc">\a</span><span class="st">gp_nc_tm_plots.csv)"</span>), </span>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>agp_nc_tm <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">clean_paths</span>(r<span class="st">"(C:\RxFire\Regen\Regeneration_2_16Sept24\data/agp_nc_tm_plots.csv)"</span>), </span>
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">show_col_types =</span> F)</span>
 <span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>agp_nc_tm <span class="ot">&lt;-</span> agp_nc_tm <span class="sc">%&gt;%</span> <span class="fu">select</span>(CN) <span class="sc">%&gt;%</span> <span class="fu">unique</span>()</span>
@@ -3192,7 +3192,7 @@ Vcells 5466718  41.8   50606883 386.1 62429708 476.4</code></pre>
 <li>Exported the combined and joined table to “C:/RxFire/Regen/Regeneration_2_16Sept24/Combined_TM_FIA_Raster_attributes.csv”</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>combined_tm_fia <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"C:/RxFire/Regen/Regeneration_2_16Sept24/Combined_TM_FIA_Raster_attributes.csv"</span>, </span>
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>combined_tm_fia <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"C:/RxFire/Regen/Regeneration_2_16Sept24/data/Combined_TM_FIA_Raster_attributes.csv"</span>, </span>
 <span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">show_col_types =</span> F)</span>
 <span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb82-4"><a href="#cb82-4" aria-hidden="true" tabindex="-1"></a>combined_tm_fia <span class="ot">&lt;-</span> combined_tm_fia <span class="sc">%&gt;%</span> <span class="fu">select</span>(OBJECTID, <span class="at">TM_OBJECTID =</span> OBJECTID_1, <span class="at">FIA_OBJECTID =</span> OBJECTID_12, </span>
@@ -4372,8 +4372,8 @@ Vcells 5466718  41.8   50606883 386.1 62429708 476.4</code></pre>
 <div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(rf_total_td, file = "C:/RxFire/Regen/Regeneration_2_16Sept24/rf_total_td.csv")</span></span>
 <span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(agp_total_td, file = "C:/RxFire/Regen/Regeneration_2_16Sept24/tm_total_td.csv")</span></span>
 <span id="cb100-3"><a href="#cb100-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb100-4"><a href="#cb100-4" aria-hidden="true" tabindex="-1"></a><span class="fu">write_xlsx</span>(rf_total_td, <span class="at">path =</span> <span class="st">"C:/RxFire/Regen/Regeneration_2_16Sept24/rf_total_td.xlsx"</span>)</span>
-<span id="cb100-5"><a href="#cb100-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write_xlsx</span>(agp_total_td, <span class="at">path =</span> <span class="st">"C:/RxFire/Regen/Regeneration_2_16Sept24/tm_total_td.xlsx"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb100-4"><a href="#cb100-4" aria-hidden="true" tabindex="-1"></a><span class="fu">write_xlsx</span>(rf_total_td, <span class="at">path =</span> <span class="st">"C:/RxFire/Regen/Regeneration_2_16Sept24/data/rf_total_td.xlsx"</span>)</span>
+<span id="cb100-5"><a href="#cb100-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write_xlsx</span>(agp_total_td, <span class="at">path =</span> <span class="st">"C:/RxFire/Regen/Regeneration_2_16Sept24/data/tm_total_td.xlsx"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="rmse-agp" class="level1">

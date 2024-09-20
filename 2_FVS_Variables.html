@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Regeneration_2_16Sept24 - 2 FVS Vars</title>
+<title>Regen 2 - 2 FVS Vars</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -113,7 +113,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">Regeneration_2_16Sept24</span>
+    <span class="navbar-title">Regen 2</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -345,7 +345,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Import</h1>
 <p>The saved list of filtered plots is at “C:/RxFire/Regen/Regeneration_2_16Sept24/1_Import_Clean.csv”.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>standlist <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./1.5_dbCreation_standlist.csv"</span>, </span>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>standlist <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./data/1.5_dbCreation_standlist.csv"</span>, </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">col_types =</span> <span class="st">"ccc"</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>standlist <span class="sc">|&gt;</span> <span class="fu">glimpse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -390,14 +390,14 @@ $ STANDPLOT_CN &lt;chr&gt; "12964130010497_1", "12964130010497_2", "129641300104
 <span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span>
 <span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="do">## Set the path to the stand input database here, aka the output db from 3_CNs_to_FVS:</span></span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>inputDatabase <span class="ot">&lt;-</span> <span class="st">'C:/RxFire/Regen/Regeneration_2_16Sept24/homemade_fvs_db_17sept24.db'</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>inputDatabase <span class="ot">&lt;-</span> <span class="st">'C:/RxFire/Regen/Regeneration_2_16Sept24/data/homemade_fvs_db_17sept24.db'</span></span>
 <span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Homemade_v1 C:/RxFire/Regen/Regeneration_2_16Sept24/homemade_fvs_db.db</span></span>
 <span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="co"># State Original DB</span></span>
 <span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="co"># 1.2 Standlist from xlsx -------------------------------------------------</span></span>
 <span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>standlist <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"C:/RxFire/Regen/Regeneration_2_16Sept24/1.5_dbCreation_standlist.csv"</span>, </span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>standlist <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"C:/RxFire/Regen/Regeneration_2_16Sept24/data/1.5_dbCreation_standlist.csv"</span>, </span>
 <span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>                      <span class="at">col_types =</span> <span class="st">"ccc"</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(</span>
 <span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>                        <span class="at">CN =</span> STANDPLOT_CN</span>
 <span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>                      ) </span>
@@ -599,8 +599,8 @@ $ STANDPLOT_CN &lt;chr&gt; "12964130010497_1", "12964130010497_2", "129641300104
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">clean_mem</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          used (Mb) gc trigger  (Mb) max used  (Mb)
-Ncells 1238286 66.2    2422434 129.4  2422434 129.4
-Vcells 2453561 18.8    8388608  64.0  4338468  33.1</code></pre>
+Ncells 1238285 66.2    2423067 129.5  2423067 129.5
+Vcells 2453528 18.8    8388608  64.0  4338712  33.2</code></pre>
 </div>
 </div>
 </section>
@@ -611,7 +611,7 @@ Vcells 2453561 18.8    8388608  64.0  4338468  33.1</code></pre>
 <li>Add tags for single visit of earlier visit.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>standlist <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./1.5_dbCreation_standlist.csv"</span>, </span>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>standlist <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./data/1.5_dbCreation_standlist.csv"</span>, </span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">col_types =</span> <span class="st">"ccc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><del>Starting subplot count: <strong>13,784</strong></del></p>
@@ -1492,13 +1492,12 @@ $ s_class &lt;chr&gt; "SE", "SE", "SE", "SE", "SI", "BG", "BG", "SI", "SI", "SE"
 <span id="cb37-29"><a href="#cb37-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">instance =</span> <span class="fu">str_c</span>(<span class="st">"visit_"</span>, <span class="fu">row_number</span>())) <span class="sc">|&gt;</span> </span>
 <span id="cb37-30"><a href="#cb37-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
 <span id="cb37-31"><a href="#cb37-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-32"><a href="#cb37-32" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(splots_1vis, "C:/RxFire/Regen/Regen_Notes/Subplots_w1visit.csv")</span></span>
-<span id="cb37-33"><a href="#cb37-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-34"><a href="#cb37-34" aria-hidden="true" tabindex="-1"></a>plots_1vis <span class="ot">&lt;-</span> plots_1vis <span class="sc">|&gt;</span> </span>
-<span id="cb37-35"><a href="#cb37-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(instance <span class="sc">==</span> <span class="st">"visit_1"</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(StandID, INVYR, instance)</span>
+<span id="cb37-32"><a href="#cb37-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-33"><a href="#cb37-33" aria-hidden="true" tabindex="-1"></a>plots_1vis <span class="ot">&lt;-</span> plots_1vis <span class="sc">|&gt;</span> </span>
+<span id="cb37-34"><a href="#cb37-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(instance <span class="sc">==</span> <span class="st">"visit_1"</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(StandID, INVYR, instance)</span>
+<span id="cb37-35"><a href="#cb37-35" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb37-36"><a href="#cb37-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-37"><a href="#cb37-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-38"><a href="#cb37-38" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(plots_2vis)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb37-37"><a href="#cb37-37" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(plots_2vis)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   StandID              INVYR        instance        
  Length:3396        Min.   :2002   Length:3396       
@@ -1551,9 +1550,9 @@ $ INVYR   &lt;int&gt; 2007, 2007, 2007, 2009, 2010, 2010, 2010, 2010, 2006, 2006
 $ TRAIN   &lt;chr&gt; "train", "train", "train", "train", "train", "train", "train",…</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># getwd()</span></span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(training_set, "C:/RxFire/Regen/Regeneration_2_16Sept24/train.csv")</span></span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(testing_set, "C:/RxFire/Regen/Regeneration_2_16Sept24/test.csv")</span></span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(standlist, "C:/RxFire/Regen/Regeneration_2_16Sept24/train_and_test.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(training_set, "C:/RxFire/Regen/Regeneration_2_16Sept24/data/train.csv")</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(testing_set, "C:/RxFire/Regen/Regeneration_2_16Sept24/data/test.csv")</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(standlist, "C:/RxFire/Regen/Regeneration_2_16Sept24/data/train_and_test.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

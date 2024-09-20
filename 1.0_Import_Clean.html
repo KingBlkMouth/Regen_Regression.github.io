@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Regeneration_2_16Sept24 - 1 Import Clean</title>
+<title>Regen 2 - 1 Import Clean</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -113,7 +113,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">Regeneration_2_16Sept24</span>
+    <span class="navbar-title">Regen 2</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -238,7 +238,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>          used (Mb) gc trigger (Mb) max used (Mb)
 Ncells  597000 31.9    1362492 72.8   686442 36.7
-Vcells 1099136  8.4    8388608 64.0  1875957 14.4</code></pre>
+Vcells 1099134  8.4    8388608 64.0  1875860 14.4</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -331,7 +331,7 @@ I could go into the veg tables and determine the proper code, but that might be 
 <p>I later decided to subset the data in R. That way all of the metadata is right here.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## For reference, here is the set from AGP</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>Buffer_plots <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"C:/RxFire/Regen/Regeneration_2_16Sept24/60k_buffer_fiaplots.csv"</span>, </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>Buffer_plots <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"C:/RxFire/Regen/Regeneration_2_16Sept24/data/60k_buffer_fiaplots.csv"</span>, </span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">col_types =</span> <span class="st">"cnnn"</span>)</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>Buffer_plots<span class="sc">$</span>CN <span class="ot">&lt;-</span> <span class="fu">as.character</span>(Buffer_plots<span class="sc">$</span>CN)</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Buffer_plots |&gt; head()</span></span>
@@ -399,7 +399,7 @@ I could go into the veg tables and determine the proper code, but that might be 
 <p>In the full FIA db, there are plots that predate the current plot design. We cannot use those plots as they do not have a uniform design. Those plots are coded with CNs that have fewer characters.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plots inside the 60km buffer from WA FIA</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>Buffer_plots <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"C:/RxFire/Regen/Regeneration_2_16Sept24/60k_buffer_fiaplots.csv"</span>, </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>Buffer_plots <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"C:/RxFire/Regen/Regeneration_2_16Sept24/data/60k_buffer_fiaplots.csv"</span>, </span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">col_types =</span> <span class="fu">c</span>(<span class="st">"c"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)) <span class="sc">|&gt;</span> <span class="fu">select</span>(CN)</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>Buffer_plots<span class="sc">$</span>CN <span class="ot">&lt;-</span> <span class="fu">as.character</span>(Buffer_plots<span class="sc">$</span>CN)</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># str(Buffer_plots)</span></span>
@@ -427,8 +427,8 @@ I could go into the veg tables and determine the proper code, but that might be 
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">clean_mem</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          used  (Mb) gc trigger  (Mb) max used  (Mb)
-Ncells 2432250 129.9    4075804 217.7  4075804 217.7
-Vcells 4217203  32.2   10146329  77.5  6997785  53.4</code></pre>
+Ncells 2432250 129.9    4075827 217.7  4075827 217.7
+Vcells 4217201  32.2   10146329  77.5  6997585  53.4</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ecoregions matching those from plots inside the 60km buffer</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>() , <span class="st">"C:/RxFire/Data/_FIADB_WA.db"</span>)</span>
@@ -847,8 +847,8 @@ I could go into the veg tables and determine the proper code, but that might be 
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">clean_mem</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          used  (Mb) gc trigger  (Mb) max used  (Mb)
-Ncells 2494279 133.3    4075804 217.7  4075804 217.7
-Vcells 5971229  45.6   60859322 464.4 73607823 561.6</code></pre>
+Ncells 2494279 133.3    4075827 217.7  4075827 217.7
+Vcells 5971227  45.6   60859319 464.4 73607829 561.6</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -908,8 +908,8 @@ Vcells 5971229  45.6   60859322 464.4 73607823 561.6</code></pre>
 <span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="fu">clean_mem</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          used  (Mb) gc trigger  (Mb) max used  (Mb)
-Ncells 2510697 134.1    4075804 217.7  4075804 217.7
-Vcells 6281537  48.0   48687458 371.5 73607823 561.6</code></pre>
+Ncells 2510697 134.1    4075827 217.7  4075827 217.7
+Vcells 6281535  48.0   48687456 371.5 73607829 561.6</code></pre>
 </div>
 </div>
 </section>
