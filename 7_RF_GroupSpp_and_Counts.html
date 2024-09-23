@@ -1381,48 +1381,48 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td style="text-align: right;">4</td>
-<td style="text-align: right;">13</td>
-<td style="text-align: right;">0.66</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.62</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">4</td>
-<td style="text-align: right;">14</td>
-<td style="text-align: right;">0.66</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">0.60</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">4</td>
-<td style="text-align: right;">15</td>
-<td style="text-align: right;">0.66</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">0.58</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">4</td>
-<td style="text-align: right;">9</td>
-<td style="text-align: right;">0.56</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">0.58</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">4</td>
 <td style="text-align: right;">11</td>
-<td style="text-align: right;">0.56</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">10</td>
-<td style="text-align: right;">0.54</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">12</td>
 <td style="text-align: right;">0.52</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">4</td>
-<td style="text-align: right;">7</td>
-<td style="text-align: right;">0.34</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.48</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">4</td>
 <td style="text-align: right;">8</td>
-<td style="text-align: right;">0.32</td>
+<td style="text-align: right;">0.46</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0.46</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">0.22</td>
 </tr>
 </tbody>
 </table>
@@ -1450,8 +1450,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="fu">clean_mem</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          used  (Mb) gc trigger  (Mb) max used  (Mb)
-Ncells 2571559 137.4    4470994 238.8  4470994 238.8
-Vcells 4771590  36.5   10146329  77.5  8182078  62.5</code></pre>
+Ncells 2571591 137.4    4471058 238.8  4471058 238.8
+Vcells 4771724  36.5   10146329  77.5  8182278  62.5</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -1557,10 +1557,14 @@ Vcells 4771590  36.5   10146329  77.5  8182078  62.5</code></pre>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>rf_yai <span class="ot">&lt;-</span> <span class="fu">yai</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">method =</span> <span class="st">"randomForest"</span>, <span class="at">k =</span> <span class="dv">1</span>, <span class="at">bootstrap =</span> T)</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>t1 <span class="ot">&lt;-</span> rf_yai <span class="sc">|&gt;</span> <span class="fu">yaiRFsummary</span>()</span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>t1<span class="sc">$</span>forestAttributes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(rf_yai, <span class="at">file =</span> <span class="st">"./data/7_rf_factors.Rdata"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="at">file =</span> <span class="st">"./data/7_rf_factors.Rdata"</span>)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>t1 <span class="ot">&lt;-</span> rf_yai <span class="sc">|&gt;</span> <span class="fu">yaiRFsummary</span>()</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>t1<span class="sc">$</span>forestAttributes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
 <table class="caption-top table table-sm table-striped small">
@@ -1586,7 +1590,7 @@ Vcells 4771590  36.5   10146329  77.5  8182078  62.5</code></pre>
 <tr class="even">
 <td style="text-align: left;">max_spp1</td>
 <td style="text-align: right;">166</td>
-<td style="text-align: right;">0.1321762</td>
+<td style="text-align: right;">0.1228304</td>
 <td style="text-align: left;">OOB error rate</td>
 <td style="text-align: right;">22</td>
 <td style="text-align: left;">classification</td>
@@ -1594,7 +1598,7 @@ Vcells 4771590  36.5   10146329  77.5  8182078  62.5</code></pre>
 <tr class="odd">
 <td style="text-align: left;">max_spp2</td>
 <td style="text-align: right;">166</td>
-<td style="text-align: right;">0.1515354</td>
+<td style="text-align: right;">0.1608812</td>
 <td style="text-align: left;">OOB error rate</td>
 <td style="text-align: right;">18</td>
 <td style="text-align: left;">classification</td>
@@ -1609,84 +1613,84 @@ Vcells 4771590  36.5   10146329  77.5  8182078  62.5</code></pre>
 <section id="scratch" class="level1">
 <h1>Scratch</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>rf_yai <span class="ot">&lt;-</span> <span class="fu">yai</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">method =</span> <span class="st">"randomForest"</span>, <span class="at">k =</span> <span class="dv">1</span>, <span class="at">bootstrap =</span> F)</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>t1 <span class="ot">&lt;-</span> rf_yai <span class="sc">|&gt;</span> <span class="fu">yaiRFsummary</span>()</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>t1<span class="sc">$</span>forestAttributes</span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>att1 <span class="ot">&lt;-</span> t1<span class="sc">$</span>forestAttributes</span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>att1 <span class="sc">|&gt;</span> <span class="fu">rownames_to_column</span>(<span class="st">"spp"</span>) <span class="sc">|&gt;</span> <span class="fu">arrange</span>(spp)</span>
-<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>rf_yai <span class="ot">&lt;-</span> <span class="fu">yai</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">method =</span> <span class="st">"randomForest"</span>, <span class="at">k =</span> <span class="dv">1</span>, <span class="at">bootstrap =</span> T, <span class="at">rfMode =</span> <span class="st">"regression"</span>)</span>
-<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>t2 <span class="ot">&lt;-</span> rf_yai <span class="sc">|&gt;</span> <span class="fu">yaiRFsummary</span>()</span>
-<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>att2 <span class="ot">&lt;-</span> t2<span class="sc">$</span>forestAttributes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>rf_yai <span class="ot">&lt;-</span> <span class="fu">yai</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">method =</span> <span class="st">"randomForest"</span>, <span class="at">k =</span> <span class="dv">1</span>, <span class="at">bootstrap =</span> F)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>t1 <span class="ot">&lt;-</span> rf_yai <span class="sc">|&gt;</span> <span class="fu">yaiRFsummary</span>()</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>t1<span class="sc">$</span>forestAttributes</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>att1 <span class="ot">&lt;-</span> t1<span class="sc">$</span>forestAttributes</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>att1 <span class="sc">|&gt;</span> <span class="fu">rownames_to_column</span>(<span class="st">"spp"</span>) <span class="sc">|&gt;</span> <span class="fu">arrange</span>(spp)</span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>rf_yai <span class="ot">&lt;-</span> <span class="fu">yai</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">method =</span> <span class="st">"randomForest"</span>, <span class="at">k =</span> <span class="dv">1</span>, <span class="at">bootstrap =</span> T, <span class="at">rfMode =</span> <span class="st">"regression"</span>)</span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>t2 <span class="ot">&lt;-</span> rf_yai <span class="sc">|&gt;</span> <span class="fu">yaiRFsummary</span>()</span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>att2 <span class="ot">&lt;-</span> t2<span class="sc">$</span>forestAttributes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>att1 <span class="sc">|&gt;</span> <span class="fu">rownames_to_column</span>(<span class="st">"spp"</span>) <span class="sc">|&gt;</span> <span class="fu">arrange</span>(spp)</span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>att2 <span class="sc">|&gt;</span> <span class="fu">rownames_to_column</span>(<span class="st">"spp"</span>) <span class="sc">|&gt;</span> <span class="fu">arrange</span>(spp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>att1 <span class="sc">|&gt;</span> <span class="fu">rownames_to_column</span>(<span class="st">"spp"</span>) <span class="sc">|&gt;</span> <span class="fu">arrange</span>(spp)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>att2 <span class="sc">|&gt;</span> <span class="fu">rownames_to_column</span>(<span class="st">"spp"</span>) <span class="sc">|&gt;</span> <span class="fu">arrange</span>(spp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>rf_yai <span class="ot">&lt;-</span> <span class="fu">yai</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">method =</span> <span class="st">"randomForest"</span>, <span class="at">k =</span> <span class="dv">1</span>, <span class="at">bootstrap =</span> F)</span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>t3 <span class="ot">&lt;-</span> rf_yai <span class="sc">|&gt;</span> <span class="fu">yaiRFsummary</span>()</span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>rf_yai <span class="ot">&lt;-</span> <span class="fu">yai</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">method =</span> <span class="st">"randomForest"</span>, <span class="at">k =</span> <span class="dv">1</span>, <span class="at">bootstrap =</span> F, <span class="at">rfMode =</span> <span class="st">"regression"</span>)</span>
-<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>t4 <span class="ot">&lt;-</span> rf_yai <span class="sc">|&gt;</span> <span class="fu">yaiRFsummary</span>()</span>
-<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>t3<span class="sc">$</span>forestAttributes</span>
-<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>t4<span class="sc">$</span>forestAttributes</span>
-<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a><span class="co"># t2$forestAttributes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>rf_yai <span class="ot">&lt;-</span> <span class="fu">yai</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">method =</span> <span class="st">"randomForest"</span>, <span class="at">k =</span> <span class="dv">1</span>, <span class="at">bootstrap =</span> F)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>t3 <span class="ot">&lt;-</span> rf_yai <span class="sc">|&gt;</span> <span class="fu">yaiRFsummary</span>()</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>rf_yai <span class="ot">&lt;-</span> <span class="fu">yai</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">method =</span> <span class="st">"randomForest"</span>, <span class="at">k =</span> <span class="dv">1</span>, <span class="at">bootstrap =</span> F, <span class="at">rfMode =</span> <span class="st">"regression"</span>)</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>t4 <span class="ot">&lt;-</span> rf_yai <span class="sc">|&gt;</span> <span class="fu">yaiRFsummary</span>()</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>t3<span class="sc">$</span>forestAttributes</span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>t4<span class="sc">$</span>forestAttributes</span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a><span class="co"># t2$forestAttributes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="regression-variation" class="level2">
 <h2 class="anchored" data-anchor-id="regression-variation">Regression variation</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>rf_imp <span class="ot">&lt;-</span> rf_yai <span class="sc">|&gt;</span> <span class="fu">impute</span>()</span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>rf_imp <span class="ot">&lt;-</span> rf_imp <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="fu">contains</span>(<span class="st">"_TD"</span>)) </span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>rf_imp <span class="ot">&lt;-</span> rf_imp <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="fu">order</span>(<span class="fu">colnames</span>(rf_imp)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>rf_imp <span class="ot">&lt;-</span> rf_yai <span class="sc">|&gt;</span> <span class="fu">impute</span>()</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>rf_imp <span class="ot">&lt;-</span> rf_imp <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="fu">contains</span>(<span class="st">"_TD"</span>)) </span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>rf_imp <span class="ot">&lt;-</span> rf_imp <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="fu">order</span>(<span class="fu">colnames</span>(rf_imp)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="abam_td-32.32-var-explained" class="level4">
 <h4 class="anchored" data-anchor-id="abam_td-32.32-var-explained">ABAM_TD 32.32 %var explained</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> rf_imp[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> t <span class="sc">|&gt;</span> <span class="fu">mutate</span>(</span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sq_dev = (ABAM_TD - ABAM_TD.o)^2, </span></span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ssr =</span> (ABAM_TD.o <span class="sc">-</span> ABAM_TD)<span class="sc">^</span><span class="dv">2</span>,</span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">sst =</span> (ABAM_TD.o <span class="sc">-</span> <span class="fu">mean</span>(t<span class="sc">$</span>ABAM_TD.o))<span class="sc">^</span><span class="dv">2</span></span>
-<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Root Meaning the squared difference</span></span>
-<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a><span class="co"># sqrt(mean(t$sq_dev))</span></span>
-<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>ssr <span class="ot">&lt;-</span> <span class="fu">sum</span>(t<span class="sc">$</span>ssr)</span>
-<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>sst <span class="ot">&lt;-</span> <span class="fu">sum</span>(t<span class="sc">$</span>sst)</span>
-<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> ssr<span class="sc">/</span>sst</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> rf_imp[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> t <span class="sc">|&gt;</span> <span class="fu">mutate</span>(</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sq_dev = (ABAM_TD - ABAM_TD.o)^2, </span></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ssr =</span> (ABAM_TD.o <span class="sc">-</span> ABAM_TD)<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">sst =</span> (ABAM_TD.o <span class="sc">-</span> <span class="fu">mean</span>(t<span class="sc">$</span>ABAM_TD.o))<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Root Meaning the squared difference</span></span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a><span class="co"># sqrt(mean(t$sq_dev))</span></span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>ssr <span class="ot">&lt;-</span> <span class="fu">sum</span>(t<span class="sc">$</span>ssr)</span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>sst <span class="ot">&lt;-</span> <span class="fu">sum</span>(t<span class="sc">$</span>sst)</span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> ssr<span class="sc">/</span>sst</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> t <span class="sc">|&gt;</span> <span class="fu">drop_na</span>()<span class="sc">|&gt;</span> <span class="fu">mutate</span>(</span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ssres = (y_i - f_i)^2,</span></span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">ssres =</span> (ABAM_TD.o <span class="sc">-</span> ABAM_TD)<span class="sc">^</span><span class="dv">2</span>,</span>
-<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sstot = (y_i - mean(t$y_i))^2,</span></span>
-<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">sstot =</span> (ABAM_TD.o <span class="sc">-</span> <span class="fu">mean</span>(t<span class="sc">$</span>ABAM_TD.o))<span class="sc">^</span><span class="dv">2</span>, </span>
-<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ssreg = (f_i - mean(t$y_i))^2,</span></span>
-<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">ssreg =</span> (ABAM_TD <span class="sc">-</span> <span class="fu">mean</span>(t<span class="sc">$</span>ABAM_TD.o))<span class="sc">^</span><span class="dv">2</span>,</span>
-<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># st = ssres + ssreg, </span></span>
-<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">st =</span> ssres <span class="sc">+</span> ssreg</span>
-<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a>r2 <span class="ot">&lt;-</span> <span class="fu">sum</span>(t<span class="sc">$</span>ssreg)<span class="sc">/</span><span class="fu">sum</span>(t<span class="sc">$</span>st)</span>
-<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(t<span class="sc">$</span>ssreg)<span class="sc">/</span><span class="fu">mean</span>(t<span class="sc">$</span>st)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> t <span class="sc">|&gt;</span> <span class="fu">drop_na</span>()<span class="sc">|&gt;</span> <span class="fu">mutate</span>(</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ssres = (y_i - f_i)^2,</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">ssres =</span> (ABAM_TD.o <span class="sc">-</span> ABAM_TD)<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sstot = (y_i - mean(t$y_i))^2,</span></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">sstot =</span> (ABAM_TD.o <span class="sc">-</span> <span class="fu">mean</span>(t<span class="sc">$</span>ABAM_TD.o))<span class="sc">^</span><span class="dv">2</span>, </span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ssreg = (f_i - mean(t$y_i))^2,</span></span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">ssreg =</span> (ABAM_TD <span class="sc">-</span> <span class="fu">mean</span>(t<span class="sc">$</span>ABAM_TD.o))<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># st = ssres + ssreg, </span></span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">st =</span> ssres <span class="sc">+</span> ssreg</span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>r2 <span class="ot">&lt;-</span> <span class="fu">sum</span>(t<span class="sc">$</span>ssreg)<span class="sc">/</span><span class="fu">sum</span>(t<span class="sc">$</span>st)</span>
+<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(t<span class="sc">$</span>ssreg)<span class="sc">/</span><span class="fu">mean</span>(t<span class="sc">$</span>st)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -1694,48 +1698,48 @@ Vcells 4771590  36.5   10146329  77.5  8182078  62.5</code></pre>
 <section id="ntree" class="level1">
 <h1>ntree</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>rf_yai <span class="ot">&lt;-</span> <span class="fu">yai</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">method =</span> <span class="st">"randomForest"</span>, <span class="at">k =</span> <span class="dv">1</span>, <span class="at">bootstrap =</span> F, <span class="at">rfMode =</span> <span class="st">"regression"</span>, </span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">ntree =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="fu">rep</span>(<span class="dv">10</span>, <span class="dv">29</span>)))</span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>t5 <span class="ot">&lt;-</span> rf_yai <span class="sc">|&gt;</span> <span class="fu">yaiRFsummary</span>()</span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>t4<span class="sc">$</span>forestAttributes</span>
-<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>t5<span class="sc">$</span>forestAttributes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>rf_yai <span class="ot">&lt;-</span> <span class="fu">yai</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">method =</span> <span class="st">"randomForest"</span>, <span class="at">k =</span> <span class="dv">1</span>, <span class="at">bootstrap =</span> F, <span class="at">rfMode =</span> <span class="st">"regression"</span>, </span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">ntree =</span> <span class="fu">c</span>(<span class="dv">1000</span>, <span class="fu">rep</span>(<span class="dv">10</span>, <span class="dv">29</span>)))</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">ntree =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="fu">rep</span>(<span class="dv">10</span>, <span class="dv">29</span>)))</span>
 <span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>t6 <span class="ot">&lt;-</span> rf_yai <span class="sc">|&gt;</span> <span class="fu">yaiRFsummary</span>()</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>t5 <span class="ot">&lt;-</span> rf_yai <span class="sc">|&gt;</span> <span class="fu">yaiRFsummary</span>()</span>
 <span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>t5<span class="sc">$</span>forestAttributes</span>
-<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>t6<span class="sc">$</span>forestAttributes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>t4<span class="sc">$</span>forestAttributes</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>t5<span class="sc">$</span>forestAttributes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>rf_yai <span class="ot">&lt;-</span> <span class="fu">yai</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">method =</span> <span class="st">"randomForest"</span>, <span class="at">k =</span> <span class="dv">1</span>, <span class="at">bootstrap =</span> F, <span class="at">rfMode =</span> <span class="st">"regression"</span>, </span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">ntree =</span> <span class="fu">c</span>(<span class="dv">1000</span>, <span class="fu">rep</span>(<span class="dv">10</span>, <span class="dv">29</span>)))</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>t6 <span class="ot">&lt;-</span> rf_yai <span class="sc">|&gt;</span> <span class="fu">yaiRFsummary</span>()</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>t5<span class="sc">$</span>forestAttributes</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>t6<span class="sc">$</span>forestAttributes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>100 trees for pipo made about 17% of the error explained. 1000 trees made about 18%.</p>
 </section>
 <section id="mtry" class="level1">
 <h1>mtry</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>rf_yai <span class="ot">&lt;-</span> <span class="fu">yai</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">method =</span> <span class="st">"randomForest"</span>, <span class="at">k =</span> <span class="dv">1</span>, <span class="at">bootstrap =</span> F, <span class="at">rfMode =</span> <span class="st">"regression"</span>, </span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">ntree =</span> <span class="fu">c</span>(<span class="dv">1000</span>, <span class="fu">rep</span>(<span class="dv">10</span>, <span class="dv">29</span>)), </span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">mtry =</span> <span class="dv">2</span></span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>              )</span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>t7 <span class="ot">&lt;-</span> rf_yai <span class="sc">|&gt;</span> <span class="fu">yaiRFsummary</span>()</span>
-<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>rf_yai <span class="ot">&lt;-</span> <span class="fu">yai</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">method =</span> <span class="st">"randomForest"</span>, <span class="at">k =</span> <span class="dv">1</span>, <span class="at">bootstrap =</span> F, <span class="at">rfMode =</span> <span class="st">"regression"</span>, </span>
-<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">ntree =</span> <span class="fu">c</span>(<span class="dv">1000</span>, <span class="fu">rep</span>(<span class="dv">10</span>, <span class="dv">29</span>)), </span>
-<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">mtry =</span> <span class="dv">20</span></span>
-<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>              )</span>
-<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>t8 <span class="ot">&lt;-</span> rf_yai <span class="sc">|&gt;</span> <span class="fu">yaiRFsummary</span>()</span>
-<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a>t6<span class="sc">$</span>forestAttributes</span>
-<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a>t7<span class="sc">$</span>forestAttributes</span>
-<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a>t8<span class="sc">$</span>forestAttributes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>rf_yai <span class="ot">&lt;-</span> <span class="fu">yai</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">method =</span> <span class="st">"randomForest"</span>, <span class="at">k =</span> <span class="dv">1</span>, <span class="at">bootstrap =</span> F, <span class="at">rfMode =</span> <span class="st">"regression"</span>, </span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">ntree =</span> <span class="fu">c</span>(<span class="dv">1000</span>, <span class="fu">rep</span>(<span class="dv">10</span>, <span class="dv">29</span>)), </span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">mtry =</span> <span class="dv">2</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>              )</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>t7 <span class="ot">&lt;-</span> rf_yai <span class="sc">|&gt;</span> <span class="fu">yaiRFsummary</span>()</span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>rf_yai <span class="ot">&lt;-</span> <span class="fu">yai</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">method =</span> <span class="st">"randomForest"</span>, <span class="at">k =</span> <span class="dv">1</span>, <span class="at">bootstrap =</span> F, <span class="at">rfMode =</span> <span class="st">"regression"</span>, </span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">ntree =</span> <span class="fu">c</span>(<span class="dv">1000</span>, <span class="fu">rep</span>(<span class="dv">10</span>, <span class="dv">29</span>)), </span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">mtry =</span> <span class="dv">20</span></span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>              )</span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>t8 <span class="ot">&lt;-</span> rf_yai <span class="sc">|&gt;</span> <span class="fu">yaiRFsummary</span>()</span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a>t6<span class="sc">$</span>forestAttributes</span>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a>t7<span class="sc">$</span>forestAttributes</span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a>t8<span class="sc">$</span>forestAttributes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The response has five or fewer unique values. Are you sure you want to do regression? Warning in randomForest.default(x = xRefs[, xN, FALSE], y = yone, proximity = FALSE, :</p>
 <p>That error pops up for all RFs where that case exists, not just this one.</p>
