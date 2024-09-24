@@ -212,7 +212,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -355,7 +355,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 </section>
-<section id="counts-as-factors" class="level1">
+<section id="counts-as-factors" class="level1 page-columns page-full">
 <h1>Counts as Factors</h1>
 <p><em>Getting the scaling factor to adjust TPAs to counts</em></p>
 <div class="cell">
@@ -701,7 +701,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<section id="breaks" class="level2">
+<section id="breaks" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="breaks">Breaks</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(y_resp_counts, n_distinct)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -731,7 +731,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<section id="natural-jenks" class="level4">
+<section id="natural-jenks" class="level4 page-columns page-full">
 <h4 class="anchored" data-anchor-id="natural-jenks">Natural jenks</h4>
 <p><em>Finding the values of Total_TD that will be classed as high TD</em></p>
 <div class="cell">
@@ -1210,7 +1210,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb28-38"><a href="#cb28-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(p2)</span>
 <span id="cb28-39"><a href="#cb28-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(p3)</span>
 <span id="cb28-40"><a href="#cb28-40" aria-hidden="true" tabindex="-1"></a>  }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell quarto-layout-panel" data-layout-ncol="3">
+<div class="cell column-screen-inset-left quarto-layout-panel" data-layout-ncol="3">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
 <p><img src="7_RF_GroupSpp_and_Counts_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="768"></p>
@@ -1381,48 +1381,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td style="text-align: right;">4</td>
-<td style="text-align: right;">12</td>
-<td style="text-align: right;">0.62</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">0.64</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">13</td>
-<td style="text-align: right;">0.60</td>
-</tr>
-<tr class="odd">
 <td style="text-align: right;">4</td>
 <td style="text-align: right;">14</td>
-<td style="text-align: right;">0.58</td>
+<td style="text-align: right;">0.64</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: right;">4</td>
 <td style="text-align: right;">15</td>
 <td style="text-align: right;">0.58</td>
 </tr>
-<tr class="odd">
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">11</td>
-<td style="text-align: right;">0.52</td>
-</tr>
 <tr class="even">
 <td style="text-align: right;">4</td>
 <td style="text-align: right;">10</td>
-<td style="text-align: right;">0.48</td>
+<td style="text-align: right;">0.56</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">0.56</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.52</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">4</td>
 <td style="text-align: right;">8</td>
-<td style="text-align: right;">0.46</td>
+<td style="text-align: right;">0.48</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">4</td>
 <td style="text-align: right;">9</td>
-<td style="text-align: right;">0.46</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">7</td>
-<td style="text-align: right;">0.22</td>
+<td style="text-align: right;">0.48</td>
 </tr>
 </tbody>
 </table>
@@ -1450,8 +1445,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="fu">clean_mem</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          used  (Mb) gc trigger  (Mb) max used  (Mb)
-Ncells 2571591 137.4    4471058 238.8  4471058 238.8
-Vcells 4771724  36.5   10146329  77.5  8182278  62.5</code></pre>
+Ncells 2571417 137.4    4471071 238.8  4471071 238.8
+Vcells 4771285  36.5   10146329  77.5  8182296  62.5</code></pre>
 </div>
 </div>
 <div class="cell">
