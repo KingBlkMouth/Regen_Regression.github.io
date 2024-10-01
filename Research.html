@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Research – Regen 2</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Regen 2</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./1.0_Import_Clean.html"> 
+<span class="menu-text">Data Prep</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./9_RF_Regression.html"> 
+<span class="menu-text">Models</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./6_distributions.html"> 
+<span class="menu-text">Plots</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./10_Hyperparameters.html"> 
+<span class="menu-text">Parameters</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./11_Heatmap.html"> 
+<span class="menu-text">Maps</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./Research.html" aria-current="page"> 
+<span class="menu-text">Other</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Research.html">Research</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Research.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Research</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#treemap-bootstrap" id="toc-treemap-bootstrap" class="nav-link active" data-scroll-target="#treemap-bootstrap">TreeMap Bootstrap</a>
+  <ul class="collapse">
+  <li><a href="#treemap-code" id="toc-treemap-code" class="nav-link" data-scroll-target="#treemap-code">TreeMap Code</a>
+  <ul class="collapse">
+  <li><a href="#part-1" id="toc-part-1" class="nav-link" data-scroll-target="#part-1">Part 1</a></li>
+  <li><a href="#part-2" id="toc-part-2" class="nav-link" data-scroll-target="#part-2">Part 2</a></li>
+  </ul></li>
+  <li><a href="#function-lookup" id="toc-function-lookup" class="nav-link" data-scroll-target="#function-lookup">Function Lookup</a></li>
+  <li><a href="#pseudo-code" id="toc-pseudo-code" class="nav-link" data-scroll-target="#pseudo-code">Pseudo-Code</a>
+  <ul class="collapse">
+  <li><a href="#part-1-1" id="toc-part-1-1" class="nav-link" data-scroll-target="#part-1-1">Part 1</a></li>
+  <li><a href="#part-2-1" id="toc-part-2-1" class="nav-link" data-scroll-target="#part-2-1">Part 2</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#end" id="toc-end" class="nav-link" data-scroll-target="#end">END</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Research</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This page consists of various research tasks. See sections titles for task descriptions.</p>
+<p><em>Libraries</em></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())                                                      </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gc</span>()                                                                                 </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Data tidying and acces</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse, <span class="at">quietly =</span> T)       <span class="co"># Easy to read syntax and data manipulation                   </span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RSQLite)                      <span class="co"># Access SQLite dbs   </span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)                     <span class="co"># Pipes and math functions    </span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># library(readxl)                     # Read xlsx </span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># library(writexl)                    # write xlsx     </span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                                                   </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># yaImpute and related                           </span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)                 <span class="co"># RF package that yaImpute uses</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(yaImpute)                     <span class="co"># RF imputation</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vegan)                        <span class="co"># Something to do the yaImpute</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>                                                     </span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># plots and tables                          </span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># library(esquisse)                     # Quick data visualization   </span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)                        <span class="co"># Better html tables</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"># library(DT)                           # Data tables for Java script tables in HTML</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co"># library(stars)</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)                   <span class="co"># Better html tables, change sizes</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co"># library(feather)                      # Faster data retrieval    </span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Geography</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)                           <span class="co"># Simple Features/vector data</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)                        <span class="co"># Raster functions</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spatstat)                     <span class="co"># Spatial stats</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tcltk)                        <span class="co"># Fix file paths</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="co"># No sci-notation. </span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">999</span>)</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">width =</span> <span class="dv">125</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p><em>Functions</em></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>clean_mem <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">ls</span>(<span class="at">envir =</span> .GlobalEnv)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ls()[!(ls() %in% keep)]</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rm</span>(<span class="at">list =</span> x[<span class="sc">!</span>(x <span class="sc">%in%</span> keep)], <span class="at">envir =</span> .GlobalEnv)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gc</span>()</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>clean_na_cols <span class="ot">&lt;-</span> <span class="cf">function</span>(df){</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> df[, <span class="fu">colSums</span>(<span class="fu">is.na</span>(df)) <span class="sc">&lt;</span> <span class="fu">nrow</span>(df)]</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># path &lt;- r"(C:\RxFire\Regen\FVS\regen_080724_1644\regen_080724_1644.db)"</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>clean_paths <span class="ot">&lt;-</span> <span class="cf">function</span>(path) {</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_replace_all</span>(path, <span class="st">"</span><span class="sc">\\\\</span><span class="st">"</span>, <span class="st">"/"</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>db_list <span class="ot">&lt;-</span> <span class="cf">function</span>(df, CN_col){</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  name <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  name <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span> <span class="fu">select</span>({{CN_col}})</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  name <span class="ot">&lt;-</span> name <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">CN_col =</span> <span class="fu">str_c</span>(<span class="st">"'"</span>, {{CN_col}}, <span class="st">"'"</span>)) </span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  name <span class="ot">&lt;-</span> <span class="fu">str_flatten_comma</span>(name<span class="sc">$</span>CN_col)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># name &lt;- str_flatten_comma(name[, CN_col])</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  name</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>nas_to_zeroes <span class="ot">&lt;-</span> <span class="cf">function</span>(df){</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span> <span class="fu">mutate_all</span>(<span class="sc">~</span><span class="fu">replace</span>(., <span class="fu">is.na</span>(.), <span class="dv">0</span>))</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  df</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>rmsd_spp <span class="ot">&lt;-</span>spprmsd_spp <span class="ot">&lt;-</span> <span class="cf">function</span>(imp_df, spp) {</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  rmsd_t <span class="ot">&lt;-</span> imp_df <span class="sc">%&gt;%</span> <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">contains</span>(spp)) <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">contains</span>(<span class="st">"TD"</span>))</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>  v1 <span class="ot">&lt;-</span> rmsd_t <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">ends_with</span>(<span class="st">"TD"</span>)) <span class="sc">%&gt;%</span> <span class="fu">names</span>()</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>  v2 <span class="ot">&lt;-</span> rmsd_t <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">ends_with</span>(<span class="st">".o"</span>)) <span class="sc">%&gt;%</span> <span class="fu">names</span>()</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>  rmsd_t <span class="ot">&lt;-</span> rmsd_t <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">sq_dev =</span> (rmsd_t[,v1] <span class="sc">-</span> rmsd_t[,v2])<span class="sc">^</span><span class="dv">2</span>) </span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">sqrt</span>(<span class="fu">mean</span>(rmsd_t<span class="sc">$</span>sq_dev)))</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>keep <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"keep"</span>, <span class="st">"clean_mem"</span>, <span class="st">"clean_na_cols"</span>, <span class="st">"clean_paths"</span>, <span class="st">"db_list"</span>, <span class="st">"nas_to_zeroes"</span>, <span class="st">"rmsd_spp"</span>) <span class="sc">%&gt;%</span> <span class="fu">unique</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<hr>
+<p><strong>Created on</strong></p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2024-10-01 11:56:23 PDT"</code></pre>
+</div>
+</div>
+<p><strong>Last updated on</strong></p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2024-10-01 12:08:15 PDT"</code></pre>
+</div>
+</div>
+<hr>
+<section id="treemap-bootstrap" class="level1">
+<h1>TreeMap Bootstrap</h1>
+<p>In various meetings, Karin has brought up that TreeMap does not have the same issue with rare classes as us. The following is looking into the TreeMap code to see why that is.</p>
+<p><strong>Why doesn’t TreeMap get the empty classes error?</strong></p>
+<p><strong>They don’t use bootstrap = T.</strong></p>
+<hr>
+<p><a href="https://github.com/USDAForestService/TreeMap2014_scripts">TreeMap Code</a></p>
+<section id="treemap-code" class="level2">
+<h2 class="anchored" data-anchor-id="treemap-code">TreeMap Code</h2>
+<p>This is the TreeMap code copied from github in Sept.&nbsp;of 2024.</p>
+<ul>
+<li>Parts 1 and 2 are just reading the code.</li>
+<li>Function lookup is learning about unfamiliar function.</li>
+<li>Pseudo-code is re-writing the TreeMap code in plain language</li>
+<li></li>
+</ul>
+<section id="part-1" class="level3">
+<h3 class="anchored" data-anchor-id="part-1">Part 1</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform random forests imputation of FIA plot data</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># written by Isaac Grenfell</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(yaImpute)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(raster)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rgdal)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(foreign)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parallel)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(foreach)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(doParallel)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="do">###Change this to match current directory and path</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>cur.zone <span class="ot">&lt;-</span> <span class="st">"z1"</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>outfolder <span class="ot">&lt;-</span> cur.zone</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"F:</span><span class="sc">\\</span><span class="st">Tree_List_c2012</span><span class="sc">\\</span><span class="st">FIA</span><span class="sc">\\</span><span class="st">working_KLR"</span>)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>meters.db <span class="ot">&lt;-</span> <span class="fu">read.dbf</span>(<span class="st">"FIA_LFRDB_Albers.dbf"</span>)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="do">###Change this to match current directory and path</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="fu">paste</span>(<span class="st">"F:</span><span class="sc">\\</span><span class="st">Tree_List_c2014</span><span class="sc">\\</span><span class="st">target_data</span><span class="sc">\\</span><span class="st">final</span><span class="sc">\\</span><span class="st">"</span>, outfolder, <span class="at">sep=</span><span class="st">""</span>))</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>()</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>cwd <span class="ot">&lt;-</span> <span class="fu">getwd</span>()</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>flist.tif <span class="ot">&lt;-</span> <span class="fu">Sys.glob</span>(<span class="st">"*.tif"</span>)</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Create raster stack of input target grids</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>raster.stack <span class="ot">&lt;-</span> <span class="fu">stack</span>(flist.tif)</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>p4s.albers <span class="ot">&lt;-</span> <span class="fu">proj4string</span>(raster.stack)</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>raster.list <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"list"</span>, <span class="fu">length</span>(flist.tif))</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>nrasters <span class="ot">&lt;-</span> <span class="fu">length</span>(flist.tif)</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(flist.tif))  </span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>  raster.list[[i]] <span class="ot">&lt;-</span> <span class="fu">raster</span>()  </span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="do">###Extract values about training points</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>nfiles.raster <span class="ot">&lt;-</span> <span class="fu">length</span>(flist.tif)</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in x table of reference data</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>allplot <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"F:</span><span class="sc">\\</span><span class="st">Tree_List_c2014</span><span class="sc">\\</span><span class="st">x_table</span><span class="sc">\\</span><span class="st">x_table_final_EVG_Karin_reclass_plus_loblolly_manual.txt"</span>, <span class="at">header=</span>T, <span class="at">sep=</span><span class="st">","</span>)</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>remap <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="fu">paste</span>(<span class="st">"F:</span><span class="sc">\\</span><span class="st">Tree_List_c2014</span><span class="sc">\\</span><span class="st">target_data</span><span class="sc">\\</span><span class="st">working_KLR</span><span class="sc">\\</span><span class="st">EVG_remap</span><span class="sc">\\</span><span class="st">"</span>, cur.zone, <span class="st">"_EVG_remap.txt"</span>, <span class="at">sep=</span><span class="st">""</span>), <span class="at">sep=</span><span class="st">":"</span>)</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a><span class="co">#Limit allplot to just the veg types in the zone remap table</span></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>plot.df <span class="ot">&lt;-</span> allplot[allplot<span class="sc">$</span>EVT_GP <span class="sc">%in%</span> remap<span class="sc">$</span>V1,]</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(plot.df)</span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="do">###Change this to match current directory and path</span></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="fu">paste</span>(<span class="st">"F:</span><span class="sc">\\</span><span class="st">Tree_List_c2014</span><span class="sc">\\</span><span class="st">outputs</span><span class="sc">\\</span><span class="st">"</span>, cur.zone, <span class="st">"_disturb"</span>, <span class="at">sep=</span><span class="st">""</span>))</span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>plot.df<span class="sc">$</span>CN <span class="ot">&lt;-</span> <span class="fu">factor</span>(plot.df<span class="sc">$</span>CN)</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(plot.df, <span class="fu">paste</span>(<span class="st">"F:</span><span class="sc">\\</span><span class="st">Tree_List_c2014</span><span class="sc">\\</span><span class="st">outputs</span><span class="sc">\\</span><span class="st">"</span>, cur.zone, <span class="st">"_disturb</span><span class="sc">\\</span><span class="st">"</span>, cur.zone, <span class="st">"_x_table_allplots_reclass.txt"</span>, <span class="at">sep=</span><span class="st">""</span>), <span class="at">row.names =</span> F)</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>merge.df <span class="ot">&lt;-</span> <span class="fu">merge</span>(plot.df, meters.db, <span class="at">by =</span> <span class="st">"CN"</span>)</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a><span class="do">##Build X predictor matrix</span></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>evg.fac <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(plot.df<span class="sc">$</span>EVT_GP)</span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>dc.code.fac <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(plot.df<span class="sc">$</span>disturb_code)</span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>dc.year.fac <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(plot.df<span class="sc">$</span>disturb_year)</span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>dc.year.num <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(plot.df<span class="sc">$</span>disturb_year)</span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>lev.dc <span class="ot">&lt;-</span> <span class="fu">levels</span>(dc.code.fac)</span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>lev.year <span class="ot">&lt;-</span> <span class="fu">levels</span>(dc.year.fac)</span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>plot.df[,<span class="dv">18</span>] <span class="ot">&lt;-</span> evg.fac</span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a><span class="do">##Build Y response matrix</span></span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>plot.df<span class="sc">$</span>POINT_X <span class="ot">&lt;-</span> merge.df<span class="sc">$</span>POINT_X</span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a>plot.df<span class="sc">$</span>POINT_Y <span class="ot">&lt;-</span> merge.df<span class="sc">$</span>POINT_Y</span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a><span class="do">###Change this to match current directory and path</span></span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="fu">paste</span>(<span class="st">"F:</span><span class="sc">\\</span><span class="st">Tree_List_c2014</span><span class="sc">\\</span><span class="st">target_data</span><span class="sc">\\</span><span class="st">final</span><span class="sc">\\</span><span class="st">"</span>, outfolder, <span class="at">sep=</span><span class="st">""</span>))</span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a><span class="do">####Reclass evgs</span></span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a>evg.reclass <span class="ot">&lt;-</span> remap</span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>n.evgs <span class="ot">&lt;-</span> <span class="fu">dim</span>(evg.reclass)[<span class="dv">1</span>]</span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a>evg.out <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">dim</span>(plot.df)[<span class="dv">1</span>])</span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a>evg.vec <span class="ot">&lt;-</span> plot.df<span class="sc">$</span><span class="st">"EVT_GP"</span></span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n.evgs)  </span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a>{  </span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a>  cur.evg <span class="ot">&lt;-</span> evg.reclass[i, <span class="dv">1</span>]  </span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a>  sub.ind <span class="ot">&lt;-</span> evg.vec <span class="sc">==</span> cur.evg  </span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a>  evg.out[sub.ind] <span class="ot">&lt;-</span> i  </span>
+<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a>}   </span>
+<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a>evg.in <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(evg.out)</span>
+<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a>plot.df<span class="sc">$</span><span class="st">"EVT_GP"</span> <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(evg.out)</span>
+<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a>plot.df<span class="sc">$</span>disturb_code <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(plot.df<span class="sc">$</span>disturb_code)</span>
+<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a><span class="co">#Create X Table</span></span>
+<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a>X.df <span class="ot">&lt;-</span> plot.df[,<span class="dv">5</span><span class="sc">:</span><span class="dv">20</span>]</span>
+<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a>aspect.temp <span class="ot">&lt;-</span> X.df<span class="sc">$</span>ASPECT</span>
+<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a>rad.temp <span class="ot">&lt;-</span> (pi<span class="sc">/</span><span class="dv">180</span>)<span class="sc">*</span>aspect.temp</span>
+<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a>northing.temp <span class="ot">&lt;-</span> <span class="fu">cos</span>(rad.temp)</span>
+<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a>easting.temp <span class="ot">&lt;-</span> <span class="fu">sin</span>(rad.temp)</span>
+<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a>X.df <span class="ot">&lt;-</span> X.df[,<span class="sc">-</span><span class="dv">2</span>]</span>
+<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a>X.df<span class="sc">$</span>NORTHING <span class="ot">&lt;-</span> northing.temp</span>
+<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a>X.df<span class="sc">$</span>EASTING <span class="ot">&lt;-</span>     easting.temp</span>
+<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(X.df) <span class="ot">&lt;-</span> plot.df<span class="sc">$</span>ID</span>
+<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a>id.table <span class="ot">&lt;-</span>  plot.df<span class="sc">$</span>ID</span>
+<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a>Y.df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(plot.df[,<span class="dv">16</span><span class="sc">:</span><span class="dv">18</span>])</span>
+<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(Y.df) <span class="ot">&lt;-</span> plot.df<span class="sc">$</span>ID</span>
+<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a><span class="co">#X.df &lt;- X.df[,-c(9, 10)]</span></span>
+<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a><span class="co"># build the random forests model (X=all predictors, Y=EVG, EVC, EVH)</span></span>
+<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">56789</span>)</span>
+<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a>yai.treelist <span class="ot">&lt;-</span> <span class="fu">yai</span>(X.df, Y.df, <span class="at">method =</span> <span class="st">"randomForest"</span>, <span class="at">ntree =</span> <span class="dv">249</span>)</span>
+<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a>yai.treelist</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="part-2" class="level3">
+<h3 class="anchored" data-anchor-id="part-2">Part 2</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># build dataframes from the raster data</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>raster.coords <span class="ot">&lt;-</span> <span class="fu">coordinates</span>(raster.stack)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>asp.raster <span class="ot">&lt;-</span> raster.stack[[<span class="dv">1</span>]]</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>dem.raster <span class="ot">&lt;-</span> raster.stack[[<span class="dv">2</span>]]</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>currow.vals <span class="ot">&lt;-</span> <span class="fu">cellFromRow</span>(dem.raster, <span class="dv">1500</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>coords.currow <span class="ot">&lt;-</span> raster.coords[currow.vals,]</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>extract.currow <span class="ot">&lt;-</span> <span class="fu">extract</span>(raster.stack, coords.currow)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>p4s.latlong <span class="ot">&lt;-</span> <span class="fu">CRS</span>(<span class="st">"+proj=longlat +datum=NAD83"</span>) </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>maxrow <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">as.numeric</span>(<span class="fu">rownames</span>(X.df)))</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>nrows.out <span class="ot">&lt;-</span> <span class="fu">dim</span>(raster.stack)[<span class="dv">1</span>]</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>ncols.out <span class="ot">&lt;-</span> <span class="fu">dim</span>(raster.stack)[<span class="dv">2</span>]</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>rs2 <span class="ot">&lt;-</span> raster.stack</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>coords.all <span class="ot">&lt;-</span> raster.coords</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>x.vec <span class="ot">&lt;-</span> coords.all[,<span class="dv">1</span>]</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>x.mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(x.vec, <span class="at">nrow=</span>nrows.out)</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>x.raster.out <span class="ot">&lt;-</span> <span class="fu">raster</span>(x.mat)</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>x.raster.out<span class="sc">@</span>extent <span class="ot">&lt;-</span>dem.raster<span class="sc">@</span>extent</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>x.raster.out<span class="sc">@</span>crs <span class="ot">&lt;-</span>dem.raster<span class="sc">@</span>crs</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>y.vec <span class="ot">&lt;-</span> coords.all[,<span class="dv">2</span>]</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>y.mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(y.vec, <span class="at">nrow=</span>nrows.out)</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>y.raster.out <span class="ot">&lt;-</span> <span class="fu">raster</span>(y.mat)</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>y.raster.out<span class="sc">@</span>extent <span class="ot">&lt;-</span>dem.raster<span class="sc">@</span>extent</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>y.raster.out<span class="sc">@</span>crs <span class="ot">&lt;-</span>dem.raster<span class="sc">@</span>crs</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a><span class="co"># impute.row()   ------------------------------------------------------------------------------</span></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform imputation</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>impute.row <span class="ot">&lt;-</span> <span class="cf">function</span>(currow)  </span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>{  </span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(yaImpute) </span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(raster) </span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(rgdal)</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>  currow.vals <span class="ot">&lt;-</span> <span class="fu">cellFromRow</span>(dem.raster, currow)</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>  coords.currow <span class="ot">&lt;-</span> raster.coords[currow.vals,]  </span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>  <span class="co"># get data from each row of rasters (coordinates)</span></span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>  sp.currow <span class="ot">&lt;-</span> <span class="fu">SpatialPoints</span>(coords.currow, <span class="fu">CRS</span>(p4s.albers)) </span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>  extract.currow <span class="ot">&lt;-</span> <span class="fu">extract</span>(rs2,   sp.currow)</span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>  colseq <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(extract.currow[,<span class="dv">1</span>])</span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>  valid.cols <span class="ot">&lt;-</span> colseq[<span class="fu">as.logical</span>(<span class="dv">1</span><span class="sc">-</span><span class="fu">is.na</span>(extract.currow[,<span class="dv">1</span>]))]</span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>  ncols.df <span class="ot">&lt;-</span> <span class="fu">dim</span>(extract.currow)[<span class="dv">2</span>]</span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>  extract.currow <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(extract.currow)</span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>  extract.currow<span class="sc">$</span><span class="st">"POINT_X"</span> <span class="ot">&lt;-</span> sp.currow<span class="sc">$</span>x</span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>  extract.currow<span class="sc">$</span><span class="st">"POINT_Y"</span> <span class="ot">&lt;-</span>sp.currow<span class="sc">$</span>y</span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>  extract.currow <span class="ot">&lt;-</span> <span class="fu">na.exclude</span>(extract.currow)</span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>  X.df.temp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(extract.currow)</span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>  nrow.temp <span class="ot">&lt;-</span> <span class="fu">dim</span>(X.df.temp)[<span class="dv">1</span>]</span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>  aspect.temp <span class="ot">&lt;-</span> X.df.temp<span class="sc">$</span>ASPECT  </span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>  rad.temp <span class="ot">&lt;-</span> (pi<span class="sc">/</span><span class="dv">180</span>)<span class="sc">*</span>aspect.temp  </span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>  northing.temp <span class="ot">&lt;-</span> <span class="fu">cos</span>(rad.temp)  </span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a>  easting.temp <span class="ot">&lt;-</span> <span class="fu">sin</span>(rad.temp)</span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>  X.df.temp <span class="ot">&lt;-</span> X.df.temp[,<span class="sc">-</span><span class="dv">1</span>]  </span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>  X.df.temp<span class="sc">$</span>NORTHING <span class="ot">&lt;-</span> northing.temp  </span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>  X.df.temp<span class="sc">$</span>EASTING <span class="ot">&lt;-</span>  easting.temp  </span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>  temp.evg <span class="ot">&lt;-</span> X.df.temp<span class="sc">$</span><span class="st">'EVT_GP'</span></span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>  <span class="co">#get nonappearing evgs   </span></span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>  evg.orig <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>n.evgs </span>
+<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>  evg.val <span class="ot">&lt;-</span> evg.orig  </span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>  evg.val.temp <span class="ot">&lt;-</span> X.df.temp<span class="sc">$</span><span class="st">'EVT_GP'</span>  </span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>  n.evgs.orig <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">sort</span>(<span class="fu">unique</span>(evg.orig)))  </span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>  evg.orig.seq <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>n.evgs.orig  </span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>  nonappearing.evgs <span class="ot">&lt;-</span> evg.val[<span class="sc">-</span><span class="fu">sort</span>(<span class="fu">unique</span>(<span class="fu">as.numeric</span>(<span class="fu">as.character</span>(evg.val.temp))))]  </span>
+<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a>  n.dummy.rows <span class="ot">&lt;-</span> <span class="fu">length</span>(nonappearing.evgs)  </span>
+<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>  X.df.temp.old <span class="ot">&lt;-</span> X.df.temp</span>
+<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(n.dummy.rows <span class="sc">&gt;</span> <span class="dv">0</span>)    </span>
+<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a>  {    </span>
+<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a>    dummy.rows <span class="ot">&lt;-</span> X.df.temp[<span class="dv">1</span><span class="sc">:</span>n.dummy.rows,]    </span>
+<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a>    tempchar <span class="ot">&lt;-</span> <span class="fu">as.character</span>(X.df.temp<span class="sc">$</span><span class="st">'EVT_GP'</span>)    </span>
+<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a>    X.df.temp<span class="sc">$</span><span class="st">'EVT_GP'</span> <span class="ot">&lt;-</span> tempchar    </span>
+<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a>    dummy.rows<span class="sc">$</span><span class="st">'EVT_GP'</span> <span class="ot">&lt;-</span> <span class="fu">as.character</span>(nonappearing.evgs)    </span>
+<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a>    X.df.temp <span class="ot">&lt;-</span> <span class="fu">rbind</span>(X.df.temp, dummy.rows)    </span>
+<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a>  n.rows.orig <span class="ot">&lt;-</span> <span class="fu">dim</span>(extract.currow)[<span class="dv">1</span>]   </span>
+<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a>  temp.fac <span class="ot">&lt;-</span> <span class="fu">factor</span>(X.df.temp<span class="sc">$</span><span class="st">'EVT_GP'</span>, <span class="at">levels =</span> <span class="fu">levels</span>(evg.in))  </span>
+<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>  dc.code.fac.temp <span class="ot">&lt;-</span> <span class="fu">factor</span>( X.df.temp<span class="sc">$</span>disturb_code, <span class="at">levels=</span>lev.dc)  </span>
+<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a>  X.df.temp<span class="sc">$</span><span class="st">'EVT_GP'</span> <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(temp.fac)  </span>
+<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a>  X.df.temp<span class="sc">$</span>disturb_code <span class="ot">&lt;-</span> dc.code.fac.temp   </span>
+<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a>  nrow.temp <span class="ot">&lt;-</span> <span class="fu">dim</span>(X.df.temp)[<span class="dv">1</span>]  </span>
+<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a>  impute.out <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="sc">-</span><span class="dv">1</span>, nrow.temp)  </span>
+<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a>  nc.orig <span class="ot">&lt;-</span> <span class="fu">dim</span>(coords.currow)[<span class="dv">1</span>]  </span>
+<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a>  impute.out <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>,nc.orig)  </span>
+<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a>  nrows.orig <span class="ot">&lt;-</span> <span class="fu">dim</span>(extract.currow)[<span class="dv">1</span>]  </span>
+<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(nrow.temp <span class="sc">&gt;</span> <span class="dv">0</span>)    </span>
+<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a>  {    </span>
+<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a>    colseq.out <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">dim</span>(X.df.temp)[<span class="dv">1</span>]    </span>
+<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a>    rownames.all <span class="ot">&lt;-</span> colseq.out<span class="sc">+</span>maxrow    </span>
+<span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rownames</span>(X.df.temp) <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">"T-"</span>, rownames.all)    </span>
+<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a>    <span class="co"># take object from formed random forests model and use X.df.temp dataframe to make predictions    </span></span>
+<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a>    temp.newtargs <span class="ot">&lt;-</span> <span class="fu">newtargets</span>(yai.treelist, <span class="at">newdata =</span> X.df.temp)    </span>
+<span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a>    temp.xall <span class="ot">&lt;-</span> temp.newtargs<span class="sc">$</span>xall    </span>
+<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a>    out.neiIds <span class="ot">&lt;-</span> temp.newtargs<span class="sc">$</span>neiIdsTrgs    </span>
+<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a>    out.trgrows <span class="ot">&lt;-</span> temp.newtargs<span class="sc">$</span>trgRows    </span>
+<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a>    yrows <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(out.neiIds[,<span class="dv">1</span>])    </span>
+<span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a>    id.out <span class="ot">&lt;-</span> id.table[yrows]    </span>
+<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a>    impute.out[valid.cols] <span class="ot">&lt;-</span> yrows[<span class="dv">1</span><span class="sc">:</span>nrows.orig]    </span>
+<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-122"><a href="#cb6-122" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(impute.out)  </span>
+<span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a><span class="co"># end ----------------------------------------------------------------------</span></span>
+<span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a>cl <span class="ot">&lt;-</span> <span class="fu">makeCluster</span>(<span class="dv">20</span>, <span class="at">port=</span><span class="st">"10187"</span>)</span>
+<span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a><span class="fu">registerDoParallel</span>(cl)</span>
+<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a>mout <span class="ot">&lt;-</span> <span class="fu">foreach</span>(<span class="at">m =</span> <span class="dv">1</span><span class="sc">:</span>nrows.out, <span class="at">.packages =</span> <span class="fu">c</span>(<span class="st">"raster"</span>, <span class="st">"rgdal"</span>, <span class="st">"yaImpute"</span>), <span class="at">.combine=</span><span class="st">"rbind"</span>) <span class="sc">%dopar%</span>   <span class="fu">impute.row</span>(m)</span>
+<span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a><span class="fu">stopCluster</span>(cl)</span>
+<span id="cb6-133"><a href="#cb6-133" aria-hidden="true" tabindex="-1"></a><span class="fu">closeAllConnections</span>()</span>
+<span id="cb6-134"><a href="#cb6-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-135"><a href="#cb6-135" aria-hidden="true" tabindex="-1"></a><span class="do">###this will return a matrix, all thats left is to write it out as a raster</span></span>
+<span id="cb6-136"><a href="#cb6-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-137"><a href="#cb6-137" aria-hidden="true" tabindex="-1"></a>m.raster <span class="ot">&lt;-</span>dem.raster</span>
+<span id="cb6-138"><a href="#cb6-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-139"><a href="#cb6-139" aria-hidden="true" tabindex="-1"></a>m.raster.out <span class="ot">&lt;-</span> <span class="fu">raster</span>(mout)</span>
+<span id="cb6-140"><a href="#cb6-140" aria-hidden="true" tabindex="-1"></a>m.raster.out<span class="sc">@</span>extent <span class="ot">&lt;-</span>dem.raster<span class="sc">@</span>extent</span>
+<span id="cb6-141"><a href="#cb6-141" aria-hidden="true" tabindex="-1"></a>m.raster.out<span class="sc">@</span>crs <span class="ot">&lt;-</span>dem.raster<span class="sc">@</span>crs</span>
+<span id="cb6-142"><a href="#cb6-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-143"><a href="#cb6-143" aria-hidden="true" tabindex="-1"></a><span class="do">###Change this!</span></span>
+<span id="cb6-144"><a href="#cb6-144" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="fu">paste</span>(<span class="st">"F:</span><span class="sc">\\</span><span class="st">Tree_List_c2014</span><span class="sc">\\</span><span class="st">outputs</span><span class="sc">\\</span><span class="st">"</span>, cur.zone, <span class="st">"_disturb"</span>, <span class="at">sep=</span><span class="st">""</span>))</span>
+<span id="cb6-145"><a href="#cb6-145" aria-hidden="true" tabindex="-1"></a>fout <span class="ot">&lt;-</span> <span class="fu">paste</span>(cur.zone, <span class="st">"_index-yes-disturb.tif"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
+<span id="cb6-146"><a href="#cb6-146" aria-hidden="true" tabindex="-1"></a><span class="fu">writeRaster</span>(m.raster.out, fout, <span class="at">overwrite=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="function-lookup" class="level2">
+<h2 class="anchored" data-anchor-id="function-lookup">Function Lookup</h2>
+<ul>
+<li><strong>base::Sys.glob</strong>
+<ul>
+<li>Function to do wildcard expansion (also known as ‘globbing’) on file paths.</li>
+</ul></li>
+<li><strong>raster::proj4string</strong>
+<ul>
+<li>Get or set the coordinate reference system (CRS) of a Raster* object.</li>
+</ul></li>
+<li><strong>base::vector</strong>
+<ul>
+<li>vector produces a ‘simple’ vector of the given length and mode, where a ‘simple’ vector has no attribute,</li>
+</ul></li>
+<li><strong>raster::coordinates</strong>
+<ul>
+<li>These functions get coordinates of the center of raster cells for a row, column, or cell number of a Raster* object.</li>
+</ul></li>
+<li><strong>raster::cellFromRow</strong>
+<ul>
+<li>Get cell number(s) of a Raster* object from row and/or column numbers. Cell numbers start at 1 in the upper left corner, and increase from left to right, and then from top to bottom. The last cell number equals the number of cells of the Raster* object.</li>
+</ul></li>
+<li><strong>raster::stack</strong>
+<ul>
+<li>A RasterStack is a collection of RasterLayer objects with the same spatial extent and resolution. A RasterStack can be created from RasterLayer objects, or from raster files, or both. It can also be created from a SpatialPixelsDataFrame or a SpatialGridDataFrame object.</li>
+</ul></li>
+<li><strong>parallel::makeCluster</strong>
+<ul>
+<li>Creates a set of copies of R running in parallel and communicating over sockets.</li>
+</ul></li>
+<li><strong>doParallel::registerDoParallel</strong>
+<ul>
+<li>The registerDoParallel function is used to register the parallel backend with the foreach package.</li>
+</ul></li>
+<li><strong>foreach::foreach</strong>
+<ul>
+<li>%do%⁠ and ⁠%dopar%⁠ are binary operators that operate on a foreach object and an R expression. The expression, ex, is evaluated multiple times in an environment that is created by the foreach object, and that environment is modified for each evaluation as specified by the foreach object. ⁠%do%⁠ evaluates the expression sequentially, while ⁠%dopar%⁠ evaluates it in parallel. The results of evaluating ex are returned as a list by default, but this can be modified by means of the .combine argument.</li>
+</ul></li>
+<li><strong>user::impute.row</strong>
+<ul>
+<li>Created above</li>
+</ul></li>
+<li><strong>parallel::stopCluster</strong>
+<ul>
+<li>Creates a set of copies of R running in parallel and communicating over sockets.</li>
+</ul></li>
+<li><strong>showConnections {base}::closeAllConnections</strong>
+<ul>
+<li>closes (and destroys) all user connections, restoring all sink diversions as it does so.</li>
+</ul></li>
+<li><strong>sp::SpatialPoints</strong>
+<ul>
+<li>create objects of class SpatialPoints-class or SpatialPointsDataFrame-class from coordinates, and from coordinates and data.frames</li>
+</ul></li>
+</ul>
+</section>
+<section id="pseudo-code" class="level2">
+<h2 class="anchored" data-anchor-id="pseudo-code">Pseudo-Code</h2>
+<section id="part-1-1" class="level3">
+<h3 class="anchored" data-anchor-id="part-1-1">Part 1</h3>
+<ol type="1">
+<li>Set zone and working directory</li>
+<li>list files and save tiff paths</li>
+<li>stack tiffs</li>
+<li>Project the stack</li>
+<li>create a vector of tiff paths and get the length</li>
+<li>for each tiff use the raster function to make it a raster object</li>
+<li>get the number of files</li>
+<li>Pull in the TreeMap tree list</li>
+<li>set remap as the EVG list</li>
+<li>remove plots to Veg types in current zone and get the new dimensions</li>
+<li>save the filtered plots</li>
+<li>join the plots to the <em>FIA_LFRDB.dbf</em></li>
+</ol>
+<p>**Build X and Y</p>
+<ol type="1">
+<li>Set EVT, dist_code, dist_yr as factors plus another for dist_yr as numeric.</li>
+<li>record factor levels for dist_cd and year.</li>
+<li>Add evt group to plot.df</li>
+<li>set the X and Ys is plot.df</li>
+<li>Enter the output folder</li>
+<li>create a vector of length to fill</li>
+<li>for the number of evgs,</li>
+</ol>
+<ul>
+<li>set the current evg to match the rows of column 1 in evg.reclass.</li>
+<li>set sub.ind to equal be T/F where the current evg vector matches the reclass</li>
+<li>set evg.out to be i where T</li>
+</ul>
+<ol start="8" type="1">
+<li>Set evg.in to factor(evg.out)</li>
+<li>add the evg to plot.df</li>
+<li>as dist_cd to plot.df</li>
+<li>Create the X table with aspect, and other variables.</li>
+<li>Create the Y table.</li>
+<li>Run yai.</li>
+</ol>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>yai.treelist <span class="ot">&lt;-</span> <span class="fu">yai</span>(X.df, Y.df, <span class="at">method =</span> <span class="st">"randomForest"</span>, <span class="at">ntree =</span> <span class="dv">249</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p><strong>They may have used bootstrap = T in the training of the model, but it is not here in the code.</strong> That is why they do not get the empty classes error.</p>
+</section>
+<section id="part-2-1" class="level3">
+<h3 class="anchored" data-anchor-id="part-2-1">Part 2</h3>
+<p><strong>Build dfs</strong></p>
+<ol type="1">
+<li>Get the raster coordinates for cell centers</li>
+<li>Pull out the aspect and elevation rasters</li>
+<li>Pull cell numbers in row 1500 from the dem</li>
+<li>Get the coordinates of the centers for this row.</li>
+<li>extract the data from the stack at these coordinates.</li>
+<li>set coordinate system to p4s.latlong</li>
+<li>Make a raster for the current rows Xs</li>
+<li>Make a raster for the current rows Ys</li>
+</ol>
+<p><strong>Impute Rows Function</strong></p>
+<ol type="1">
+<li>Get the current row and the center coordinates</li>
+<li>Make spatial points from centers</li>
+<li>extract raster stack to spatial points.</li>
+<li>Set up a df of the needed dimensions for the extracted data.</li>
+<li>Add the X and Y coordinates.</li>
+<li>Correct aspect to N and E.</li>
+<li>Pull out and sort unique EVGs</li>
+<li>Make another list with EVGs that do not appear.</li>
+<li>if there are EVGs that do not appear, add rows for temporary variables</li>
+<li>*Maybe remove the CNs that have EVGs that do not appear.</li>
+<li>Use the yai object to get new targets for the filtered EVTs.</li>
+<li>return the new tagets for the current row.</li>
+</ol>
+<p><strong>Impute the Map</strong></p>
+<ol type="1">
+<li>For each row, in parallel, impute the new targets to a matrix</li>
+<li>Create a raster from the matrix.</li>
+<li>save and exit.</li>
+</ol>
+</section>
+</section>
+</section>
+<section id="end" class="level1">
+<h1>END</h1>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

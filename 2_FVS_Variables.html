@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.555">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Regen 2 - 2 FVS Vars</title>
+<title>2 FVS Vars – Regen 2</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -33,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -69,10 +69,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -105,7 +105,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-sidebar docked nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -117,7 +117,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -127,67 +127,85 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./1.0_Import_Clean.html"> 
-<span class="menu-text">1 Import Clean</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./1.5_DB_Create.html"> 
-<span class="menu-text">1.5 DB Create</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link active" href="./2_FVS_Variables.html" aria-current="page"> 
-<span class="menu-text">2 FVS Vars</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./3_RandomForests_Prep.html"> 
-<span class="menu-text">3 RF Prep</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./4_RF_by_Eco.html"> 
-<span class="menu-text">4 RF Ecos</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./5_TD_Imp.html"> 
-<span class="menu-text">5 TD Imp</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./6_distributions.html"> 
-<span class="menu-text">6 Histos</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./7_RF_GroupSpp_and_Counts.html"> 
-<span class="menu-text">7 RF Groups &amp; Counts</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./8_RF_Spp_Groups.html"> 
-<span class="menu-text">8 RF Spp Groups</span></a>
+    <a class="nav-link active" href="./1.0_Import_Clean.html" aria-current="page"> 
+<span class="menu-text">Data Prep</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./9_RF_Regression.html"> 
-<span class="menu-text">9 RF Reg</span></a>
+<span class="menu-text">Models</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./6_distributions.html"> 
+<span class="menu-text">Plots</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./10_Hyperparameters.html"> 
-<span class="menu-text">10 Hyper Params</span></a>
+<span class="menu-text">Parameters</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./11_Heatmap.html"> 
-<span class="menu-text">11- 1st Map</span></a>
+<span class="menu-text">Maps</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./12_Error_Map.html"> 
-<span class="menu-text">12 Error Map</span></a>
+    <a class="nav-link" href="./14_Research.html"> 
+<span class="menu-text">Other</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./2_FVS_Variables.html">2 FVS Vars</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1.0_Import_Clean.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1 Import Clean</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1.5_DB_Create.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.5 DB Create</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2_FVS_Variables.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">2 FVS Vars</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3_RandomForests_Prep.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3 RF Prep</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -297,6 +315,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+<hr>
+<p><strong>Created on</strong></p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2024-08-06 11:34:49 PDT"</code></pre>
+</div>
+</div>
+<p><strong>Last updated on</strong></p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2024-09-27 11:53:54 PDT"</code></pre>
+</div>
+</div>
+<hr>
 <section id="intro" class="level1">
 <h1>Intro</h1>
 <p><strong>This is the second document in a data pipeline from raw input data to Random Forests imputation. This page will deal with running FVS to get the RF predictor variables from FVS, then further filtering the data by Stem Exclusion and inventory cycle.</strong></p>
@@ -345,9 +377,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Import</h1>
 <p>The saved list of filtered plots is at “C:/RxFire/Regen/Regeneration_2_16Sept24/1_Import_Clean.csv”.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>standlist <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./data/1.5_dbCreation_standlist.csv"</span>, </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">col_types =</span> <span class="st">"ccc"</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>standlist <span class="sc">|&gt;</span> <span class="fu">glimpse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>standlist <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./data/1.5_dbCreation_standlist.csv"</span>, </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">col_types =</span> <span class="st">"ccc"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>standlist <span class="sc">|&gt;</span> <span class="fu">glimpse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 15,369
 Columns: 3
@@ -363,197 +395,197 @@ $ STANDPLOT_CN &lt;chr&gt; "12964130010497_1", "12964130010497_2", "129641300104
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># rm(list = ls())</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RSQLite)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse, <span class="at">quietly =</span> T, <span class="at">warn.conflicts =</span> F)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">999</span>)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Set paths ---------------------------------------------------------------</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="do">## Set all the file paths and names in this section. Then, run the rest of the script in sections 2. </span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="do">## Set the working directory</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>fvs_wd <span class="ot">&lt;-</span> <span class="st">"C:/RxFire/Regen/FVS"</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="do">## Where are the FVS executables? FVSbin? </span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co">#  Include the /FVS prefix to variant.exe. </span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>FVSbin <span class="ot">&lt;-</span>  <span class="st">"C:/FVSbin_v5.1/FVS"</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co"># name = regen_MMDDYY_HHMM</span></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>name <span class="ot">&lt;-</span> <span class="fu">str_c</span>(<span class="st">"regen_"</span>, </span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>              <span class="fu">strftime</span>(<span class="fu">Sys.Date</span>(),<span class="st">"%m%d%y"</span>), </span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>              <span class="st">"_"</span>, </span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>              <span class="fu">strftime</span>(<span class="fu">Sys.time</span>(),<span class="st">"%H%M"</span>))</span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="do">## Set the path to the stand input database here, aka the output db from 3_CNs_to_FVS:</span></span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>inputDatabase <span class="ot">&lt;-</span> <span class="st">'C:/RxFire/Regen/Regeneration_2_16Sept24/data/homemade_fvs_db_17sept24.db'</span></span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Homemade_v1 C:/RxFire/Regen/Regeneration_2_16Sept24/homemade_fvs_db.db</span></span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="co"># State Original DB</span></span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="co"># 1.2 Standlist from xlsx -------------------------------------------------</span></span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>standlist <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"C:/RxFire/Regen/Regeneration_2_16Sept24/data/1.5_dbCreation_standlist.csv"</span>, </span>
-<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>                      <span class="at">col_types =</span> <span class="st">"ccc"</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(</span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>                        <span class="at">CN =</span> STANDPLOT_CN</span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>                      ) </span>
-<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="co"># standlist &lt;- standlist[1:100, ]</span></span>
-<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="do">## I don't think I need to have the actual Variant. This is just to read the initial conditions. </span></span>
-<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>standlist<span class="sc">$</span>FVSVariant <span class="ot">&lt;-</span> <span class="st">"EC"</span></span>
-<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Batch file Creation -----------------------------------------------------</span></span>
-<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="do">## Run everything in section 2. There shouldn't be anything to change.</span></span>
-<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a><span class="co">#  Except, maybe createInputFile(group_stands$CN[s], if CN was read in as Stand_CN. </span></span>
-<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>int <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
-<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>create_dir <span class="ot">&lt;-</span> <span class="cf">function</span>(dir) {</span>
-<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(dir)) {</span>
-<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>      <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Making Run directory: "</span>, dir))</span>
-<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>      <span class="fu">dir.create</span>(dir)</span>
-<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">else</span>(</span>
-<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>        <span class="fu">print</span>(<span class="fu">str_c</span>(dir, <span class="st">", already exists"</span>))</span>
-<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a><span class="co"># Create directory where FVS runs will be sent:</span></span>
-<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>RunDirectory <span class="ot">&lt;-</span> <span class="fu">str_c</span>(fvs_wd, <span class="st">'/'</span>, name)</span>
-<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a><span class="fu">create_dir</span>(RunDirectory)</span>
-<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a><span class="co"># Create input Directory</span></span>
-<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>inputDirectory <span class="ot">&lt;-</span> <span class="fu">str_c</span>(RunDirectory, <span class="st">"/In"</span>)</span>
-<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a><span class="fu">create_dir</span>(inputDirectory)</span>
-<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a><span class="co"># Create Cmd Directory</span></span>
-<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>CmdDirectory <span class="ot">&lt;-</span> <span class="fu">str_c</span>(RunDirectory, <span class="st">"/Cmd"</span>)</span>
-<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a><span class="fu">create_dir</span>(CmdDirectory)</span>
-<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a><span class="do">## The path to the FVS output database is set here:</span></span>
-<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a>outputDatabase <span class="ot">&lt;-</span> <span class="fu">str_c</span>(RunDirectory, <span class="st">"/"</span>, name, <span class="st">".db"</span>)</span>
-<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a><span class="do">## This function creates the string for a single stand in FVS.</span></span>
-<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a>createInputFile <span class="ot">&lt;-</span> <span class="cf">function</span>(stand, managementID, inputDatabase, outputDatabase){</span>
-<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create .key file</span></span>
-<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a>  input <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">'STDIDENT</span><span class="sc">\n</span><span class="st">'</span>,                     </span>
-<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a>                  stand, <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>,                     </span>
-<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'STANDCN</span><span class="sc">\n</span><span class="st">'</span>,                     </span>
-<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a>                  stand, <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>,                     </span>
-<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'MGMTID</span><span class="sc">\n</span><span class="st">'</span>,                     </span>
-<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a>                  managementID,                     </span>
-<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>,                             </span>
-<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'NUMCYCLE          1</span><span class="sc">\n</span><span class="st">'</span>, <span class="co"># Set time intervals. </span></span>
-<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a>                  <span class="co"># 0 = Change all cycles | Cycle length to one year</span></span>
-<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'TIMEINT           0         1</span><span class="sc">\n</span><span class="st">'</span>,</span>
-<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'SCREEN</span><span class="sc">\n</span><span class="st">'</span>,               </span>
-<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a>                  <span class="do">## Database in    </span></span>
-<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'DATABASE</span><span class="sc">\n</span><span class="st">'</span>,</span>
-<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'DSNIN</span><span class="sc">\n</span><span class="st">'</span>,                                                </span>
-<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a>                  inputDatabase, <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>,  </span>
-<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a>                  <span class="do">## Stand</span></span>
-<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'StandSQL</span><span class="sc">\n</span><span class="st">'</span>,                                             </span>
-<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'SELECT * FROM FVS_PLOTINIT_PLOT</span><span class="sc">\n</span><span class="st">'</span>,</span>
-<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a>                  <span class="co"># 'SELECT * FROM FVS_PlotInit\n',  # For a different table name                   </span></span>
-<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"WHERE  STANDPLOT_CN  = '%STAND_CN%'</span><span class="sc">\n</span><span class="st">"</span>,                     </span>
-<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'EndSQL</span><span class="sc">\n</span><span class="st">'</span>,                                                    </span>
-<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'DSNIN</span><span class="sc">\n</span><span class="st">'</span>,                                          </span>
-<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a>                  inputDatabase, <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>,                                             </span>
-<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a>                  <span class="do">## Tree</span></span>
-<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'TreeSQL</span><span class="sc">\n</span><span class="st">'</span>,</span>
-<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'SELECT * FROM FVS_TREEINIT_PLOT</span><span class="sc">\n</span><span class="st">'</span>,</span>
-<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a>                  <span class="co"># 'SELECT * FROM FVS_TreeInit\n',                              </span></span>
-<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"WHERE  STANDPLOT_CN  = '%STAND_CN%'</span><span class="sc">\n</span><span class="st">"</span>,                            </span>
-<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'EndSQL</span><span class="sc">\n</span><span class="st">'</span>,                                                          </span>
-<span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'END</span><span class="sc">\n</span><span class="st">'</span>,   </span>
-<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a>                  <span class="do">##</span></span>
-<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'STRCLASS</span><span class="sc">\n</span><span class="st">'</span>,</span>
-<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a>                  <span class="co"># year of compute 0 = Every cycle</span></span>
-<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'COMPUTE           0</span><span class="sc">\n</span><span class="st">'</span>,                                                                        <span class="co"># Compute below here</span></span>
-<span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a>                  <span class="co"># # acancov defined when str_class is used, after thin Canopy</span></span>
-<span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'CC = bcancov</span><span class="sc">\n</span><span class="st">'</span>,</span>
-<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'END</span><span class="sc">\n</span><span class="st">'</span>,                                                                                            <span class="co"># Compute ends</span></span>
-<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'DATABASE</span><span class="sc">\n</span><span class="st">'</span>,                                                                                     <span class="co"># DB Out Starts</span></span>
-<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'DSNOUT</span><span class="sc">\n</span><span class="st">'</span>,                                      </span>
-<span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a>                  outputDatabase, <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>,</span>
-<span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'SUMMARY           2</span><span class="sc">\n</span><span class="st">'</span>,</span>
-<span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'StrClsDB</span><span class="sc">\n</span><span class="st">'</span>,</span>
-<span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'COMPUTDB</span><span class="sc">\n</span><span class="st">'</span>,</span>
-<span id="cb5-125"><a href="#cb5-125" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'END</span><span class="sc">\n</span><span class="st">'</span>,</span>
-<span id="cb5-126"><a href="#cb5-126" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'Process</span><span class="sc">\n\n</span><span class="st">'</span>)                                    </span>
-<span id="cb5-127"><a href="#cb5-127" aria-hidden="true" tabindex="-1"></a>                   </span>
-<span id="cb5-128"><a href="#cb5-128" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb5-129"><a href="#cb5-129" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-130"><a href="#cb5-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-131"><a href="#cb5-131" aria-hidden="true" tabindex="-1"></a><span class="fu">write</span>(<span class="fu">str_c</span>(<span class="st">"set RScript="</span>, <span class="st">" </span><span class="sc">\"</span><span class="st">"</span>, <span class="st">"C:/Program Files/R/R-4.4.1/bin/Rscript.exe"</span>, <span class="st">"</span><span class="sc">\"</span><span class="st">"</span>,</span>
-<span id="cb5-132"><a href="#cb5-132" aria-hidden="true" tabindex="-1"></a>            <span class="st">"</span><span class="sc">\n</span><span class="st"> </span><span class="sc">\n</span><span class="st">"</span>,</span>
-<span id="cb5-133"><a href="#cb5-133" aria-hidden="true" tabindex="-1"></a>            <span class="st">"cd "</span>, inputDirectory, <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span>), <span class="fu">paste0</span>(RunDirectory, <span class="st">'</span><span class="sc">\\</span><span class="st">test.bat'</span>), <span class="at">append =</span> <span class="st">"TRUE"</span>)</span>
-<span id="cb5-134"><a href="#cb5-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-135"><a href="#cb5-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-136"><a href="#cb5-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-137"><a href="#cb5-137" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (g <span class="cf">in</span> <span class="fu">unique</span>(standlist<span class="sc">$</span>FVSVariant)) {</span>
-<span id="cb5-138"><a href="#cb5-138" aria-hidden="true" tabindex="-1"></a>  masterkeys <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb5-139"><a href="#cb5-139" aria-hidden="true" tabindex="-1"></a>  group_stands <span class="ot">&lt;-</span> <span class="fu">subset</span>(standlist, FVSVariant <span class="sc">==</span> g)</span>
-<span id="cb5-140"><a href="#cb5-140" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (s <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(group_stands)) {</span>
-<span id="cb5-141"><a href="#cb5-141" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb5-142"><a href="#cb5-142" aria-hidden="true" tabindex="-1"></a>    keywords <span class="ot">&lt;-</span> <span class="fu">createInputFile</span>(<span class="at">stand =</span> group_stands<span class="sc">$</span>CN[s], <span class="at">managementID =</span> group_stands<span class="sc">$</span>CN[s], </span>
-<span id="cb5-143"><a href="#cb5-143" aria-hidden="true" tabindex="-1"></a>                                <span class="at">inputDatabase =</span> inputDatabase,</span>
-<span id="cb5-144"><a href="#cb5-144" aria-hidden="true" tabindex="-1"></a>                                <span class="at">outputDatabase =</span> outputDatabase</span>
-<span id="cb5-145"><a href="#cb5-145" aria-hidden="true" tabindex="-1"></a>                                )</span>
-<span id="cb5-146"><a href="#cb5-146" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb5-147"><a href="#cb5-147" aria-hidden="true" tabindex="-1"></a>    masterkeys <span class="ot">&lt;-</span> <span class="fu">paste0</span>(masterkeys, keywords)</span>
-<span id="cb5-148"><a href="#cb5-148" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb5-149"><a href="#cb5-149" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Print to the key file</span></span>
-<span id="cb5-150"><a href="#cb5-150" aria-hidden="true" tabindex="-1"></a>  masterkeys <span class="ot">&lt;-</span> <span class="fu">paste0</span>(masterkeys, <span class="st">"</span><span class="sc">\n</span><span class="st">STOP</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb5-151"><a href="#cb5-151" aria-hidden="true" tabindex="-1"></a>  <span class="co"># "\n STOP?\n" or "\nSTOP\n", outfile has errors 1 &amp; 2, invalid keyword &amp; no Stop</span></span>
-<span id="cb5-152"><a href="#cb5-152" aria-hidden="true" tabindex="-1"></a>  file_name <span class="ot">&lt;-</span> <span class="fu">str_sub</span>(g, <span class="at">end =</span> <span class="sc">-</span><span class="dv">5</span>)</span>
-<span id="cb5-153"><a href="#cb5-153" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write</span>(masterkeys, <span class="at">file =</span> <span class="fu">str_c</span>(inputDirectory, <span class="st">'</span><span class="sc">\\</span><span class="st">'</span>, g, <span class="st">'.key'</span>))</span>
-<span id="cb5-154"><a href="#cb5-154" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb5-155"><a href="#cb5-155" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Create the .in file ##</span></span>
-<span id="cb5-156"><a href="#cb5-156" aria-hidden="true" tabindex="-1"></a>  fvs_in <span class="ot">&lt;-</span> <span class="fu">paste0</span>(g, <span class="st">".key</span><span class="sc">\n</span><span class="st">"</span>,</span>
-<span id="cb5-157"><a href="#cb5-157" aria-hidden="true" tabindex="-1"></a>                   g, <span class="st">".fvs</span><span class="sc">\n</span><span class="st">"</span>,</span>
-<span id="cb5-158"><a href="#cb5-158" aria-hidden="true" tabindex="-1"></a>                   g, <span class="st">".out</span><span class="sc">\n</span><span class="st">"</span>,</span>
-<span id="cb5-159"><a href="#cb5-159" aria-hidden="true" tabindex="-1"></a>                   g, <span class="st">".trl</span><span class="sc">\n</span><span class="st">"</span>,</span>
-<span id="cb5-160"><a href="#cb5-160" aria-hidden="true" tabindex="-1"></a>                   g, <span class="st">".sum</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb5-161"><a href="#cb5-161" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb5-162"><a href="#cb5-162" aria-hidden="true" tabindex="-1"></a>  fvs_in_file <span class="ot">&lt;-</span> <span class="fu">paste0</span>(inputDirectory, <span class="st">'</span><span class="sc">\\</span><span class="st">'</span>, g, <span class="st">'.in'</span>)</span>
-<span id="cb5-163"><a href="#cb5-163" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write</span>(fvs_in, <span class="at">file =</span> fvs_in_file)</span>
-<span id="cb5-164"><a href="#cb5-164" aria-hidden="true" tabindex="-1"></a>  fvs_bat <span class="ot">&lt;-</span> <span class="fu">paste0</span>(FVSbin, <span class="fu">unique</span>(group_stands<span class="sc">$</span>FVSVariant), <span class="st">".exe &lt; "</span>, g, <span class="st">".in &gt;"</span>,</span>
-<span id="cb5-165"><a href="#cb5-165" aria-hidden="true" tabindex="-1"></a>                    RunDirectory, <span class="st">"/Cmd/"</span>, g, <span class="st">".txt"</span>, <span class="st">" 2&gt;&amp;1"</span>, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
-<span id="cb5-166"><a href="#cb5-166" aria-hidden="true" tabindex="-1"></a>                    <span class="co"># Send each CMD file to this script</span></span>
-<span id="cb5-167"><a href="#cb5-167" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"%RScript%"</span>,<span class="st">" C:/RxFire/Scripts/ErrorProcessing/RcmdProcess.R "</span>,</span>
-<span id="cb5-168"><a href="#cb5-168" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"</span><span class="sc">\"</span><span class="st">"</span>, RunDirectory, <span class="st">"/Cmd/"</span>, g, <span class="st">".txt"</span>, <span class="st">"</span><span class="sc">\"</span><span class="st">"</span>, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb5-169"><a href="#cb5-169" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb5-170"><a href="#cb5-170" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write</span>(fvs_bat, <span class="fu">paste0</span>(RunDirectory, <span class="st">'</span><span class="sc">\\</span><span class="st">test.bat'</span>), <span class="at">append =</span> <span class="st">"TRUE"</span>)</span>
-<span id="cb5-171"><a href="#cb5-171" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-172"><a href="#cb5-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-173"><a href="#cb5-173" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize the OUT files</span></span>
-<span id="cb5-174"><a href="#cb5-174" aria-hidden="true" tabindex="-1"></a>fvs_errors <span class="ot">&lt;-</span> <span class="fu">str_c</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">REM This one cleans in extra files out and summarizes the output the Run Directory </span><span class="sc">\n</span><span class="st">"</span>,</span>
-<span id="cb5-175"><a href="#cb5-175" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"%RScript%"</span>,<span class="st">" C:/RxFire/Scripts/ErrorProcessing/RfvsProcess.R "</span>,</span>
-<span id="cb5-176"><a href="#cb5-176" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"</span><span class="sc">\"</span><span class="st">"</span>, RunDirectory, <span class="st">"/In"</span>, <span class="st">"</span><span class="sc">\"</span><span class="st">"</span>)</span>
-<span id="cb5-177"><a href="#cb5-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-178"><a href="#cb5-178" aria-hidden="true" tabindex="-1"></a><span class="fu">write</span>(fvs_errors, <span class="fu">paste0</span>(RunDirectory, <span class="st">'</span><span class="sc">\\</span><span class="st">test.bat'</span>), <span class="at">append =</span> <span class="st">"TRUE"</span>)</span>
-<span id="cb5-179"><a href="#cb5-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-180"><a href="#cb5-180" aria-hidden="true" tabindex="-1"></a><span class="co"># write("PAUSE", paste0(inputDirectory, '\\test.bat'), append = "TRUE")</span></span>
-<span id="cb5-181"><a href="#cb5-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-182"><a href="#cb5-182" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), outputDatabase)</span>
-<span id="cb5-183"><a href="#cb5-183" aria-hidden="true" tabindex="-1"></a><span class="fu">dbWriteTable</span>(<span class="at">conn =</span> con, <span class="at">name =</span> <span class="st">"standlist"</span>, <span class="at">value =</span> standlist, <span class="at">overwrite =</span> T)</span>
-<span id="cb5-184"><a href="#cb5-184" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span>
-<span id="cb5-185"><a href="#cb5-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-186"><a href="#cb5-186" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
-<span id="cb5-187"><a href="#cb5-187" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-188"><a href="#cb5-188" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(out <span class="sc">-</span> int)</span>
-<span id="cb5-189"><a href="#cb5-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-190"><a href="#cb5-190" aria-hidden="true" tabindex="-1"></a><span class="co"># Run this Batch file</span></span>
-<span id="cb5-191"><a href="#cb5-191" aria-hidden="true" tabindex="-1"></a><span class="fu">shell.exec</span>(<span class="fu">str_c</span>(RunDirectory, <span class="st">'</span><span class="sc">\\</span><span class="st">test.bat'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># rm(list = ls())</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RSQLite)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse, <span class="at">quietly =</span> T, <span class="at">warn.conflicts =</span> F)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">999</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Set paths ---------------------------------------------------------------</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="do">## Set all the file paths and names in this section. Then, run the rest of the script in sections 2. </span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="do">## Set the working directory</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>fvs_wd <span class="ot">&lt;-</span> <span class="st">"C:/RxFire/Regen/FVS"</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="do">## Where are the FVS executables? FVSbin? </span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co">#  Include the /FVS prefix to variant.exe. </span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>FVSbin <span class="ot">&lt;-</span>  <span class="st">"C:/FVSbin_v5.1/FVS"</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="co"># name = regen_MMDDYY_HHMM</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>name <span class="ot">&lt;-</span> <span class="fu">str_c</span>(<span class="st">"regen_"</span>, </span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>              <span class="fu">strftime</span>(<span class="fu">Sys.Date</span>(),<span class="st">"%m%d%y"</span>), </span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>              <span class="st">"_"</span>, </span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>              <span class="fu">strftime</span>(<span class="fu">Sys.time</span>(),<span class="st">"%H%M"</span>))</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="do">## Set the path to the stand input database here, aka the output db from 3_CNs_to_FVS:</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>inputDatabase <span class="ot">&lt;-</span> <span class="st">'C:/RxFire/Regen/Regeneration_2_16Sept24/data/homemade_fvs_db_17sept24.db'</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Homemade_v1 C:/RxFire/Regen/Regeneration_2_16Sept24/homemade_fvs_db.db</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="co"># State Original DB</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="co"># 1.2 Standlist from xlsx -------------------------------------------------</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>standlist <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"C:/RxFire/Regen/Regeneration_2_16Sept24/data/1.5_dbCreation_standlist.csv"</span>, </span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>                      <span class="at">col_types =</span> <span class="st">"ccc"</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>                        <span class="at">CN =</span> STANDPLOT_CN</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>                      ) </span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a><span class="co"># standlist &lt;- standlist[1:100, ]</span></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a><span class="do">## I don't think I need to have the actual Variant. This is just to read the initial conditions. </span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>standlist<span class="sc">$</span>FVSVariant <span class="ot">&lt;-</span> <span class="st">"EC"</span></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Batch file Creation -----------------------------------------------------</span></span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a><span class="do">## Run everything in section 2. There shouldn't be anything to change.</span></span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a><span class="co">#  Except, maybe createInputFile(group_stands$CN[s], if CN was read in as Stand_CN. </span></span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>int <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>create_dir <span class="ot">&lt;-</span> <span class="cf">function</span>(dir) {</span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(dir)) {</span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>      <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Making Run directory: "</span>, dir))</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>      <span class="fu">dir.create</span>(dir)</span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">else</span>(</span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>        <span class="fu">print</span>(<span class="fu">str_c</span>(dir, <span class="st">", already exists"</span>))</span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a><span class="co"># Create directory where FVS runs will be sent:</span></span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>RunDirectory <span class="ot">&lt;-</span> <span class="fu">str_c</span>(fvs_wd, <span class="st">'/'</span>, name)</span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a><span class="fu">create_dir</span>(RunDirectory)</span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a><span class="co"># Create input Directory</span></span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>inputDirectory <span class="ot">&lt;-</span> <span class="fu">str_c</span>(RunDirectory, <span class="st">"/In"</span>)</span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a><span class="fu">create_dir</span>(inputDirectory)</span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a><span class="co"># Create Cmd Directory</span></span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>CmdDirectory <span class="ot">&lt;-</span> <span class="fu">str_c</span>(RunDirectory, <span class="st">"/Cmd"</span>)</span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a><span class="fu">create_dir</span>(CmdDirectory)</span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a><span class="do">## The path to the FVS output database is set here:</span></span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>outputDatabase <span class="ot">&lt;-</span> <span class="fu">str_c</span>(RunDirectory, <span class="st">"/"</span>, name, <span class="st">".db"</span>)</span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a><span class="do">## This function creates the string for a single stand in FVS.</span></span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>createInputFile <span class="ot">&lt;-</span> <span class="cf">function</span>(stand, managementID, inputDatabase, outputDatabase){</span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create .key file</span></span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>  input <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">'STDIDENT</span><span class="sc">\n</span><span class="st">'</span>,                     </span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>                  stand, <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>,                     </span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'STANDCN</span><span class="sc">\n</span><span class="st">'</span>,                     </span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a>                  stand, <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>,                     </span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'MGMTID</span><span class="sc">\n</span><span class="st">'</span>,                     </span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a>                  managementID,                     </span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>,                             </span>
+<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'NUMCYCLE          1</span><span class="sc">\n</span><span class="st">'</span>, <span class="co"># Set time intervals. </span></span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>                  <span class="co"># 0 = Change all cycles | Cycle length to one year</span></span>
+<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'TIMEINT           0         1</span><span class="sc">\n</span><span class="st">'</span>,</span>
+<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'SCREEN</span><span class="sc">\n</span><span class="st">'</span>,               </span>
+<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a>                  <span class="do">## Database in    </span></span>
+<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'DATABASE</span><span class="sc">\n</span><span class="st">'</span>,</span>
+<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'DSNIN</span><span class="sc">\n</span><span class="st">'</span>,                                                </span>
+<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a>                  inputDatabase, <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>,  </span>
+<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a>                  <span class="do">## Stand</span></span>
+<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'StandSQL</span><span class="sc">\n</span><span class="st">'</span>,                                             </span>
+<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'SELECT * FROM FVS_PLOTINIT_PLOT</span><span class="sc">\n</span><span class="st">'</span>,</span>
+<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a>                  <span class="co"># 'SELECT * FROM FVS_PlotInit\n',  # For a different table name                   </span></span>
+<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"WHERE  STANDPLOT_CN  = '%STAND_CN%'</span><span class="sc">\n</span><span class="st">"</span>,                     </span>
+<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'EndSQL</span><span class="sc">\n</span><span class="st">'</span>,                                                    </span>
+<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'DSNIN</span><span class="sc">\n</span><span class="st">'</span>,                                          </span>
+<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a>                  inputDatabase, <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>,                                             </span>
+<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a>                  <span class="do">## Tree</span></span>
+<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'TreeSQL</span><span class="sc">\n</span><span class="st">'</span>,</span>
+<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'SELECT * FROM FVS_TREEINIT_PLOT</span><span class="sc">\n</span><span class="st">'</span>,</span>
+<span id="cb7-108"><a href="#cb7-108" aria-hidden="true" tabindex="-1"></a>                  <span class="co"># 'SELECT * FROM FVS_TreeInit\n',                              </span></span>
+<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"WHERE  STANDPLOT_CN  = '%STAND_CN%'</span><span class="sc">\n</span><span class="st">"</span>,                            </span>
+<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'EndSQL</span><span class="sc">\n</span><span class="st">'</span>,                                                          </span>
+<span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'END</span><span class="sc">\n</span><span class="st">'</span>,   </span>
+<span id="cb7-112"><a href="#cb7-112" aria-hidden="true" tabindex="-1"></a>                  <span class="do">##</span></span>
+<span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'STRCLASS</span><span class="sc">\n</span><span class="st">'</span>,</span>
+<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a>                  <span class="co"># year of compute 0 = Every cycle</span></span>
+<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'COMPUTE           0</span><span class="sc">\n</span><span class="st">'</span>,                                                                        <span class="co"># Compute below here</span></span>
+<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a>                  <span class="co"># # acancov defined when str_class is used, after thin Canopy</span></span>
+<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'CC = bcancov</span><span class="sc">\n</span><span class="st">'</span>,</span>
+<span id="cb7-118"><a href="#cb7-118" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'END</span><span class="sc">\n</span><span class="st">'</span>,                                                                                            <span class="co"># Compute ends</span></span>
+<span id="cb7-119"><a href="#cb7-119" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'DATABASE</span><span class="sc">\n</span><span class="st">'</span>,                                                                                     <span class="co"># DB Out Starts</span></span>
+<span id="cb7-120"><a href="#cb7-120" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'DSNOUT</span><span class="sc">\n</span><span class="st">'</span>,                                      </span>
+<span id="cb7-121"><a href="#cb7-121" aria-hidden="true" tabindex="-1"></a>                  outputDatabase, <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>,</span>
+<span id="cb7-122"><a href="#cb7-122" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'SUMMARY           2</span><span class="sc">\n</span><span class="st">'</span>,</span>
+<span id="cb7-123"><a href="#cb7-123" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'StrClsDB</span><span class="sc">\n</span><span class="st">'</span>,</span>
+<span id="cb7-124"><a href="#cb7-124" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'COMPUTDB</span><span class="sc">\n</span><span class="st">'</span>,</span>
+<span id="cb7-125"><a href="#cb7-125" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'END</span><span class="sc">\n</span><span class="st">'</span>,</span>
+<span id="cb7-126"><a href="#cb7-126" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'Process</span><span class="sc">\n\n</span><span class="st">'</span>)                                    </span>
+<span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a>                   </span>
+<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-129"><a href="#cb7-129" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-130"><a href="#cb7-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-131"><a href="#cb7-131" aria-hidden="true" tabindex="-1"></a><span class="fu">write</span>(<span class="fu">str_c</span>(<span class="st">"set RScript="</span>, <span class="st">" </span><span class="sc">\"</span><span class="st">"</span>, <span class="st">"C:/Program Files/R/R-4.4.1/bin/Rscript.exe"</span>, <span class="st">"</span><span class="sc">\"</span><span class="st">"</span>,</span>
+<span id="cb7-132"><a href="#cb7-132" aria-hidden="true" tabindex="-1"></a>            <span class="st">"</span><span class="sc">\n</span><span class="st"> </span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb7-133"><a href="#cb7-133" aria-hidden="true" tabindex="-1"></a>            <span class="st">"cd "</span>, inputDirectory, <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span>), <span class="fu">paste0</span>(RunDirectory, <span class="st">'</span><span class="sc">\\</span><span class="st">test.bat'</span>), <span class="at">append =</span> <span class="st">"TRUE"</span>)</span>
+<span id="cb7-134"><a href="#cb7-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-135"><a href="#cb7-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-136"><a href="#cb7-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-137"><a href="#cb7-137" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (g <span class="cf">in</span> <span class="fu">unique</span>(standlist<span class="sc">$</span>FVSVariant)) {</span>
+<span id="cb7-138"><a href="#cb7-138" aria-hidden="true" tabindex="-1"></a>  masterkeys <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb7-139"><a href="#cb7-139" aria-hidden="true" tabindex="-1"></a>  group_stands <span class="ot">&lt;-</span> <span class="fu">subset</span>(standlist, FVSVariant <span class="sc">==</span> g)</span>
+<span id="cb7-140"><a href="#cb7-140" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (s <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(group_stands)) {</span>
+<span id="cb7-141"><a href="#cb7-141" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-142"><a href="#cb7-142" aria-hidden="true" tabindex="-1"></a>    keywords <span class="ot">&lt;-</span> <span class="fu">createInputFile</span>(<span class="at">stand =</span> group_stands<span class="sc">$</span>CN[s], <span class="at">managementID =</span> group_stands<span class="sc">$</span>CN[s], </span>
+<span id="cb7-143"><a href="#cb7-143" aria-hidden="true" tabindex="-1"></a>                                <span class="at">inputDatabase =</span> inputDatabase,</span>
+<span id="cb7-144"><a href="#cb7-144" aria-hidden="true" tabindex="-1"></a>                                <span class="at">outputDatabase =</span> outputDatabase</span>
+<span id="cb7-145"><a href="#cb7-145" aria-hidden="true" tabindex="-1"></a>                                )</span>
+<span id="cb7-146"><a href="#cb7-146" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-147"><a href="#cb7-147" aria-hidden="true" tabindex="-1"></a>    masterkeys <span class="ot">&lt;-</span> <span class="fu">paste0</span>(masterkeys, keywords)</span>
+<span id="cb7-148"><a href="#cb7-148" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-149"><a href="#cb7-149" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Print to the key file</span></span>
+<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a>  masterkeys <span class="ot">&lt;-</span> <span class="fu">paste0</span>(masterkeys, <span class="st">"</span><span class="sc">\n</span><span class="st">STOP</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a>  <span class="co"># "\n STOP?\n" or "\nSTOP\n", outfile has errors 1 &amp; 2, invalid keyword &amp; no Stop</span></span>
+<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a>  file_name <span class="ot">&lt;-</span> <span class="fu">str_sub</span>(g, <span class="at">end =</span> <span class="sc">-</span><span class="dv">5</span>)</span>
+<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write</span>(masterkeys, <span class="at">file =</span> <span class="fu">str_c</span>(inputDirectory, <span class="st">'</span><span class="sc">\\</span><span class="st">'</span>, g, <span class="st">'.key'</span>))</span>
+<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Create the .in file ##</span></span>
+<span id="cb7-156"><a href="#cb7-156" aria-hidden="true" tabindex="-1"></a>  fvs_in <span class="ot">&lt;-</span> <span class="fu">paste0</span>(g, <span class="st">".key</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb7-157"><a href="#cb7-157" aria-hidden="true" tabindex="-1"></a>                   g, <span class="st">".fvs</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb7-158"><a href="#cb7-158" aria-hidden="true" tabindex="-1"></a>                   g, <span class="st">".out</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a>                   g, <span class="st">".trl</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a>                   g, <span class="st">".sum</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb7-161"><a href="#cb7-161" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a>  fvs_in_file <span class="ot">&lt;-</span> <span class="fu">paste0</span>(inputDirectory, <span class="st">'</span><span class="sc">\\</span><span class="st">'</span>, g, <span class="st">'.in'</span>)</span>
+<span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write</span>(fvs_in, <span class="at">file =</span> fvs_in_file)</span>
+<span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a>  fvs_bat <span class="ot">&lt;-</span> <span class="fu">paste0</span>(FVSbin, <span class="fu">unique</span>(group_stands<span class="sc">$</span>FVSVariant), <span class="st">".exe &lt; "</span>, g, <span class="st">".in &gt;"</span>,</span>
+<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a>                    RunDirectory, <span class="st">"/Cmd/"</span>, g, <span class="st">".txt"</span>, <span class="st">" 2&gt;&amp;1"</span>, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a>                    <span class="co"># Send each CMD file to this script</span></span>
+<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"%RScript%"</span>,<span class="st">" C:/RxFire/Scripts/ErrorProcessing/RcmdProcess.R "</span>,</span>
+<span id="cb7-168"><a href="#cb7-168" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"</span><span class="sc">\"</span><span class="st">"</span>, RunDirectory, <span class="st">"/Cmd/"</span>, g, <span class="st">".txt"</span>, <span class="st">"</span><span class="sc">\"</span><span class="st">"</span>, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-170"><a href="#cb7-170" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write</span>(fvs_bat, <span class="fu">paste0</span>(RunDirectory, <span class="st">'</span><span class="sc">\\</span><span class="st">test.bat'</span>), <span class="at">append =</span> <span class="st">"TRUE"</span>)</span>
+<span id="cb7-171"><a href="#cb7-171" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-172"><a href="#cb7-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize the OUT files</span></span>
+<span id="cb7-174"><a href="#cb7-174" aria-hidden="true" tabindex="-1"></a>fvs_errors <span class="ot">&lt;-</span> <span class="fu">str_c</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">REM This one cleans in extra files out and summarizes the output the Run Directory </span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb7-175"><a href="#cb7-175" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"%RScript%"</span>,<span class="st">" C:/RxFire/Scripts/ErrorProcessing/RfvsProcess.R "</span>,</span>
+<span id="cb7-176"><a href="#cb7-176" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"</span><span class="sc">\"</span><span class="st">"</span>, RunDirectory, <span class="st">"/In"</span>, <span class="st">"</span><span class="sc">\"</span><span class="st">"</span>)</span>
+<span id="cb7-177"><a href="#cb7-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-178"><a href="#cb7-178" aria-hidden="true" tabindex="-1"></a><span class="fu">write</span>(fvs_errors, <span class="fu">paste0</span>(RunDirectory, <span class="st">'</span><span class="sc">\\</span><span class="st">test.bat'</span>), <span class="at">append =</span> <span class="st">"TRUE"</span>)</span>
+<span id="cb7-179"><a href="#cb7-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-180"><a href="#cb7-180" aria-hidden="true" tabindex="-1"></a><span class="co"># write("PAUSE", paste0(inputDirectory, '\\test.bat'), append = "TRUE")</span></span>
+<span id="cb7-181"><a href="#cb7-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-182"><a href="#cb7-182" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), outputDatabase)</span>
+<span id="cb7-183"><a href="#cb7-183" aria-hidden="true" tabindex="-1"></a><span class="fu">dbWriteTable</span>(<span class="at">conn =</span> con, <span class="at">name =</span> <span class="st">"standlist"</span>, <span class="at">value =</span> standlist, <span class="at">overwrite =</span> T)</span>
+<span id="cb7-184"><a href="#cb7-184" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span>
+<span id="cb7-185"><a href="#cb7-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-186"><a href="#cb7-186" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
+<span id="cb7-187"><a href="#cb7-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-188"><a href="#cb7-188" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(out <span class="sc">-</span> int)</span>
+<span id="cb7-189"><a href="#cb7-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-190"><a href="#cb7-190" aria-hidden="true" tabindex="-1"></a><span class="co"># Run this Batch file</span></span>
+<span id="cb7-191"><a href="#cb7-191" aria-hidden="true" tabindex="-1"></a><span class="fu">shell.exec</span>(<span class="fu">str_c</span>(RunDirectory, <span class="st">'</span><span class="sc">\\</span><span class="st">test.bat'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>I am copying some stuff from the above code here. That way I don’t need to run fvs each time.</p>
@@ -561,9 +593,9 @@ $ STANDPLOT_CN &lt;chr&gt; "12964130010497_1", "12964130010497_2", "129641300104
 <p>I accidentally overwrote the last db and the copy while altering the imputation data. I also had not yet added the changes from Missoula, so I am going through it now and fixing all of it. <em>9/17/24</em></p>
 <hr>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># outputDatabase &lt;- "C:/RxFire/Regen/FVS/regen_080724_1644/regen_080724_1644.db"</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>outputDatabase <span class="ot">&lt;-</span> <span class="st">"C:/RxFire/Regen/FVS/regen_091724_2118/regen_091724_2118.db"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># outputDatabase &lt;- "C:/RxFire/Regen/FVS/regen_080724_1644/regen_080724_1644.db"</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>outputDatabase <span class="ot">&lt;-</span> <span class="st">"C:/RxFire/Regen/FVS/regen_091724_2118/regen_091724_2118.db"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><em>32 minutes to run.</em></p>
 <p><em>11 min to run on second time through. I ran it at night this time.</em></p>
@@ -572,20 +604,20 @@ $ STANDPLOT_CN &lt;chr&gt; "12964130010497_1", "12964130010497_2", "129641300104
 <h1>Extract variables</h1>
 <p>In this case, the output table compute has the before anything CC and Year. The other tables have an start and end year. So, using the compute table makes it easy to select the correct Year without setting INV_Year in the database.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), outputDatabase)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>key <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con, <span class="st">"select CaseID, StandID, Variant from FVS_Cases"</span>)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>cc <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con, <span class="st">"select CaseID, Year, CC from FVS_Compute"</span>)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>ba_sdi <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con, <span class="st">"select CaseID, Year, BA, SDI from FVS_Summary2"</span>)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>stem <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con, <span class="st">"select CaseID, Year, Structure_Class from FVS_StrClass where Removal_Code == 0 "</span>)</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>xVars <span class="ot">&lt;-</span> <span class="fu">left_join</span>(key, cc, <span class="fu">join_by</span>(CaseID))</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>xVars <span class="ot">&lt;-</span> <span class="fu">left_join</span>(xVars, ba_sdi, <span class="fu">join_by</span>(CaseID, Year))</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>xVars <span class="ot">&lt;-</span> <span class="fu">left_join</span>(xVars, stem, <span class="fu">join_by</span>(CaseID, Year))</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>xVars <span class="sc">|&gt;</span> <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), outputDatabase)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>key <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con, <span class="st">"select CaseID, StandID, Variant from FVS_Cases"</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>cc <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con, <span class="st">"select CaseID, Year, CC from FVS_Compute"</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>ba_sdi <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con, <span class="st">"select CaseID, Year, BA, SDI from FVS_Summary2"</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>stem <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con, <span class="st">"select CaseID, Year, Structure_Class from FVS_StrClass where Removal_Code == 0 "</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>xVars <span class="ot">&lt;-</span> <span class="fu">left_join</span>(key, cc, <span class="fu">join_by</span>(CaseID))</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>xVars <span class="ot">&lt;-</span> <span class="fu">left_join</span>(xVars, ba_sdi, <span class="fu">join_by</span>(CaseID, Year))</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>xVars <span class="ot">&lt;-</span> <span class="fu">left_join</span>(xVars, stem, <span class="fu">join_by</span>(CaseID, Year))</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>xVars <span class="sc">|&gt;</span> <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 15369</code></pre>
 </div>
@@ -594,13 +626,13 @@ $ STANDPLOT_CN &lt;chr&gt; "12964130010497_1", "12964130010497_2", "129641300104
 <p>13,366 after translating FIA to FVS. This method removed empty plots.</p>
 <p>15,369 after incorporating Missoula’s changes.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>keep <span class="ot">&lt;-</span> <span class="fu">append</span>(keep, <span class="fu">c</span>(<span class="st">"xVars"</span>, <span class="st">"standlist"</span>))</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">clean_mem</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>keep <span class="ot">&lt;-</span> <span class="fu">append</span>(keep, <span class="fu">c</span>(<span class="st">"xVars"</span>, <span class="st">"standlist"</span>))</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">clean_mem</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          used (Mb) gc trigger  (Mb) max used  (Mb)
-Ncells 1238285 66.2    2423067 129.5  2423067 129.5
-Vcells 2453528 18.8    8388608  64.0  4338712  33.2</code></pre>
+Ncells 1253014   67    2430590 129.9  2430590 129.9
+Vcells 2484762   19    8388608  64.0  4864935  37.2</code></pre>
 </div>
 </div>
 </section>
@@ -611,22 +643,22 @@ Vcells 2453528 18.8    8388608  64.0  4338712  33.2</code></pre>
 <li>Add tags for single visit of earlier visit.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>standlist <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./data/1.5_dbCreation_standlist.csv"</span>, </span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">col_types =</span> <span class="st">"ccc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>standlist <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./data/1.5_dbCreation_standlist.csv"</span>, </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">col_types =</span> <span class="st">"ccc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><del>Starting subplot count: <strong>13,784</strong></del></p>
 <p><del>Starting subplot count: <strong>13,366</strong></del></p>
 <p>Starting subplot count: <strong>15,369</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>stem <span class="ot">&lt;-</span> xVars <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>CaseID)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>stem <span class="ot">&lt;-</span> stem <span class="sc">|&gt;</span> <span class="fu">mutate</span>(</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">s_class =</span> <span class="fu">str_sub</span>(Structure_Class, <span class="sc">-</span><span class="dv">2</span>,<span class="sc">-</span><span class="dv">1</span>)</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>) </span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>stem <span class="ot">&lt;-</span> stem <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Year))</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(stem)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>stem <span class="ot">&lt;-</span> xVars <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>CaseID)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>stem <span class="ot">&lt;-</span> stem <span class="sc">|&gt;</span> <span class="fu">mutate</span>(</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">s_class =</span> <span class="fu">str_sub</span>(Structure_Class, <span class="sc">-</span><span class="dv">2</span>,<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>) </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>stem <span class="ot">&lt;-</span> stem <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Year))</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(stem)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 15369</code></pre>
 </div>
@@ -638,17 +670,17 @@ Vcells 2453528 18.8    8388608  64.0  4338712  33.2</code></pre>
 </ul>
 <p>In the first FVS run I used the FVS_Ready data. I wanted to make some progress. In the output database, there are 768 NAs. These were the rows that were not present in the FVS Ready data. This will be fixed when I create the new database to pull from.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># These subplots have no living trees</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>noTrees <span class="ot">&lt;-</span> stem <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="fu">is.na</span>(s_class)) <span class="sc">|&gt;</span> <span class="fu">select</span>(StandID, BA)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(noTrees<span class="sc">$</span>BA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># These subplots have no living trees</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>noTrees <span class="ot">&lt;-</span> stem <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="fu">is.na</span>(s_class)) <span class="sc">|&gt;</span> <span class="fu">select</span>(StandID, BA)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(noTrees<span class="sc">$</span>BA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>keep <span class="ot">&lt;-</span> <span class="fu">append</span>(keep, <span class="st">"noTrees"</span>)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># The NAs were from joining the StrClass table to the full standlist</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>stem <span class="ot">&lt;-</span> stem <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(s_class)) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>Structure_Class)</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(stem)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>keep <span class="ot">&lt;-</span> <span class="fu">append</span>(keep, <span class="st">"noTrees"</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># The NAs were from joining the StrClass table to the full standlist</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>stem <span class="ot">&lt;-</span> stem <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(s_class)) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>Structure_Class)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(stem)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 15,320
 Columns: 7
@@ -672,8 +704,8 @@ $ s_class &lt;chr&gt; "SE", "SE", "SE", "SE", "SI", "BG", "BG", "SI", "SI", "SE"
 <section id="stem-exclusion" class="level2">
 <h2 class="anchored" data-anchor-id="stem-exclusion">Stem Exclusion</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>regPlots <span class="ot">&lt;-</span> stem <span class="sc">|&gt;</span> <span class="fu">filter</span>(s_class <span class="sc">!=</span> <span class="st">"SE"</span>)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(regPlots<span class="sc">$</span>s_class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>regPlots <span class="ot">&lt;-</span> stem <span class="sc">|&gt;</span> <span class="fu">filter</span>(s_class <span class="sc">!=</span> <span class="st">"SE"</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(regPlots<span class="sc">$</span>s_class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "SI" "BG" "UR" "OS" "YM" "OM"</code></pre>
 </div>
@@ -681,11 +713,11 @@ $ s_class &lt;chr&gt; "SE", "SE", "SE", "SE", "SI", "BG", "BG", "SI", "SI", "SE"
 <p><del><strong>8,545 Subplots</strong></del></p>
 <p><strong>9,253</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">add_commas</span>((<span class="fu">nrow</span>(stem) <span class="sc">-</span> <span class="fu">nrow</span>(regPlots)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">add_commas</span>((<span class="fu">nrow</span>(stem) <span class="sc">-</span> <span class="fu">nrow</span>(regPlots)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 4,683</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(regPlots) <span class="sc">%&gt;%</span> <span class="fu">add_commas</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(regPlots) <span class="sc">%&gt;%</span> <span class="fu">add_commas</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 10,637</code></pre>
 </div>
@@ -696,7 +728,7 @@ $ s_class &lt;chr&gt; "SE", "SE", "SE", "SE", "SI", "BG", "BG", "SI", "SI", "SE"
 <li>4,683 lost, 10,637 kept</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>regPlots <span class="sc">|&gt;</span> <span class="fu">filter</span>(s_class <span class="sc">==</span> <span class="st">"BG"</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(CC, BA, SDI) <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>regPlots <span class="sc">|&gt;</span> <span class="fu">filter</span>(s_class <span class="sc">==</span> <span class="st">"BG"</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(CC, BA, SDI) <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       CC               BA                SDI       
  Min.   : 0.000   Min.   : 0.00409   Min.   : 0.00  
@@ -715,28 +747,28 @@ $ s_class &lt;chr&gt; "SE", "SE", "SE", "SE", "SI", "BG", "BG", "SI", "SI", "SE"
 <h1>Inventory Cycle</h1>
 <p><em>Get PLT_CN and pull the PLOT ids</em></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>cns <span class="ot">&lt;-</span> regPlots <span class="sc">|&gt;</span> <span class="fu">select</span>(StandID) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">PLT_CN =</span> <span class="fu">str_sub</span>(StandID, <span class="dv">1</span>, <span class="sc">-</span><span class="dv">3</span>), </span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">SUBP =</span> <span class="fu">str_sub</span>(StandID, <span class="sc">-</span><span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>)</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>plt_cn <span class="ot">&lt;-</span> <span class="fu">db_list</span>(cns, PLT_CN)</span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), <span class="st">"c:/RxFire/Data/_FIADB_WA.db"</span>)</span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>plots <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con, <span class="fu">str_c</span>(<span class="st">"select * from PLOT where CN in ("</span>, plt_cn, <span class="st">")"</span>))</span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>plots <span class="ot">&lt;-</span> plots <span class="sc">|&gt;</span> <span class="fu">rename</span>(<span class="at">PLT_CN =</span> CN)</span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>t_plots <span class="ot">&lt;-</span> <span class="fu">left_join</span>(cns, plots, <span class="fu">join_by</span>(PLT_CN))</span>
-<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>t_plots <span class="ot">&lt;-</span> t_plots <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">PLOTid =</span> <span class="fu">str_c</span>(PLOT, <span class="st">"_"</span>, SUBP)) <span class="sc">|&gt;</span> <span class="fu">relocate</span>(StandID, PLOTid)</span>
-<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>t_plots <span class="sc">|&gt;</span> <span class="fu">nrow</span>() <span class="sc">%&gt;%</span> <span class="fu">add_commas</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>cns <span class="ot">&lt;-</span> regPlots <span class="sc">|&gt;</span> <span class="fu">select</span>(StandID) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">PLT_CN =</span> <span class="fu">str_sub</span>(StandID, <span class="dv">1</span>, <span class="sc">-</span><span class="dv">3</span>), </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">SUBP =</span> <span class="fu">str_sub</span>(StandID, <span class="sc">-</span><span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>plt_cn <span class="ot">&lt;-</span> <span class="fu">db_list</span>(cns, PLT_CN)</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), <span class="st">"c:/RxFire/Data/_FIADB_WA.db"</span>)</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>plots <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con, <span class="fu">str_c</span>(<span class="st">"select * from PLOT where CN in ("</span>, plt_cn, <span class="st">")"</span>))</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>plots <span class="ot">&lt;-</span> plots <span class="sc">|&gt;</span> <span class="fu">rename</span>(<span class="at">PLT_CN =</span> CN)</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>t_plots <span class="ot">&lt;-</span> <span class="fu">left_join</span>(cns, plots, <span class="fu">join_by</span>(PLT_CN))</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>t_plots <span class="ot">&lt;-</span> t_plots <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">PLOTid =</span> <span class="fu">str_c</span>(PLOT, <span class="st">"_"</span>, SUBP)) <span class="sc">|&gt;</span> <span class="fu">relocate</span>(StandID, PLOTid)</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>t_plots <span class="sc">|&gt;</span> <span class="fu">nrow</span>() <span class="sc">%&gt;%</span> <span class="fu">add_commas</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 10,637</code></pre>
 </div>
 </div>
 <p><em>Making sure that PLOTid works</em></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>t_plots <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>t_plots <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
 <table class="caption-top table table-sm table-striped small">
@@ -1365,32 +1397,32 @@ $ s_class &lt;chr&gt; "SE", "SE", "SE", "SE", "SI", "BG", "BG", "SI", "SI", "SE"
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For each PLOTid, find the years of each visit. </span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> t_plots <span class="sc">|&gt;</span> </span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(StandID, PREV_PLT_CN, INVYR, PLOTid) <span class="sc">|&gt;</span> </span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PLOTid, INVYR) <span class="sc">|&gt;</span> </span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(), </span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(PLOTid, <span class="fu">desc</span>(INVYR)) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>n)</span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a tag for first or second visit</span></span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> a <span class="sc">|&gt;</span> <span class="fu">group_by</span>(PLOTid) <span class="sc">|&gt;</span> </span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">instance =</span> <span class="fu">str_c</span>(<span class="st">"visit_"</span>, <span class="fu">row_number</span>())</span>
-<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Make it wider to see where there was only one visit*</span></span>
-<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>plot_yr <span class="ot">&lt;-</span> a <span class="sc">|&gt;</span> <span class="fu">select</span>(PLOTid, INVYR, instance) <span class="sc">|&gt;</span> </span>
-<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
-<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> instance, <span class="at">values_from =</span> INVYR)</span>
-<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>plot_yr <span class="sc">|&gt;</span> <span class="fu">nrow</span>() <span class="sc">%&gt;%</span> <span class="fu">add_commas</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For each PLOTid, find the years of each visit. </span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> t_plots <span class="sc">|&gt;</span> </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(StandID, PREV_PLT_CN, INVYR, PLOTid) <span class="sc">|&gt;</span> </span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PLOTid, INVYR) <span class="sc">|&gt;</span> </span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(), </span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(PLOTid, <span class="fu">desc</span>(INVYR)) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>n)</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a tag for first or second visit</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> a <span class="sc">|&gt;</span> <span class="fu">group_by</span>(PLOTid) <span class="sc">|&gt;</span> </span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">instance =</span> <span class="fu">str_c</span>(<span class="st">"visit_"</span>, <span class="fu">row_number</span>())</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Make it wider to see where there was only one visit*</span></span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>plot_yr <span class="ot">&lt;-</span> a <span class="sc">|&gt;</span> <span class="fu">select</span>(PLOTid, INVYR, instance) <span class="sc">|&gt;</span> </span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> instance, <span class="at">values_from =</span> INVYR)</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>plot_yr <span class="sc">|&gt;</span> <span class="fu">nrow</span>() <span class="sc">%&gt;%</span> <span class="fu">add_commas</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 7,241</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>plot_yr <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>plot_yr <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
 <table class="caption-top table table-sm table-striped small">
@@ -1442,18 +1474,18 @@ $ s_class &lt;chr&gt; "SE", "SE", "SE", "SE", "SI", "BG", "BG", "SI", "SI", "SE"
 </ul>
 <p><em>Number of visits</em></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>v1 <span class="ot">&lt;-</span> a <span class="sc">|&gt;</span> <span class="fu">filter</span>(instance <span class="sc">==</span> <span class="st">"visit_1"</span>)</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(plot_yr<span class="sc">$</span>visit_1)) <span class="sc">%&gt;%</span> <span class="fu">add_commas</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>v1 <span class="ot">&lt;-</span> a <span class="sc">|&gt;</span> <span class="fu">filter</span>(instance <span class="sc">==</span> <span class="st">"visit_1"</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(plot_yr<span class="sc">$</span>visit_1)) <span class="sc">%&gt;%</span> <span class="fu">add_commas</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 7,241</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 6064</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>v2 <span class="ot">&lt;-</span> a <span class="sc">|&gt;</span> <span class="fu">filter</span>(instance <span class="sc">==</span> <span class="st">"visit_2"</span>)</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(plot_yr<span class="sc">$</span>visit_2)) <span class="sc">%&gt;%</span> <span class="fu">add_commas</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 6064</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>v2 <span class="ot">&lt;-</span> a <span class="sc">|&gt;</span> <span class="fu">filter</span>(instance <span class="sc">==</span> <span class="st">"visit_2"</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(plot_yr<span class="sc">$</span>visit_2)) <span class="sc">%&gt;%</span> <span class="fu">add_commas</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3,396</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 2481</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 2481</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li><del>There were 6064 individual PLOTs for those 8,545 visits and 2,481 had earlier visits.</del></li>
@@ -1461,43 +1493,43 @@ $ s_class &lt;chr&gt; "SE", "SE", "SE", "SE", "SI", "BG", "BG", "SI", "SI", "SE"
 <li>7,241 PLOTs, 3,396 had earlier visits.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>plots_2vis <span class="ot">&lt;-</span> plot_yr <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(visit_2)) <span class="sc">|&gt;</span> <span class="fu">select</span>(PLOTid)</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>plots_1vis <span class="ot">&lt;-</span> plot_yr <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="fu">is.na</span>(visit_2)) <span class="sc">|&gt;</span> <span class="fu">select</span>(PLOTid)</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>plots_2vis <span class="ot">&lt;-</span> <span class="fu">left_join</span>(plots_2vis, t_plots, <span class="fu">join_by</span>(PLOTid))</span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>plots_1vis <span class="ot">&lt;-</span> <span class="fu">left_join</span>(plots_1vis, t_plots, <span class="fu">join_by</span>(PLOTid))</span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>plots_2vis <span class="ot">&lt;-</span> plots_2vis <span class="sc">|&gt;</span> </span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PLOTid, StandID, INVYR) <span class="sc">|&gt;</span> </span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(), </span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(PLOTid, <span class="fu">desc</span>(INVYR)) <span class="sc">|&gt;</span> </span>
-<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PLOTid) <span class="sc">|&gt;</span> </span>
-<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">instance =</span> <span class="fu">str_c</span>(<span class="st">"visit_"</span>, <span class="fu">row_number</span>())) <span class="sc">|&gt;</span> </span>
-<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
-<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(splots_2vis, "C:/RxFire/Regen/Regen_Notes/Subplots_w2visits.csv")</span></span>
-<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>plots_2vis <span class="ot">&lt;-</span> plots_2vis <span class="sc">|&gt;</span> </span>
-<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(instance <span class="sc">==</span> <span class="st">"visit_2"</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(StandID, INVYR, instance)</span>
-<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>plots_1vis <span class="ot">&lt;-</span> plots_1vis <span class="sc">|&gt;</span> </span>
-<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PLOTid, StandID, INVYR) <span class="sc">|&gt;</span> </span>
-<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(), </span>
-<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(PLOTid, <span class="fu">desc</span>(INVYR)) <span class="sc">|&gt;</span> </span>
-<span id="cb37-28"><a href="#cb37-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PLOTid) <span class="sc">|&gt;</span> </span>
-<span id="cb37-29"><a href="#cb37-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">instance =</span> <span class="fu">str_c</span>(<span class="st">"visit_"</span>, <span class="fu">row_number</span>())) <span class="sc">|&gt;</span> </span>
-<span id="cb37-30"><a href="#cb37-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
-<span id="cb37-31"><a href="#cb37-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-32"><a href="#cb37-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-33"><a href="#cb37-33" aria-hidden="true" tabindex="-1"></a>plots_1vis <span class="ot">&lt;-</span> plots_1vis <span class="sc">|&gt;</span> </span>
-<span id="cb37-34"><a href="#cb37-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(instance <span class="sc">==</span> <span class="st">"visit_1"</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(StandID, INVYR, instance)</span>
-<span id="cb37-35"><a href="#cb37-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-36"><a href="#cb37-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-37"><a href="#cb37-37" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(plots_2vis)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>plots_2vis <span class="ot">&lt;-</span> plot_yr <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(visit_2)) <span class="sc">|&gt;</span> <span class="fu">select</span>(PLOTid)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>plots_1vis <span class="ot">&lt;-</span> plot_yr <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="fu">is.na</span>(visit_2)) <span class="sc">|&gt;</span> <span class="fu">select</span>(PLOTid)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>plots_2vis <span class="ot">&lt;-</span> <span class="fu">left_join</span>(plots_2vis, t_plots, <span class="fu">join_by</span>(PLOTid))</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>plots_1vis <span class="ot">&lt;-</span> <span class="fu">left_join</span>(plots_1vis, t_plots, <span class="fu">join_by</span>(PLOTid))</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>plots_2vis <span class="ot">&lt;-</span> plots_2vis <span class="sc">|&gt;</span> </span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PLOTid, StandID, INVYR) <span class="sc">|&gt;</span> </span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(), </span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(PLOTid, <span class="fu">desc</span>(INVYR)) <span class="sc">|&gt;</span> </span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PLOTid) <span class="sc">|&gt;</span> </span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">instance =</span> <span class="fu">str_c</span>(<span class="st">"visit_"</span>, <span class="fu">row_number</span>())) <span class="sc">|&gt;</span> </span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(splots_2vis, "C:/RxFire/Regen/Regen_Notes/Subplots_w2visits.csv")</span></span>
+<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a>plots_2vis <span class="ot">&lt;-</span> plots_2vis <span class="sc">|&gt;</span> </span>
+<span id="cb39-20"><a href="#cb39-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(instance <span class="sc">==</span> <span class="st">"visit_2"</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(StandID, INVYR, instance)</span>
+<span id="cb39-21"><a href="#cb39-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-22"><a href="#cb39-22" aria-hidden="true" tabindex="-1"></a>plots_1vis <span class="ot">&lt;-</span> plots_1vis <span class="sc">|&gt;</span> </span>
+<span id="cb39-23"><a href="#cb39-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PLOTid, StandID, INVYR) <span class="sc">|&gt;</span> </span>
+<span id="cb39-24"><a href="#cb39-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb39-25"><a href="#cb39-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(), </span>
+<span id="cb39-26"><a href="#cb39-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb39-27"><a href="#cb39-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(PLOTid, <span class="fu">desc</span>(INVYR)) <span class="sc">|&gt;</span> </span>
+<span id="cb39-28"><a href="#cb39-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PLOTid) <span class="sc">|&gt;</span> </span>
+<span id="cb39-29"><a href="#cb39-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">instance =</span> <span class="fu">str_c</span>(<span class="st">"visit_"</span>, <span class="fu">row_number</span>())) <span class="sc">|&gt;</span> </span>
+<span id="cb39-30"><a href="#cb39-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb39-31"><a href="#cb39-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-32"><a href="#cb39-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-33"><a href="#cb39-33" aria-hidden="true" tabindex="-1"></a>plots_1vis <span class="ot">&lt;-</span> plots_1vis <span class="sc">|&gt;</span> </span>
+<span id="cb39-34"><a href="#cb39-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(instance <span class="sc">==</span> <span class="st">"visit_1"</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(StandID, INVYR, instance)</span>
+<span id="cb39-35"><a href="#cb39-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-36"><a href="#cb39-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-37"><a href="#cb39-37" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(plots_2vis)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   StandID              INVYR        instance        
  Length:3396        Min.   :2002   Length:3396       
@@ -1509,15 +1541,15 @@ $ s_class &lt;chr&gt; "SE", "SE", "SE", "SE", "SI", "BG", "BG", "SI", "SI", "SE"
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(plots_1vis) <span class="sc">%&gt;%</span> <span class="fu">add_commas</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(plots_1vis) <span class="sc">%&gt;%</span> <span class="fu">add_commas</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3,845</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(plots_2vis) <span class="sc">%&gt;%</span> <span class="fu">add_commas</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(plots_2vis) <span class="sc">%&gt;%</span> <span class="fu">add_commas</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3,396</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>(<span class="fu">nrow</span>(plots_1vis) <span class="sc">+</span> <span class="fu">nrow</span>(plots_2vis)) <span class="sc">%&gt;%</span> <span class="fu">add_commas</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>(<span class="fu">nrow</span>(plots_1vis) <span class="sc">+</span> <span class="fu">nrow</span>(plots_2vis)) <span class="sc">%&gt;%</span> <span class="fu">add_commas</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 7,241</code></pre>
 </div>
@@ -1533,15 +1565,15 @@ $ s_class &lt;chr&gt; "SE", "SE", "SE", "SE", "SI", "BG", "BG", "SI", "SI", "SE"
 <section id="subplots" class="level1">
 <h1>7,241 subplots</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>training_set <span class="ot">&lt;-</span> <span class="fu">add_row</span>(plots_2vis, plots_1vis) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>instance)</span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>testing_set <span class="ot">&lt;-</span> <span class="fu">anti_join</span>(t_plots, training_set, <span class="fu">join_by</span>(StandID, INVYR)) <span class="sc">|&gt;</span> <span class="fu">select</span>(StandID, INVYR)</span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>training_set<span class="sc">$</span>TRAIN <span class="ot">&lt;-</span> <span class="st">"train"</span></span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>testing_set<span class="sc">$</span>TRAIN <span class="ot">&lt;-</span> <span class="st">"test"</span></span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>standlist <span class="ot">&lt;-</span> <span class="fu">add_row</span>(training_set, testing_set)</span>
-<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(standlist)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>training_set <span class="ot">&lt;-</span> <span class="fu">add_row</span>(plots_2vis, plots_1vis) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>instance)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>testing_set <span class="ot">&lt;-</span> <span class="fu">anti_join</span>(t_plots, training_set, <span class="fu">join_by</span>(StandID, INVYR)) <span class="sc">|&gt;</span> <span class="fu">select</span>(StandID, INVYR)</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>training_set<span class="sc">$</span>TRAIN <span class="ot">&lt;-</span> <span class="st">"train"</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>testing_set<span class="sc">$</span>TRAIN <span class="ot">&lt;-</span> <span class="st">"test"</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>standlist <span class="ot">&lt;-</span> <span class="fu">add_row</span>(training_set, testing_set)</span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(standlist)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 10,637
 Columns: 3
@@ -1549,10 +1581,10 @@ $ StandID &lt;chr&gt; "22954433010497_1", "22954433010497_2", "22954433010497_3"
 $ INVYR   &lt;int&gt; 2007, 2007, 2007, 2009, 2010, 2010, 2010, 2010, 2006, 2006, 20…
 $ TRAIN   &lt;chr&gt; "train", "train", "train", "train", "train", "train", "train",…</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># getwd()</span></span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(training_set, "C:/RxFire/Regen/Regeneration_2_16Sept24/data/train.csv")</span></span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(testing_set, "C:/RxFire/Regen/Regeneration_2_16Sept24/data/test.csv")</span></span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(standlist, "C:/RxFire/Regen/Regeneration_2_16Sept24/data/train_and_test.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># getwd()</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(training_set, "C:/RxFire/Regen/Regeneration_2_16Sept24/data/train.csv")</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(testing_set, "C:/RxFire/Regen/Regeneration_2_16Sept24/data/test.csv")</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(standlist, "C:/RxFire/Regen/Regeneration_2_16Sept24/data/train_and_test.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
@@ -1594,18 +1626,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -1637,7 +1658,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp("https:\/\/KingBlkMouth\.github\.io\/Regen_Regression\.github\.io\/");
@@ -1645,7 +1688,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {
