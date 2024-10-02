@@ -2,35 +2,87 @@ project:
   type: website
 
 website:
-  title: "Regeneration_2_16Sept24"
+  reader-mode: true
+  title: "Regen 2"
   navbar:
+    search: true
     left:
       - href: index.qmd
         text: Home
-      - 1.0_Import_Clean.qmd
-      - 1.5_DB_Create.qmd
-      - 2_FVS_Variables.qmd
-      - 3_RandomForests_Prep.qmd
-      - 4_RF_by_Eco.qmd
-      - 5_TD_Imp.qmd
-      - 6_distributions.qmd
-      - 7_RF_GroupSpp_and_Counts.qmd
-      - 8_RF_Spp_Groups.qmd
-      - 9_RF_Regression.qmd
-      - 10_Hyperparameters.qmd
-      - 11_Heatmap.qmd
-      - 12_Error_Map.qmd
+      - text: "Data Prep"
+        href: 1.0_Import_Clean.qmd
+
+      - text: "Models"
+        href: 9_RF_Regression.qmd
+
+      - text: "Plots"
+        href: 6_distributions.qmd
+          
+      - text: "Parameters"
+        href: 10_Hyperparameters.qmd
+        
+      - text: "Maps"
+        href: 11_Heatmap.qmd
+        
+      - text: "Other"
+        href: 14_Research.qmd
+
+  sidebar:
+    - title: "Data Prep"
+      style: "docked"
+      contents:
+        - 1.0_Import_Clean.qmd
+        - 1.5_DB_Create.qmd
+        - 2_FVS_Variables.qmd
+        - 3_RandomForests_Prep.qmd
+        
+    - title: "Models"
+      style: "docked"
+      contents: 
+        - 4_RF_by_Eco.qmd
+        - 5_TD_Imp.qmd
+        - 7_RF_GroupSpp_and_Counts.qmd
+        - 8_RF_Spp_Groups.qmd
+        - 9_RF_Regression.qmd
+        
+    - title: "Plots"
+      style: "docked"
+      contents: 
+        - 6_distributions.qmd
+        - 13_Stem_exclusion.qmd
+
+    - title: "Parameters"
+      style: "docked"
+      contents:
+        - 10_Hyperparameters.qmd
+        
+    - title: "Maps"
+      style: "docked"
+      contents:
+        - 11_Heatmap.qmd
+        - 12_Error_Map.qmd
+        
+    - title: "Other"
+      style: "docked"
+      contents:
+        - 14_Research.qmd
+        - 15_Personal_Notes.qmd
 
 format:
   html:
-    theme: cosmo
+    theme: Darkly
     css: styles.css
     toc: true
     grid: 
-      sidebar-width: 50px
-      margin-width: 150px
-      body-width: 1100px
+      sidebar-width: 250px
+      margin-width: 300px
+      body-width: 1200px
     df-print: kable
+
+knitr:
+  opts_chunk: 
+    R.options:
+      width: 1100
 
 
 
