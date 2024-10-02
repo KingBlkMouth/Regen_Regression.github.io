@@ -5,11 +5,11 @@ execute:
 ---
 
 
-*Rachel's Original Code*
 ```{r}
 #| code-fold: true
 #| label: Rachels FIA code
 #| eval: false
+#| include: false
 
 library(RSQLite)
 library(sqldf)
@@ -213,7 +213,7 @@ options(scipen = 999)
 *Functions*
 ```{r}
 #| code-fold: true
-#| label: Functions
+#| echo: false
 
 clean_mem <- function() {
   x <- ls(envir = .GlobalEnv)
@@ -221,11 +221,14 @@ clean_mem <- function() {
   rm(list = x[!(x %in% keep)], envir = .GlobalEnv)
   gc()
 }
-keep <- c("keep", "clean_mem", "clean_na_cols")
 
 clean_na_cols <- function(df){
   df <- df[, colSums(is.na(df)) < nrow(df)]
-  print(df)
+}
+
+# path <- r"(C:\RxFire\Regen\FVS\regen_080724_1644\regen_080724_1644.db)"
+clean_paths <- function(path) {
+  str_replace_all(path, "\\\\", "/")
 }
 
 db_list <- function(df, CN_col){
@@ -236,9 +239,51 @@ db_list <- function(df, CN_col){
   # name <- str_flatten_comma(name[, CN_col])
   name
 }
+
+nas_to_zeroes <- function(df){
+  df <- df |> mutate_all(~replace(., is.na(.), 0))
+  df
+}
+
+add_commas <- function(n) {
+  t <- prettyNum(n, ",",scientific=FALSE)
+  return(noquote(t))
+}
+
+keep <- c("keep", "clean_mem", "clean_na_cols", "clean_paths", "db_list", "nas_to_zeroes", "add_commas")
 ```
 
 
+___
+
+
+```{r}
+#| include: false
+#| eval: false
+
+rstudioapi::getSourceEditorContext()$path %>% basename()
+```
+
+
+**Created on**
+```{r}
+#| echo: false
+
+ymd_hms(file.info("./1.5_DB_Create.qmd")$ctime, tz = "America/Los_Angeles")
+```
+
+**Last updated on**
+```{r}
+#| echo: false
+
+ymd_hms(file.info("./1.5_DB_Create.qmd")$atime, tz = "America/Los_Angeles")
+```
+
+
+___
+
+
+# Rachels's Code
 
 **Breaking down Rachel's code**
 
@@ -333,6 +378,7 @@ Pseudo code
 - join the fine and coarse fuel tables
 - Remove PredCN and NA values
 - write new db. 
+
 
 
 
@@ -749,7 +795,7 @@ joining the plots to the tree table's Standplot_cn to ensure there are no empty 
 ```{r}
 # Part 1 Setup
 
-standlist <- read_csv("./1_Import_Clean2.csv", 
+standlist <- read_csv("./data/1_Import_Clean2.csv", 
                       col_types = "ccc")
 
 standlist <- standlist |> mutate(
@@ -792,14 +838,15 @@ tree <- as.data.table(
   )
 # n_distinct(tree$PLT_CN)
 # 3426 PLT_CNs have trees in the TREE table
- 
+
 tree <- tree |> mutate(
   Species = SPCD, 
-  History = ifelse(
-    !is.na(AGENTCD), 8, 1
-  ), 
+  History = ifelse(STATUSCD == 1 & is.na(AGENTCD), 1, 8),
+  History = ifelse(STATUSCD != 1 | !is.na(AGENTCD), 8, 1),
   CrRatio = CR
 ) |> select(-INVYR)
+
+# tree %>% select(STATUSCD, AGENTCD, History) %>% unique()
 
 forest_type <- as.data.table(dbGetQuery(con, 'select * FROM REF_FOREST_TYPE'))
 dbDisconnect(con)
@@ -985,7 +1032,7 @@ getwd()
 # Just to make it easier to integrate this into the other scripts I am renaming the tables FVS_...
 
 
-con <- dbConnect(RSQLite::SQLite(), dbname = "./homemade_fvs_db_17sept24.db")
+con <- dbConnect(RSQLite::SQLite(), dbname = "./data/homemade_fvs_db_17sept24.db")
 
 
 
@@ -1035,8 +1082,8 @@ dbDisconnect(con)
 
 # Remove NA values when writing files (FVS does NOT like them)
 ### UPDATE YOUR OUTPUT FILE NAMES HERE ###
-# write.csv(tree_table, file = "tree_table_R1_Carbon_2014.csv", na = "", row.names = FALSE)
-# write.csv(stands_with_fuels, file = "stand_table_R1_Carbon2014.csv", na = "", row.names = FALSE)
+# write.csv(tree_table, file = "data/tree_table_R1_Carbon_2014.csv", na = "", row.names = FALSE)
+# write.csv(stands_with_fuels, file = "data/stand_table_R1_Carbon2014.csv", na = "", row.names = FALSE)
 
 ```
 
@@ -1046,7 +1093,7 @@ dbDisconnect(con)
 ```{r}
 # splt_cn <- splt_cn |> select(STAND_CN, STANDPLOT_CN)
 
-# write_csv(splt_cn, "./1.5_dbCreation_standlist.csv")
+# write_csv(splt_cn, "./data/1.5_dbCreation_standlist.csv")
 ```
 
 
@@ -1054,8 +1101,8 @@ dbDisconnect(con)
 
 **Where is the difference**
 ```{r}
-# end1.5 <- read_csv("./1.5_dbCreation_standlist.csv")
-# end1.0 <- read_csv("./1_Import_Clean2.csv", 
+# end1.5 <- read_csv("./data/1.5_dbCreation_standlist.csv")
+# end1.0 <- read_csv("./data/1_Import_Clean2.csv", 
 #                       col_types = "ccc")
 
 # t <- anti_join(end1.0, end1.5, join_by(STANDPLOT_CN))

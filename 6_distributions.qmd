@@ -4,8 +4,6 @@ execute:
   freeze: auto
 ---
 
-**Tu. 27AUG24**
-
 
 The following graphs are organized by Density, Log transformation, then raw. 
 Each set shows two sets of histograms, one that contains the excess zeroes and one that doesn't. 
@@ -106,6 +104,35 @@ keep <- c("keep", "clean_mem", "clean_na_cols", "clean_paths", "db_list", "nas_t
 ```
 
 
+___
+
+
+```{r}
+#| include: false
+#| eval: false
+
+rstudioapi::getSourceEditorContext()$path %>% basename()
+```
+
+
+**Created on**
+```{r}
+#| echo: false
+
+ymd_hms(file.info("./6_distributions.qmd")$ctime, tz = "America/Los_Angeles")
+```
+
+**Last updated on**
+```{r}
+#| echo: false
+
+ymd_hms(file.info("./6_distributions.qmd")$atime, tz = "America/Los_Angeles")
+```
+
+
+___
+
+
 
 # Import
 
@@ -113,8 +140,8 @@ keep <- c("keep", "clean_mem", "clean_na_cols", "clean_paths", "db_list", "nas_t
 ```{r}
 #| code-fold: true
 
-load("raw_TDs_forHist.Rdata")
-load("rf_TDs_forHist.Rdata")
+load("data/raw_TDs_forHist.Rdata")
+load("data/rf_TDs_forHist.Rdata")
 ```
 
 
@@ -168,7 +195,7 @@ t <- add_row(t, t3) |> drop_na()
 ```{r}
 #| code-fold: true
 
-load("raw_TDs_forHist.Rdata")
+load("data/raw_TDs_forHist.Rdata")
 
 raw_tds |> ncol()
 CNs <- raw_tds |> select(STANDPLOT_CN) 
@@ -277,23 +304,6 @@ Since imputed vs observed are closely matched, Observed v the test set have the 
 
 
 
-- Space
-
-  + Space
-
-
-- Space
-
-  + Space
-  
-- Space
-
-  + Space
-  
-  
-- Space
-
-  + Space
 
 
 ```{r}
@@ -392,25 +402,6 @@ similar to the imputed vs. test set ones.
 
 
 
-- Space
-
-  + Space
-
-
-- Space
-
-  + Space
-  
-- Space
-
-  + Space
-  
-  
-- Space
-
-  + Space
-
-
 
 
 ```{r}
@@ -498,38 +489,6 @@ for (i in 1:length(spp_list)) {  ## length(spp_list)
 
 
 
-**I was originally going to summarise all of these. 
-Now, I am keeping these in to create space between the sets of graphs.**
-
-**Observed v Imputed**
-
-- ABAM
-  + 
-  
-- General
-  + 
-  
-**Imputed v Test**
-
-- ABAM
-  + 
-  
-- General
-  + 
-
-**Observed v Test**
-
-- ABAM
-  + 
-  
-- General
-  + 
-  
-- Space
-
- + Space
-
-
 
 
 ```{r}
@@ -615,31 +574,7 @@ for (i in 1:length(spp_list)) {  ## length(spp_list)
 
 
 
-**I was originally going to summarise all of these. 
-Now, I am keeping these in to create space between the sets of graphs.**
 
-  
-- Space
-
- + Space
-
-- Space
-
- + Space
-
-
-- Space
-
- + Space
-
-
-- Space
-
- + Space
-
-- Space
-
- + Space
 
 
 
@@ -740,30 +675,6 @@ for (i in 1:length(spp_list)) {  ## length(spp_list)
 
 
 
-- Space
-
-  + Space
-
-
-- Space
-
-  + Space
-  
-- Space
-
-  + Space
-  
-  
-- Space
-
-  + Space
-
-
-
-
-
-
-
 ```{r}
 #| layout-ncol: 3
 #| fig-width: 10
@@ -843,29 +754,6 @@ The imputed values contain many more zeroes than the observed.
 In fact, it looks like there are just more plots in the imputed
 
 
-
-**I was originally going to summarise all of these. 
-Now, I am keeping these in to create space between the sets of graphs.**
-
-
-
-- Space
-
-  + Space
-
-
-- Space
-
-  + Space
-  
-- Space
-
-  + Space
-  
-  
-- Space
-
-  + Space
 
 
 
@@ -950,32 +838,6 @@ for (i in 1:length(spp_list)) {  ## length(spp_list)
 
 
 
-**I was originally going to summarise all of these. 
-Now, I am keeping these in to create space between the sets of graphs.**
-
-  
-- Space
-
- + Space
-
-- Space
-
- + Space
-
-
-- Space
-
- + Space
-
-
-- Space
-
- + Space
-
-- Space
-
- + Space
-
 
 
 
@@ -1054,37 +916,6 @@ for (i in 1:length(spp_list)) {  ## length(spp_list)
 
 
 
-
-**I was originally going to summarise all of these. 
-Now, I am keeping these in to create space between the sets of graphs.**
-
-**Observed v Imputed**
-
-- ABAM
-  + 
-  
-- General
-  + 
-  
-**Imputed v Test**
-
-- ABAM
-  + 
-  
-- General
-  + 
-
-**Observed v Test**
-
-- ABAM
-  + 
-  
-- General
-  + 
-  
-- Space
-
- + Space
 
 
 

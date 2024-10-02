@@ -4,6 +4,15 @@ execute:
   freeze: auto
 ---
 
+
+```{r}
+#| include: false
+
+rm(list = ls())                                                      
+gc()   
+```
+
+
 *Libraries*
 ```{r}
 #| label: Libraries
@@ -12,8 +21,7 @@ execute:
 #| code-fold: true
 #| echo: false
 
-rm(list = ls())                                                      
-gc()                                                                                 
+                                                                              
 
 # Data tidying and acces
 library(tidyverse, quietly = T)       # Easy to read syntax and data manipulation                   
@@ -45,9 +53,10 @@ library(sf)                           # Simple Features/vector data
 options(scipen = 999)
 ```
 
-
+*Functions*
 ```{r}
 #| code-fold: true
+
 
 clean_mem <- function() {
   x <- ls(envir = .GlobalEnv)
@@ -55,12 +64,60 @@ clean_mem <- function() {
   rm(list = x[!(x %in% keep)], envir = .GlobalEnv)
   gc()
 }
-keep <- c("keep", "clean_mem", "clean_na_cols")
 
 clean_na_cols <- function(df){
   df <- df[, colSums(is.na(df)) < nrow(df)]
 }
+
+# path <- r"(C:\RxFire\Regen\FVS\regen_080724_1644\regen_080724_1644.db)"
+clean_paths <- function(path) {
+  str_replace_all(path, "\\\\", "/")
+}
+
+db_list <- function(df, CN_col){
+  name <- NULL
+  name <- df |> select({{CN_col}})
+  name <- name |> mutate(CN_col = str_c("'", {{CN_col}}, "'")) 
+  name <- str_flatten_comma(name$CN_col)
+  # name <- str_flatten_comma(name[, CN_col])
+  name
+}
+
+nas_to_zeroes <- function(df){
+  df <- df |> mutate_all(~replace(., is.na(.), 0))
+  df
+}
+
+add_commas <- function(n) {
+  t <- prettyNum(n, ",",scientific=FALSE)
+  return(noquote(t))
+}
+
+keep <- c("keep", "clean_mem", "clean_na_cols", "clean_paths", "db_list", "nas_to_zeroes", "add_commas")
 ```
+
+
+___
+
+**Created on**
+```{r}
+#| echo: false
+
+ymd_hms(file.info("./1.0_Import_Clean.qmd")$ctime, tz = "America/Los_Angeles")
+```
+
+**Last updated on**
+```{r}
+#| echo: false
+
+ymd_hms(file.info("./1.0_Import_Clean.qmd")$atime, tz = "America/Los_Angeles")
+```
+
+___
+
+
+
+
 
 
 # Intro
@@ -70,7 +127,61 @@ clean_na_cols <- function(df){
 This page will deal with filtering raw data from FIA up until the point I can run it in FVS.**
 
 
+# Filtering Steps
 
+There are three pages of filtering to be done. I will list them all here. 
+
+Starting from the set of FIA plots that share ecoregions that are present within the study area's 60k buffer. 
+These are filtered out:
+
+*Last updated on 27Sept24*
+
+**This page**
+
+1. **Periodic**, *DESIGNCD != 559 and DESIGNCD != 558"*
+2. **Multi-Condition**, *CONDPROP_UNADJ == 1*
+3. **Non-Forest**, *FORTYPCD > 0*
+4. **Fire-Disturbed**, *DSTRBCDs 1:3 == 30, 31, or 32*
+5. **Only Null TREECOUNT**, *Removing plots that only contain Null TreeCounts*
+6. **No trees**, *Plots that do not have NULL TREECOUNTs, but have no trees, live or dead*
+7. **Does not have FPAG**, *HABTYPCD1 is NULL*
+8. **Artificial Regeneration**, *TRTCDs 1:3 == 30*
+9. **Equal condition microplot and subplot**, *This is redundant to Multi-condition*
+10. **Proportion of subplot and microplot are dominated by a single condition**, *Again, this is redundant to Multi-Condiditon*
+11. **FPAG is Artificial, Non-Veg, or Water**, *HABTYPCD1 starts with, A, N, or W*
+12. **Fix FPAG**, *Convert the single PIAL plot to CAGO, Condifer, Alpine, Grass. Determined by looking at the NRCS data*
+
+**Page 1.5, DB_Create**
+
+13. **Dead Trees**, *STATUSCD == 1 & is.na(AGENTCD) = 1(Live), else 8(dead); plots that only contain dead trees are removed*
+
+**Page 2, FVS Variables**
+
+After Running the previously filtered plots through FVS, the following were filtered:
+
+14. **Double check on plots with only dead trees**, *Redundant*
+15. **Stem Exclusion**, *FVS_StrClass::Structure_Class- "2 = SE"*
+  - *Structure Class is a function of the number of strata, the nominal diameter of trees in the strata, and stocking.*
+16. **Inventory Cycle**, *Not filtering, but tagging plots as Training (The earlier visit or only 1 visit) or Test set (The later visit)*
+
+**Page 3, RF_Prep**
+
+17. **Subplots with only dead trees**
+
+
+:::{.callout-note collapse="true"}
+
+# Definitions
+
+**Status code**. A code indicating whether the sample tree is live, cut, or dead at the time of
+measurement. Includes dead and cut trees, which are required to estimate aboveground
+biomass and net annual volume for growth, mortality, and removals. This code is not used
+when querying data for change estimates.
+Note: New and replacement plots use only codes 1 (Live) and 2 (Dead), Older plots use 0 (Not tallied), & 3 (Removed/Cut). 
+
+**AGENTCD**, Cause of death (agent) code, 0 = no record in plots before 1999, else dead. 30 = fire. NA = not filled in. 
+
+:::
 
 
 # Pseudo Code
@@ -78,13 +189,11 @@ This page will deal with filtering raw data from FIA up until the point I can ru
 1. Subset fia plots by FOA buffer
 
   - Extract the CN, latitude, and longitude of all FIA plots from the WA FIA.db. 
-  - ~~save the CN list to a csv~~
-  - ~~Import the list to ArcGIS Pro (AGP)~~
   - Create an sf object from the lat/long
   - Set the Geodetic Coordinate system to match the FIA data (NAD83)
-  - set the projected Coordinates system to match the 60k buffer. (Albers_Conic_Equal_Area)
-  - Filter the FIA plots by the OkWen 60km buffer. **Not the FOA_60km_Buffer**
-  - ~~save the subset to "C:/RxFire/Regen/Regen2_08Aug24/60k_buffer_fiaplots.csv"~~
+  - Set the projected Coordinates system to match the 60k buffer. (Albers_Conic_Equal_Area)
+  - Filter the FIA plots by the OkWen 60km buffer. 
+    + **This is not the FOA_60km_Buffer, but the OkWen buffer**
   
 2. Get all plots from these EcoRegions in WA. 
  
@@ -150,7 +259,7 @@ I later decided to subset the data in R. That way all of the metadata is right h
 
 ```{r}
 ## For reference, here is the set from AGP
-Buffer_plots <- read_csv("C:/RxFire/Regen/Regeneration_2_16Sept24/60k_buffer_fiaplots.csv", 
+Buffer_plots <- read_csv("C:/RxFire/Regen/Regeneration_2_16Sept24/data/60k_buffer_fiaplots.csv", 
                          col_types = "cnnn")
 Buffer_plots$CN <- as.character(Buffer_plots$CN)
 # Buffer_plots |> head()
@@ -223,7 +332,7 @@ Those plots are coded with CNs that have fewer characters.
 
 ```{r}
 # Plots inside the 60km buffer from WA FIA
-Buffer_plots <- read_csv("C:/RxFire/Regen/Regeneration_2_16Sept24/60k_buffer_fiaplots.csv", 
+Buffer_plots <- read_csv("C:/RxFire/Regen/Regeneration_2_16Sept24/data/60k_buffer_fiaplots.csv", 
                          col_types = c("c", "c", "c", "c")) |> select(CN)
 Buffer_plots$CN <- as.character(Buffer_plots$CN)
 # str(Buffer_plots)
@@ -248,9 +357,14 @@ ___
 
 
 ```{r}
+#| include: false
+
 keep <- append(keep, c("Buffer_plots", "n_plots_in_60k")) |> unique()
 clean_mem()
+```
 
+
+```{r}
 # Ecoregions matching those from plots inside the 60km buffer
 con <- dbConnect(RSQLite::SQLite() , "C:/RxFire/Data/_FIADB_WA.db")
 WA_ecos <- dbGetQuery(con, "SELECT CN, ECOSUBCD FROM PLOT")
@@ -451,10 +565,12 @@ single_cond <- single_cond |> filter(DSTRBCD1 != 32 & DSTRBCD2 != 32 & DSTRBCD3 
 ```
 
 ```{r}
-30 %in% unique(single_cond$DSTRBCD1) |> sort()
+#| include: false
+
+# 30 %in% unique(single_cond$DSTRBCD1) |> sort()
 # 31 %in% unique(single_cond$DSTRBCD1) |> sort()
 # 32 %in% unique(single_cond$DSTRBCD1) |> sort()
-# 
+#  
 # 30 %in% unique(single_cond$DSTRBCD2) |> sort()
 # 31 %in% unique(single_cond$DSTRBCD2) |> sort()
 # 32 %in% unique(single_cond$DSTRBCD2) |> sort()
@@ -603,6 +719,8 @@ n_distinct(fpag_cond$PLT_CN)
 
 
 ```{r}
+#| include: false
+
 keep <- append(keep, c("hab_key", "plots", "fpag_cond"))
 clean_mem()
 ```
@@ -672,6 +790,8 @@ Now there are 3,446 plots and 13,784 subplots.
 15828 and 3957 on the second time through. 
 
 ```{r}
+#| include: false
+
 keep <- append(keep, c("zsubcond"))
 clean_mem()
 ```

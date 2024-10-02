@@ -87,6 +87,36 @@ keep <- c("keep", "clean_mem", "clean_na_cols", "clean_paths", "db_list", "nas_t
 ```
 
 
+___
+
+
+```{r}
+#| include: false
+#| eval: false
+
+rstudioapi::getSourceEditorContext()$path %>% basename()
+```
+
+
+**Created on**
+```{r}
+#| echo: false
+
+ymd_hms(file.info("./4_RF_by_Eco.qmd")$ctime, tz = "America/Los_Angeles")
+```
+
+**Last updated on**
+```{r}
+#| echo: false
+
+ymd_hms(file.info("./4_RF_by_Eco.qmd")$atime, tz = "America/Los_Angeles")
+```
+
+
+___
+
+
+
 # Import
 
 
@@ -99,7 +129,7 @@ rm(list = ls())
 
 
 ```{r}
-imp_db <- clean_paths(r"(./homemade_fvs_db2.db)")
+imp_db <- clean_paths(r"(./data/homemade_fvs_db2.db)")
 
 
 con <- dbConnect(RSQLite::SQLite(), imp_db)
@@ -679,7 +709,7 @@ y$max_spp1 <- factor(y$max_spp1)
 
 # rf_yai <- yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = T)
 # save(rf_yai, file = str_c("imp_12AUG24_kitchenSink", ".Rdata"))
-load(str_c("imp_12AUG24_kitchenSink", ".Rdata"))
+load(str_c("./data/imp_12AUG24_kitchenSink", ".Rdata"))
 ```
 
 yaImpute may have rejected the data because:
@@ -836,7 +866,7 @@ y <- y |> mutate(
 
 
 # rf_yai <- yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = T)
-# save(rf_yai, file = str_c("imp_12AUG24_kitchenSink", ".Rdata"))
+# save(rf_yai, file = str_c("data/imp_12AUG24_kitchenSink", ".Rdata"))
 
 ```
 
@@ -921,7 +951,7 @@ levels(y$max_spp1)
 
 # rf_seedling_TD <- yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = T)
 # rm(list = ls())
-load("./imp_12AUG24_kitchenSink.Rdata")
+load("./data/imp_12AUG24_kitchenSink.Rdata")
 
 rf_seedling_TD <- rf_yai
 rm(rf_yai)

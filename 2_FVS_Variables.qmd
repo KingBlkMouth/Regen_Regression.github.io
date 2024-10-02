@@ -79,6 +79,35 @@ add_commas <- function(n) {
 
 
 
+___
+
+
+```{r}
+#| include: false
+#| eval: false
+
+rstudioapi::getSourceEditorContext()$path %>% basename()
+```
+
+
+**Created on**
+```{r}
+#| echo: false
+
+ymd_hms(file.info("./2_FVS_Variables.qmd")$ctime, tz = "America/Los_Angeles")
+```
+
+**Last updated on**
+```{r}
+#| echo: false
+
+ymd_hms(file.info("./2_FVS_Variables.qmd")$atime, tz = "America/Los_Angeles")
+```
+
+
+___
+
+
 
 
 
@@ -139,7 +168,7 @@ The saved list of filtered plots is at "C:/RxFire/Regen/Regeneration_2_16Sept24/
 
 
 ```{r}
-standlist <- read_csv("./1.5_dbCreation_standlist.csv", 
+standlist <- read_csv("./data/1.5_dbCreation_standlist.csv", 
                       col_types = "ccc")
 standlist |> glimpse()
 ```
@@ -182,14 +211,14 @@ name <- str_c("regen_",
 
 getwd()
 ## Set the path to the stand input database here, aka the output db from 3_CNs_to_FVS:
-inputDatabase <- 'C:/RxFire/Regen/Regeneration_2_16Sept24/homemade_fvs_db_17sept24.db'
+inputDatabase <- 'C:/RxFire/Regen/Regeneration_2_16Sept24/data/homemade_fvs_db_17sept24.db'
 # Homemade_v1 C:/RxFire/Regen/Regeneration_2_16Sept24/homemade_fvs_db.db
 # State Original DB
 
 
 # 1.2 Standlist from xlsx -------------------------------------------------
 
-standlist <- read_csv("C:/RxFire/Regen/Regeneration_2_16Sept24/1.5_dbCreation_standlist.csv", 
+standlist <- read_csv("C:/RxFire/Regen/Regeneration_2_16Sept24/data/1.5_dbCreation_standlist.csv", 
                       col_types = "ccc") |> select(
                         CN = STANDPLOT_CN
                       ) 
@@ -415,7 +444,7 @@ clean_mem()
 
 
 ```{r}
-standlist <- read_csv("./1.5_dbCreation_standlist.csv", 
+standlist <- read_csv("./data/1.5_dbCreation_standlist.csv", 
                       col_types = "ccc")
 
 
@@ -626,7 +655,6 @@ plots_1vis <- plots_1vis |>
   mutate(instance = str_c("visit_", row_number())) |> 
   ungroup()
 
-# write_csv(splots_1vis, "C:/RxFire/Regen/Regen_Notes/Subplots_w1visit.csv")
 
 plots_1vis <- plots_1vis |> 
   filter(instance == "visit_1") |> select(StandID, INVYR, instance)
@@ -670,8 +698,8 @@ standlist <- add_row(training_set, testing_set)
 glimpse(standlist)
 
 # getwd()
-# write_csv(training_set, "C:/RxFire/Regen/Regeneration_2_16Sept24/train.csv")
-# write_csv(testing_set, "C:/RxFire/Regen/Regeneration_2_16Sept24/test.csv")
-# write_csv(standlist, "C:/RxFire/Regen/Regeneration_2_16Sept24/train_and_test.csv")
+# write_csv(training_set, "C:/RxFire/Regen/Regeneration_2_16Sept24/data/train.csv")
+# write_csv(testing_set, "C:/RxFire/Regen/Regeneration_2_16Sept24/data/test.csv")
+# write_csv(standlist, "C:/RxFire/Regen/Regeneration_2_16Sept24/data/train_and_test.csv")
 ```
 

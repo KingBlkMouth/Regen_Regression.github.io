@@ -4,7 +4,6 @@ execute:
   freeze: auto
 ---
 
-**26AUG24**
 
 *Libraries*
 ```{r}
@@ -89,11 +88,42 @@ keep <- c("keep", "clean_mem", "clean_na_cols", "clean_paths", "db_list", "nas_t
 ```
 
 
+___
+
+
+```{r}
+#| include: false
+#| eval: false
+
+rstudioapi::getSourceEditorContext()$path %>% basename()
+```
+
+
+**Created on**
+```{r}
+#| echo: false
+
+ymd_hms(file.info("./5_TD_Imp.qmd")$ctime, tz = "America/Los_Angeles")
+```
+
+**Last updated on**
+```{r}
+#| echo: false
+
+ymd_hms(file.info("./5_TD_Imp.qmd")$atime, tz = "America/Los_Angeles")
+```
+
+
+___
+
+
+
+
 # Import
 "C:\RxFire\Regen\Regeneration_2_16Sept24\.Rproj.user"
 *Import imp_data, fix names*
 ```{r}
-imp_db <- clean_paths(r"(C:\RxFire\Regen\Regeneration_2_16Sept24\homemade_fvs_db2.db)")
+imp_db <- clean_paths(r"(C:\RxFire\Regen\Regeneration_2_16Sept24\data\homemade_fvs_db2.db)")
 
 con <- dbConnect(RSQLite::SQLite(), imp_db)
 
@@ -301,7 +331,7 @@ yfull <- yfull |> mutate(
 ```{r}
 # t <- left_join(x_pred, yfull, join_by(STANDPLOT_CN))
 # 
-# con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Regen/Regeneration_2_16Sept24/homemade_fvs_db.db")
+# con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Regen/Regeneration_2_16Sept24/data/homemade_fvs_db.db")
 # 
 # dbWriteTable(con, "imp_data_2", t)
 # 
@@ -754,7 +784,7 @@ x <- droplevels(x)
 ```{r}
 # rf_yai <- yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = T)
 # save(rf_yai, file = str_c("RF_26AUG24_original_Y", ".Rdata"))
-load(str_c("RF_26AUG24_original_Y", ".Rdata"))
+load(str_c("data/RF_26AUG24_original_Y", ".Rdata"))
 ```
 
 
@@ -890,7 +920,7 @@ yaiVarImp(rf_yai)
 ### Terminal Buckets
 
 ```{r}
-load("example_imputation.Rdata")
+load("data/example_imputation.Rdata")
 # a <- t[8:9,]
 # a <-  a %>% select_if(~ !is.numeric(.) || sum(.) != 0)
 a
@@ -1235,7 +1265,7 @@ x <- droplevels(x)
 ```{r}
 # rf_yai <- yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = T)
 # save(rf_yai, file = str_c("RF_26AUG24_1seedlings", ".Rdata"))
-load(str_c("RF_26AUG24_1seedlings", ".Rdata"))
+load(str_c("data/RF_26AUG24_1seedlings", ".Rdata"))
 ```
 
 
@@ -1659,9 +1689,9 @@ clean_mem()
 
 
 ```{r}
-test_set <- read_csv("C:/RxFire/Regen/Regeneration_2_16Sept24/test.csv")
+test_set <- read_csv("C:/RxFire/Regen/Regeneration_2_16Sept24/data/test.csv")
 
-con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Regen/Regeneration_2_16Sept24/homemade_fvs_db2.db")
+con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Regen/Regeneration_2_16Sept24/data/homemade_fvs_db2.db")
 trees <- dbGetQuery(con, "select * from fvs_treeinit_plot")
 plots <- dbGetQuery(con, "select * from fvs_plotinit_plot")
 dbDisconnect(con)

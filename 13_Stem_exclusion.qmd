@@ -1,0 +1,797 @@
+---
+title: "Stem Exclusion"
+execute: 
+  freeze: false
+code-fold: true
+---
+
+
+
+*Libraries*
+```{r}
+#| label: Libraries
+#| message: false
+#| warning: false
+#| code-fold: true
+#| output: false
+
+rm(list = ls())                                                      
+gc()                                                                                 
+
+# Data tidying and acces
+library(tidyverse, quietly = T)       # Easy to read syntax and data manipulation                   
+library(RSQLite)                      # Access SQLite dbs   
+library(magrittr)                     # Pipes and math functions    
+# library(readxl)                     # Read xlsx 
+# library(writexl)                    # write xlsx     
+library(foreign)                      # Write dbf
+                                                   
+# yaImpute and related                           
+# library(yaImpute)                     # RF imputation     
+# library(vegan)                        # Something to do the yaImpute 
+# library(randomForest)                 # RF package that yaImpute uses                                   
+                                                     
+# plots and tables                          
+# library(esquisse)                     # Quick data visualization   
+# library(knitr)                        # Better html tables
+# library(DT)                           # Data tables for Java script tables in HTML
+                                                      
+# library(kableExtra)                   # Better html tables, change sizes        
+# library(feather)                      # Faster data retrieval    
+
+# Geography
+# library(sf)                           # Simple Features/vector data
+# library(terra)                        # Raster functions
+# library(spatstat)                     # Spatial stats
+
+# No sci-notation. 
+options(scipen = 999)
+```
+
+*Functions*
+```{r}
+#| code-fold: true
+#| label: Functions
+
+clean_mem <- function() {
+  x <- ls(envir = .GlobalEnv)
+  # ls()[!(ls() %in% keep)]
+  rm(list = x[!(x %in% keep)], envir = .GlobalEnv)
+  gc()
+}
+keep <- c("keep", "clean_mem", "clean_na_cols", "db_list", "add_commas")
+
+clean_na_cols <- function(df){
+  df <- df[, colSums(is.na(df)) < nrow(df)]
+}
+
+db_list <- function(df, CN_col){
+  name <- NULL
+  name <- df |> select({{CN_col}})
+  name <- name |> mutate(CN_col = str_c("'", {{CN_col}}, "'")) 
+  name <- str_flatten_comma(name$CN_col)
+  # name <- str_flatten_comma(name[, CN_col])
+  name
+}
+
+add_commas <- function(n) {
+  t <- prettyNum(n, ",",scientific=FALSE)
+  return(noquote(t))
+}
+```
+
+
+
+___
+
+
+```{r}
+#| include: false
+#| eval: false
+
+rstudioapi::getSourceEditorContext()$path %>% basename()
+```
+
+
+**Created on**
+```{r}
+#| echo: false
+
+ymd_hms(file.info("./13_Stem_exclusion.qmd")$ctime, tz = "America/Los_Angeles")
+```
+
+**Last updated on**
+```{r}
+#| echo: false
+
+ymd_hms(file.info("./13_Stem_exclusion.qmd")$atime, tz = "America/Los_Angeles")
+```
+
+
+___
+
+*Import imp_data from RF Prep DB*
+```{r}
+#| code-fold: true
+
+
+con <- dbConnect(RSQLite::SQLite(), "C:/RxFire/Regen/Regeneration_2_16Sept24/data/homemade_fvs_db_17sept24.db")
+plants_ref <- dbGetQuery(con, str_c("select * from plants_ref"))
+# seedlings <- dbGetQuery(con, str_c("select * from seedling where PLT_CN in (", cns, ")"))
+dbDisconnect(con)
+```
+
+
+*Import Structural Statistics table from FVS output*
+```{r}
+#| code-fold: true
+
+outputDatabase <- "C:/RxFire/Regen/FVS/regen_091724_2118/regen_091724_2118.db"
+
+
+con <- dbConnect(RSQLite::SQLite(), outputDatabase)
+
+key <- dbGetQuery(con, "select CaseID, StandID, Variant from FVS_Cases")
+cc <- dbGetQuery(con, "select CaseID, Year, CC from FVS_Compute")
+ba_sdi <- dbGetQuery(con, "select CaseID, Year, BA, SDI from FVS_Summary2")
+stem <- dbGetQuery(con, "select CaseID, Year, Structure_Class from FVS_StrClass where Removal_Code == 0 ")
+
+dbDisconnect(con)
+
+xVars <- left_join(key, cc, join_by(CaseID))
+xVars <- left_join(xVars, ba_sdi, join_by(CaseID, Year))
+xVars <- left_join(xVars, stem, join_by(CaseID, Year))
+
+
+keep <- append(keep, c("xVars", "standlist", "plants_ref"))
+```
+
+
+```{r}
+#| include: false
+clean_mem()
+```
+
+
+*Creating a tag for stem exclusion mapping*
+```{r}
+stem_ex_points <- xVars %>% select(-CaseID) %>%
+  mutate(
+    PLT_CN = str_sub(StandID, 1, -3),
+    SUBP = str_sub(StandID, -1, -1)
+    ) %>% relocate(PLT_CN, SUBP)
+# stem_ex_points %>% head()
+
+cns <- stem_ex_points %>% select(PLT_CN) %>% unique()
+
+cns <- db_list(cns, PLT_CN)
+
+con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Data/_FIADB_WA.db")
+points <- dbGetQuery(con, str_c("select CN, Lat, Lon from PLOT where CN in (", cns, ")"))
+dbDisconnect(con)
+points <- points %>% rename(PLT_CN = CN)
+# points
+
+points$PLT_CN <- as.character(points$PLT_CN)
+
+stem_ex_points$PLT_CN <- as.character(stem_ex_points$PLT_CN)
+
+stem_ex_points <- stem_ex_points %>% mutate(
+  s_class = str_sub(Structure_Class, -2,-1)
+) %>% select(-Structure_Class)
+
+t <- left_join(points, stem_ex_points, join_by(PLT_CN))
+ 
+# write.dbf(t, "C:/RxFire/Regen/Regeneration_2_16Sept24/data/1_ImpClean_CNs_StemExclusion_tracking_filters.dbf")
+
+```
+
+*Creating structure class code that is more tidy*
+```{r}
+#| code-fold: true
+
+stem <- xVars |> select(-CaseID)
+
+stem <- stem |> mutate(
+  s_class = str_sub(Structure_Class, -2,-1)
+)
+
+stem <- stem |> filter(!is.na(Year))
+
+stem <- stem |> filter(!is.na(s_class)) |> select(-Structure_Class)
+
+# nrow(stem)/nrow(stem_ex)
+```
+
+
+# Stem excluded
+
+*Serparating Stem excluded stands from others, adding trees and seedlings*
+```{r}
+#| code-fold: true
+
+stem_ex <- stem |> filter(s_class == "SE") %>% rename(standplot_cn = StandID)
+
+cns <- stem_ex %>% select(standplot_cn)
+cns <- cns %>% mutate(PLT_CN = str_sub(standplot_cn, 1,-3))
+
+
+cns <- db_list(cns, PLT_CN)
+
+con <- dbConnect(RSQLite::SQLite(), "C:/RxFire/Data/_FIADB_WA.db")
+tree <- dbGetQuery(con, str_c("select * from TREE where PLT_CN in (", cns, ")"))
+seedlings <- dbGetQuery(con, str_c("select * from seedling where PLT_CN in (", cns, ")"))
+dbDisconnect(con)
+
+seedlings <- left_join(seedlings, plants_ref, join_by(SPCD)) %>% relocate(SYMBL, .after = PLT_CN)
+
+seedlings <- seedlings %>% mutate(
+  SYMBL = ifelse(SPCD == 212, "GSEQ", SYMBL), 
+  SYMBL = ifelse(SPCD == 602, "BWAL", SYMBL)
+  )
+# - 212 is Giant sequoia
+# - 602 is Black walnut
+seedlings <- seedlings %>% mutate(standplot_cn = str_c(PLT_CN, "_", SUBP))
+
+t <- stem_ex %>% select(standplot_cn)
+
+stem_ex_seedlings <- left_join(t, seedlings, join_by(standplot_cn))
+stem_ex_seedlings <- stem_ex_seedlings %>% filter(!is.na(PLT_CN))
+
+
+not_stem_ex <- stem %>% filter(s_class != "SE") %>% rename(standplot_cn = StandID)
+
+cns <- not_stem_ex %>% select(standplot_cn)
+cns <- cns %>% mutate(PLT_CN = str_sub(standplot_cn, 1,-3))
+
+
+cns <- db_list(cns, PLT_CN)
+
+con <- dbConnect(RSQLite::SQLite(), "C:/RxFire/Data/_FIADB_WA.db")
+tree <- dbGetQuery(con, str_c("select * from TREE where PLT_CN in (", cns, ")"))
+seedlings <- dbGetQuery(con, str_c("select * from seedling where PLT_CN in (", cns, ")"))
+dbDisconnect(con)
+
+seedlings <- left_join(seedlings, plants_ref, join_by(SPCD)) %>% relocate(SYMBL, .after = PLT_CN)
+
+seedlings <- seedlings %>% mutate(
+  SYMBL = ifelse(SPCD == 212, "GSEQ", SYMBL), 
+  SYMBL = ifelse(SPCD == 602, "BWAL", SYMBL)
+  )
+# - 212 is Giant sequoia
+# - 602 is Black walnut
+seedlings <- seedlings %>% mutate(standplot_cn = str_c(PLT_CN, "_", SUBP))
+
+t <- not_stem_ex %>% select(standplot_cn)
+
+not_stem_ex_seedlings <- left_join(t, seedlings, join_by(standplot_cn))
+not_stem_ex_seedlings <- not_stem_ex_seedlings %>% filter(!is.na(PLT_CN))
+```
+
+
+
+
+### SubPlots in Stem ex
+
+*Finding the number of subplots tagged as SE*
+```{r}
+n_distinct(stem_ex$standplot_cn)
+stem_ex_seedlings %>% group_by(standplot_cn) %>% summarise(n = n()) %>% nrow()
+```
+
+4,683 standplot cns are in stem exclusion, 2,565 of those have seedlings. 
+
+*Grouped summary of stem excluded subplots and species*
+```{r}
+#| code-fold: true
+
+stem_ex_grouped_sum <- stem_ex_seedlings %>% group_by(standplot_cn, SYMBL) %>% 
+  summarise(
+    .groups = "drop", 
+    n = n(), 
+    TPA = round(sum(TPA_UNADJ))
+    # spcd = SPCD
+    ) %>% arrange(desc(TPA))
+
+
+stem_ex_grouped_sum %>% head()
+```
+
+
+## With and without regen nplots
+
+*Pulling CNs of subplots tagged SE and not*
+```{r}
+CNs_w_regen <- stem_ex_seedlings %>% group_by(standplot_cn) %>% 
+  summarise(
+    .groups = "drop", 
+    n = n(), 
+    TPA = round(sum(TPA_UNADJ))
+    # spcd = SPCD
+    ) %>% arrange(desc(TPA))
+
+CNs_wo_regen <- not_stem_ex_seedlings %>% group_by(standplot_cn) %>% 
+  summarise(
+    .groups = "drop", 
+    n = n(), 
+    TPA = round(sum(TPA_UNADJ))
+    # spcd = SPCD
+    ) %>% arrange(desc(TPA))
+
+# CNs_wo_regen %>% head()
+# CNs_w_regen %>% head()
+```
+
+
+## Zero regen
+
+*Finding subplots where total_TD == 0*
+```{r}
+con <- dbConnect(RSQLite::SQLite(), "C:/RxFire/Regen/Regeneration_2_16Sept24/data/homemade_fvs_db_17sept24.db")
+imp_data <- dbGetQuery(con, "select * from imp_data")
+dbDisconnect(con)
+
+imp_data %>% filter(total_TD == 0) %>% head()
+```
+
+
+*Get species list and see nrow for subplot, species summary*
+```{r}
+#| code-fold: true
+
+spp <- unique(stem_ex_seedlings$SYMBL)
+stem_ex_seedlings %>% nrow()
+```
+
+
+*Plotting histograms of species both tagged as SE and not side-by-side*
+```{r}
+#| layout-ncol: 2
+#| code-fold: true
+
+for(i in 1:21) {
+  p <- stem_ex_seedlings %>% filter(SYMBL == spp[i]) %>% ggplot() + 
+    aes(x = TPA_UNADJ) + 
+    geom_histogram(bins = 30) + 
+    labs(title = str_c("Species in Stem Exclusion: ", spp[i])) + 
+    ylab("Number of plots") + 
+    xlab("Seedling TPA")
+  
+  print(p)
+  
+  p <- not_stem_ex_seedlings %>% filter(SYMBL == spp[i]) %>% ggplot() + 
+    aes(x = TPA_UNADJ) + 
+    geom_histogram(bins = 30) + 
+    labs(title = str_c("Species NOT in Stem Exclusion: ", spp[i])) + 
+    ylab("Number of plots") + 
+    xlab("Seedling TPA")
+  
+  print(p)
+}
+```
+
+There were more seedling species, but they get down to ones and twos after this. 
+
+
+
+# Preds
+
+*Plotting predictors for SE v. not*
+```{r}
+#| layout-ncol: 2
+#| code-fold: true
+
+preds <- c("CC", "BA", "SDI")
+
+t <- stem_ex %>% select(CC, BA, SDI)
+t2 <- not_stem_ex %>% select(CC, BA, SDI)
+for(i in 1:length(preds)) {
+  p <- t %>% ggplot() + 
+    aes(x = t[, i]) + 
+    geom_histogram(bins = 30) + 
+    labs(title = str_c("Species in Stem Exclusion: ", preds[i])) + 
+    ylab("Number of plots") + 
+    xlab(preds[i])
+  
+  print(p)
+  
+  p <- t2 %>% 
+    ggplot() + 
+    aes(x = t2[,i]) + 
+    geom_histogram(bins = 30) + 
+    labs(title = str_c("Species NOT in Stem Exclusion: ", preds[i])) + 
+    ylab("Number of plots") + 
+    xlab(preds[i])
+  
+  print(p)
+}
+```
+
+
+
+
+
+
+
+
+# FVS's explanation
+
+Initially defined strata must have over 5 percent canopy cover or they are rejected.
+Nominal stratum diameter and height are computed by averaging the nine sample trees
+centered on the 70th percentile tree. Once the strata are defined, the stand is classified as
+bare ground (BG), stand initiation (SI), stem exclusion (SE), understory reinitiation (UR),
+young forest multistrata (YM), old forest single stratum (OS), or old forest multistrata
+(OM) as a function of the number of strata, the nominal diameter of trees in the strata,
+and stocking.
+
+
+
+# Filtered plots
+
+I can not find the R script that I made to tag all of the filtered plots. 
+I fear that I may have accidentally deleted it. 
+The following file is the output from that script. 
+I went through the steps of the notes in pages 1-2, raw FIA plots to FVS variables. 
+I stopped the process at FVS because there were 53,000 subplots that would have needed to be run in FVS. 
+The largest one that I have ever run was about 11,000 plots, and that took about 5 hours. 
+I thought that I saved the script, and intended to run it over the weekend, but I had other responsibilities. 
+
+## Tracking Filter
+
+This is essentially scratch. 
+I used the 53,000 subplots/conditions list that I made while adding filtering tags to pull all non-periodic plots from 
+FIA. Those CNs were used to create ArcPro feature classes to display the data. 
+For each of the pre-FVS filtering steps, I extracted the Plt_CN and location, then wrote it to a dbf and added it to 
+the map. 
+
+```{r}
+#| include: false
+
+clean_mem()
+```
+
+
+```{r}
+tracking <- read_csv("C:/RxFire/Regen/Regeneration_2_16Sept24/data/1_ImpClean_CNs_subp_tracking_filters.csv", 
+                     show_col_types = F)
+
+tracking %>% nrow()
+```
+
+```{r}
+tracking %>% head()
+```
+
+
+```{r}
+tracking_plots <- tracking %>% select(-SUBP) %>% unique()
+tracking_plots %>% nrow()
+```
+
+There were 15,935 unique combinations of PLT_CN and filtering criteria. 
+
+```{r}
+tracking_plots %>% head()
+```
+
+
+
+```{r}
+n_distinct(tracking_plots$PLT_CN)
+```
+
+Of the ~16k combinations, there were 13,380 unique PLT_CNs. 
+
+*All 13,380 plots that are not periodic*
+```{r}
+cns <- tracking_plots %>% select(PLT_CN) %>% unique()
+
+cns <- db_list(cns, PLT_CN)
+
+con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Data/_FIADB_WA.db")
+points <- dbGetQuery(con, str_c("select CN, Lat, Lon from PLOT where CN in (", cns, ")"))
+dbDisconnect(con)
+
+points %>% head()
+```
+
+
+## All plots
+
+*Write all points to dbf*
+```{r}
+tracking_plots$PLT_CN <- as.character(tracking_plots$PLT_CN)
+points$CN <- as.character(points$CN)
+t <- left_join(points, tracking_plots, join_by(CN == PLT_CN))
+
+# write.dbf(t, "C:/RxFire/Regen/Regeneration_2_16Sept24/data/1_ImpClean_CNs_subp_tracking_filters.dbf")
+
+con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Data/_FIADB_WA.db")
+points <- dbGetQuery(con, str_c("select CN, Lat, Lon from PLOT"))
+dbDisconnect(con)
+
+points <- points %>% unique()
+
+# write.dbf(points, "C:/RxFire/Regen/Regeneration_2_16Sept24/data/FIA_PLOTS_WA_30Sept24.dbf")
+```
+
+
+*Find and write all points not in the 13k to find periodic plots*
+```{r}
+test <- anti_join(points, tracking_plots, join_by(CN == PLT_CN))
+
+test %>% arrange(nchar(CN)) %>% head()
+test <- test %>% drop_na()
+
+# test %>% filter(CN == "17959")
+
+# write.dbf(test, "C:/RxFire/Regen/Regeneration_2_16Sept24/data/FIA_PLOTS_Periodic_30Sept24.dbf")
+```
+
+There are two ways that I use to find the periodic plots, the better way would have been to use design code. 
+In the moment, I used the length of the PLT_CN. Short PLT_CNs are periodic, in my experience. 
+I used design code when I filtered the tracking plots to find the ~13k. 
+The plots from FIA that were not in that list are listed above, but arranged by the length of PLT_CN. 
+
+
+## Fire
+
+These all follow the same patter, find the plots with the titled filtering criteria, then write a .dbf. 
+
+*Distcds are 30, 31, or 32*
+```{r}
+cns <- tracking_plots %>% filter(Distcd_30 == T | Distcd_31 == T | Distcd_32 == T) %>% select(PLT_CN)
+
+cns <- db_list(cns, PLT_CN)
+
+con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Data/_FIADB_WA.db")
+dist <- dbGetQuery(con, str_c("select PLT_CN, DSTRBCD1, DSTRBCD2, DSTRBCD3 from COND where PLT_CN in (", cns, ")"))
+dbDisconnect(con)
+
+# dist %>% group_by(PLT_CN) %>% 
+#   summarise(
+#     n = n()
+#   ) %>% 
+#   arrange(desc(n))
+
+con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Data/_FIADB_WA.db")
+distcd <- dbGetQuery(con, str_c("select PLT_CN, DSTRBCD1, DSTRBCD2, DSTRBCD3 from COND"))
+plot <- dbGetQuery(con, str_c("select CN, LAT, LON from PLOT"))
+dbDisconnect(con)
+
+dist <- left_join(plot, distcd, join_by(CN == PLT_CN)) %>% drop_na()
+
+dist_0 <- dist %>% filter(DSTRBCD1 == 30 | DSTRBCD2 == 30 | DSTRBCD3 == 30)
+dist_1 <- dist %>% filter(DSTRBCD1 == 31 | DSTRBCD2 == 31 | DSTRBCD3 == 31)
+dist_2 <- dist %>% filter(DSTRBCD1 == 32 | DSTRBCD2 == 32 | DSTRBCD3 == 32)
+
+d <- add_row(dist_0, dist_1)
+d <- add_row(d, dist_2)
+d <- d %>% unique()
+
+# write.dbf(d, "C:/RxFire/Regen/Regeneration_2_16Sept24/data/FIA_PLOTS_Fire_30Sept24.dbf")
+```
+
+
+## Forest
+
+*filter(FORTYPCD > 0)*
+```{r}
+con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Data/_FIADB_WA.db")
+cond <- dbGetQuery(con, str_c("select * from COND"))
+plot <- dbGetQuery(con, str_c("select * from PLOT"))
+dbDisconnect(con)
+
+plot_j <-plot %>% select(PLT_CN = CN, LAT, LON) %>% unique()
+
+forest <- cond %>% filter(FORTYPCD > 0) %>% select(PLT_CN)
+
+
+ft <- left_join(forest, plot_j, join_by(PLT_CN)) %>% drop_na()
+
+# write.dbf(ft, "C:/RxFire/Regen/Regeneration_2_16Sept24/data/FIA_PLOTS_Forest_30Sept24.dbf")
+```
+
+
+## Single cond
+
+*filter(CONDPROP_UNADJ == 1)*
+```{r}
+single <- cond %>% filter(CONDPROP_UNADJ == 1) %>% select(PLT_CN)
+
+t <- left_join(single, plot_j, join_by(PLT_CN)) %>% drop_na()
+
+# write.dbf(t, "C:/RxFire/Regen/Regeneration_2_16Sept24/data/FIA_PLOTS_SingleCond_30Sept24.dbf")
+```
+
+
+## NoFPAG
+
+*filter(is.na(HABTYPCD1))*
+```{r}
+
+nofpag <- cond %>% filter(is.na(HABTYPCD1)) %>% select(PLT_CN, HABTYPCD1) %>% unique()
+t <- left_join(nofpag, plot_j, join_by(PLT_CN))
+
+# write.dbf(t, "C:/RxFire/Regen/Regeneration_2_16Sept24/data/FIA_PLOTS_nofpag_30Sept24.dbf")
+```
+
+## TRTcd
+
+*TRTCDs = 30*
+```{r}
+# names(cond) %>% sort()
+
+trt <- cond %>% filter(TRTCD1 == 30 | TRTCD2 == 30 | TRTCD3 == 30) %>% select(PLT_CN, contains("TRTCD")) %>% unique()
+trt <- trt[,1:4]
+t <- left_join(trt, plot_j, join_by(PLT_CN)) %>% drop_na()
+
+# write.dbf(t, "C:/RxFire/Regen/Regeneration_2_16Sept24/data/FIA_PLOTS_trtcd_30Sept24.dbf")
+```
+
+## FPAG_ANW
+
+*FPAG starts with A, N, or W*
+```{r}
+# names(cond) %>% sort()
+
+fpagA <- cond %>% filter(startsWith(HABTYPCD1, "A")) %>% select(PLT_CN, HABTYPCD1) %>% unique()
+fpagN <- cond %>% filter(startsWith(HABTYPCD1, "N")) %>% select(PLT_CN, HABTYPCD1) %>% unique()
+fpagW <- cond %>% filter(startsWith(HABTYPCD1, "W")) %>% select(PLT_CN, HABTYPCD1) %>% unique()
+
+fpagANW <- add_row(fpagA, fpagN)
+fpagANW <- add_row(fpagANW, fpagW)
+
+t <- left_join(fpagANW, plot_j, join_by(PLT_CN)) %>% drop_na()
+
+# write.dbf(t, "C:/RxFire/Regen/Regeneration_2_16Sept24/data/FIA_PLOTS_fpagANW_30Sept24.dbf")
+```
+
+
+## FPAG_Pial
+
+*filter(HABTYPCD1 == "PIAL")*
+```{r}
+# names(cond) %>% sort()
+
+fpagA <- cond %>% filter(HABTYPCD1 == "PIAL") %>% select(PLT_CN, HABTYPCD1) %>% unique()
+
+
+t <- left_join(fpagA, plot_j, join_by(PLT_CN)) %>% drop_na()
+
+# write.dbf(t, "C:/RxFire/Regen/Regeneration_2_16Sept24/data/FIA_PLOTS_fpagPIAL_30Sept24.dbf")
+```
+
+
+
+# Forest code with trees
+
+*Finding all of the NULL FORTYP plots with Trees or seedlings.*
+```{r}
+cns <- read_csv("C:/RxFire/Regen/Regeneration_2_16Sept24/data/1_ImpClean_CNs_subp_tracking_filters.csv", 
+                show_col_types = F)
+
+cns <- cns %>% select(PLT_CN) %>% unique()
+cns <- db_list(cns, PLT_CN)
+
+con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Data/_FIADB_WA.db")
+fortyp <- dbGetQuery(con, str_c("select PLT_CN, FORTYPCD, FLDTYPCD from COND where PLT_CN in (", cns, ")")) 
+dbDisconnect(con)
+```
+
+*Number of plots with null fortyp and fldtyp*
+```{r}
+sum(is.na(fortyp$FORTYPCD))
+sum(is.na(fortyp$FLDTYPCD))
+
+fortyp_null <- fortyp %>% filter(is.na(FORTYPCD)) %>% unique()
+```
+
+
+*Pulling trees and seedling tables*
+```{r}
+cns <- fortyp_null %>% select(PLT_CN) %>% unique()
+
+cns <- db_list(cns, PLT_CN)
+
+con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Data/_FIADB_WA.db")
+trees_null <- dbGetQuery(con, str_c("select * from TREE where PLT_CN in (", cns, ")"))
+seeds_null <- dbGetQuery(con, str_c("select * from SEEDLING where PLT_CN in (", cns, ")"))
+plots_null <- dbGetQuery(con, str_c("select * from PLOT where CN in (", cns, ")"))
+dbDisconnect(con)
+```
+
+*Number of Null Fortyp plot_CNs*
+```{r}
+n_distinct(plots_null$CN)
+```
+
+*Number of NULL FORTYP PLT_CNs in tree table*
+```{r}
+n_distinct(trees_null$PLT_CN)
+```
+
+*writing a .dbf to map null fortyp*
+```{r}
+t <- plots_null %>% select(CN, LAT, LON)
+
+# write.dbf(t, "C:/RxFire/Regen/Regeneration_2_16Sept24/data/FIA_PLOTS_NULLFORTYPCD_30Sept24.dbf")
+
+cn_pnull <- plots_null %>% select(CN)
+```
+
+*TREE table hist, where fortyp is null*
+```{r}
+t <- trees_null %>% group_by(PLT_CN) %>% 
+  summarise(
+    n = n(),
+    tpa = sum(TPA_UNADJ)
+    )
+
+cn_tnull <- t %>% select(PLT_CN)
+cn_tnull$Has_trees <- T
+
+notrees <- anti_join(cn_pnull, cn_tnull, join_by(CN==PLT_CN))
+notrees$Has_trees <- F
+notrees <- notrees %>% rename(PLT_CN = CN)
+
+js_cns <- add_row(cn_tnull, notrees)
+
+hist(t$tpa, breaks = "fd")
+```
+
+
+*TREE table hist, where fortyp is null, live trees*
+```{r}
+t <- trees_null %>% filter(STATUSCD == 1) %>% group_by(PLT_CN) %>% 
+  summarise(
+    n = n(),
+    tpa = sum(TPA_UNADJ)
+    )
+
+hist(t$tpa, breaks = "fd")
+```
+
+*SEEDLING table hist, where fortyp is null*
+```{r}
+t <- seeds_null %>% group_by(PLT_CN) %>% 
+  summarise(
+    n = n(),
+    tpa = sum(TPA_UNADJ)
+    )
+cn_snull <- t %>% select(PLT_CN)
+cn_snull$Has_seedlings <- T
+
+cn_pnull <- cn_pnull %>% rename(PLT_CN = CN)
+
+noseeds <- anti_join(cn_pnull, cn_snull, join_by(PLT_CN))
+noseeds$Has_seedlings <- F
+# noseeds <- noseeds %>% rename(PLT_CN = CN)
+
+# nrow(cn_snull) + nrow(noseeds)
+
+js_cns2 <- add_row(cn_snull, noseeds)
+
+# sum(js_cns2$Has_seedlings)
+
+js_cns <- left_join(js_cns, js_cns2, by = "PLT_CN")
+js_cns <- left_join(js_cns, fortyp_null, by = "PLT_CN")
+
+hist(t$tpa, breaks = "fd")
+```
+
+
+*Data check for csv that I am sending to John Shaw*
+```{r}
+#| layout-ncol: 2
+
+# options(width = 1200)
+
+summary(js_cns)
+
+# write_csv(js_cns, "c:/RxFire/Regen/Regeneration_2_16Sept24/data/JohnShaw_FORTYPnull.csv")
+```
+
+
+
+# END

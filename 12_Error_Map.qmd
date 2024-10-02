@@ -2,9 +2,53 @@
 title: "12 Error Map"
 execute: 
   freeze: auto
+code-fold: true
 ---
 
-**12Sept24**
+# Intro
+
+There were two options presented, both use RMSD of max species per subplot set to the FIA points: 
+
+1. 4 bars for subplots & height for error
+2. 4 overlapping circles for subplots with color for error. 
+
+In both cases I need to get the rmsd per subplot and the max species per subplot joined with the FIA CNs. 
+
+If I map rmsd, the error for rare species will be close to zero. 
+If I map %Variation explained, that doesn't really tell us anything about the difference in TPA. 
+I could map the averages over the sets of ten yai runs, but we will not be imputing the data that way. 
+
+I am not sure what the difference would be, and I would like to see it, when RMSD is calculated over the pixel counts. 
+So, I would need to include the observed vs imputed values when joining the data. 
+
+The table I need has columns: *standplot_cn, max_spp, observed_TD, imputed_TD, rmsd_max_spp.*
+It will not add time to include the observed, imputed, and rmsd for each species. 
+So, I will add those. 
+
+I have run many different yai distance calculations.
+The most default is where ntree is 50. 
+The best in terms of least RMSD was the run with 500 for total_TD, the rest at 50 and 5 for the last 6. 
+
+Run 105 in this set had better than average RMSD. 
+```{r}
+#| eval: false
+
+load(file = "./data/ntree_error_sept23_500.50.5_10reps.Rdata")
+error_500_50_5 <- ntree_error
+```
+
+
+This one has the runs with ntree from 50 - 500
+```{r}
+#| code-fold: true
+
+load(file = "./data/ntree_error_sept23_50.500.Rdata")
+error_500 <- ntree_error
+```
+
+Neither of those datasets have CNs. They show error by species. 
+
+I think the easiest way to do this is just to use the yai from the default regression run. 
 
 
 *Libraries*
@@ -103,18 +147,35 @@ rmsd_spp <-spprmsd_spp <- function(imp_df, spp) {
 keep <- c("keep", "clean_mem", "clean_na_cols", "clean_paths", "db_list", "nas_to_zeroes", "rmsd_spp") %>% unique()
 ```
 
+
+___
+
+```{r}
+#| include: false
+#| eval: false
+
+rstudioapi::getSourceEditorContext()$path %>% basename()
+```
+
+
 **Created on**
 ```{r}
-ymd(as_date(file.info("10_Error_Map.qmd")$ctime))
+#| echo: false
+
+ymd_hms(file.info("./12_Error_Map.qmd")$ctime, tz = "America/Los_Angeles")
+```
+
+**Last updated on**
+```{r}
+#| echo: false
+
+ymd_hms(file.info("./12_Error_Map.qmd")$atime, tz = "America/Los_Angeles")
 ```
 
 ___
 
 
-**Last modified on**
-```{r}
-ymd(as_date(file.info("10_Error_Map.qmd")$atime))
-```
+
 
 
 
@@ -123,365 +184,355 @@ ymd(as_date(file.info("10_Error_Map.qmd")$atime))
 
 # Import
 
-# AGP TreeMap
+## imp_data
 
 ```{r}
-agp_nc_tm <- read_csv(clean_paths(r"(C:\RxFire\Regen\Regeneration_2_16Sept24\agp_nc_tm_plots.csv)"), 
-                      show_col_types = F)
-
-agp_nc_tm <- agp_nc_tm %>% select(CN) %>% unique()
-
-
-cns <- db_list(agp_nc_tm, CN)
-
-con <- dbConnect(RSQLite::SQLite(), clean_paths(r"(C:\RxFire\Data\SQLite_FIADB_ENTIRE.db)"))
-agp_nc_seedlings <- dbGetQuery(con, str_c("select * from SEEDLING where PLT_CN in (", cns, ")"))
-agp_nc_trees <- dbGetQuery(con, str_c("select * from TREE where PLT_CN in (", cns, ")"))
-agp_nc_plots <- dbGetQuery(con, str_c("select * from PLOT where CN in (", cns, ")"))
-
-species_ref <- dbGetQuery(con, "select * from REF_SPECIES")
-species_grp_ref <- dbGetQuery(con, "select * from REF_SPECIES_GROUP")
-
+con <- dbConnect(RSQLite::SQLite(), clean_paths(r"(C:\RxFire\Regen\Regeneration_2_16Sept24\data/homemade_fvs_db_17sept24.db)"))
+imp_data <- dbGetQuery(con, "select * from imp_data")
 dbDisconnect(con)
 
-agp_nc_seedlings <- clean_na_cols(agp_nc_seedlings)
-names(agp_nc_seedlings)
+imp_data_nc <- imp_data %>% filter(eco_code == "NC" & TRAIN == T)
+imp_data_nc <- imp_data_nc |> filter(total_TD != 0)
 
+```
 
+## yai
 
-
-species_ref2 <- species_ref %>% select(SPCD, COMMON_NAME, SPECIES_SYMBOL)
-species_grp_ref2 <- species_grp_ref %>% select(SPGRPCD, grp_name = NAME, CLASS)
-
-agp_nc_seedlings <- agp_nc_seedlings %>% mutate(
-  STANDPLOT_CN = str_c(PLT_CN, "_", SUBP)
-    ) %>% relocate(STANDPLOT_CN)
-
-agp_nc_seedlings <- left_join(agp_nc_seedlings, species_ref2, join_by(SPCD))
-agp_nc_seedlings <- agp_nc_seedlings %>% relocate(SPCD, SPECIES_SYMBOL, .after = SPGRPCD) %>% 
-  select_if(~ !is.numeric(.) || sum(.) != 0)
-agp_nc_seedlings <- clean_na_cols(agp_nc_seedlings)
-
-agp_nc_seedlings <- left_join(agp_nc_seedlings, species_grp_ref2, join_by(SPGRPCD)) %>% 
-  relocate(SPGRPCD, grp_name, .after = SPECIES_SYMBOL)
-
-agp_nc_seedlings <- agp_nc_seedlings %>% select(STANDPLOT_CN, TPA_UNADJ, SPCD, SPECIES_SYMBOL, COMMON_NAME, SPGRPCD, grp_name, CLASS,
-                        TREECOUNT, PLT_CN, SUBP)
-
-
-keep <- append(keep, 
-               c("agp_nc_seedlings", "agp_nc_tm", "species_ref", "rf_5_seeds")) %>% unique()
+*Load yai object*
+```{r}
+load(file = "./data/rf_reg_noclass_sept18.R")
+rf <- rf_reg_noclass
+rm(rf_reg_noclass)
 ```
 
 
+# FIA plots
+
+*Import FIA plots in NC from AGP*
 ```{r}
-clean_mem()
+fia_plots_nc <- read_csv("./data/FIA_Plots_nc.csv", show_col_types = F) %>% select(PLT_CN)
+
+cns <- db_list(fia_plots_nc, PLT_CN)
+
+con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Data/_FIADB_WA.db")
+
+fia_plots_nc <- dbGetQuery(con, str_c("select * from PLOT where CN in (", cns, ")"))
+
+dbDisconnect(con)
+```
+
+*Filtering the FIA plots in NC to match our filtering steps*
+```{r}
+cns_imp_data <- imp_data %>% filter(eco_code == "NC" & total_TD > 0 & TRAIN == T) %>% select(STANDPLOT_CN, CN = STAND_CN, LAT, LON)
+
+cns <- db_list(cns_imp_data, CN)
+con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Data/_FIADB_WA.db")
+fia_plots_imp_data <- dbGetQuery(con, str_c("select * from PLOT where CN in (", cns, ")"))
+dbDisconnect(con)
+
+cns_fia_imp <- fia_plots_imp_data %>% select(CN)
 ```
 
 
-
-# RandomForests. 
-
-
-
+Of the 4420 CNs that were in the FIA data, only 1612 matched those we filtered. 
+That is the same number as was present in the imp_data. 
 ```{r}
-load(str_c("RF_26AUG24_1seedlings", ".Rdata"))
+#| warning: false
 
-rf_5_seeds <- rf_yai
-rm(rf_yai)
-
-rf_imputation <- impute.yai((rf_5_seeds))
-
-rf_5_data <- rf_imputation %>% drop_na() %>% select(ends_with("TD.o"), ends_with("TD"), contains("max"))
-
-keep <- append(keep, "rf_5_data")
-
-rm(rf_imputation, rf_5_seeds)
-
-
-rmsd(rf_5_data)
+cns_imp_data %>% head()
+better_FIA_Plots <- left_join(cns_fia_imp, cns_imp_data, by = "CN")
+# write_csv(better_FIA_Plots, "./data/Updated_FIA_plots_in_imp_data.csv")
 ```
 
+The datum is NAD 83 from the fia database guide. In AGP it is GCS_North_American_1983.
 
 
-# RMSD
-
+*Impute and rmsd*
 ```{r}
-rmsd <- rmsd(rf_5_data)
-rmsd
+rf_imp <- impute(rf)
+rmsd <- rmsd(rf_imp)
+rf_imp <- rf_imp %>% select(contains("TD"))
+rf_imp <- rf_imp %>% rownames_to_column("standplot_cn")
 ```
 
+There are NA values in the TDs and standplot_cn has bootstrap replicates. 
+Removing replicates results in 1775 rows. 
+Removing NAs results in 1775 rows. 
+Removing replicates and NAs results in 1139 rows. 
 
+There are probably values from the bootstrap replicates that we would lose if I remove them too early. 
+I will need to remove the periods to join data to those cns. 
 
-
-## RMSD Calc
-
-**In the rmsd function, rmsd is calculated after dropping the NA values from the full dataframe.**
-
-**In 5_TD_Imp.qmd, I matched the imputations RMSD, but I had done so after dropping NAs from the dataset and for 
-the ancillary data. Above, I tried to pull out the needed columns and then drop NAs. 
-That caused the difference in RMSD.**
-
-
+*Renaming the bootstrap replictes*
 ```{r}
-#| eval: false
-rmsd_spp <-spprmsd_spp <- function(imp_df, spp) {
-  
-  rmsd_t <- imp_df %>% drop_na() %>% select(contains(spp)) %>% select(contains("TD"))
-  
-  v1 <- rmsd_t %>% select(ends_with("TD")) %>% names()
-  v2 <- rmsd_t %>% select(ends_with(".o")) %>% names()
-  
-  rmsd_t <- rmsd_t %>% mutate(sq_dev = (rmsd_t[,v1] - rmsd_t[,v2])^2) 
-  
-  # l <- list(v1, sqrt(mean(rmsd_t$sq_dev)))
-  print(paste0("RMSD for ", v1, " is ", sqrt(mean(rmsd_t$sq_dev))))
-  # print(sqrt(mean(rmsd_t$sq_dev)))
-  # return(sqrt(mean(rmsd_t$sq_dev)))
-}
-```
-
-
-```{r}
-rmsd_spp(rf_5_data, "ABLA")
-```
-
-
-# Distributions
-
-```{r}
-load("raw_TDs_forHist.Rdata")
-# load("rf_TDs_forHist.Rdata")
-
-raw_tds %>% head()
-```
-
-
-```{r}
-
-df <- raw_tds
-spp_vector <- c("ABAM", "THPL", "TSHE")
-
-hist_spps <- function(df, spp_vector) {
-  
-  df2 <- df %>% select(contains(spp_vector[1]))
-  
-  if (length(spp_vector) == 1) {
-    print(df2)
-  }
-  if (length(spp_vector) > 1) {
-    for(i in 2:length(spp_vector)) { 
-      spp <- df %>% select(contains(spp_vector[i]))
-      
-      df2 <- cbind(df2, spp)
-    }
-  }
-  
-  plot_variables <- names(df2)
-  # ?pivot_longer
-  df3 <- df2 %>% pivot_longer(
-    cols = plot_variables,
-    values_to = "TDs", 
-    names_to = "Species"
+rf_imp <- rf_imp %>% mutate(
+  splt_cn = ifelse(
+    str_detect(standplot_cn, ("\\.")), str_sub(standplot_cn, 1,-3), standplot_cn
   )
-  
-  p <- df3 %>% ggplot() + 
-    aes(x = TDs, fill = Species) + 
-    geom_histogram(
-      alpha = 0.5, 
-      position = "identity", 
-      bins = 30
-    ) + 
-    labs(title = plot_variables) + 
-    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
-  
-  print(p)
-}
-
-hist_spps(df = raw_tds, spp_vector = c("ABLA", "ABGR", "TSHE"))
+) %>% relocate(splt_cn)
 ```
 
-#### Side by side bar plots
 
+___
+
+#### NAs
+
+*Separating NAs from not nas*
 ```{r}
-df <- raw_tds
-spp_vector <- c("ABAM", "THPL", "TSHE")
-
-bar_spps <- function(df, spp_vector) {
-  
-  df2 <- df %>% select(contains(spp_vector[1]))
-  
-  if (length(spp_vector) == 1) {
-    print(df2)
-  }
-  if (length(spp_vector) > 1) {
-    for(i in 2:length(spp_vector)) { 
-      spp <- df %>% select(contains(spp_vector[i]))
-      
-      df2 <- cbind(df2, spp)
-    }
-  }
-  
-  plot_variables <- names(df2)
-  # ?pivot_longer
-  df3 <- df2 %>% pivot_longer(
-    cols = plot_variables,
-    values_to = "TDs", 
-    names_to = "Species"
-  )
-  
-  p <- df3 %>% ggplot() + 
-    aes(x = TDs, fill = Species) + 
-    geom_histogram(
-      # alpha = 0.5, 
-      position = "dodge", 
-      bins = 30
-    ) + 
-    labs(title = plot_variables) + 
-    theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
-  
-  print(p)
-}
-
-bar_spps(df = raw_tds, spp_vector = c("ABLA", "ABGR", "TSHE"))
+not_nas <- rf_imp %>% filter(!is.na(PSME_TD.o))
+nas <- rf_imp %>% filter(is.na(PSME_TD.o))
 ```
 
+The NAs are in the test dataset left out by bootstrapping. There were no observed values for that set. 
+I can add them back in. 
 
-#### log plots
-
+*Adding the NAs back from imp_data*
 ```{r}
-df <- raw_tds
-spp_vector <- c("ABAM", "THPL", "TSHE")
+cns <- nas %>% select(splt_cn)
+fill <- left_join(cns, imp_data, join_by(splt_cn == STANDPLOT_CN))
+fill <- fill %>% select(splt_cn, contains("TD"))
 
-hist_spps <- function(df, spp_vector, hist_bar = "histogram", log_tds = F, keep_zeroes = T) {
-  # df cleaning
-  df2 <- df %>% select(contains(spp_vector[1]))
-  
-  if (length(spp_vector) == 1) {
-    print(df2)
-  }
-  if (length(spp_vector) > 1) {
-    for(i in 2:length(spp_vector)) { 
-      spp <- df %>% select(contains(spp_vector[i]))
-      
-      df2 <- cbind(df2, spp)
-    }
-  }
-  
-  plot_variables <- names(df2)
-  # ?pivot_longer
-  df3 <- df2 %>% pivot_longer(
-    cols = plot_variables,
-    values_to = "TDs", 
-    names_to = "Species"
-  )
-  
-  # keep_zeroes
-  if (keep_zeroes == F) {
-    df3 <- df3 %>% filter(TDs > 0)
-  }
-  
-  # log_tds
-  if (log_tds == T) {
-    df3$TDs <- log(df3$TDs + 1)
-  }
-  
-  # hist_bar
-  if (hist_bar == "histogram") {
-    
-    p <- df3 %>% ggplot() + 
-      aes(x = TDs, fill = Species) + 
-      geom_histogram(
-        alpha = 0.5,
-        position = "dodge", 
-        bins = 30
-      ) + 
-      labs(title = plot_variables) + 
-      theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
-    
-    print(p)
-  }
-  
-  if (hist_bar == "bar") {
-    
-    p <- df3 %>% ggplot() + 
-      aes(x = TDs, fill = Species) + 
-      geom_histogram(
-        # alpha = 0.5, 
-        position = "dodge", 
-        bins = 30
-      ) + 
-      labs(title = str_flatten_comma(plot_variables)) + 
-      theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
-    
-    print(p)
-  }
-  
-}
-# df, spp_vector, hist_bar = "histogram", log_tds = F
-hist_spps(df = raw_tds, spp_vector = c("ABLA", "ABGR", "TSHE"))
 
-hist_spps(df = raw_tds, spp_vector = c("ABLA", "ABGR", "TSHE"), hist_bar = "bar", log_tds = T)
+fill <- fill %>% column_to_rownames("splt_cn") %>% 
+  rename_with(~paste0(., ".o"), names(.)) %>% rownames_to_column("splt_cn")
 
-hist_spps(df = raw_tds, 
-          spp_vector = c("ABLA", "ABGR", "TSHE"), 
-          hist_bar = "bar", 
-          log_tds = T, 
-          keep_zeroes = F)
+nas.i <- nas %>% select(!contains(".o"))
+
+nas.f <- left_join(nas.i, fill, join_by(splt_cn))
+t <- names(not_nas)
+nas.f <- nas.f %>% select(splt_cn, all_of(t))
+
+t <- rbind(not_nas, nas.f)
 ```
 
 
 
 
 
+___
+
+There is a difference in rmsd depending on if the function is run on the yai object vs the imputed object. 
+In this case, it's lower for the imputed object. 
+I am not sure which to use. 
+
+I went back up and filled in the missing NAs for the observed values from the yai test set. 
+Those rmsd values fall inbetween the imputed and yai rmsds. 
+
+*Joining the three sets of rmsd*
+```{r}
+#| warning: false
+
+t <- rmsd(t)
+t <- t %>% rownames_to_column("symbl") %>% rename(nas_rmsd = rmsd)
+t_rf <- rmsd(rf)
+t_rf <- t_rf %>% rownames_to_column("symbl") %>% rename(rf_rmsd = rmsd)
+t_imp <- rmsd(rf_imp)
+t_imp <- t_imp %>% rownames_to_column("symbl") %>% rename(imp_rmsd = rmsd)
+
+t <- left_join(t_rf, t)
+t <- left_join(t, t_imp)
+t %>% head()
+```
+
+
+*Remove replicates, save for later*
+```{r}
+# rf_imp <- rf_imp %>% filter(!str_detect(standplot_cn, ("\\.")))
+```
+
+### RMSD
+
+To get max species and its associated rmsd into the data, I need to get max species. 
+
+#### Max_spp
+
+*Get max_spp1 from imp_data*
+```{r}
+
+max_spp <- imp_data %>% select(standplot_cn = STANDPLOT_CN, max_spp1)
+
+key <- left_join(rf_imp, max_spp, join_by(splt_cn == standplot_cn)) %>% select(splt_cn, standplot_cn, max_spp1)
+```
+
+
+*Combine rmsd from yai and max spp*
+```{r}
+rmsd <- rmsd %>% rownames_to_column("spp")
+key <- left_join(key, rmsd, join_by(max_spp1 == spp))
+
+agp_ready <- left_join(key, rf_imp, join_by(standplot_cn, splt_cn))
+agp_ready <- agp_ready %>% rename(max_spp = max_spp1)
+
+rm(key, rmsd, t, con, max_spp)
+```
+
+We are not going to have an error metric for if the max species was imputed correctly. 
+It was not in the y variables. 
+I could add it back, but I am not doing that now. 
+
+
+
+*Sorting columns*
+```{r}
+tds <- agp_ready %>% select_if(is.numeric) %>% select(-rmsd)
+not_tds <- agp_ready %>% select(!contains("TD"))
+tds <- tds[, order(names(tds), decreasing = T)]
+agp_ready <- cbind(not_tds, tds)
+```
 
 
 
 
+# Export
+
+The table I need has columns: *standplot_cn, max_spp, observed_TD, imputed_TD, rmsd_max_spp.*
 
 
+*Here are the columns I have*
+```{r}
+agp_ready <- agp_ready %>% mutate(plt_cn = str_sub(splt_cn, 1, -3)) %>% relocate(plt_cn)
+agp_ready %>% names() %>% noquote()
+```
 
-
-
-
-
-
-
-
-
-
-
+That should give me everything I need to build the map, except I'll want plot_cn as well. 
 
 
 
 
 ```{r}
-# install.packages("plotrix")
-# require(plotrix)
-# 
-# 
-# multhist(df2, main = "t", col = c("blue", "red", "green")) 
-# legend("topright",                      # Position of the legend
-#        legend = names(df2),    # Labels for the legend
-#        fill = c("blue", "red", "green"))
+better_FIA_Plots %>% head()
+
+better_agp_ready <- left_join(better_FIA_Plots, agp_ready, join_by(CN == plt_cn, STANDPLOT_CN == splt_cn))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+AGP wants me to add a rownumber. 
+
+```{r}
+
+better_agp_ready <- better_agp_ready %>% mutate(rowid = row_number()) %>% relocate(rowid)
+better_agp_ready %>% head()
+```
+
+
+# Matching cns
+
+```{r}
+inner_join(fia_plots_nc, agp_ready, join_by(CN == plt_cn)) %>% head()
+anti_join(agp_ready, fia_plots_nc, join_by(plt_cn == CN)) %>% head()
 ```
 
 ```{r}
-# par(mar=c(7,4,4,6))
-# testcol<-color.gradient(c(0,1),0,c(1,0),nslices=5)
-# col.labels<-c("Cold","Warm","Hot")
-# # this will put the labels at the intersections
-# # col.labels<-c("","Cold","","Warm","","Warmer","","Hot","")
-# color2D.matplot(matrix(rnorm(100),nrow=10),c(1,0),0,c(0,1),
-# main="Test color legends")
-# color.legend(11,6,11.8,9,col.labels,testcol,gradient="y")
-# color.legend(10.2,2,11,5,col.labels,testcol,align="rb",gradient="y")
-# color.legend(0.5,-2,3.5,-1.2,col.labels,testcol)
-# color.legend(7,-1.8,10,-1,col.labels,testcol,align="rb",col=testcol[c(1,3,5)])
-# par(mar=c(5,4,4,2))
+#| message: false
+#| warning: false
+
+cns_nc_agp <- fia_plots_nc %>% select(CN) %>% unique()
+cns_rf <- agp_ready %>% select(CN = plt_cn) %>% unique()
+
+# rf plots not in fia
+anti_join(cns_rf, cns_nc_agp, by = "CN") %>% nrow()
+anti_join(cns_nc_agp, cns_rf, by = "CN") %>% nrow()
 
 ```
+
+- There are 68 plot cns from the imputation that are not in the N.Cascades FIA plot cns. 
+- There are 3179 cns from FIA N.Cascades not in the rf imputation. 
+- There are 909 unique plot cns in the rf imputation and 1775 standplot cns. 
+- The FIA plots in NC were taken from the full list of PLOT's LAT/LON. They are not necessarily the kinds of plots we care about. 
+
+The FIA plots in NC should be filtered to remove the same plots we removed in the filtering steps. 
+Since I started with a much larger set of plots, the final set of plots we have in imp_data will contain all of the 
+CNs that we care about. 
+
+```{r}
+n_distinct(agp_ready$splt_cn)
+```
+
+
+```{r}
+# write_csv(better_agp_ready, "./data/12_agp_ready.csv")
+```
+
+```{r}
+# library(foreign)
+# write.dbf(better_agp_ready, "./data/12_agp_ready.dbf")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # End
+
+*Playing with impute, seeing if it will take the imp_data*
+```{r}
+# imp_data_nc <- imp_data %>% filter(eco_code == "NC") %>% as.data.frame()
+# t <- imp_data_nc %>% select(STANDPLOT_CN, !contains("TD")) %>% select(-c(STAND_CN, TRAIN, EcoRegion, ECO_NAME, eco_code, FPAG))
+# t <- t %>% select(!contains("larg")) %>% select(!contains("max"))
+# t <- t %>% column_to_rownames("STANDPLOT_CN")
+# # t <- t %>% select(-STANDPLOT_CN)
+# impute(rf, t)
+```
+
+```{r}
+better_agp_ready %>% filter(CN == 216960325020004)
+```
+
+```{r}
+better_agp_ready %>% group_by(CN) %>% 
+  summarise(
+    n = n_distinct(max_spp)
+  ) %>% arrange(desc(n)) %>% head()
+```
+
+```{r}
+t <- rep(74.96528, 20)
+t2 <- seq(1:20)
+
+t * t2
+```
+```{r}
+
+sp <- "PIPO"
+spp <- better_agp_ready %>% select(contains(sp)) %>% names() %>% sort()
+
+t <- better_agp_ready %>% select(spp[1], spp[2]) %>% 
+  drop_na() 
+t <- t %>% 
+  filter(t[,1] > 0 | t[,2] > 0) 
+t <- t %>% 
+  mutate(
+    diff = t[,1] - t[,2]
+  )
+# hist(t$diff, breaks = "fd")
+
+summary(t[,3])
+```
+
+
 

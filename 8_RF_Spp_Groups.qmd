@@ -4,8 +4,6 @@ execute:
   freeze: auto
 ---
 
-**04Sept24**
-
 # Intro
 
 To run RF with the species grouped by species group code instead of species code, 
@@ -105,6 +103,34 @@ keep <- c("keep", "clean_mem", "clean_na_cols", "clean_paths", "db_list", "nas_t
 
 
 
+___
+
+
+```{r}
+#| include: false
+#| eval: false
+
+rstudioapi::getSourceEditorContext()$path %>% basename()
+```
+
+
+**Created on**
+```{r}
+#| echo: false
+
+ymd_hms(file.info("./8_RF_Spp_Groups.qmd")$ctime, tz = "America/Los_Angeles")
+```
+
+**Last updated on**
+```{r}
+#| echo: false
+
+ymd_hms(file.info("./8_RF_Spp_Groups.qmd")$atime, tz = "America/Los_Angeles")
+```
+
+___
+
+
 
 
 
@@ -126,7 +152,7 @@ clean_mem()
 # "C:/RxFire/Regen/Regeneration_2_16Sept24/homemade_fvs_db_17sept24.db"
 
 regen_db_path <- clean_paths(r"(C:\RxFire\Regen\FVS\regen_080724_1644\regen_080724_1644.db)")
-standlist <- clean_paths(r"(C:\RxFire\Regen\Regeneration_2_16Sept24\train.csv)")
+standlist <- clean_paths(r"(C:\RxFire\Regen\Regeneration_2_16Sept24\data\train.csv)")
 standlist <-  read_csv(standlist, col_types = "cn") 
 standlist |> nrow()
 ```
@@ -158,7 +184,7 @@ pred <- left_join(comp, summary, join_by(CaseID, StandID))
 ## *Get FIA data from 1.5_Create DB*
 
 # connecting to the WA state FIA db
-fia_db_path <- clean_paths(r"(C:\RxFire\Regen\Regeneration_2_16Sept24\homemade_fvs_db.db)")
+fia_db_path <- clean_paths(r"(C:\RxFire\Regen\Regeneration_2_16Sept24\data\homemade_fvs_db.db)")
 con <- dbConnect(RSQLite::SQLite(), fia_db_path)
 
 # collecting the trees
@@ -183,7 +209,7 @@ dbDisconnect(con)
 
 ## *Get FPAG from 1_Import and Clean Standlist*
 
-fpags <- read_csv("C:/RxFire/Regen/Regeneration_2_16Sept24/1_Import_Clean.csv", 
+fpags <- read_csv("C:/RxFire/Regen/Regeneration_2_16Sept24/data/1_Import_Clean.csv", 
                       col_types = "ccc")
 
 fpags <- left_join(standlist, fpags, join_by(StandID == STANDPLOT_CN))
@@ -759,9 +785,9 @@ setup change.
 #| eval: false
 
 
-con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Regen/Regeneration_2_16Sept24/homemade_fvs_db.db")
+# con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Regen/Regeneration_2_16Sept24/data/homemade_fvs_db.db")
 # dbWriteTable(con, value = imp_data, name = "imp_data_groups", overwrite = T)
-dbDisconnect(con)
+# dbDisconnect(con)
 ```
 
 
@@ -1026,7 +1052,7 @@ rf_groups_reg <- rf
 
 *Loading the rf run from page 5 done with seedlings not as factors*
 ```{r}
-load(str_c("RF_26AUG24_1seedlings", ".Rdata"))
+load(str_c("data/RF_26AUG24_1seedlings", ".Rdata"))
 
 rf_5_seeds <- rf_yai
 ```

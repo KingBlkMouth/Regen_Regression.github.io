@@ -4,9 +4,6 @@ execute:
   freeze: auto
 ---
 
-**06Sept24**
-
-
 *Libraries*
 ```{r}
 #| label: Libraries
@@ -90,10 +87,36 @@ nas_to_zeroes <- function(df){
 keep <- c("keep", "clean_mem", "clean_na_cols", "clean_paths", "db_list", "nas_to_zeroes")
 ```
 
+
+___
+
+
+```{r}
+#| include: false
+#| eval: false
+
+
+rstudioapi::getSourceEditorContext()$path %>% basename()
+```
+
+
 **Created on**
 ```{r}
-ymd(as_date(file.info("9_Heatmap.qmd")$ctime))
+#| echo: false
+
+ymd_hms(file.info("./11_Heatmap.qmd")$ctime, tz = "America/Los_Angeles")
 ```
+
+**Last updated on**
+```{r}
+#| echo: false
+
+ymd_hms(file.info("./11_Heatmap.qmd")$atime, tz = "America/Los_Angeles")
+```
+
+
+___
+
 
 
 # Intro
@@ -284,7 +307,7 @@ tm_fiaplots <- tm_fiaplots %>% select(CN) %>% unique()
 #| eval: false
 
 # Path to OkWen shape
-pathshp <- clean_paths(r"(C:\RxFire\Regen\Regeneration_2_16Sept24\N_Cascades_in_Ok60_SHP\N_Cascades_SHP.shp)")
+pathshp <- clean_paths(r"(C:\RxFire\Regen\Regeneration_2_16Sept24\data/N_Cascades_in_Ok60_SHP\N_Cascades_SHP.shp)")
 buffer_nc <- st_read(pathshp, quiet = TRUE)
 st_geometry(buffer_nc)
 ```
@@ -331,7 +354,7 @@ nc_CNs <- left_join(tl_ids, tm_fiaplots, join_by(tl_id)) %>% select(CN) %>% drop
 ```{r}
 #| eval: false
 
-agp_nc_tm <- read_csv(clean_paths(r"(C:\RxFire\Regen\Regeneration_2_16Sept24\agp_nc_tm_plots.csv)"), 
+agp_nc_tm <- read_csv(clean_paths(r"(C:\RxFire\Regen\Regeneration_2_16Sept24\data/agp_nc_tm_plots.csv)"), 
                       show_col_types = F)
 
 agp_nc_tm <- agp_nc_tm %>% select(CN) %>% unique()
@@ -384,7 +407,7 @@ clean_mem()
 
 *Get list of TreeMap CNs*
 ```{r}
-agp_nc_tm <- read_csv(clean_paths(r"(C:\RxFire\Regen\Regeneration_2_16Sept24\agp_nc_tm_plots.csv)"), 
+agp_nc_tm <- read_csv(clean_paths(r"(C:\RxFire\Regen\Regeneration_2_16Sept24\data/agp_nc_tm_plots.csv)"), 
                       show_col_types = F)
 
 agp_nc_tm <- agp_nc_tm %>% select(CN) %>% unique()
@@ -498,7 +521,7 @@ This imputation was done in 5_TD_imp done for North Cascades.
 
 
 ```{r}
-load(str_c("RF_26AUG24_1seedlings", ".Rdata"))
+load(str_c("data/RF_26AUG24_1seedlings", ".Rdata"))
 
 rf_imputation <- impute(rf_yai)
 rf_imputation <- rf_imputation %>% rownames_to_column("STANDPLOT_CN")
@@ -629,7 +652,7 @@ If I run these with species groupings, then I am disregarding the imputation.
 
 
 ```{r}
-agp_nc_tm <- read_csv(clean_paths(r"(C:\RxFire\Regen\Regeneration_2_16Sept24\agp_nc_tm_plots.csv)"), 
+agp_nc_tm <- read_csv(clean_paths(r"(C:\RxFire\Regen\Regeneration_2_16Sept24\data/agp_nc_tm_plots.csv)"), 
                       show_col_types = F)
 
 agp_nc_tm <- agp_nc_tm %>% select(CN) %>% unique()
@@ -861,7 +884,7 @@ In agp:
 - Exported the combined and joined table to "C:/RxFire/Regen/Regeneration_2_16Sept24/Combined_TM_FIA_Raster_attributes.csv"
 
 ```{r}
-combined_tm_fia <- read_csv("C:/RxFire/Regen/Regeneration_2_16Sept24/Combined_TM_FIA_Raster_attributes.csv", 
+combined_tm_fia <- read_csv("C:/RxFire/Regen/Regeneration_2_16Sept24/data/Combined_TM_FIA_Raster_attributes.csv", 
                             show_col_types = F)
 
 combined_tm_fia <- combined_tm_fia %>% select(OBJECTID, TM_OBJECTID = OBJECTID_1, FIA_OBJECTID = OBJECTID_12, 
@@ -978,8 +1001,8 @@ getwd()
 # write_csv(rf_total_td, file = "C:/RxFire/Regen/Regeneration_2_16Sept24/rf_total_td.csv")
 # write_csv(agp_total_td, file = "C:/RxFire/Regen/Regeneration_2_16Sept24/tm_total_td.csv")
 
-write_xlsx(rf_total_td, path = "C:/RxFire/Regen/Regeneration_2_16Sept24/rf_total_td.xlsx")
-write_xlsx(agp_total_td, path = "C:/RxFire/Regen/Regeneration_2_16Sept24/tm_total_td.xlsx")
+write_xlsx(rf_total_td, path = "C:/RxFire/Regen/Regeneration_2_16Sept24/data/rf_total_td.xlsx")
+write_xlsx(agp_total_td, path = "C:/RxFire/Regen/Regeneration_2_16Sept24/data/tm_total_td.xlsx")
 ```
 
 

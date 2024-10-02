@@ -4,7 +4,6 @@ execute:
   freeze: auto
 ---
 
-**03Sept24**
 
 *Libraries*
 ```{r}
@@ -90,10 +89,39 @@ keep <- c("keep", "clean_mem", "clean_na_cols", "clean_paths", "db_list", "nas_t
 ```
 
 
+___
+
+
+```{r}
+#| include: false
+#| eval: false
+
+rstudioapi::getSourceEditorContext()$path %>% basename()
+```
+
+
+**Created on**
+```{r}
+#| echo: false
+
+ymd_hms(file.info("./7_RF_GroupSpp_and_Counts.qmd")$ctime, tz = "America/Los_Angeles")
+```
+
+**Last updated on**
+```{r}
+#| echo: false
+
+ymd_hms(file.info("./7_RF_GroupSpp_and_Counts.qmd")$atime, tz = "America/Los_Angeles")
+```
+
+
+___
+
+
 # Import
 
 ```{r}
-con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Regen/Regeneration_2_16Sept24/homemade_fvs_db.db")
+con <- dbConnect(RSQLite::SQLite(), "c:/RxFire/Regen/Regeneration_2_16Sept24/data/homemade_fvs_db.db")
 
 imp_data <- dbGetQuery(con, "select * from imp_data_2")
 
@@ -252,7 +280,9 @@ The largest count in North Cascades is 328 seedlings for a single species and 36
 ```{r}
 #| layout-ncol: 3
 #| fig-width: 8
-#| fig-asp: .0618
+#| fig-asp: .618
+#| column: screen-inset-left
+
 # i <- 1
 for (i in 30:length(td_names)) { 
   
@@ -596,7 +626,15 @@ x <- droplevels(x)
 
 
 ```{r}
+#| eval: false
+
 rf_yai <- yai(x = x, y = y, method = "randomForest", k = 1, bootstrap = T)
+save(rf_yai, file = "./data/7_rf_factors.Rdata")
+```
+
+
+```{r}
+load(file = "./data/7_rf_factors.Rdata")
 
 t1 <- rf_yai |> yaiRFsummary()
 

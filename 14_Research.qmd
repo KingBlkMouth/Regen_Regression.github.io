@@ -1,0 +1,938 @@
+---
+title: "Research"
+execute: 
+  freeze: false
+code-fold: true
+---
+
+This page consists of various research tasks. See sections titles for task descriptions. 
+
+
+*Libraries*
+```{r}
+#| label: Libraries
+#| message: false
+#| warning: false
+#| code-fold: true
+#| output: false
+
+rm(list = ls())                                                      
+gc()                                                                                 
+
+# Data tidying and acces
+library(tidyverse, quietly = T)       # Easy to read syntax and data manipulation                   
+library(RSQLite)                      # Access SQLite dbs   
+library(magrittr)                     # Pipes and math functions    
+# library(readxl)                     # Read xlsx 
+# library(writexl)                    # write xlsx     
+                                                   
+# yaImpute and related                           
+# library(randomForest)                 # RF package that yaImpute uses
+# library(yaImpute)                     # RF imputation
+# library(vegan)                        # Something to do the yaImpute
+
+                                                     
+# plots and tables                          
+# library(esquisse)                     # Quick data visualization   
+# library(knitr)                        # Better html tables
+# library(DT)                           # Data tables for Java script tables in HTML
+# library(stars)
+# library(kableExtra)                   # Better html tables, change sizes
+# library(feather)                      # Faster data retrieval    
+
+# Geography
+# library(sf)                           # Simple Features/vector data
+# library(terra)                        # Raster functions
+# library(spatstat)                     # Spatial stats
+
+
+library(tcltk)                        # Fix file paths
+
+# No sci-notation. 
+options(scipen = 999)
+options(width = 125)
+```
+
+*Functions*
+```{r}
+#| code-fold: true
+#| label: Functions
+
+clean_mem <- function() {
+  x <- ls(envir = .GlobalEnv)
+  # ls()[!(ls() %in% keep)]
+  rm(list = x[!(x %in% keep)], envir = .GlobalEnv)
+  gc()
+}
+
+clean_na_cols <- function(df){
+  df <- df[, colSums(is.na(df)) < nrow(df)]
+}
+
+# path <- r"(C:\RxFire\Regen\FVS\regen_080724_1644\regen_080724_1644.db)"
+clean_paths <- function(path) {
+  str_replace_all(path, "\\\\", "/")
+}
+
+db_list <- function(df, CN_col){
+  name <- NULL
+  name <- df |> select({{CN_col}})
+  name <- name |> mutate(CN_col = str_c("'", {{CN_col}}, "'")) 
+  name <- str_flatten_comma(name$CN_col)
+  # name <- str_flatten_comma(name[, CN_col])
+  name
+}
+
+nas_to_zeroes <- function(df){
+  df <- df |> mutate_all(~replace(., is.na(.), 0))
+  df
+}
+
+rmsd_spp <-spprmsd_spp <- function(imp_df, spp) {
+  
+  rmsd_t <- imp_df %>% drop_na() %>% select(contains(spp)) %>% select(contains("TD"))
+  
+  v1 <- rmsd_t %>% select(ends_with("TD")) %>% names()
+  v2 <- rmsd_t %>% select(ends_with(".o")) %>% names()
+  
+  rmsd_t <- rmsd_t %>% mutate(sq_dev = (rmsd_t[,v1] - rmsd_t[,v2])^2) 
+  
+  return(sqrt(mean(rmsd_t$sq_dev)))
+}
+
+
+keep <- c("keep", "clean_mem", "clean_na_cols", "clean_paths", "db_list", "nas_to_zeroes", "rmsd_spp") %>% unique()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+___
+
+```{r}
+#| include: false
+#| eval: false
+
+rstudioapi::getSourceEditorContext()$path %>% basename()
+```
+
+
+**Created on**
+```{r}
+#| echo: false
+
+ymd_hms(file.info("./Research.qmd")$ctime, tz = "America/Los_Angeles")
+```
+
+**Last updated on**
+```{r}
+#| echo: false
+
+ymd_hms(file.info("./Research.qmd")$atime, tz = "America/Los_Angeles")
+```
+
+___
+
+
+
+# FIA Variables
+
+Here I am looking for FIA variables that could be used to indicate soil type and water availability. 
+
+Looking in the FIA database, data description and user guide for phase 2 version 9.2. 
+
+[Users Guide](https://research.fs.usda.gov/understory/forest-inventory-and-analysis-database-user-guide-nfi)
+
+I am using ctrl + f to search for water and soil. 
+Also, I'm looking at tables that I have never had the oportunity look at before.
+
+
+
+## PLOT table
+
+
+### Water
+
+
+- 2.4.19 *WATERCD*, 
+Water on plot code. Water body <1 acre in size or a stream <30 feet wide that has the
+greatest impact on the area within the sampled portions of any of the four subplots. The
+coding hierarchy is listed in order from large permanent water to temporary water. May
+not be populated for some FIA work units.
+  + 0 None - no water sources within the sampled condition class(es).
+  + 1 Permanent streams or ponds too small to qualify as noncensus water.
+  + 2 Permanent water in the form of deep swamps, bogs, marshes without standing trees present and less than 1.0 acre in size, or with standing trees.
+  + 3 Ditch/canal - human-made channels used as a means of moving water, e.g., for irrigation or drainage, which are too small to qualify as noncensus water.
+  + 4 Temporary streams.
+  + 5 Flood zones - evidence of flooding when bodies of water exceed their natural banks.
+  + 9 Other temporary water.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Visits and Sampling
+
+This could be a good code to use in filtering, if it is filled for all plots. 
+
+- 2.4.41 *SAMP_METHOD_CD*, 
+Sample method code. A code indicating if the plot was observed in the field or remotely
+sensed in the office. 
+1 =  Field visited, meaning a field crew physically examined the plot and recorded information
+at least about subplot 1 center condition (see SUBP_EXAMINE_CD below)
+  + When the plot is sampled remotely, the number of subplots examined (SUBP_EXAMINE_CD) usually equals 1.
+
+- 2.4.42 *SUBP_EXAMINE_CD*, 
+Subplots examined code. A code indicating the number of subplots examined. 
+By default, PLOT_STATUS_CD = 1 plots have all 4 subplots examined. 
+4 = All four subplots fully described (no assumptions/inferences).
+
+- 1.2.1 Sampling, **Phase 1 (P1) is used for stratification, while Phase 2 (P2) consists of plots that are visited 
+or photo-interpreted.**
+
+- 2.4.11 *PLOT_NONSAMPLE_REASN_CD* 
+Plot nonsampled reason code. A code indicating the reason an entire plot was not 
+sampled. 
+1-11 = not-sampled. Perhaps NULL indicates sampled. 
+
+- 2.4.50 *NF_PLOT_STATUS_CD*, 
+Nonforest plot status code. A code describing the sampling status of the nonforest plot.
+1 = Sampled at least one accessible nonforest land condition present on the plot.
+
+
+
+
+
+
+### Hexagons
+
+Emap hexagons are not the hexagons that outline FIA plots for large area estimation. 
+The hexagons refered to in Intesity are the ones that I needed for the error map. 
+
+- 2.4.40 *EMAP_HEX*, 
+EMAP hexagon. The identifier for the approximately 160,000 acre Environmental
+Monitoring and Assessment Program (EMAP) hexagon in which the plot is located. EMAP
+hexagons are available to the public, cover the coterminous United States, and have been
+used in summarizing and aggregating data about numerous natural resources.
+
+- 2.4.44 *INTENSITY*,  
+Intensity. A code used to identify Federal base grid annual inventory plots and plots that
+have been added to intensify a particular sample. Under the Federal base grid, one plot is
+collected in each theoretical hexagonal polygon, which is slightly more than 5,900 acres in
+size. Plots with INTENSITY = 1 are part of the Federal base grid. In some instances,
+States and/or agencies have provided additional support to increase the sampling intensity
+for an area. Supplemental plots have INTENSITY set to higher numbers depending on the
+amount of plot intensification chosen for the particular estimation unit. Populated when
+MANUAL 1.0.
+
+
+
+
+
+
+
+
+
+
+
+## COND table
+
+
+
+- 2.5.9 *COND_STATUS_CD*, 
+Condition status code. A code indicating the basic land classification. 
+
+
+
+![Cond Status cd](C:/RxFire/Regen/Regeneration_2_16Sept24/Images/COND_STATUS_CD_Table.png)
+
+- 2.5.159 *FOREST_COND_STATUS_CHANGE_CD*, 
+Forest land condition status change code. A code indicating change in forest land
+condition.
+
+- 3.1.27 *AGENTCD*, 
+Cause of death (agent) code. (core: all remeasured plots when the tree was alive at the
+previous visit and at revisit is dead or removed OR the tree is standing dead in the current
+inventory and the tree is ingrowth, through growth, or a missed live tree; core optional: all
+initial plot visits when tree qualifies as a mortality tree) When PLOT.MANUAL 1.0, this
+attribute was collected on only dead and cut trees. When PLOT.MANUAL <1.0, this
+attribute was collected on all trees (live, dead, and cut). Cause of damage was recorded
+for live trees if the presence of damage or pathogen activity was serious enough to reduce
+the quality or vigor of the tree. When a tree was damaged by more than one agent, the
+most severe damage was coded. When no damage was observed on a live tree, 00 was
+recorded. Damage recorded for dead trees was the cause of death. Each FIA program
+records specific codes that may differ from one State to the next. These codes fall within
+the ranges listed below. For the specific codes used in a particular State, contact the FIA
+work unit responsible for that State (table 1-1).
+  + 30 = Fire
+  + 00 = No agent recorded (only allowed on live trees in data prior to 1999).
+  
+
+
+
+
+### Water
+
+2.5.35 *PHYSCLCD*, 
+Physiographic class code. A code indicating the general effect of land form, topographical
+position, and soil on moisture available to trees.
+  +Note: When PLOT.MANUAL <1.0, this attribute is populated for all forest periodic plots
+and all NCRS periodic plots that were measured as "nonforest with trees" (e.g., wooded
+pasture, windbreaks).
+
+Xeric sites (normally low or deficient in available moisture)
+
+  + 11 Dry Tops - Ridge tops with thin rock outcrops and considerable exposure to sun and
+wind.
+  + 12 Dry Slopes - Slopes with thin rock outcrops and considerable exposure to sun and
+wind. Includes most mountain/steep slopes with a southern or western exposure.
+  + 13 Deep Sands - Sites with a deep, sandy surface subject to rapid loss of moisture
+following precipitation. Typical examples include sand hills, ridges, and flats in the
+South, sites along the beach and shores of lakes and streams.
+  + 19 Other Xeric - All dry physiographic sites not described above.
+
+Mesic sites (normally moderate but adequate available moisture)
+
+  + 21 Flatwoods - Flat or fairly level sites outside of floodplains. Excludes deep sands and
+wet, swampy sites.
+  + 22 Rolling Uplands - Hills and gently rolling, undulating terrain and associated small
+streams. Excludes deep sands, all hydric sites, and streams with associated
+floodplains.
+  + 23 Moist Slopes and Coves - Moist slopes and coves with relatively deep, fertile soils.
+Often these sites have a northern or eastern exposure and are partially shielded
+from wind and sun. Includes moist mountain tops and saddles.
+  + 24 Narrow floodplains/Bottomlands - Floodplains and bottomlands less than 1/4 mile in
+width along rivers and streams. These sites are normally well drained but are
+subjected to occasional flooding during periods of heavy or extended precipitation.
+Includes associated levees, benches, and terraces within a 1/4 mile limit. Excludes
+swamps, sloughs, and bogs.
+  + 25 Broad Floodplains/Bottomlands - Floodplains and bottomlands 1/4/-mile or wider
+along rivers and streams. These sites are normally well drained but are subjected to
+occasional flooding during periods of heavy or extended precipitation. Includes
+associated levees, benches, and terraces. Excludes swamps, sloughs, and bogs with
+year-round water problems.
+  + 29 Other Mesic - All moderately moist physiographic sites not described above.
+
+Hydric sites (normally abundant or overabundant moisture all year)
+
+  + 31 Swamps/Bogs - Low, wet, flat, forested areas usually quite extensive that are
+flooded for long periods except during periods of extreme drought. Excludes cypress
+ponds and small drains.
+  + 32 Small Drains - Narrow, stream-like, wet strands of forest land often without a
+well-defined stream channel. These areas are poorly drained or flooded throughout
+most of the year and drain the adjacent higher ground.
+  + 33 Bays and wet pocosins - Low, wet, boggy sites characterized by peaty or organic
+soils. May be somewhat dry during periods of extended drought. Examples include
+sites in the Carolina bays in the Southeast United States.
+  + 34 Beaver ponds.
+  + 35 Cypress ponds.
+  + 39 Other hydric - All other hydric physiographic sites.
+
+
+
+2.5.131 *FOREST_COMMUNITY_PNWRS*, 
+Forest type (Pacific Islands), Pacific Northwest Research Station. A code indicating the
+forest type that best describes the species with the plurality of crown cover for all live
+trees in the condition class that are not overtopped. Recorded for all accessible forest land
+condition classes in the Pacific Islands. Only populated by certain FIA work units
+(SURVEY.RSCD = 26).
+  + Note: Pacific Island forest types are taken from Mueller-Dombois and Fosberg (1998).
+
+
++ 1 Strand or halophytic vegetation - vegetation near the shore containing
+species adapted to high rates of evaporation by wind and to high salt
+concentrations from windblown ocean spray or inundation by salt water.
++ 2 Mangrove swamps - trees with high salt tolerance growing on tidally
+inundated shores and in landlocked depressions. Many species have
+pneumatophores, adaptive structures for aeration of waterlogged root
+systems.
++ 3 Lowland tropical rainforest - multistoried forest with many canopydwelling epiphytes, open ground, and shrub layers. This forest community
+can extend up the lower slopes with windward rainy exposures.
++ 4 Montane rainforest -the predominant type on moist hilltops and mountain
+slopes in many tropical islands. Forests of low stature that are rich in
+shrubs and epiphytes.
++ 5 Cloud forest - These forests are covered with clouds or fog much of the
+time. The trees have low canopies and are often dripping with moisture.
+The trees are typically small-leafed and covered with masses of epiphytic
+mosses and liverworts, which also form a deep ground cover.
++ 6 Mesophytic or moist forest - seasonally dry evergreen forests on leeward,
+drier slopes.
++ 7 Xerophytic - forests found on truly dry, rain-shadow, leeward mountain
+slopes and lowlands.
++ 8 Agroforestry - tree species are included in crop or animal production
+agricultural ecosystems.
++ 9 Plantations - an area planted with tree species for the purpose of timber
+production. Species planted are mainly eucalypt, mahogany, and pine
+species that replace indigenous forests and savannas.
+
+
+
+## SUBP Regen Table
+
+- 6.2.10 *REGEN_SUBP_STATUS_CD*, 
+Regeneration subplot status code. A code indicating whether or not the subplot was
+sampled for advanced regeneration. This attribute was retired starting with INVYR =
+2015. Data for all years are now populated in REGEN_MICR_STATUS_CD. 
+
+- 6.2.12 *SUBPLOT_SITE_LIMITATIONS*, 
+Subplot site limitations. A code indicating if the site has a limitation on at least 30
+percent of the accessible forest area of the subplot that would inhibit or preclude the
+presence of regenerating seedlings. This attribute was retired starting with INVYR = 2015.
+Note: For INVYR <2015, the field guide referenced the sampling unit as the subplot even
+though seedlings are and have only been counted on the microplots.
+
+  + 1 No site limitation.
+  + 2 Rocky surface with little or no soil.
+  + 3 Water-saturated soils (during the growing season).
+
+- 6.2.13 *MICROPLOT_SITE_LIMITATIONS*, 
+Microplot site limitations. A code indicating if the site has a limitation on at least 30
+percent of the accessible forest area of the microplot that would inhibit or preclude the
+presence of regenerating seedlings.
+  + Same codes as above. 
+  
+- 6.2.22 *REGEN_MICR_STATUS_CD*, 
+Regeneration microplot status code. A code indicating whether the microplot was
+sampled for advanced regeneration. Based on the procedures described in Bechtold and
+Patterson (2005), POP_STRATUM.ADJ_FACTOR_REGEN_MICR should be applied when
+making population estimates. This compensates for any nonsampled microplots or cases
+where the sampling status is ambiguous (codes 3 through 9).
+
+  + 1 Advance regeneration sampled - accessible forest land condition present on the microplot.
++ 2 Advance regeneration sampled - no accessible forest land condition present on the microplot.
++ 3 Advance regeneration nonsampled - accessible forest land condition present on the microplot,
+but advance regeneration variables cannot be assessed (core SEEDLING.TREECOUNT is still
+measured).
++ 4 Advance regeneration nonsampled - QA/QC did not measure subplot/microplot for
+tree/sapling/seedling data (PLOT.QA_STATUS = 2-5 only).
++ 5 Nonsampled - subplot not sampled (SUBPLOT.SUBP_STATUS_CD = 3).
++ 9 Advance regeneration sample status is ambiguous - collected under earlier, more general
+definition; refer to REGEN_SUBP_STATUS_CD.
+
+
+
+
+## Seedling Regeneration Table
+
+
+6.3.14 *SEEDLING_SOURCE_CD*, 
+Seedling source code. A code indicating the source of the seedlings
+
+  + 1 Other seedling.
+  + 2 Stump sprout.
+  + 3 Competitive oak, hickory, or butternut seedling (Note: Research indicates that
+competitive seedlings are highly likely to become dominant or codominant stems in the
+next stand during forest succession. To be classified as competitive, stems must have a
+root collar diameter [d.r.c.] >0.75 inches or have a length of at least 3 feet. In situations
+with relatively high tally, it should only be necessary to check at least 10% of d.r.c.’s.)
+
+6.3.15 *LENGTH_CLASS_CD*, 
+Length class code. A code indicating the length class of the seedlings.
+
+  + 1, 2 inches to less than 6 inches.
+  + 2, 6 inches to less than 12 inches.
+  + 3, 1 foot to less than 3 feet.
+  + 4, 3 feet to less than 5 feet.
+  + 5, 5 feet to less than 10 feet.
+  + 6, Greater than or equal to 10 feet.
+
+
+
+## Ground Cover Table
+
+7.1.12 *GRND_CVR_TYP*, 
+Ground cover type. A code indicating the ground cover type found on each transect
+segment. If multiple ground cover types (e.g., BARE, LITT, ROCK) are present on a
+segment, a separate record is populated for each category. Individual categories add up to
+100 percent for each 10-foot segment along the transect.
+
+
+
+## Subplot Soil Sample Layer Table
+
+**Look at this table. It has soil moisture measurements, but I am not sure that the sampling procedure will be helpful.**
+**If there are samples on our CNs, then it is worth looking at this further**
+
+
+- 8.2.29 *TEXTURE_CD*, 
+Texture code. A code indicating the texture of the soil layer.
+
+  + 0, Organic.
+  + 1, Loamy.
+  + 2, Clayey.
+  + 3, Sandy.
+  + 4, Coarse sand.
+  + 9, Not measured.
+
+
+There are a bunch of codes for ph and nutrients. 
+
+
+## Population tables
+
+These aren't useful here, but there is information that is used to infer the data to a population. 
+
+## Plot Geometry Table
+
+- 10.1.23 *FVS_LOC_CD*, 
+Forest vegetation simulator location code
+
+
+
+
+
+
+# --------------------------
+
+
+# TreeMap Bootstrap
+
+In various meetings, Karin has brought up that TreeMap does not have the same issue with rare classes as us. 
+The following is looking into the TreeMap code to see why that is. 
+
+
+**Why doesn't TreeMap get the empty classes error?** 
+
+**They don't use bootstrap = T.**
+
+
+___
+
+
+[TreeMap Code](https://github.com/USDAForestService/TreeMap2014_scripts)
+
+
+## TreeMap Code
+
+This is the TreeMap code copied from github in Sept. of 2024. 
+
+- Parts 1 and 2 are just reading the code. 
+- Function lookup is learning about unfamiliar function. 
+- Pseudo-code is re-writing the TreeMap code in plain language
+- 
+
+### Part 1
+
+```{r}
+#| eval: false
+
+# Perform random forests imputation of FIA plot data
+# written by Isaac Grenfell
+
+library(yaImpute)
+library(raster)
+library(rgdal)
+library(foreign)
+library(parallel)
+library(foreach)
+library(doParallel)
+
+
+###Change this to match current directory and path
+cur.zone <- "z1"
+outfolder <- cur.zone
+
+setwd("F:\\Tree_List_c2012\\FIA\\working_KLR")
+meters.db <- read.dbf("FIA_LFRDB_Albers.dbf")
+
+###Change this to match current directory and path
+setwd(paste("F:\\Tree_List_c2014\\target_data\\final\\", outfolder, sep=""))
+list.files()
+
+cwd <- getwd()
+flist.tif <- Sys.glob("*.tif")
+
+# Create raster stack of input target grids
+raster.stack <- stack(flist.tif)
+p4s.albers <- proj4string(raster.stack)
+raster.list <- vector("list", length(flist.tif))
+nrasters <- length(flist.tif)
+for(i in 1:length(flist.tif))  
+{
+  raster.list[[i]] <- raster()  
+}
+
+###Extract values about training points
+nfiles.raster <- length(flist.tif)
+
+# Read in x table of reference data
+allplot <- read.table("F:\\Tree_List_c2014\\x_table\\x_table_final_EVG_Karin_reclass_plus_loblolly_manual.txt", header=T, sep=",")
+remap <- read.table(paste("F:\\Tree_List_c2014\\target_data\\working_KLR\\EVG_remap\\", cur.zone, "_EVG_remap.txt", sep=""), sep=":")
+
+#Limit allplot to just the veg types in the zone remap table
+plot.df <- allplot[allplot$EVT_GP %in% remap$V1,]
+dim(plot.df)
+
+###Change this to match current directory and path
+dir.create(paste("F:\\Tree_List_c2014\\outputs\\", cur.zone, "_disturb", sep=""))
+plot.df$CN <- factor(plot.df$CN)
+write.csv(plot.df, paste("F:\\Tree_List_c2014\\outputs\\", cur.zone, "_disturb\\", cur.zone, "_x_table_allplots_reclass.txt", sep=""), row.names = F)
+
+merge.df <- merge(plot.df, meters.db, by = "CN")
+
+##Build X predictor matrix
+evg.fac <- as.factor(plot.df$EVT_GP)
+dc.code.fac <- as.factor(plot.df$disturb_code)
+dc.year.fac <- as.factor(plot.df$disturb_year)
+dc.year.num <- as.numeric(plot.df$disturb_year)
+
+
+
+lev.dc <- levels(dc.code.fac)
+lev.year <- levels(dc.year.fac)
+
+plot.df[,18] <- evg.fac
+
+
+##Build Y response matrix
+plot.df$POINT_X <- merge.df$POINT_X
+plot.df$POINT_Y <- merge.df$POINT_Y
+
+
+###Change this to match current directory and path
+setwd(paste("F:\\Tree_List_c2014\\target_data\\final\\", outfolder, sep=""))
+
+####Reclass evgs
+evg.reclass <- remap
+n.evgs <- dim(evg.reclass)[1]
+
+evg.out <- rep(0, dim(plot.df)[1])
+evg.vec <- plot.df$"EVT_GP"
+for(i in 1:n.evgs)  
+{  
+  cur.evg <- evg.reclass[i, 1]  
+  sub.ind <- evg.vec == cur.evg  
+  evg.out[sub.ind] <- i  
+}	
+evg.in <- as.factor(evg.out)
+
+plot.df$"EVT_GP" <- as.factor(evg.out)
+plot.df$disturb_code <- as.factor(plot.df$disturb_code)
+
+#Create X Table
+X.df <- plot.df[,5:20]
+
+aspect.temp <- X.df$ASPECT
+rad.temp <- (pi/180)*aspect.temp
+northing.temp <- cos(rad.temp)
+easting.temp <- sin(rad.temp)
+X.df <- X.df[,-2]
+X.df$NORTHING <- northing.temp
+X.df$EASTING <- 	easting.temp
+
+rownames(X.df) <- plot.df$ID
+id.table <-  plot.df$ID
+Y.df <- data.frame(plot.df[,16:18])
+rownames(Y.df) <- plot.df$ID
+#X.df <- X.df[,-c(9, 10)]
+
+# build the random forests model (X=all predictors, Y=EVG, EVC, EVH)
+set.seed(56789)
+yai.treelist <- yai(X.df, Y.df, method = "randomForest", ntree = 249)
+
+yai.treelist
+```
+
+### Part 2
+
+```{r}
+#| eval: false
+
+# build dataframes from the raster data
+raster.coords <- coordinates(raster.stack)
+asp.raster <- raster.stack[[1]]
+dem.raster <- raster.stack[[2]]
+
+currow.vals <- cellFromRow(dem.raster, 1500)
+coords.currow <- raster.coords[currow.vals,]
+
+extract.currow <- extract(raster.stack, coords.currow)
+p4s.latlong <- CRS("+proj=longlat +datum=NAD83") 
+
+maxrow <- max(as.numeric(rownames(X.df)))
+
+nrows.out <- dim(raster.stack)[1]
+ncols.out <- dim(raster.stack)[2]
+
+rs2 <- raster.stack
+coords.all <- raster.coords
+
+x.vec <- coords.all[,1]
+x.mat <- matrix(x.vec, nrow=nrows.out)
+
+x.raster.out <- raster(x.mat)
+x.raster.out@extent <-dem.raster@extent
+x.raster.out@crs <-dem.raster@crs
+
+y.vec <- coords.all[,2]
+y.mat <- matrix(y.vec, nrow=nrows.out)
+
+y.raster.out <- raster(y.mat)
+y.raster.out@extent <-dem.raster@extent
+y.raster.out@crs <-dem.raster@crs
+
+# impute.row()   ------------------------------------------------------------------------------
+
+# Perform imputation
+impute.row <- function(currow)  
+{  
+  library(yaImpute) 
+  library(raster) 
+  library(rgdal)
+  currow.vals <- cellFromRow(dem.raster, currow)
+  coords.currow <- raster.coords[currow.vals,]  
+  
+  # get data from each row of rasters (coordinates)
+  sp.currow <- SpatialPoints(coords.currow, CRS(p4s.albers)) 
+  extract.currow <- extract(rs2,   sp.currow)
+  
+  colseq <- 1:length(extract.currow[,1])
+  valid.cols <- colseq[as.logical(1-is.na(extract.currow[,1]))]
+  ncols.df <- dim(extract.currow)[2]
+  extract.currow <- data.frame(extract.currow)
+  extract.currow$"POINT_X" <- sp.currow$x
+  extract.currow$"POINT_Y" <-sp.currow$y
+  extract.currow <- na.exclude(extract.currow)
+  X.df.temp <- data.frame(extract.currow)
+  nrow.temp <- dim(X.df.temp)[1]
+  
+  aspect.temp <- X.df.temp$ASPECT  
+  rad.temp <- (pi/180)*aspect.temp  
+  northing.temp <- cos(rad.temp)  
+  easting.temp <- sin(rad.temp)
+  
+  X.df.temp <- X.df.temp[,-1]  
+  X.df.temp$NORTHING <- northing.temp  
+  X.df.temp$EASTING <- 	easting.temp  
+  temp.evg <- X.df.temp$'EVT_GP'
+  
+  #get nonappearing evgs   
+  evg.orig <- 1:n.evgs 
+  evg.val <- evg.orig  
+  evg.val.temp <- X.df.temp$'EVT_GP'  
+  n.evgs.orig <- length(sort(unique(evg.orig)))  
+  evg.orig.seq <- 1:n.evgs.orig  
+  
+  nonappearing.evgs <- evg.val[-sort(unique(as.numeric(as.character(evg.val.temp))))]  
+  n.dummy.rows <- length(nonappearing.evgs)  
+  X.df.temp.old <- X.df.temp
+
+  
+  
+  
+  
+
+if(n.dummy.rows > 0)    
+  {    
+    dummy.rows <- X.df.temp[1:n.dummy.rows,]    
+    tempchar <- as.character(X.df.temp$'EVT_GP')    
+    X.df.temp$'EVT_GP' <- tempchar    
+    dummy.rows$'EVT_GP' <- as.character(nonappearing.evgs)    
+    X.df.temp <- rbind(X.df.temp, dummy.rows)    
+  }
+  
+  n.rows.orig <- dim(extract.currow)[1]	  
+  temp.fac <- factor(X.df.temp$'EVT_GP', levels = levels(evg.in))  
+  dc.code.fac.temp <- factor( X.df.temp$disturb_code, levels=lev.dc)  
+  
+  X.df.temp$'EVT_GP' <- as.factor(temp.fac)  
+  X.df.temp$disturb_code <- dc.code.fac.temp   
+  nrow.temp <- dim(X.df.temp)[1]  
+  impute.out <- rep(-1, nrow.temp)  
+  
+  nc.orig <- dim(coords.currow)[1]  
+  impute.out <- rep(NA,nc.orig)  
+  nrows.orig <- dim(extract.currow)[1]  
+  if(nrow.temp > 0)    
+  {    
+    colseq.out <- 1:dim(X.df.temp)[1]    
+    rownames.all <- colseq.out+maxrow    
+    rownames(X.df.temp) <- paste("T-", rownames.all)    
+    
+    # take object from formed random forests model and use X.df.temp dataframe to make predictions    
+    temp.newtargs <- newtargets(yai.treelist, newdata = X.df.temp)    
+    temp.xall <- temp.newtargs$xall    
+    out.neiIds <- temp.newtargs$neiIdsTrgs    
+    out.trgrows <- temp.newtargs$trgRows    
+    yrows <- as.numeric(out.neiIds[,1])    
+    id.out <- id.table[yrows]    
+    impute.out[valid.cols] <- yrows[1:nrows.orig]    
+  }
+  
+  return(impute.out)  
+}
+
+# end ----------------------------------------------------------------------
+
+cl <- makeCluster(20, port="10187")
+registerDoParallel(cl)
+
+mout <- foreach(m = 1:nrows.out, .packages = c("raster", "rgdal", "yaImpute"), .combine="rbind") %dopar%   impute.row(m)
+
+stopCluster(cl)
+closeAllConnections()
+
+###this will return a matrix, all thats left is to write it out as a raster
+
+m.raster <-dem.raster
+
+m.raster.out <- raster(mout)
+m.raster.out@extent <-dem.raster@extent
+m.raster.out@crs <-dem.raster@crs
+
+###Change this!
+setwd(paste("F:\\Tree_List_c2014\\outputs\\", cur.zone, "_disturb", sep=""))
+fout <- paste(cur.zone, "_index-yes-disturb.tif", sep="")
+writeRaster(m.raster.out, fout, overwrite=TRUE)
+```
+
+
+
+
+## Function Lookup
+
+
+
+- **base::Sys.glob**
+  + Function to do wildcard expansion (also known as ‘globbing’) on file paths.
+  
+- **raster::proj4string**        
+  + Get or set the coordinate reference system (CRS) of a Raster* object.
+  
+- **base::vector**             
+  + vector produces a ‘simple’ vector of the given length and mode, where a ‘simple’ vector has no attribute,
+  
+- **raster::coordinates**        
+  + These functions get coordinates of the center of raster cells for a row, column, or cell number of a Raster* object.
+  
+- **raster::cellFromRow**        
+  + Get cell number(s) of a Raster* object from row and/or column numbers. 
+  Cell numbers start at 1 in the upper left corner, and increase from left to right, and then from top to bottom. 
+  The last cell number equals the number of cells of the Raster* object.
+  
+- **raster::stack**              
+  + A RasterStack is a collection of RasterLayer objects with the same spatial extent and resolution. A RasterStack can be created from RasterLayer objects, or from raster files, or both. It can also be created from a SpatialPixelsDataFrame or a SpatialGridDataFrame object.
+  
+- **parallel::makeCluster**        
+  + Creates a set of copies of R running in parallel and communicating over sockets.
+  
+- **doParallel::registerDoParallel** 
+  + The registerDoParallel function is used to register the parallel backend with the foreach package.
+  
+- **foreach::foreach**            
+  + %do%⁠ and ⁠%dopar%⁠ are binary operators that operate on a foreach object and an R expression. The expression, ex, is evaluated multiple times in an environment that is created by the foreach object, and that environment is modified for each evaluation as specified by the foreach object. ⁠%do%⁠ evaluates the expression sequentially, while ⁠%dopar%⁠ evaluates it in parallel. The results of evaluating ex are returned as a list by default, but this can be modified by means of the .combine argument.
+  
+- **user::impute.row**         
+  + Created above
+  
+- **parallel::stopCluster**        
+  + Creates a set of copies of R running in parallel and communicating over sockets.
+  
+- **showConnections {base}::closeAllConnections**
+  + closes (and destroys) all user connections, restoring all sink diversions as it does so.
+  
+- **sp::SpatialPoints**
+  + create objects of class SpatialPoints-class or SpatialPointsDataFrame-class from coordinates, and from coordinates and data.frames
+  
+
+
+## Pseudo-Code
+
+### Part 1
+
+1. Set zone and working directory
+2. list files and save tiff paths
+3. stack tiffs
+4. Project the stack
+5. create a vector of tiff paths and get the length
+6. for each tiff use the raster function to make it a raster object
+7. get the number of files
+8. Pull in the TreeMap tree list
+9. set remap as the EVG list
+10. remove plots to Veg types in current zone and get the new dimensions
+11. save the filtered plots
+12. join the plots to the *FIA_LFRDB.dbf*
+
+**Build X and Y
+
+1. Set EVT, dist_code, dist_yr as factors plus another for dist_yr as numeric. 
+2. record factor levels for dist_cd and year. 
+3. Add evt group to plot.df
+4. set the X and Ys is plot.df
+5. Enter the output folder
+6. create a vector of length to fill
+7. for the number of evgs, 
+  + set the current evg to match the rows of column 1 in evg.reclass. 
+  + set sub.ind to equal be T/F where the current evg vector matches the reclass
+  + set evg.out to be i where T
+8. Set evg.in to factor(evg.out)
+9. add the evg to plot.df
+10. as dist_cd to plot.df
+11. Create the X table with aspect, and other variables. 
+12. Create the Y table. 
+13. Run yai. 
+
+
+```{r}
+#| eval: false
+
+yai.treelist <- yai(X.df, Y.df, method = "randomForest", ntree = 249)
+```
+
+**They may have used bootstrap = T in the training of the model, but it is not here in the code.**
+That is why they do not get the empty classes error. 
+
+### Part 2 
+
+**Build dfs**
+
+1. Get the raster coordinates for cell centers
+2. Pull out the aspect and elevation rasters
+3. Pull cell numbers in row 1500 from the dem
+4. Get the coordinates of the centers for this row. 
+5. extract the data from the stack at these coordinates. 
+6. set coordinate system to p4s.latlong
+7. Make a raster for the current rows Xs
+8. Make a raster for the current rows Ys
+
+**Impute Rows Function**
+
+1. Get the current row and the center coordinates
+2. Make spatial points from centers
+3. extract raster stack to spatial points. 
+4. Set up a df of the needed dimensions for the extracted data.
+5. Add the X and Y coordinates. 
+6. Correct aspect to N and E. 
+7. Pull out and sort unique EVGs
+8. Make another list with EVGs that do not appear. 
+9. if there are EVGs that do not appear, add rows for temporary variables
+10. *Maybe remove the CNs that have EVGs that do not appear. 
+11. Use the yai object to get new targets for the filtered EVTs. 
+12. return the new tagets for the current row. 
+
+**Impute the Map**
+
+1. For each row, in parallel, impute the new targets to a matrix
+2. Create a raster from the matrix. 
+3. save and exit.
+
+
+# END

@@ -94,6 +94,36 @@ keep <- c("keep", "clean_mem", "clean_na_cols", "clean_paths", "db_list", "nas_t
 ```
 
 
+___
+
+
+```{r}
+#| include: false
+#| eval: false
+
+
+rstudioapi::getSourceEditorContext()$path %>% basename()
+```
+
+
+**Created on**
+```{r}
+#| echo: false
+
+ymd_hms(file.info("./3_RandomForests_Prep.qmd")$ctime, tz = "America/Los_Angeles")
+```
+
+**Last updated on**
+```{r}
+#| echo: false
+
+ymd_hms(file.info("./3_RandomForests_Prep.qmd")$atime, tz = "America/Los_Angeles")
+```
+
+
+___
+
+
 
 
 
@@ -111,7 +141,7 @@ clean_mem()
 # "C:/RxFire/Regen/FVS/regen_091724_2118/regen_091724_2118.db"
 
 regen_db_path <- clean_paths(r"(C:\RxFire\Regen\FVS\regen_091724_2118\regen_091724_2118.db)")
-standlist <- clean_paths(r"(./train_and_test.csv)")
+standlist <- clean_paths(r"(./data/train_and_test.csv)")
 standlist <-  read_csv(standlist, col_types = "cnc") 
 standlist |> glimpse()
 ```
@@ -138,7 +168,7 @@ pred <- left_join(comp, summary, join_by(CaseID, StandID)) %>% relocate(CaseID, 
 *Get FIA data from 1.5_Create DB*
 ```{r}
 # connecting to the WA state FIA db
-fia_db_path <- clean_paths(r"(./homemade_fvs_db_17sept24.db)")
+fia_db_path <- clean_paths(r"(./data/homemade_fvs_db_17sept24.db)")
 con <- dbConnect(RSQLite::SQLite(), fia_db_path)
 
 # collecting the trees
@@ -173,13 +203,13 @@ dbDisconnect(con)
 
 *Get FPAG from 1_Import and Clean Standlist*
 ```{r}
-fpags <- read_csv("./1_Import_Clean2.csv", 
+fpags <- read_csv("./data/1_Import_Clean2.csv", 
                       col_types = "ccc")
 
 fpags <- left_join(standlist, fpags, join_by(StandID == STANDPLOT_CN))
 # summary(fpags)
 ```
-▐
+
 ```{r}
 t <- tree |> select(STAND_CN) |> unique()
 nrow(t) %>% add_commas()
@@ -779,7 +809,7 @@ setup change.
 ```{r}
 standlist <- standlist %>% mutate(TRAIN = ifelse(TRAIN == "train", T, F))
 
-db_path <- "c:/RxFire/Regen/Regeneration_2_16Sept24/homemade_fvs_db_17sept24.db"
+db_path <- "c:/RxFire/Regen/Regeneration_2_16Sept24/data/homemade_fvs_db_17sept24.db"
 ```
 
 
