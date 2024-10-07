@@ -305,7 +305,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Last updated on</strong></p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "2024-09-27 16:47:23 PDT"</code></pre>
+<pre><code>[1] "2024-10-07 09:03:55 PDT"</code></pre>
 </div>
 </div>
 <hr>
@@ -759,8 +759,9 @@ I could go into the veg tables and determine the proper code, but that might be 
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 195140</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> t <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(TREECOUNT))</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>t <span class="sc">|&gt;</span> <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>tnull <span class="ot">&lt;-</span> t <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="fu">is.na</span>(TREECOUNT)) <span class="sc">%&gt;%</span> <span class="fu">select</span>(PLT_CN) <span class="sc">%&gt;%</span> <span class="fu">unique</span>()</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> t <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(TREECOUNT))</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>t <span class="sc">|&gt;</span> <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 185211</code></pre>
 </div>
@@ -987,16 +988,7 @@ I could go into the veg tables and determine the proper code, but that might be 
 <div class="cell">
 <div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(zsubcond<span class="sc">$</span>FPAG) <span class="sc">|&gt;</span> <span class="fu">noquote</span>() <span class="sc">|&gt;</span> <span class="fu">sort</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  [1] CA   CAC1 CAC5 CACE CAF2 CAG1 CAG2 CAG3 CAS2 CAS3 CAS4 CC   CCF2 CCS2 CCS3
- [16] CD   CD13 CD61 CD63 CD81 CDF0 CDF4 CDG1 CDG2 CDG3 CDG6 CDRX CDS  CDS1 CDS2
- [31] CDS4 CDS6 cds7 CDS7 CDS8 CE   CE54 CEF2 CEF3 CEF4 CEFA CEFH CEG1 CEG2 CEG3
- [46] CEM2 CEM3 CERR CES  CES1 CES2 CES3 CES4 CES5 CF   CFF1 CFF2 CFF3 CFF4 CFM1
- [61] CFRR CFS1 CFS2 CFS3 CFS4 CFS5 CFS6 CFSC CH   CH12 CH21 CH6- CH62 CHC2 CHF1
- [76] CHF2 CHF4 CHF9 CHM1 CHS  CHS1 CHS2 CHS3 chs5 CHS5 CHS6 CHS7 CHS8 CL   CLM4
- [91] CLS2 CLS3 CLS4 CLS5 CM   CMF1 CMF2 CMG2 CMS1 CMS2 CMS3 CMS4 CMS5 CP   CPF0
-[106] CPG1 CPG2 CPS0 CPS2 CPS3 CPS5 CSF2 CSF3 CW   CW33 CW55 CWC4 CWF0 CWF2 CWF3
-[121] CWF4 CWG1 CWGI CWS2 CWS3 CWS5 HA   HBM1 HC   HO   HOG1 HOG2 HOG3 HOS3 HQ  
-[136] HQG1 HQM2 HQS2 HX   PIAL SM20</code></pre>
+<pre><code>  [1] CA   CAC1 CAC5 CACE CAF2 CAG1 CAG2 CAG3 CAS2 CAS3 CAS4 CC   CCF2 CCS2 CCS3 CD   CD13 CD61 CD63 CD81 CDF0 CDF4 CDG1 CDG2 CDG3 CDG6 CDRX CDS  CDS1 CDS2 CDS4 CDS6 cds7 CDS7 CDS8 CE   CE54 CEF2 CEF3 CEF4 CEFA CEFH CEG1 CEG2 CEG3 CEM2 CEM3 CERR CES  CES1 CES2 CES3 CES4 CES5 CF   CFF1 CFF2 CFF3 CFF4 CFM1 CFRR CFS1 CFS2 CFS3 CFS4 CFS5 CFS6 CFSC CH   CH12 CH21 CH6- CH62 CHC2 CHF1 CHF2 CHF4 CHF9 CHM1 CHS  CHS1 CHS2 CHS3 chs5 CHS5 CHS6 CHS7 CHS8 CL   CLM4 CLS2 CLS3 CLS4 CLS5 CM   CMF1 CMF2 CMG2 CMS1 CMS2 CMS3 CMS4 CMS5 CP   CPF0 CPG1 CPG2 CPS0 CPS2 CPS3 CPS5 CSF2 CSF3 CW   CW33 CW55 CWC4 CWF0 CWF2 CWF3 CWF4 CWG1 CWGI CWS2 CWS3 CWS5 HA   HBM1 HC   HO   HOG1 HOG2 HOG3 HOS3 HQ   HQG1 HQM2 HQS2 HX   PIAL SM20</code></pre>
 </div>
 </div>
 <p>In the last iteration of this, I looked up the following plot in the tree and P2Veg tables to find the most likely Habitat type. I decided on a conifer/alpine/grass model.</p>
@@ -1154,13 +1146,7 @@ I could go into the veg tables and determine the proper code, but that might be 
 <span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a><span class="fu">anti_join</span>(y, x, <span class="fu">join_by</span>(HABTYPCD))<span class="sc">$</span>HABTYPCD <span class="sc">|&gt;</span> <span class="fu">noquote</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] CWF253   CES      CFS533   CH2135   chs513   CFS2-57  CDS      CFS1-51 
- [9] CFS333   CDS1813  CEFH23   CD811    CD132    CEFA23   CW5554   CDG231  
-[17] SM20(1)  CH6-15   CHF1-25  CMS556   CHS34    CHS13    CHF1-24  CWGI21  
-[25] CD639    CH625    CD6131   CHS235   CHF9     CACEF211 CHS1-26  cds715  
-[33] CMS553   CHS261   CSF223   CHS      CE5426   CES351   CFS125   CSF352  
-[41] CAC11    CHF138   PIAL     CDG639   CHS 7    CHS1 37  CES427   CH124   
-[49] CW336    CES542  </code></pre>
+<pre><code> [1] CWF253   CES      CFS533   CH2135   chs513   CFS2-57  CDS      CFS1-51  CFS333   CDS1813  CEFH23   CD811    CD132    CEFA23   CW5554   CDG231   SM20(1)  CH6-15   CHF1-25  CMS556   CHS34    CHS13    CHF1-24  CWGI21   CD639    CH625    CD6131   CHS235   CHF9     CACEF211 CHS1-26  cds715   CMS553   CHS261   CSF223   CHS      CE5426   CES351   CFS125   CSF352   CAC11    CHF138   PIAL     CDG639   CHS 7    CHS1 37  CES427   CH124    CW336    CES542  </code></pre>
 </div>
 </div>
 <p>The 42 above Habitat types are in the conditions table, but not in the reference data.</p>
@@ -2438,19 +2424,7 @@ I could go into the veg tables and determine the proper code, but that might be 
 <div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> t <span class="sc">|&gt;</span> <span class="fu">filter</span>(FPA <span class="sc">==</span> <span class="st">"CDS"</span>)</span>
 <span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a>x<span class="sc">$</span>SCIENTIFIC_NAME</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "PSME/ARPA"            "PSME/HODI/2GRAM"      "PSME/HODI/Grass"     
- [4] "PSME/HODI/GRASS"      "PSME/HODI/CAGE2"      "PSME/ACCI/FEOC"      
- [7] "PSME/GASH"            "PSME/PAMY"            "PSME/PAMY/CARU"      
-[10] "PSME/SPIRA-SYAL-ARUV" "PIPO-PSME/SYAL-HODI"  "PSME/HODI"           
-[13] "PIPO-PSME/HODI"       "2TE/SYAL/2FORB"       "PSME-ABCO/SYAL/2FORB"
-[16] "PSME/SYAL"            "PSME/SYOR-WEN"        "PSME/SYOR2"          
-[19] "PSME/SPBE2"           "PSME/SYAL/PSSPS"      "PSME/SYAL/CARU"      
-[22] "PSME/SPBEL/CARU"      "PSME/SPBEL"           "PSME/ARUV"           
-[25] "PSME/ARUV-PUTR2"      "PSME/ARUV/CARU"       "PSME/ARNE"           
-[28] "PSME/PUTR2"           "PSME/PUTR"            "PSME/PUTR2/PSSPS"    
-[31] "PSME/PUTR2/CARU"      "PSME/PHMA5"           "PSME/PHMA"           
-[34] "PSME/PHMA5/LIBOL2"    "PSME/VACCI"           "PSME/VAME"           
-[37] "PSME/VACA13"          "PSME/VAMY"            "PSME/VAMY/CARU"      </code></pre>
+<pre><code> [1] "PSME/ARPA"            "PSME/HODI/2GRAM"      "PSME/HODI/Grass"      "PSME/HODI/GRASS"      "PSME/HODI/CAGE2"      "PSME/ACCI/FEOC"       "PSME/GASH"            "PSME/PAMY"            "PSME/PAMY/CARU"       "PSME/SPIRA-SYAL-ARUV" "PIPO-PSME/SYAL-HODI"  "PSME/HODI"            "PIPO-PSME/HODI"       "2TE/SYAL/2FORB"       "PSME-ABCO/SYAL/2FORB" "PSME/SYAL"            "PSME/SYOR-WEN"        "PSME/SYOR2"           "PSME/SPBE2"           "PSME/SYAL/PSSPS"      "PSME/SYAL/CARU"       "PSME/SPBEL/CARU"      "PSME/SPBEL"           "PSME/ARUV"            "PSME/ARUV-PUTR2"      "PSME/ARUV/CARU"       "PSME/ARNE"            "PSME/PUTR2"           "PSME/PUTR"            "PSME/PUTR2/PSSPS"     "PSME/PUTR2/CARU"      "PSME/PHMA5"           "PSME/PHMA"            "PSME/PHMA5/LIBOL2"    "PSME/VACCI"           "PSME/VAME"            "PSME/VACA13"          "PSME/VAMY"            "PSME/VAMY/CARU"      </code></pre>
 </div>
 </div>
 <div class="cell">
