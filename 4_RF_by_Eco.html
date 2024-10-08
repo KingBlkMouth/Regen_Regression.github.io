@@ -348,7 +348,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Last updated on</strong></p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "2024-09-27 12:03:55 PDT"</code></pre>
+<pre><code>[1] "2024-10-08 10:59:59 PDT"</code></pre>
 </div>
 </div>
 <hr>
@@ -383,23 +383,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># n_cascades |&gt; str()</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(n_cascades)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "STANDPLOT_CN" "CC"           "SDI"          "FPAG"         "LAT"         
- [6] "LON"          "ELEV"         "ASPECT"       "SLOPE"        "BAp"         
-[11] "PIPO_BA"      "PSME_BA"      "ABAM_BA"      "TSME_BA"      "ABGR_BA"     
-[16] "PICO_BA"      "LALY_BA"      "PIAL_BA"      "PIEN_BA"      "ABLA_BA"     
-[21] "LAOC_BA"      "THPL_BA"      "ALRU2_BA"     "TSHE_BA"      "TABR2_BA"    
-[26] "CHNO_BA"      "POBAT_BA"     "ABPR_BA"      "BEPA_BA"      "PREM_BA"     
-[31] "CONU4_BA"     "POTR5_BA"     "PIMO3_BA"     "ACGL_BA"      "FRLA_BA"     
-[36] "ACMA3_BA"     "2TREE_BA"     "ALRH2_BA"     "QUGA4_BA"     "PRVI_BA"     
-[41] "MAFU_BA"      "PISI_BA"      "ABCO_BA"      "JUHI_BA"      "ARME_BA"     
-[46] "BEOC2_BA"     "PIPO_TD"      "ABLA_TD"      "TSME_TD"      "PSME_TD"     
-[51] "ABGR_TD"      "LALY_TD"      "PIEN_TD"      "PICO_TD"      "LAOC_TD"     
-[56] "ACGL_TD"      "TABR2_TD"     "CHNO_TD"      "ABAM_TD"      "THPL_TD"     
-[61] "TSHE_TD"      "BEPA_TD"      "PREM_TD"      "POTR5_TD"     "PIAL_TD"     
-[66] "ALRU2_TD"     "ABPR_TD"      "PIMO3_TD"     "PRVI_TD"      "2TB_TD"      
-[71] "ACMA3_TD"     "CONU4_TD"     "QUGA4_TD"     "MAFU_TD"      "ABCO_TD"     
-[76] "PSMA_TD"      "ALRH2_TD"     "POBAT_TD"     "BEOC2_TD"     "PRPE2_TD"    
-[81] "CHLA_TD"      "PISI_TD"     </code></pre>
+<pre><code> [1] "STANDPLOT_CN" "CC"           "SDI"          "FPAG"         "LAT"          "LON"          "ELEV"         "ASPECT"       "SLOPE"        "BAp"          "PIPO_BA"      "PSME_BA"      "ABAM_BA"      "TSME_BA"      "ABGR_BA"      "PICO_BA"      "LALY_BA"      "PIAL_BA"      "PIEN_BA"      "ABLA_BA"      "LAOC_BA"      "THPL_BA"      "ALRU2_BA"     "TSHE_BA"      "TABR2_BA"     "CHNO_BA"      "POBAT_BA"     "ABPR_BA"      "BEPA_BA"      "PREM_BA"      "CONU4_BA"     "POTR5_BA"     "PIMO3_BA"     "ACGL_BA"      "FRLA_BA"      "ACMA3_BA"     "2TREE_BA"     "ALRH2_BA"     "QUGA4_BA"     "PRVI_BA"      "MAFU_BA"      "PISI_BA"      "ABCO_BA"      "JUHI_BA"      "ARME_BA"      "BEOC2_BA"     "PIPO_TD"      "ABLA_TD"      "TSME_TD"      "PSME_TD"      "ABGR_TD"      "LALY_TD"      "PIEN_TD"      "PICO_TD"      "LAOC_TD"      "ACGL_TD"      "TABR2_TD"     "CHNO_TD"      "ABAM_TD"     
+[60] "THPL_TD"      "TSHE_TD"      "BEPA_TD"      "PREM_TD"      "POTR5_TD"     "PIAL_TD"      "ALRU2_TD"     "ABPR_TD"      "PIMO3_TD"     "PRVI_TD"      "2TB_TD"       "ACMA3_TD"     "CONU4_TD"     "QUGA4_TD"     "MAFU_TD"      "ABCO_TD"      "PSMA_TD"      "ALRH2_TD"     "POBAT_TD"     "BEOC2_TD"     "PRPE2_TD"     "CHLA_TD"      "PISI_TD"     </code></pre>
 </div>
 </div>
 <p><em>Separating the predictors from the responses</em></p>
@@ -407,16 +392,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>x_pred <span class="ot">&lt;-</span> n_cascades[,<span class="dv">1</span><span class="sc">:</span><span class="dv">46</span>]</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(x_pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "STANDPLOT_CN" "CC"           "SDI"          "FPAG"         "LAT"         
- [6] "LON"          "ELEV"         "ASPECT"       "SLOPE"        "BAp"         
-[11] "PIPO_BA"      "PSME_BA"      "ABAM_BA"      "TSME_BA"      "ABGR_BA"     
-[16] "PICO_BA"      "LALY_BA"      "PIAL_BA"      "PIEN_BA"      "ABLA_BA"     
-[21] "LAOC_BA"      "THPL_BA"      "ALRU2_BA"     "TSHE_BA"      "TABR2_BA"    
-[26] "CHNO_BA"      "POBAT_BA"     "ABPR_BA"      "BEPA_BA"      "PREM_BA"     
-[31] "CONU4_BA"     "POTR5_BA"     "PIMO3_BA"     "ACGL_BA"      "FRLA_BA"     
-[36] "ACMA3_BA"     "2TREE_BA"     "ALRH2_BA"     "QUGA4_BA"     "PRVI_BA"     
-[41] "MAFU_BA"      "PISI_BA"      "ABCO_BA"      "JUHI_BA"      "ARME_BA"     
-[46] "BEOC2_BA"    </code></pre>
+<pre><code> [1] "STANDPLOT_CN" "CC"           "SDI"          "FPAG"         "LAT"          "LON"          "ELEV"         "ASPECT"       "SLOPE"        "BAp"          "PIPO_BA"      "PSME_BA"      "ABAM_BA"      "TSME_BA"      "ABGR_BA"      "PICO_BA"      "LALY_BA"      "PIAL_BA"      "PIEN_BA"      "ABLA_BA"      "LAOC_BA"      "THPL_BA"      "ALRU2_BA"     "TSHE_BA"      "TABR2_BA"     "CHNO_BA"      "POBAT_BA"     "ABPR_BA"      "BEPA_BA"      "PREM_BA"      "CONU4_BA"     "POTR5_BA"     "PIMO3_BA"     "ACGL_BA"      "FRLA_BA"      "ACMA3_BA"     "2TREE_BA"     "ALRH2_BA"     "QUGA4_BA"     "PRVI_BA"      "MAFU_BA"      "PISI_BA"      "ABCO_BA"      "JUHI_BA"      "ARME_BA"      "BEOC2_BA"    </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>y_resp <span class="ot">&lt;-</span> n_cascades[, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">47</span><span class="sc">:</span><span class="fu">ncol</span>(n_cascades))]</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -425,14 +401,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(y_resp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "STANDPLOT_CN" "PIPO_TD"      "ABLA_TD"      "TSME_TD"      "PSME_TD"     
- [6] "ABGR_TD"      "LALY_TD"      "PIEN_TD"      "PICO_TD"      "LAOC_TD"     
-[11] "ACGL_TD"      "TABR2_TD"     "CHNO_TD"      "ABAM_TD"      "THPL_TD"     
-[16] "TSHE_TD"      "BEPA_TD"      "PREM_TD"      "POTR5_TD"     "PIAL_TD"     
-[21] "ALRU2_TD"     "ABPR_TD"      "PIMO3_TD"     "PRVI_TD"      "2TB_TD"      
-[26] "ACMA3_TD"     "CONU4_TD"     "QUGA4_TD"     "MAFU_TD"      "ABCO_TD"     
-[31] "PSMA_TD"      "ALRH2_TD"     "POBAT_TD"     "BEOC2_TD"     "PRPE2_TD"    
-[36] "CHLA_TD"      "PISI_TD"     </code></pre>
+<pre><code> [1] "STANDPLOT_CN" "PIPO_TD"      "ABLA_TD"      "TSME_TD"      "PSME_TD"      "ABGR_TD"      "LALY_TD"      "PIEN_TD"      "PICO_TD"      "LAOC_TD"      "ACGL_TD"      "TABR2_TD"     "CHNO_TD"      "ABAM_TD"      "THPL_TD"      "TSHE_TD"      "BEPA_TD"      "PREM_TD"      "POTR5_TD"     "PIAL_TD"      "ALRU2_TD"     "ABPR_TD"      "PIMO3_TD"     "PRVI_TD"      "2TB_TD"       "ACMA3_TD"     "CONU4_TD"     "QUGA4_TD"     "MAFU_TD"      "ABCO_TD"      "PSMA_TD"      "ALRH2_TD"     "POBAT_TD"     "BEOC2_TD"     "PRPE2_TD"     "CHLA_TD"      "PISI_TD"     </code></pre>
 </div>
 </div>
 <p>This is where I am not sure what to do.</p>
@@ -462,18 +431,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>t2 <span class="ot">&lt;-</span> t2 <span class="sc">|&gt;</span> <span class="fu">sort</span>(<span class="at">decreasing =</span> T)</span>
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>t2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>      PSME_BA       ABAM_BA       TSHE_BA       THPL_BA       TSME_BA 
-26739.7932824 20532.4595711 19284.3462117  8513.0268588  7399.8409280 
-      ABLA_BA       PIPO_BA       PICO_BA       PIEN_BA       ABGR_BA 
- 5252.8166352  4870.9300874  2940.4700282  2830.3465026  2489.4660372 
-      CHNO_BA      ALRU2_BA       PIAL_BA       LAOC_BA      ACMA3_BA 
- 1328.7801453  1245.0262140   573.6183870   531.6589495   438.1439843 
-      LALY_BA      PIMO3_BA       ABPR_BA      POBAT_BA       ACGL_BA 
-  363.7744168   287.4134388   272.5000457   251.0438668   146.7487189 
-      PISI_BA      TABR2_BA      POTR5_BA       BEPA_BA       PREM_BA 
-  133.5668888    91.8866365    85.8487632    49.0018027    19.7650810 
-     ALRH2_BA       MAFU_BA      CONU4_BA       PRVI_BA      2TREE_BA 
-    2.6586163     2.3550373     2.2109185     1.3901262     0.6909745 </code></pre>
+<pre><code>      PSME_BA       ABAM_BA       TSHE_BA       THPL_BA       TSME_BA       ABLA_BA       PIPO_BA       PICO_BA       PIEN_BA       ABGR_BA       CHNO_BA      ALRU2_BA       PIAL_BA       LAOC_BA      ACMA3_BA       LALY_BA      PIMO3_BA       ABPR_BA      POBAT_BA       ACGL_BA       PISI_BA      TABR2_BA      POTR5_BA       BEPA_BA       PREM_BA      ALRH2_BA       MAFU_BA      CONU4_BA       PRVI_BA      2TREE_BA 
+26739.7932824 20532.4595711 19284.3462117  8513.0268588  7399.8409280  5252.8166352  4870.9300874  2940.4700282  2830.3465026  2489.4660372  1328.7801453  1245.0262140   573.6183870   531.6589495   438.1439843   363.7744168   287.4134388   272.5000457   251.0438668   146.7487189   133.5668888    91.8866365    85.8487632    49.0018027    19.7650810     2.6586163     2.3550373     2.2109185     1.3901262     0.6909745 </code></pre>
 </div>
 </div>
 <section id="most-prevelant-by-stand" class="level4">
@@ -599,11 +558,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">names</span>(ty)</span>
 <span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "ABAM_TD"  "TSHE_TD"  "ABLA_TD"  "PSME_TD"  "PIEN_TD"  "ABGR_TD" 
- [7] "TSME_TD"  "PICO_TD"  "THPL_TD"  "LAOC_TD"  "CHNO_TD"  "TABR2_TD"
-[13] "PIPO_TD"  "PIAL_TD"  "POTR5_TD" "PIMO3_TD" "LALY_TD"  "PREM_TD" 
-[19] "ACMA3_TD" "PRVI_TD"  "ACGL_TD"  "ALRU2_TD" "BEPA_TD"  "ABPR_TD" 
-[25] "POBAT_TD" "2TB_TD"   "PSMA_TD"  "ALRH2_TD" "PISI_TD" </code></pre>
+<pre><code> [1] "ABAM_TD"  "TSHE_TD"  "ABLA_TD"  "PSME_TD"  "PIEN_TD"  "ABGR_TD"  "TSME_TD"  "PICO_TD"  "THPL_TD"  "LAOC_TD"  "CHNO_TD"  "TABR2_TD" "PIPO_TD"  "PIAL_TD"  "POTR5_TD" "PIMO3_TD" "LALY_TD"  "PREM_TD"  "ACMA3_TD" "PRVI_TD"  "ACGL_TD"  "ALRU2_TD" "BEPA_TD"  "ABPR_TD"  "POBAT_TD" "2TB_TD"   "PSMA_TD"  "ALRH2_TD" "PISI_TD" </code></pre>
 </div>
 </div>
 <p>N.Cascades drops from 35 to 28 columns after removing empty Seedling categories.</p>
@@ -993,32 +948,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>spp1 <span class="sc">|&gt;</span> <span class="fu">sort</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "ABAM_TD"  "ABGR_TD"  "ABLA_TD"  "ACGL_TD"  "ACMA3_TD" "ALRH2_TD"
- [7] "ALRU2_TD" "BEPA_TD"  "CHNO_TD"  "LALY_TD"  "LAOC_TD"  "PIAL_TD" 
-[13] "PICO_TD"  "PIEN_TD"  "PIMO3_TD" "PIPO_TD"  "POBAT_TD" "POTR5_TD"
-[19] "PREM_TD"  "PRVI_TD"  "PSMA_TD"  "PSME_TD"  "TABR2_TD" "THPL_TD" 
-[25] "TSHE_TD"  "TSME_TD"  "zero"    </code></pre>
+<pre><code> [1] "ABAM_TD"  "ABGR_TD"  "ABLA_TD"  "ACGL_TD"  "ACMA3_TD" "ALRH2_TD" "ALRU2_TD" "BEPA_TD"  "CHNO_TD"  "LALY_TD"  "LAOC_TD"  "PIAL_TD"  "PICO_TD"  "PIEN_TD"  "PIMO3_TD" "PIPO_TD"  "POBAT_TD" "POTR5_TD" "PREM_TD"  "PRVI_TD"  "PSMA_TD"  "PSME_TD"  "TABR2_TD" "THPL_TD"  "TSHE_TD"  "TSME_TD"  "zero"    </code></pre>
 </div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>spp2 <span class="sc">|&gt;</span> <span class="fu">sort</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "2TB_TD"   "ABAM_TD"  "ABGR_TD"  "ABLA_TD"  "ABPR_TD"  "ACGL_TD" 
- [7] "ACMA3_TD" "ALRU2_TD" "CHNO_TD"  "LALY_TD"  "LAOC_TD"  "PIAL_TD" 
-[13] "PICO_TD"  "PIEN_TD"  "PIMO3_TD" "PIPO_TD"  "POBAT_TD" "POTR5_TD"
-[19] "PREM_TD"  "PRVI_TD"  "PSME_TD"  "TABR2_TD" "THPL_TD"  "TSHE_TD" 
-[25] "TSME_TD"  "zero"    </code></pre>
+<pre><code> [1] "2TB_TD"   "ABAM_TD"  "ABGR_TD"  "ABLA_TD"  "ABPR_TD"  "ACGL_TD"  "ACMA3_TD" "ALRU2_TD" "CHNO_TD"  "LALY_TD"  "LAOC_TD"  "PIAL_TD"  "PICO_TD"  "PIEN_TD"  "PIMO3_TD" "PIPO_TD"  "POBAT_TD" "POTR5_TD" "PREM_TD"  "PRVI_TD"  "PSME_TD"  "TABR2_TD" "THPL_TD"  "TSHE_TD"  "TSME_TD"  "zero"    </code></pre>
 </div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>spp12 <span class="ot">&lt;-</span> <span class="fu">append</span>(spp1, spp2) <span class="sc">|&gt;</span> <span class="fu">unique</span>()</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>spp12</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "zero"     "PIPO_TD"  "ABLA_TD"  "PSME_TD"  "ABGR_TD"  "LALY_TD" 
- [7] "PIEN_TD"  "TABR2_TD" "ABAM_TD"  "TSME_TD"  "TSHE_TD"  "BEPA_TD" 
-[13] "POTR5_TD" "LAOC_TD"  "ACGL_TD"  "PIAL_TD"  "PICO_TD"  "THPL_TD" 
-[19] "CHNO_TD"  "ACMA3_TD" "ALRU2_TD" "PIMO3_TD" "PSMA_TD"  "PREM_TD" 
-[25] "ALRH2_TD" "PRVI_TD"  "POBAT_TD" "2TB_TD"   "ABPR_TD" </code></pre>
+<pre><code> [1] "zero"     "PIPO_TD"  "ABLA_TD"  "PSME_TD"  "ABGR_TD"  "LALY_TD"  "PIEN_TD"  "TABR2_TD" "ABAM_TD"  "TSME_TD"  "TSHE_TD"  "BEPA_TD"  "POTR5_TD" "LAOC_TD"  "ACGL_TD"  "PIAL_TD"  "PICO_TD"  "THPL_TD"  "CHNO_TD"  "ACMA3_TD" "ALRU2_TD" "PIMO3_TD" "PSMA_TD"  "PREM_TD"  "ALRH2_TD" "PRVI_TD"  "POBAT_TD" "2TB_TD"   "ABPR_TD" </code></pre>
 </div>
 </div>
 <p><em>Names of columns where the overstory matches species in understory</em></p>
@@ -1027,11 +970,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>regen_species <span class="ot">&lt;-</span> regen_species[<span class="dv">2</span><span class="sc">:</span><span class="dv">29</span>]</span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>regen_species</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "PIPO_BA"  "ABLA_BA"  "PSME_BA"  "ABGR_BA"  "LALY_BA"  "PIEN_BA" 
- [7] "TABR2_BA" "ABAM_BA"  "TSME_BA"  "TSHE_BA"  "BEPA_BA"  "POTR5_BA"
-[13] "LAOC_BA"  "ACGL_BA"  "PIAL_BA"  "PICO_BA"  "THPL_BA"  "CHNO_BA" 
-[19] "ACMA3_BA" "ALRU2_BA" "PIMO3_BA" "PSMA_BA"  "PREM_BA"  "ALRH2_BA"
-[25] "PRVI_BA"  "POBAT_BA" "2TB_BA"   "ABPR_BA" </code></pre>
+<pre><code> [1] "PIPO_BA"  "ABLA_BA"  "PSME_BA"  "ABGR_BA"  "LALY_BA"  "PIEN_BA"  "TABR2_BA" "ABAM_BA"  "TSME_BA"  "TSHE_BA"  "BEPA_BA"  "POTR5_BA" "LAOC_BA"  "ACGL_BA"  "PIAL_BA"  "PICO_BA"  "THPL_BA"  "CHNO_BA"  "ACMA3_BA" "ALRU2_BA" "PIMO3_BA" "PSMA_BA"  "PREM_BA"  "ALRH2_BA" "PRVI_BA"  "POBAT_BA" "2TB_BA"   "ABPR_BA" </code></pre>
 </div>
 </div>
 <div class="cell">
@@ -1043,23 +982,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>overstory[<span class="sc">!</span>(overstory <span class="sc">%in%</span> regen_species)] <span class="sc">|&gt;</span> <span class="fu">sort</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "2TREE_BA" "ABCO_BA"  "ARME_BA"  "BEOC2_BA" "CONU4_BA" "FRLA_BA" 
- [7] "JUHI_BA"  "MAFU_BA"  "PISI_BA"  "QUGA4_BA"</code></pre>
+<pre><code> [1] "2TREE_BA" "ABCO_BA"  "ARME_BA"  "BEOC2_BA" "CONU4_BA" "FRLA_BA"  "JUHI_BA"  "MAFU_BA"  "PISI_BA"  "QUGA4_BA"</code></pre>
 </div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(x_pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "STANDPLOT_CN" "CC"           "SDI"          "LAT"          "LON"         
- [6] "ELEV"         "ASPECT"       "SLOPE"        "BAp"          "PIPO_BA"     
-[11] "PSME_BA"      "ABAM_BA"      "TSME_BA"      "ABGR_BA"      "PICO_BA"     
-[16] "LALY_BA"      "PIAL_BA"      "PIEN_BA"      "ABLA_BA"      "LAOC_BA"     
-[21] "THPL_BA"      "ALRU2_BA"     "TSHE_BA"      "TABR2_BA"     "CHNO_BA"     
-[26] "POBAT_BA"     "ABPR_BA"      "BEPA_BA"      "PREM_BA"      "CONU4_BA"    
-[31] "POTR5_BA"     "PIMO3_BA"     "ACGL_BA"      "FRLA_BA"      "ACMA3_BA"    
-[36] "2TREE_BA"     "ALRH2_BA"     "QUGA4_BA"     "PRVI_BA"      "MAFU_BA"     
-[41] "PISI_BA"      "ABCO_BA"      "JUHI_BA"      "ARME_BA"      "BEOC2_BA"    
-[46] "f"            "p"            "a"            "g"           </code></pre>
+<pre><code> [1] "STANDPLOT_CN" "CC"           "SDI"          "LAT"          "LON"          "ELEV"         "ASPECT"       "SLOPE"        "BAp"          "PIPO_BA"      "PSME_BA"      "ABAM_BA"      "TSME_BA"      "ABGR_BA"      "PICO_BA"      "LALY_BA"      "PIAL_BA"      "PIEN_BA"      "ABLA_BA"      "LAOC_BA"      "THPL_BA"      "ALRU2_BA"     "TSHE_BA"      "TABR2_BA"     "CHNO_BA"      "POBAT_BA"     "ABPR_BA"      "BEPA_BA"      "PREM_BA"      "CONU4_BA"     "POTR5_BA"     "PIMO3_BA"     "ACGL_BA"      "FRLA_BA"      "ACMA3_BA"     "2TREE_BA"     "ALRH2_BA"     "QUGA4_BA"     "PRVI_BA"      "MAFU_BA"      "PISI_BA"      "ABCO_BA"      "JUHI_BA"      "ARME_BA"      "BEOC2_BA"     "f"            "p"            "a"            "g"           </code></pre>
 </div>
 </div>
 </section>
@@ -1076,16 +1005,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(x_pred) <span class="sc">|&gt;</span> <span class="fu">sort</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "2TREE_BA"     "a"            "ABAM_BA"      "ABCO_BA"      "ABGR_BA"     
- [6] "ABLA_BA"      "ABPR_BA"      "ACGL_BA"      "ACMA3_BA"     "ALRH2_BA"    
-[11] "ALRU2_BA"     "ARME_BA"      "ASPECT"       "BAp"          "BEOC2_BA"    
-[16] "BEPA_BA"      "CC"           "CHNO_BA"      "CONU4_BA"     "ELEV"        
-[21] "f"            "FRLA_BA"      "g"            "JUHI_BA"      "LALY_BA"     
-[26] "LAOC_BA"      "LAT"          "LON"          "MAFU_BA"      "p"           
-[31] "PIAL_BA"      "PICO_BA"      "PIEN_BA"      "PIMO3_BA"     "PIPO_BA"     
-[36] "PISI_BA"      "POBAT_BA"     "POTR5_BA"     "PREM_BA"      "PRVI_BA"     
-[41] "PSME_BA"      "QUGA4_BA"     "SDI"          "SLOPE"        "STANDPLOT_CN"
-[46] "TABR2_BA"     "THPL_BA"      "TSHE_BA"      "TSME_BA"     </code></pre>
+<pre><code> [1] "2TREE_BA"     "a"            "ABAM_BA"      "ABCO_BA"      "ABGR_BA"      "ABLA_BA"      "ABPR_BA"      "ACGL_BA"      "ACMA3_BA"     "ALRH2_BA"     "ALRU2_BA"     "ARME_BA"      "ASPECT"       "BAp"          "BEOC2_BA"     "BEPA_BA"      "CC"           "CHNO_BA"      "CONU4_BA"     "ELEV"         "f"            "FRLA_BA"      "g"            "JUHI_BA"      "LALY_BA"      "LAOC_BA"      "LAT"          "LON"          "MAFU_BA"      "p"            "PIAL_BA"      "PICO_BA"      "PIEN_BA"      "PIMO3_BA"     "PIPO_BA"      "PISI_BA"      "POBAT_BA"     "POTR5_BA"     "PREM_BA"      "PRVI_BA"      "PSME_BA"      "QUGA4_BA"     "SDI"          "SLOPE"        "STANDPLOT_CN" "TABR2_BA"     "THPL_BA"      "TSHE_BA"      "TSME_BA"     </code></pre>
 </div>
 </div>
 <div class="cell">
@@ -2076,54 +1996,12 @@ largest_2   100 0.01802403 OOB error rate      5 classification
 total_TD    100 0.03671562 OOB error rate      9 classification
 
 $scaledImportance
-               LAT    SLOPE   ASPECT     ELEV       BAp        CC      SDI
-max_spp1  1.886434 1.908383 1.544237 2.039500 1.2869105 1.2314988 1.352466
-max_spp2  1.951273 1.486317 1.700475 2.085381 1.6983424 0.8386649 1.333268
-largest_1 1.467530 1.798198 1.788797 1.221523 1.4914917 1.6978601 2.294734
-largest_2 1.612400 1.828659 1.688561 1.542356 0.9627016 1.3761607 1.133497
-total_TD  1.815650 1.607982 1.337713 1.019399 1.8260383 1.5149478 2.162988
-               LON        p   ABAM_BA   PSME_BA   TSME_BA    LAOC_BA   TSHE_BA
-max_spp1  1.181532 1.222890 1.1056029 1.4212306 0.4195763 -0.1927788 0.4572209
-max_spp2  1.261891 1.242192 1.3873572 0.9027010 0.8489556  0.1732437 0.8300933
-largest_1 1.274945 1.002970 0.9259416 0.8493907 0.9160998  0.7742442 0.9173073
-largest_2 1.786748 1.122981 1.0250171 0.9872816 0.8179355  1.5516180 0.7512885
-total_TD  1.309831 1.166335 1.0197390 1.0300102 1.1098218  0.7692446 0.7541445
-             THPL_BA    PIEN_BA    CHNO_BA   ABLA_BA     PICO_BA     LALY_BA
-max_spp1  0.31763874 0.12261980  0.1380445 1.1285294  0.02742589 -0.49238436
-max_spp2  0.84452069 0.06676832  0.4099475 0.3980530  0.21830887  0.09865958
-largest_1 0.59693668 0.26656286 -0.2619733 0.1836692 -0.13333801  0.46427082
-largest_2 0.03252221 0.91215222  0.9641114 0.1054708  0.30322914 -0.23215716
-total_TD  0.42938802 0.89879711  0.1858237 0.1701539  0.15106901 -0.08994616
-              PIPO_BA     ABGR_BA   ALRU2_BA    POTR5_BA     PIAL_BA   TABR2_BA
-max_spp1   0.05938241  0.71570070 -0.2029551 -0.55929722 -0.42053094 -0.2633207
-max_spp2  -0.17805724 -0.25671356 -0.3483885 -0.38646503  0.08889864 -0.4676166
-largest_1 -0.03144414 -0.21310064 -0.7970988  0.30010681 -0.48757395 -0.5511371
-largest_2 -0.31626789 -0.02516966 -0.1584863 -0.93376092 -0.35964632 -0.5175546
-total_TD  -0.12157674 -0.38979658 -0.5303385 -0.09297562 -0.72657536 -0.5006878
-             ABPR_BA    BEPA_BA    PREM_BA   PIMO3_BA   POBAT_BA    ACGL_BA
-max_spp1  -0.6480805 -0.5373594 -0.2930134 -0.3065770 -0.4286893 -0.8638314
-max_spp2  -0.6348843 -0.5789315 -0.5407506 -0.6014126 -0.8350485 -0.6829718
-largest_1 -0.6782559 -0.6782559 -0.6782559 -1.1636682 -0.9099048 -0.9099048
-largest_2 -0.6531424 -0.6531424 -0.9337609 -0.7814275 -0.9337609 -0.9337609
-total_TD  -0.6252034 -0.7195198 -0.9433336 -0.8934134 -0.7195198 -0.9433336
-            ACMA3_BA   ALRH2_BA    PISI_BA   CONU4_BA    FRLA_BA  X2TREE_BA
-max_spp1  -0.6096870 -0.6691755 -0.9077920 -1.1064865 -1.1064865 -1.1064865
-max_spp2  -0.8919843 -0.8919843 -1.2651333 -1.0277245 -1.0277245 -1.0277245
-largest_1 -0.9099048 -0.9099048 -0.9099048 -0.9099048 -0.9099048 -0.9099048
-largest_2 -0.9337609 -0.9337609 -0.9337609 -0.9337609 -0.9337609 -0.9337609
-total_TD  -0.9433336 -0.9433336 -0.7195198 -0.9433336 -0.9433336 -0.9433336
-            QUGA4_BA    PRVI_BA    MAFU_BA    ABCO_BA    JUHI_BA    ARME_BA
-max_spp1  -1.1064865 -1.1064865 -1.1064865 -1.1064865 -1.1064865 -1.1064865
-max_spp2  -1.0277245 -1.0277245 -1.0277245 -1.0277245 -1.0277245 -1.0277245
-largest_1 -0.9099048 -0.9099048 -0.9099048 -0.9099048 -0.9099048 -0.9099048
-largest_2 -0.9337609 -0.9337609 -0.9337609 -0.9337609 -0.9337609 -0.9337609
-total_TD  -0.9433336 -0.9433336 -0.9433336 -0.9433336 -0.9433336 -0.9433336
-            BEOC2_BA          f
-max_spp1  -1.1064865 -1.1064865
-max_spp2  -1.0277245 -1.0277245
-largest_1 -0.9099048 -0.9099048
-largest_2 -0.9337609 -0.9337609
-total_TD  -0.9433336 -0.9433336</code></pre>
+               LAT    SLOPE   ASPECT     ELEV       BAp        CC      SDI      LON        p   ABAM_BA   PSME_BA   TSME_BA    LAOC_BA   TSHE_BA    THPL_BA    PIEN_BA    CHNO_BA   ABLA_BA     PICO_BA     LALY_BA     PIPO_BA     ABGR_BA   ALRU2_BA    POTR5_BA     PIAL_BA   TABR2_BA    ABPR_BA    BEPA_BA    PREM_BA   PIMO3_BA   POBAT_BA    ACGL_BA   ACMA3_BA   ALRH2_BA    PISI_BA   CONU4_BA    FRLA_BA  X2TREE_BA   QUGA4_BA    PRVI_BA    MAFU_BA    ABCO_BA    JUHI_BA    ARME_BA   BEOC2_BA          f
+max_spp1  1.886434 1.908383 1.544237 2.039500 1.2869105 1.2314988 1.352466 1.181532 1.222890 1.1056029 1.4212306 0.4195763 -0.1927788 0.4572209 0.31763874 0.12261980  0.1380445 1.1285294  0.02742589 -0.49238436  0.05938241  0.71570070 -0.2029551 -0.55929722 -0.42053094 -0.2633207 -0.6480805 -0.5373594 -0.2930134 -0.3065770 -0.4286893 -0.8638314 -0.6096870 -0.6691755 -0.9077920 -1.1064865 -1.1064865 -1.1064865 -1.1064865 -1.1064865 -1.1064865 -1.1064865 -1.1064865 -1.1064865 -1.1064865 -1.1064865
+max_spp2  1.951273 1.486317 1.700475 2.085381 1.6983424 0.8386649 1.333268 1.261891 1.242192 1.3873572 0.9027010 0.8489556  0.1732437 0.8300933 0.84452069 0.06676832  0.4099475 0.3980530  0.21830887  0.09865958 -0.17805724 -0.25671356 -0.3483885 -0.38646503  0.08889864 -0.4676166 -0.6348843 -0.5789315 -0.5407506 -0.6014126 -0.8350485 -0.6829718 -0.8919843 -0.8919843 -1.2651333 -1.0277245 -1.0277245 -1.0277245 -1.0277245 -1.0277245 -1.0277245 -1.0277245 -1.0277245 -1.0277245 -1.0277245 -1.0277245
+largest_1 1.467530 1.798198 1.788797 1.221523 1.4914917 1.6978601 2.294734 1.274945 1.002970 0.9259416 0.8493907 0.9160998  0.7742442 0.9173073 0.59693668 0.26656286 -0.2619733 0.1836692 -0.13333801  0.46427082 -0.03144414 -0.21310064 -0.7970988  0.30010681 -0.48757395 -0.5511371 -0.6782559 -0.6782559 -0.6782559 -1.1636682 -0.9099048 -0.9099048 -0.9099048 -0.9099048 -0.9099048 -0.9099048 -0.9099048 -0.9099048 -0.9099048 -0.9099048 -0.9099048 -0.9099048 -0.9099048 -0.9099048 -0.9099048 -0.9099048
+largest_2 1.612400 1.828659 1.688561 1.542356 0.9627016 1.3761607 1.133497 1.786748 1.122981 1.0250171 0.9872816 0.8179355  1.5516180 0.7512885 0.03252221 0.91215222  0.9641114 0.1054708  0.30322914 -0.23215716 -0.31626789 -0.02516966 -0.1584863 -0.93376092 -0.35964632 -0.5175546 -0.6531424 -0.6531424 -0.9337609 -0.7814275 -0.9337609 -0.9337609 -0.9337609 -0.9337609 -0.9337609 -0.9337609 -0.9337609 -0.9337609 -0.9337609 -0.9337609 -0.9337609 -0.9337609 -0.9337609 -0.9337609 -0.9337609 -0.9337609
+total_TD  1.815650 1.607982 1.337713 1.019399 1.8260383 1.5149478 2.162988 1.309831 1.166335 1.0197390 1.0300102 1.1098218  0.7692446 0.7541445 0.42938802 0.89879711  0.1858237 0.1701539  0.15106901 -0.08994616 -0.12157674 -0.38979658 -0.5303385 -0.09297562 -0.72657536 -0.5006878 -0.6252034 -0.7195198 -0.9433336 -0.8934134 -0.7195198 -0.9433336 -0.9433336 -0.9433336 -0.7195198 -0.9433336 -0.9433336 -0.9433336 -0.9433336 -0.9433336 -0.9433336 -0.9433336 -0.9433336 -0.9433336 -0.9433336 -0.9433336</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -2363,104 +2241,56 @@ total_TD  -0.9433336 -0.9433336</code></pre>
 <span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>rf_imp_ancillary <span class="ot">&lt;-</span> <span class="fu">impute</span>(rf_yai, <span class="at">ancillaryData =</span> y_ancil)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA
-Warning in mean.default(newX[, i], ...): argument is not numeric or logical:
-returning NA</code></pre>
+<pre><code>Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA
+Warning in mean.default(newX[, i], ...): argument is not numeric or logical: returning NA</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning in var(if (is.vector(x) || is.factor(x)) x else as.double(x), na.rm =
-na.rm): NAs introduced by coercion
-Warning in var(if (is.vector(x) || is.factor(x)) x else as.double(x), na.rm =
-na.rm): NAs introduced by coercion
-Warning in var(if (is.vector(x) || is.factor(x)) x else as.double(x), na.rm =
-na.rm): NAs introduced by coercion
-Warning in var(if (is.vector(x) || is.factor(x)) x else as.double(x), na.rm =
-na.rm): NAs introduced by coercion</code></pre>
+<pre><code>Warning in var(if (is.vector(x) || is.factor(x)) x else as.double(x), na.rm = na.rm): NAs introduced by coercion
+Warning in var(if (is.vector(x) || is.factor(x)) x else as.double(x), na.rm = na.rm): NAs introduced by coercion
+Warning in var(if (is.vector(x) || is.factor(x)) x else as.double(x), na.rm = na.rm): NAs introduced by coercion
+Warning in var(if (is.vector(x) || is.factor(x)) x else as.double(x), na.rm = na.rm): NAs introduced by coercion</code></pre>
 </div>
 </div>
 <section id="var-imp" class="level3">
@@ -2468,14 +2298,7 @@ na.rm): NAs introduced by coercion</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>x <span class="sc">|&gt;</span> <span class="fu">names</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "CC"       "SDI"      "LAT"      "LON"      "ELEV"     "ASPECT"  
- [7] "SLOPE"    "BAp"      "PIPO_BA"  "PSME_BA"  "ABAM_BA"  "TSME_BA" 
-[13] "ABGR_BA"  "PICO_BA"  "LALY_BA"  "PIAL_BA"  "PIEN_BA"  "ABLA_BA" 
-[19] "LAOC_BA"  "THPL_BA"  "ALRU2_BA" "TSHE_BA"  "TABR2_BA" "CHNO_BA" 
-[25] "POBAT_BA" "ABPR_BA"  "BEPA_BA"  "PREM_BA"  "CONU4_BA" "POTR5_BA"
-[31] "PIMO3_BA" "ACGL_BA"  "FRLA_BA"  "ACMA3_BA" "2TREE_BA" "ALRH2_BA"
-[37] "QUGA4_BA" "PRVI_BA"  "MAFU_BA"  "PISI_BA"  "ABCO_BA"  "JUHI_BA" 
-[43] "ARME_BA"  "BEOC2_BA" "f"        "p"       </code></pre>
+<pre><code> [1] "CC"       "SDI"      "LAT"      "LON"      "ELEV"     "ASPECT"   "SLOPE"    "BAp"      "PIPO_BA"  "PSME_BA"  "ABAM_BA"  "TSME_BA"  "ABGR_BA"  "PICO_BA"  "LALY_BA"  "PIAL_BA"  "PIEN_BA"  "ABLA_BA"  "LAOC_BA"  "THPL_BA"  "ALRU2_BA" "TSHE_BA"  "TABR2_BA" "CHNO_BA"  "POBAT_BA" "ABPR_BA"  "BEPA_BA"  "PREM_BA"  "CONU4_BA" "POTR5_BA" "PIMO3_BA" "ACGL_BA"  "FRLA_BA"  "ACMA3_BA" "2TREE_BA" "ALRH2_BA" "QUGA4_BA" "PRVI_BA"  "MAFU_BA"  "PISI_BA"  "ABCO_BA"  "JUHI_BA"  "ARME_BA"  "BEOC2_BA" "f"        "p"       </code></pre>
 </div>
 </div>
 <div class="cell">
@@ -2673,11 +2496,7 @@ na.rm): NAs introduced by coercion</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(y<span class="sc">$</span>max_spp1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "ABAM_TD"  "ABGR_TD"  "ABLA_TD"  "ACGL_TD"  "ACMA3_TD" "ALRH2_TD"
- [7] "ALRU2_TD" "BEPA_TD"  "CHNO_TD"  "LALY_TD"  "LAOC_TD"  "PIAL_TD" 
-[13] "PICO_TD"  "PIEN_TD"  "PIMO3_TD" "PIPO_TD"  "POBAT_TD" "POTR5_TD"
-[19] "PREM_TD"  "PRVI_TD"  "PSMA_TD"  "PSME_TD"  "TABR2_TD" "THPL_TD" 
-[25] "TSHE_TD"  "TSME_TD"  "zero"    </code></pre>
+<pre><code> [1] "ABAM_TD"  "ABGR_TD"  "ABLA_TD"  "ACGL_TD"  "ACMA3_TD" "ALRH2_TD" "ALRU2_TD" "BEPA_TD"  "CHNO_TD"  "LALY_TD"  "LAOC_TD"  "PIAL_TD"  "PICO_TD"  "PIEN_TD"  "PIMO3_TD" "PIPO_TD"  "POBAT_TD" "POTR5_TD" "PREM_TD"  "PRVI_TD"  "PSMA_TD"  "PSME_TD"  "TABR2_TD" "THPL_TD"  "TSHE_TD"  "TSME_TD"  "zero"    </code></pre>
 </div>
 </div>
 <div class="cell">
@@ -2853,7 +2672,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("https:\/\/KingBlkMouth\.github\.io\/Regen_Regression\.github\.io\/");
+      var filterRegex = new RegExp('/' + window.location.host + '/');
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }

@@ -409,7 +409,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Last updated on</strong></p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "2024-09-27 12:04:51 PDT"</code></pre>
+<pre><code>[1] "2024-10-08 11:00:17 PDT"</code></pre>
 </div>
 </div>
 <hr>
@@ -591,17 +591,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>n_cascades <span class="ot">&lt;-</span> imp_data <span class="sc">|&gt;</span> <span class="fu">filter</span>(EcoRegion <span class="sc">==</span> <span class="st">"M242D"</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>EcoRegion)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(n_cascades)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "STANDPLOT_CN" "CC"           "SDI"          "FPAG"         "LAT"          "LON"          "ELEV"         "Northing"    
- [9] "Easting"      "SLOPE"        "BAp"          "PIPO_BA"      "PSME_BA"      "ABAM_BA"      "TSME_BA"      "ABGR_BA"     
-[17] "PICO_BA"      "LALY_BA"      "PIAL_BA"      "PIEN_BA"      "ABLA_BA"      "LAOC_BA"      "THPL_BA"      "ALRU2_BA"    
-[25] "TSHE_BA"      "TABR2_BA"     "CHNO_BA"      "POBAT_BA"     "ABPR_BA"      "BEPA_BA"      "PREM_BA"      "CONU4_BA"    
-[33] "POTR5_BA"     "PIMO3_BA"     "ACGL_BA"      "FRLA_BA"      "ACMA3_BA"     "Other_BA"     "ALRH2_BA"     "QUGA4_BA"    
-[41] "PRVI_BA"      "MAFU_BA"      "PISI_BA"      "ABCO_BA"      "JUHI_BA"      "ARME_BA"      "BEOC2_BA"     "PIPO_TD"     
-[49] "ABLA_TD"      "TSME_TD"      "PSME_TD"      "ABGR_TD"      "LALY_TD"      "PIEN_TD"      "PICO_TD"      "LAOC_TD"     
-[57] "ACGL_TD"      "TABR2_TD"     "CHNO_TD"      "ABAM_TD"      "THPL_TD"      "TSHE_TD"      "BEPA_TD"      "PREM_TD"     
-[65] "POTR5_TD"     "PIAL_TD"      "ALRU2_TD"     "ABPR_TD"      "PIMO3_TD"     "PRVI_TD"      "Other_TD"     "ACMA3_TD"    
-[73] "CONU4_TD"     "QUGA4_TD"     "MAFU_TD"      "ABCO_TD"      "PSMA_TD"      "ALRH2_TD"     "POBAT_TD"     "BEOC2_TD"    
-[81] "PRPE2_TD"     "CHLA_TD"      "PISI_TD"     </code></pre>
+<pre><code> [1] "STANDPLOT_CN" "CC"           "SDI"          "FPAG"         "LAT"          "LON"          "ELEV"         "Northing"     "Easting"      "SLOPE"        "BAp"          "PIPO_BA"      "PSME_BA"      "ABAM_BA"      "TSME_BA"      "ABGR_BA"      "PICO_BA"      "LALY_BA"      "PIAL_BA"      "PIEN_BA"      "ABLA_BA"      "LAOC_BA"      "THPL_BA"      "ALRU2_BA"     "TSHE_BA"      "TABR2_BA"     "CHNO_BA"      "POBAT_BA"     "ABPR_BA"      "BEPA_BA"      "PREM_BA"      "CONU4_BA"     "POTR5_BA"     "PIMO3_BA"     "ACGL_BA"      "FRLA_BA"      "ACMA3_BA"     "Other_BA"     "ALRH2_BA"     "QUGA4_BA"     "PRVI_BA"      "MAFU_BA"      "PISI_BA"      "ABCO_BA"      "JUHI_BA"      "ARME_BA"      "BEOC2_BA"     "PIPO_TD"      "ABLA_TD"      "TSME_TD"      "PSME_TD"      "ABGR_TD"      "LALY_TD"      "PIEN_TD"      "PICO_TD"      "LAOC_TD"      "ACGL_TD"      "TABR2_TD"     "CHNO_TD"     
+[60] "ABAM_TD"      "THPL_TD"      "TSHE_TD"      "BEPA_TD"      "PREM_TD"      "POTR5_TD"     "PIAL_TD"      "ALRU2_TD"     "ABPR_TD"      "PIMO3_TD"     "PRVI_TD"      "Other_TD"     "ACMA3_TD"     "CONU4_TD"     "QUGA4_TD"     "MAFU_TD"      "ABCO_TD"      "PSMA_TD"      "ALRH2_TD"     "POBAT_TD"     "BEOC2_TD"     "PRPE2_TD"     "CHLA_TD"      "PISI_TD"     </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>x_pred <span class="ot">&lt;-</span> n_cascades[,<span class="dv">1</span><span class="sc">:</span><span class="dv">47</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -610,11 +601,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>y_resp <span class="ot">&lt;-</span> n_cascades[, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">48</span><span class="sc">:</span><span class="fu">ncol</span>(n_cascades))]</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(y_resp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "STANDPLOT_CN" "PIPO_TD"      "ABLA_TD"      "TSME_TD"      "PSME_TD"      "ABGR_TD"      "LALY_TD"      "PIEN_TD"     
- [9] "PICO_TD"      "LAOC_TD"      "ACGL_TD"      "TABR2_TD"     "CHNO_TD"      "ABAM_TD"      "THPL_TD"      "TSHE_TD"     
-[17] "BEPA_TD"      "PREM_TD"      "POTR5_TD"     "PIAL_TD"      "ALRU2_TD"     "ABPR_TD"      "PIMO3_TD"     "PRVI_TD"     
-[25] "Other_TD"     "ACMA3_TD"     "CONU4_TD"     "QUGA4_TD"     "MAFU_TD"      "ABCO_TD"      "PSMA_TD"      "ALRH2_TD"    
-[33] "POBAT_TD"     "BEOC2_TD"     "PRPE2_TD"     "CHLA_TD"      "PISI_TD"     </code></pre>
+<pre><code> [1] "STANDPLOT_CN" "PIPO_TD"      "ABLA_TD"      "TSME_TD"      "PSME_TD"      "ABGR_TD"      "LALY_TD"      "PIEN_TD"      "PICO_TD"      "LAOC_TD"      "ACGL_TD"      "TABR2_TD"     "CHNO_TD"      "ABAM_TD"      "THPL_TD"      "TSHE_TD"      "BEPA_TD"      "PREM_TD"      "POTR5_TD"     "PIAL_TD"      "ALRU2_TD"     "ABPR_TD"      "PIMO3_TD"     "PRVI_TD"      "Other_TD"     "ACMA3_TD"     "CONU4_TD"     "QUGA4_TD"     "MAFU_TD"      "ABCO_TD"      "PSMA_TD"      "ALRH2_TD"     "POBAT_TD"     "BEOC2_TD"     "PRPE2_TD"     "CHLA_TD"      "PISI_TD"     </code></pre>
 </div>
 </div>
 </section>
@@ -644,9 +631,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>t2 <span class="ot">&lt;-</span> t2 <span class="sc">|&gt;</span> <span class="fu">sort</span>(<span class="at">decreasing =</span> T)</span>
 <span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>t2 <span class="sc">|&gt;</span> <span class="fu">names</span>() <span class="sc">|&gt;</span> <span class="fu">noquote</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] BAp      PSME_BA  ABAM_BA  TSHE_BA  THPL_BA  TSME_BA  ABLA_BA  PIPO_BA  PICO_BA  PIEN_BA  ABGR_BA  CHNO_BA  ALRU2_BA
-[14] PIAL_BA  LAOC_BA  ACMA3_BA LALY_BA  PIMO3_BA ABPR_BA  POBAT_BA ACGL_BA  PISI_BA  TABR2_BA POTR5_BA BEPA_BA  PREM_BA 
-[27] ALRH2_BA MAFU_BA  CONU4_BA PRVI_BA  Other_BA</code></pre>
+<pre><code> [1] BAp      PSME_BA  ABAM_BA  TSHE_BA  THPL_BA  TSME_BA  ABLA_BA  PIPO_BA  PICO_BA  PIEN_BA  ABGR_BA  CHNO_BA  ALRU2_BA PIAL_BA  LAOC_BA  ACMA3_BA LALY_BA  PIMO3_BA ABPR_BA  POBAT_BA ACGL_BA  PISI_BA  TABR2_BA POTR5_BA BEPA_BA  PREM_BA  ALRH2_BA MAFU_BA  CONU4_BA PRVI_BA  Other_BA</code></pre>
 </div>
 </div>
 <p><em>Seedlings in decreasing order of prevalence</em></p>
@@ -660,9 +645,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">names</span>(ty)</span>
 <span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "ABAM_TD"  "TSHE_TD"  "ABLA_TD"  "PSME_TD"  "PIEN_TD"  "ABGR_TD"  "TSME_TD"  "PICO_TD"  "THPL_TD"  "LAOC_TD"  "CHNO_TD" 
-[12] "TABR2_TD" "PIPO_TD"  "PIAL_TD"  "POTR5_TD" "PIMO3_TD" "LALY_TD"  "PREM_TD"  "ACMA3_TD" "PRVI_TD"  "ACGL_TD"  "ALRU2_TD"
-[23] "BEPA_TD"  "ABPR_TD"  "POBAT_TD" "Other_TD" "PSMA_TD"  "ALRH2_TD" "PISI_TD" </code></pre>
+<pre><code> [1] "ABAM_TD"  "TSHE_TD"  "ABLA_TD"  "PSME_TD"  "PIEN_TD"  "ABGR_TD"  "TSME_TD"  "PICO_TD"  "THPL_TD"  "LAOC_TD"  "CHNO_TD"  "TABR2_TD" "PIPO_TD"  "PIAL_TD"  "POTR5_TD" "PIMO3_TD" "LALY_TD"  "PREM_TD"  "ACMA3_TD" "PRVI_TD"  "ACGL_TD"  "ALRU2_TD" "BEPA_TD"  "ABPR_TD"  "POBAT_TD" "Other_TD" "PSMA_TD"  "ALRH2_TD" "PISI_TD" </code></pre>
 </div>
 </div>
 <p>N.Cascades drops from 35 to 29 columns after removing empty Seedling categories.</p>
@@ -1317,9 +1300,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>spp12 <span class="sc">|&gt;</span> <span class="fu">sort</span>() <span class="sc">|&gt;</span> <span class="fu">noquote</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] ABAM_TD  ABGR_TD  ABLA_TD  ABPR_TD  ACGL_TD  ACMA3_TD ALRH2_TD ALRU2_TD BEPA_TD  CHNO_TD  LALY_TD  LAOC_TD  Other_TD
-[14] PIAL_TD  PICO_TD  PIEN_TD  PIMO3_TD PIPO_TD  POBAT_TD POTR5_TD PREM_TD  PRVI_TD  PSMA_TD  PSME_TD  TABR2_TD THPL_TD 
-[27] TSHE_TD  TSME_TD  zero    </code></pre>
+<pre><code> [1] ABAM_TD  ABGR_TD  ABLA_TD  ABPR_TD  ACGL_TD  ACMA3_TD ALRH2_TD ALRU2_TD BEPA_TD  CHNO_TD  LALY_TD  LAOC_TD  Other_TD PIAL_TD  PICO_TD  PIEN_TD  PIMO3_TD PIPO_TD  POBAT_TD POTR5_TD PREM_TD  PRVI_TD  PSMA_TD  PSME_TD  TABR2_TD THPL_TD  TSHE_TD  TSME_TD  zero    </code></pre>
 </div>
 </div>
 <p>Above is all of the species that are present in either the most or second most common seedlings for each subplot in N.C.</p>
@@ -1336,9 +1317,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>regen_species <span class="ot">&lt;-</span> regen_species[<span class="dv">2</span><span class="sc">:</span><span class="fu">length</span>(regen_species)]</span>
 <span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>regen_species <span class="sc">|&gt;</span> <span class="fu">sort</span>() <span class="sc">|&gt;</span> <span class="fu">noquote</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] ABAM_BA  ABGR_BA  ABLA_BA  ABPR_BA  ACGL_BA  ACMA3_BA ALRH2_BA ALRU2_BA BEPA_BA  CHNO_BA  LALY_BA  LAOC_BA  Other_BA
-[14] PIAL_BA  PICO_BA  PIEN_BA  PIMO3_BA PIPO_BA  POBAT_BA POTR5_BA PREM_BA  PRVI_BA  PSMA_BA  PSME_BA  TABR2_BA THPL_BA 
-[27] TSHE_BA  TSME_BA </code></pre>
+<pre><code> [1] ABAM_BA  ABGR_BA  ABLA_BA  ABPR_BA  ACGL_BA  ACMA3_BA ALRH2_BA ALRU2_BA BEPA_BA  CHNO_BA  LALY_BA  LAOC_BA  Other_BA PIAL_BA  PICO_BA  PIEN_BA  PIMO3_BA PIPO_BA  POBAT_BA POTR5_BA PREM_BA  PRVI_BA  PSMA_BA  PSME_BA  TABR2_BA THPL_BA  TSHE_BA  TSME_BA </code></pre>
 </div>
 </div>
 <p><em>Get names of Overstory spp</em></p>
@@ -1351,9 +1330,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>overstory <span class="ot">&lt;-</span> <span class="fu">names</span>(overstory)</span>
 <span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>overstory <span class="sc">|&gt;</span> <span class="fu">sort</span>() <span class="sc">|&gt;</span> <span class="fu">noquote</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] ABAM_BA  ABGR_BA  ABLA_BA  ABPR_BA  ACGL_BA  ACMA3_BA ALRH2_BA ALRU2_BA BEPA_BA  CHNO_BA  CONU4_BA LALY_BA  LAOC_BA 
-[14] MAFU_BA  Other_BA PIAL_BA  PICO_BA  PIEN_BA  PIMO3_BA PIPO_BA  PISI_BA  POBAT_BA POTR5_BA PREM_BA  PRVI_BA  PSME_BA 
-[27] TABR2_BA THPL_BA  TSHE_BA  TSME_BA </code></pre>
+<pre><code> [1] ABAM_BA  ABGR_BA  ABLA_BA  ABPR_BA  ACGL_BA  ACMA3_BA ALRH2_BA ALRU2_BA BEPA_BA  CHNO_BA  CONU4_BA LALY_BA  LAOC_BA  MAFU_BA  Other_BA PIAL_BA  PICO_BA  PIEN_BA  PIMO3_BA PIPO_BA  PISI_BA  POBAT_BA POTR5_BA PREM_BA  PRVI_BA  PSME_BA  TABR2_BA THPL_BA  TSHE_BA  TSME_BA </code></pre>
 </div>
 </div>
 <div class="cell">
@@ -1484,8 +1461,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>          used  (Mb) gc trigger  (Mb) max used  (Mb)
-Ncells 2507854 134.0    4250852 227.1  4250852 227.1
-Vcells 5174884  39.5   10146329  77.5  8388582  64.0</code></pre>
+Ncells 2507882 134.0    4242578 226.6  4242578 226.6
+Vcells 5175964  39.5   10146329  77.5  8388592  64.0</code></pre>
 </div>
 </div>
 <section id="rf" class="level2">
@@ -3877,9 +3854,7 @@ Vcells 5174884  39.5   10146329  77.5  8388582  64.0</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>x <span class="sc">|&gt;</span> <span class="fu">names</span>() <span class="sc">|&gt;</span> <span class="fu">noquote</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] CC       SDI      LAT      LON      ELEV     Northing Easting  SLOPE    BAp      f        p        PIPO_BA  PSME_BA 
-[14] ABAM_BA  TSME_BA  ABGR_BA  PICO_BA  LALY_BA  PIAL_BA  PIEN_BA  ABLA_BA  LAOC_BA  THPL_BA  ALRU2_BA TSHE_BA  TABR2_BA
-[27] CHNO_BA  POBAT_BA ABPR_BA  BEPA_BA  PREM_BA  POTR5_BA PIMO3_BA ACGL_BA  ACMA3_BA Other_BA ALRH2_BA PRVI_BA </code></pre>
+<pre><code> [1] CC       SDI      LAT      LON      ELEV     Northing Easting  SLOPE    BAp      f        p        PIPO_BA  PSME_BA  ABAM_BA  TSME_BA  ABGR_BA  PICO_BA  LALY_BA  PIAL_BA  PIEN_BA  ABLA_BA  LAOC_BA  THPL_BA  ALRU2_BA TSHE_BA  TABR2_BA CHNO_BA  POBAT_BA ABPR_BA  BEPA_BA  PREM_BA  POTR5_BA PIMO3_BA ACGL_BA  ACMA3_BA Other_BA ALRH2_BA PRVI_BA </code></pre>
 </div>
 </div>
 <div class="cell">
@@ -4628,10 +4603,7 @@ Vcells 5174884  39.5   10146329  77.5  8388582  64.0</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>x <span class="sc">|&gt;</span> <span class="fu">names</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "CC"       "SDI"      "LAT"      "LON"      "ELEV"     "Northing" "Easting"  "SLOPE"    "BAp"      "f"        "p"       
-[12] "PIPO_BA"  "PSME_BA"  "ABAM_BA"  "TSME_BA"  "ABGR_BA"  "PICO_BA"  "LALY_BA"  "PIAL_BA"  "PIEN_BA"  "ABLA_BA"  "LAOC_BA" 
-[23] "THPL_BA"  "ALRU2_BA" "TSHE_BA"  "TABR2_BA" "CHNO_BA"  "POBAT_BA" "ABPR_BA"  "BEPA_BA"  "PREM_BA"  "POTR5_BA" "PIMO3_BA"
-[34] "ACGL_BA"  "ACMA3_BA" "Other_BA" "ALRH2_BA" "PRVI_BA" </code></pre>
+<pre><code> [1] "CC"       "SDI"      "LAT"      "LON"      "ELEV"     "Northing" "Easting"  "SLOPE"    "BAp"      "f"        "p"        "PIPO_BA"  "PSME_BA"  "ABAM_BA"  "TSME_BA"  "ABGR_BA"  "PICO_BA"  "LALY_BA"  "PIAL_BA"  "PIEN_BA"  "ABLA_BA"  "LAOC_BA"  "THPL_BA"  "ALRU2_BA" "TSHE_BA"  "TABR2_BA" "CHNO_BA"  "POBAT_BA" "ABPR_BA"  "BEPA_BA"  "PREM_BA"  "POTR5_BA" "PIMO3_BA" "ACGL_BA"  "ACMA3_BA" "Other_BA" "ALRH2_BA" "PRVI_BA" </code></pre>
 </div>
 </div>
 <div class="cell">
@@ -5101,8 +5073,7 @@ Vcells 5174884  39.5   10146329  77.5  8388582  64.0</code></pre>
 <span id="cb93-43"><a href="#cb93-43" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb93-44"><a href="#cb93-44" aria-hidden="true" tabindex="-1"></a>y_rare <span class="sc">|&gt;</span> <span class="fu">names</span>() <span class="sc">|&gt;</span> <span class="fu">noquote</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] ALRH2_TD POBAT_TD PSMA_TD  BEPA_TD  ALRU2_TD LALY_TD  LAOC_TD  PIMO3_TD PRVI_TD  ACMA3_TD POTR5_TD PREM_TD  ACGL_TD 
-[14] PIAL_TD  CHNO_TD  TABR2_TD PIEN_TD  THPL_TD  PIPO_TD  PICO_TD </code></pre>
+<pre><code> [1] ALRH2_TD POBAT_TD PSMA_TD  BEPA_TD  ALRU2_TD LALY_TD  LAOC_TD  PIMO3_TD PRVI_TD  ACMA3_TD POTR5_TD PREM_TD  ACGL_TD  PIAL_TD  CHNO_TD  TABR2_TD PIEN_TD  THPL_TD  PIPO_TD  PICO_TD </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a>y_rare <span class="ot">&lt;-</span> y_rare <span class="sc">|&gt;</span> <span class="fu">mutate</span>(</span>
 <span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">rare_TD =</span> <span class="fu">rowSums</span>(y_rare[<span class="fu">grep</span>(<span class="st">"_TD"</span>, <span class="fu">names</span>(y_rare))])</span>
@@ -7543,16 +7514,13 @@ Vcells 5174884  39.5   10146329  77.5  8388582  64.0</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a>x <span class="sc">|&gt;</span> <span class="fu">names</span>() <span class="sc">|&gt;</span> <span class="fu">noquote</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] CC       SDI      LAT      LON      ELEV     Northing Easting  SLOPE    BAp      f        p        PIPO_BA  PSME_BA 
-[14] ABAM_BA  TSME_BA  ABGR_BA  PICO_BA  LALY_BA  PIAL_BA  PIEN_BA  ABLA_BA  LAOC_BA  THPL_BA  ALRU2_BA TSHE_BA  TABR2_BA
-[27] CHNO_BA  POBAT_BA ABPR_BA  BEPA_BA  PREM_BA  POTR5_BA PIMO3_BA ACGL_BA  ACMA3_BA Other_BA ALRH2_BA PRVI_BA </code></pre>
+<pre><code> [1] CC       SDI      LAT      LON      ELEV     Northing Easting  SLOPE    BAp      f        p        PIPO_BA  PSME_BA  ABAM_BA  TSME_BA  ABGR_BA  PICO_BA  LALY_BA  PIAL_BA  PIEN_BA  ABLA_BA  LAOC_BA  THPL_BA  ALRU2_BA TSHE_BA  TABR2_BA CHNO_BA  POBAT_BA ABPR_BA  BEPA_BA  PREM_BA  POTR5_BA PIMO3_BA ACGL_BA  ACMA3_BA Other_BA ALRH2_BA PRVI_BA </code></pre>
 </div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a>y <span class="sc">|&gt;</span> <span class="fu">names</span>() <span class="sc">|&gt;</span> <span class="fu">noquote</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] max_spp1  max_spp2  ABLA_TD   TSME_TD   PSME_TD   ABGR_TD   ABAM_TD   TSHE_TD   ABPR_TD   Other_TD  PISI_TD   largest_1
-[13] largest_2 total_TD  rare_TD  </code></pre>
+<pre><code> [1] max_spp1  max_spp2  ABLA_TD   TSME_TD   PSME_TD   ABGR_TD   ABAM_TD   TSHE_TD   ABPR_TD   Other_TD  PISI_TD   largest_1 largest_2 total_TD  rare_TD  </code></pre>
 </div>
 </div>
 </section>
@@ -8207,10 +8175,7 @@ Vcells 5174884  39.5   10146329  77.5  8388582  64.0</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb117"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a>x <span class="sc">|&gt;</span> <span class="fu">names</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "CC"       "SDI"      "LAT"      "LON"      "ELEV"     "Northing" "Easting"  "SLOPE"    "BAp"      "f"        "p"       
-[12] "PIPO_BA"  "PSME_BA"  "ABAM_BA"  "TSME_BA"  "ABGR_BA"  "PICO_BA"  "LALY_BA"  "PIAL_BA"  "PIEN_BA"  "ABLA_BA"  "LAOC_BA" 
-[23] "THPL_BA"  "ALRU2_BA" "TSHE_BA"  "TABR2_BA" "CHNO_BA"  "POBAT_BA" "ABPR_BA"  "BEPA_BA"  "PREM_BA"  "POTR5_BA" "PIMO3_BA"
-[34] "ACGL_BA"  "ACMA3_BA" "Other_BA" "ALRH2_BA" "PRVI_BA" </code></pre>
+<pre><code> [1] "CC"       "SDI"      "LAT"      "LON"      "ELEV"     "Northing" "Easting"  "SLOPE"    "BAp"      "f"        "p"        "PIPO_BA"  "PSME_BA"  "ABAM_BA"  "TSME_BA"  "ABGR_BA"  "PICO_BA"  "LALY_BA"  "PIAL_BA"  "PIEN_BA"  "ABLA_BA"  "LAOC_BA"  "THPL_BA"  "ALRU2_BA" "TSHE_BA"  "TABR2_BA" "CHNO_BA"  "POBAT_BA" "ABPR_BA"  "BEPA_BA"  "PREM_BA"  "POTR5_BA" "PIMO3_BA" "ACGL_BA"  "ACMA3_BA" "Other_BA" "ALRH2_BA" "PRVI_BA" </code></pre>
 </div>
 </div>
 <div class="cell">
@@ -8448,15 +8413,15 @@ Vcells 5174884  39.5   10146329  77.5  8388582  64.0</code></pre>
 <span id="cb133-3"><a href="#cb133-3" aria-hidden="true" tabindex="-1"></a><span class="fu">clean_mem</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          used  (Mb) gc trigger  (Mb) max used  (Mb)
-Ncells 2559339 136.7    4250852 227.1  4250852 227.1
-Vcells 7505242  57.3   12255594  93.6 10146329  77.5</code></pre>
+Ncells 2559334 136.7    4242578 226.6  4242578 226.6
+Vcells 7506263  57.3   12255594  93.6 10146329  77.5</code></pre>
 </div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb135"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb135-1"><a href="#cb135-1" aria-hidden="true" tabindex="-1"></a>test_set <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"C:/RxFire/Regen/Regeneration_2_16Sept24/data/test.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 3396 Columns: 3
-── Column specification ─────────────────────────────────────────────────────────────────────────────────────────────────────
+── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 Delimiter: ","
 chr (2): StandID, TRAIN
 dbl (1): INVYR
@@ -9032,7 +8997,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("https:\/\/KingBlkMouth\.github\.io\/Regen_Regression\.github\.io\/");
+      var filterRegex = new RegExp('/' + window.location.host + '/');
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }

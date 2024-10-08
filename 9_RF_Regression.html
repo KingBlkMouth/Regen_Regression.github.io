@@ -378,7 +378,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Last updated on</strong></p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "2024-09-27 12:07:01 PDT"</code></pre>
+<pre><code>[1] "2024-10-08 11:02:32 PDT"</code></pre>
 </div>
 </div>
 <hr>
@@ -1122,23 +1122,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>importance_10 <span class="ot">&lt;-</span> <span class="fu">yaiVarImp</span>(rf_reg_noclass, <span class="at">plot =</span> F, <span class="at">ntop =</span> <span class="dv">38</span>)</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>importance_10 <span class="sc">%&gt;%</span> <span class="fu">names</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "LON"      "LAT"      "ELEV"     "BAp"      "Easting"  "CC"       "SLOPE"    "SDI"      "Northing" "PSME_BA"  "TSHE_BA" 
-[12] "ABAM_BA"  "ABLA_BA"  "PIEN_BA"  "THPL_BA"  "ABGR_BA"  "PIPO_BA"  "PICO_BA"  "TSME_BA"  "PIMO3_BA"</code></pre>
+<pre><code> [1] "LON"      "LAT"      "ELEV"     "BAp"      "Easting"  "CC"       "SLOPE"    "SDI"      "Northing" "PSME_BA"  "TSHE_BA"  "ABAM_BA"  "ABLA_BA"  "PIEN_BA"  "THPL_BA"  "ABGR_BA"  "PIPO_BA"  "PICO_BA"  "TSME_BA"  "PIMO3_BA"</code></pre>
 </div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vars</span>(rf_reg_noclass)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$xvars
- [1] "CC"       "BAp"      "SDI"      "LAT"      "LON"      "ELEV"     "Northing" "Easting"  "SLOPE"    "PIPO_BA"  "PSME_BA" 
-[12] "ABAM_BA"  "TSME_BA"  "ABGR_BA"  "PICO_BA"  "LALY_BA"  "PIAL_BA"  "PIEN_BA"  "ABLA_BA"  "ALRU2_BA" "TSHE_BA"  "ABPR_BA" 
-[23] "LAOC_BA"  "THPL_BA"  "TABR2_BA" "CHNO_BA"  "POBAT_BA" "BEPA_BA"  "PREM_BA"  "CONU4_BA" "POTR5_BA" "PIMO3_BA" "ACGL_BA" 
-[34] "ACMA3_BA" "PRVI_BA"  "2TREE_BA" "ALRH2_BA" "PISI_BA" 
+ [1] "CC"       "BAp"      "SDI"      "LAT"      "LON"      "ELEV"     "Northing" "Easting"  "SLOPE"    "PIPO_BA"  "PSME_BA"  "ABAM_BA"  "TSME_BA"  "ABGR_BA"  "PICO_BA"  "LALY_BA"  "PIAL_BA"  "PIEN_BA"  "ABLA_BA"  "ALRU2_BA" "TSHE_BA"  "ABPR_BA"  "LAOC_BA"  "THPL_BA"  "TABR2_BA" "CHNO_BA"  "POBAT_BA" "BEPA_BA"  "PREM_BA"  "CONU4_BA" "POTR5_BA" "PIMO3_BA" "ACGL_BA"  "ACMA3_BA" "PRVI_BA"  "2TREE_BA" "ALRH2_BA" "PISI_BA" 
 
 $yvars
- [1] "PIPO_TD"  "ABLA_TD"  "TSME_TD"  "PSME_TD"  "ABGR_TD"  "LALY_TD"  "PIEN_TD"  "PICO_TD"  "LAOC_TD"  "ACGL_TD"  "TABR2_TD"
-[12] "CHNO_TD"  "ABAM_TD"  "THPL_TD"  "TSHE_TD"  "BEPA_TD"  "PREM_TD"  "ALRU2_TD" "POTR5_TD" "PIAL_TD"  "ABPR_TD"  "PIMO3_TD"
-[23] "ACMA3_TD" "PRVI_TD"  "2TB_TD"   "PSMA_TD"  "POBAT_TD" "ALRH2_TD" "PISI_TD"  "total_TD"</code></pre>
+ [1] "PIPO_TD"  "ABLA_TD"  "TSME_TD"  "PSME_TD"  "ABGR_TD"  "LALY_TD"  "PIEN_TD"  "PICO_TD"  "LAOC_TD"  "ACGL_TD"  "TABR2_TD" "CHNO_TD"  "ABAM_TD"  "THPL_TD"  "TSHE_TD"  "BEPA_TD"  "PREM_TD"  "ALRU2_TD" "POTR5_TD" "PIAL_TD"  "ABPR_TD"  "PIMO3_TD" "ACMA3_TD" "PRVI_TD"  "2TB_TD"   "PSMA_TD"  "POBAT_TD" "ALRH2_TD" "PISI_TD"  "total_TD"</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -3120,7 +3114,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("https:\/\/KingBlkMouth\.github\.io\/Regen_Regression\.github\.io\/");
+      var filterRegex = new RegExp('/' + window.location.host + '/');
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }

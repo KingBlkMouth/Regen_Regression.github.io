@@ -369,7 +369,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Last updated on</strong></p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "2024-10-01 10:48:15 PDT"</code></pre>
+<pre><code>[1] "2024-10-08 10:58:15 PDT"</code></pre>
 </div>
 </div>
 <hr>
@@ -686,14 +686,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>agp_ready <span class="sc">%&gt;%</span> <span class="fu">names</span>() <span class="sc">%&gt;%</span> <span class="fu">noquote</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] plt_cn       splt_cn      standplot_cn max_spp      rmsd         TSME_TD.o    TSME_TD      TSHE_TD.o    TSHE_TD     
-[10] total_TD.o   total_TD     THPL_TD.o    THPL_TD      TABR2_TD.o   TABR2_TD     PSME_TD.o    PSME_TD      PSMA_TD.o   
-[19] PSMA_TD      PRVI_TD.o    PRVI_TD      PREM_TD.o    PREM_TD      POTR5_TD.o   POTR5_TD     POBAT_TD.o   POBAT_TD    
-[28] PISI_TD.o    PISI_TD      PIPO_TD.o    PIPO_TD      PIMO3_TD.o   PIMO3_TD     PIEN_TD.o    PIEN_TD      PICO_TD.o   
-[37] PICO_TD      PIAL_TD.o    PIAL_TD      LAOC_TD.o    LAOC_TD      LALY_TD.o    LALY_TD      CHNO_TD.o    CHNO_TD     
-[46] BEPA_TD.o    BEPA_TD      ALRU2_TD.o   ALRU2_TD     ALRH2_TD.o   ALRH2_TD     ACMA3_TD.o   ACMA3_TD     ACGL_TD.o   
-[55] ACGL_TD      ABPR_TD.o    ABPR_TD      ABLA_TD.o    ABLA_TD      ABGR_TD.o    ABGR_TD      ABAM_TD.o    ABAM_TD     
-[64] 2TB_TD.o     2TB_TD      </code></pre>
+<pre><code> [1] plt_cn       splt_cn      standplot_cn max_spp      rmsd         TSME_TD.o    TSME_TD      TSHE_TD.o    TSHE_TD      total_TD.o   total_TD     THPL_TD.o    THPL_TD      TABR2_TD.o   TABR2_TD     PSME_TD.o    PSME_TD      PSMA_TD.o    PSMA_TD      PRVI_TD.o    PRVI_TD      PREM_TD.o    PREM_TD      POTR5_TD.o   POTR5_TD     POBAT_TD.o   POBAT_TD     PISI_TD.o    PISI_TD      PIPO_TD.o    PIPO_TD      PIMO3_TD.o   PIMO3_TD     PIEN_TD.o    PIEN_TD      PICO_TD.o    PICO_TD      PIAL_TD.o    PIAL_TD      LAOC_TD.o    LAOC_TD      LALY_TD.o    LALY_TD      CHNO_TD.o    CHNO_TD      BEPA_TD.o    BEPA_TD      ALRU2_TD.o   ALRU2_TD     ALRH2_TD.o   ALRH2_TD     ACMA3_TD.o   ACMA3_TD     ACGL_TD.o    ACGL_TD      ABPR_TD.o    ABPR_TD      ABLA_TD.o    ABLA_TD      ABGR_TD.o    ABGR_TD      ABAM_TD.o    ABAM_TD      2TB_TD.o     2TB_TD      </code></pre>
 </div>
 </div>
 <p>That should give me everything I need to build the map, except I’ll want plot_cn as well.</p>
@@ -3356,8 +3349,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>t <span class="sc">*</span> t2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1]   74.96528  149.93056  224.89584  299.86112  374.82640  449.79168  524.75696  599.72224  674.68752  749.65280  824.61808
-[12]  899.58336  974.54864 1049.51392 1124.47920 1199.44448 1274.40976 1349.37504 1424.34032 1499.30560</code></pre>
+<pre><code> [1]   74.96528  149.93056  224.89584  299.86112  374.82640  449.79168  524.75696  599.72224  674.68752  749.65280  824.61808  899.58336  974.54864 1049.51392 1124.47920 1199.44448 1274.40976 1349.37504 1424.34032 1499.30560</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -3480,7 +3472,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("https:\/\/KingBlkMouth\.github\.io\/Regen_Regression\.github\.io\/");
+      var filterRegex = new RegExp('/' + window.location.host + '/');
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }

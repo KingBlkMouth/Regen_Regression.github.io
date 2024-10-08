@@ -345,7 +345,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Last updated on</strong></p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "2024-09-27 12:06:32 PDT"</code></pre>
+<pre><code>[1] "2024-10-08 11:01:31 PDT"</code></pre>
 </div>
 </div>
 <hr>
@@ -367,12 +367,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>x_pred <span class="sc">|&gt;</span> <span class="fu">names</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "STANDPLOT_CN" "CC"           "SDI"          "LAT"          "LON"          "ELEV"         "Northing"     "Easting"     
- [9] "SLOPE"        "f"            "p"            "a"            "g"            "BAp"          "PIPO_BA"      "PSME_BA"     
-[17] "ABAM_BA"      "TSME_BA"      "ABGR_BA"      "PICO_BA"      "LALY_BA"      "PIAL_BA"      "PIEN_BA"      "ABLA_BA"     
-[25] "LAOC_BA"      "THPL_BA"      "ALRU2_BA"     "TSHE_BA"      "TABR2_BA"     "CHNO_BA"      "POBAT_BA"     "ABPR_BA"     
-[33] "BEPA_BA"      "PREM_BA"      "CONU4_BA"     "POTR5_BA"     "PIMO3_BA"     "ACGL_BA"      "ACMA3_BA"     "Other_BA"    
-[41] "ALRH2_BA"     "PRVI_BA"      "MAFU_BA"      "PISI_BA"     </code></pre>
+<pre><code> [1] "STANDPLOT_CN" "CC"           "SDI"          "LAT"          "LON"          "ELEV"         "Northing"     "Easting"      "SLOPE"        "f"            "p"            "a"            "g"            "BAp"          "PIPO_BA"      "PSME_BA"      "ABAM_BA"      "TSME_BA"      "ABGR_BA"      "PICO_BA"      "LALY_BA"      "PIAL_BA"      "PIEN_BA"      "ABLA_BA"      "LAOC_BA"      "THPL_BA"      "ALRU2_BA"     "TSHE_BA"      "TABR2_BA"     "CHNO_BA"      "POBAT_BA"     "ABPR_BA"      "BEPA_BA"      "PREM_BA"      "CONU4_BA"     "POTR5_BA"     "PIMO3_BA"     "ACGL_BA"      "ACMA3_BA"     "Other_BA"     "ALRH2_BA"     "PRVI_BA"      "MAFU_BA"      "PISI_BA"     </code></pre>
 </div>
 </div>
 </section>
@@ -383,11 +378,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>y_resp <span class="sc">|&gt;</span> <span class="fu">names</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "STANDPLOT_CN" "PIPO_TD"      "ABLA_TD"      "TSME_TD"      "PSME_TD"      "ABGR_TD"      "LALY_TD"      "PIEN_TD"     
- [9] "PICO_TD"      "LAOC_TD"      "ACGL_TD"      "TABR2_TD"     "CHNO_TD"      "ABAM_TD"      "THPL_TD"      "TSHE_TD"     
-[17] "BEPA_TD"      "PREM_TD"      "POTR5_TD"     "PIAL_TD"      "ALRU2_TD"     "ABPR_TD"      "PIMO3_TD"     "PRVI_TD"     
-[25] "Other_TD"     "ACMA3_TD"     "PSMA_TD"      "ALRH2_TD"     "POBAT_TD"     "PISI_TD"      "largest_1"    "largest_2"   
-[33] "largest_3"    "max_spp1"     "max_spp2"     "max_spp3"     "total_TD"    </code></pre>
+<pre><code> [1] "STANDPLOT_CN" "PIPO_TD"      "ABLA_TD"      "TSME_TD"      "PSME_TD"      "ABGR_TD"      "LALY_TD"      "PIEN_TD"      "PICO_TD"      "LAOC_TD"      "ACGL_TD"      "TABR2_TD"     "CHNO_TD"      "ABAM_TD"      "THPL_TD"      "TSHE_TD"      "BEPA_TD"      "PREM_TD"      "POTR5_TD"     "PIAL_TD"      "ALRU2_TD"     "ABPR_TD"      "PIMO3_TD"     "PRVI_TD"      "Other_TD"     "ACMA3_TD"     "PSMA_TD"      "ALRH2_TD"     "POBAT_TD"     "PISI_TD"      "largest_1"    "largest_2"    "largest_3"    "max_spp1"     "max_spp2"     "max_spp3"     "total_TD"    </code></pre>
 </div>
 </div>
 </section>
@@ -743,16 +734,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(y_resp_counts, n_distinct)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>     PIPO_TD      ABLA_TD      TSME_TD      PSME_TD      ABGR_TD      LALY_TD      PIEN_TD      PICO_TD      LAOC_TD 
-           9           36           20           18           24            7           16           22           12 
-     ACGL_TD     TABR2_TD      CHNO_TD      ABAM_TD      THPL_TD      TSHE_TD      BEPA_TD      PREM_TD     POTR5_TD 
-           6           12           12           57           16           35            4            7            6 
-     PIAL_TD     ALRU2_TD      ABPR_TD     PIMO3_TD      PRVI_TD     Other_TD     ACMA3_TD      PSMA_TD     ALRH2_TD 
-           7            5            3            7            7            3            6            2            2 
-    POBAT_TD      PISI_TD     total_TD STANDPLOT_CN    largest_1    largest_2    largest_3     max_spp1     max_spp2 
-           4            2           81         2739           76           26           10           27           26 
-    max_spp3 
-          21 </code></pre>
+<pre><code>     PIPO_TD      ABLA_TD      TSME_TD      PSME_TD      ABGR_TD      LALY_TD      PIEN_TD      PICO_TD      LAOC_TD      ACGL_TD     TABR2_TD      CHNO_TD      ABAM_TD      THPL_TD      TSHE_TD      BEPA_TD      PREM_TD     POTR5_TD      PIAL_TD     ALRU2_TD      ABPR_TD     PIMO3_TD      PRVI_TD     Other_TD     ACMA3_TD      PSMA_TD     ALRH2_TD     POBAT_TD      PISI_TD     total_TD STANDPLOT_CN    largest_1    largest_2    largest_3     max_spp1     max_spp2     max_spp3 
+           9           36           20           18           24            7           16           22           12            6           12           12           57           16           35            4            7            6            7            5            3            7            7            3            6            2            2            4            2           81         2739           76           26           10           27           26           21 </code></pre>
 </div>
 </div>
 <p>For N.Cascades, only total_td has enough distinct counts to need groupings that would avoid the yaImpute factor limit.</p>
@@ -848,11 +831,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>names <span class="ot">&lt;-</span> y_resp_counts_grouped <span class="sc">|&gt;</span> <span class="fu">names</span>()</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>names</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "PIPO_TD"      "ABLA_TD"      "TSME_TD"      "PSME_TD"      "ABGR_TD"      "LALY_TD"      "PIEN_TD"      "PICO_TD"     
- [9] "LAOC_TD"      "ACGL_TD"      "TABR2_TD"     "CHNO_TD"      "ABAM_TD"      "THPL_TD"      "TSHE_TD"      "BEPA_TD"     
-[17] "PREM_TD"      "POTR5_TD"     "PIAL_TD"      "ALRU2_TD"     "ABPR_TD"      "PIMO3_TD"     "PRVI_TD"      "Other_TD"    
-[25] "ACMA3_TD"     "PSMA_TD"      "ALRH2_TD"     "POBAT_TD"     "PISI_TD"      "total_TD"     "STANDPLOT_CN" "largest_1"   
-[33] "largest_2"    "max_spp1"     "max_spp2"    </code></pre>
+<pre><code> [1] "PIPO_TD"      "ABLA_TD"      "TSME_TD"      "PSME_TD"      "ABGR_TD"      "LALY_TD"      "PIEN_TD"      "PICO_TD"      "LAOC_TD"      "ACGL_TD"      "TABR2_TD"     "CHNO_TD"      "ABAM_TD"      "THPL_TD"      "TSHE_TD"      "BEPA_TD"      "PREM_TD"      "POTR5_TD"     "PIAL_TD"      "ALRU2_TD"     "ABPR_TD"      "PIMO3_TD"     "PRVI_TD"      "Other_TD"     "ACMA3_TD"     "PSMA_TD"      "ALRH2_TD"     "POBAT_TD"     "PISI_TD"      "total_TD"     "STANDPLOT_CN" "largest_1"    "largest_2"    "max_spp1"     "max_spp2"    </code></pre>
 </div>
 </div>
 <p><em>Setting all columns to factors</em></p>
@@ -1172,38 +1151,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(y_resp_factors)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>    PIPO_TD        ABLA_TD        TSME_TD        PSME_TD        ABGR_TD     LALY_TD      PIEN_TD        PICO_TD    
- 0      :2682   0      :2447   0      :2586   0      :2464   0      :2629   0 :2723   0      :2659   0      :2671  
- 1      :  42   1      :  61   1      :  55   1      : 143   1      :  30   1 :   7   1      :  32   1      :  32  
- 2      :   7   2      :  58   2      :  28   2      :  45   2      :  17   2 :   3   2      :  11   2      :   8  
- 4      :   3   4      :  26   3      :  23   3      :  31   3      :  16   3 :   2   3      :   8   4      :   4  
- 3      :   1   6      :  23   4      :  13   4      :  13   4      :  11   4 :   2   4      :   6   3      :   3  
- 6      :   1   3      :  21   6      :   7   5      :  12   6      :   7   7 :   1   5      :   5   8      :   3  
- (Other):   3   (Other): 103   (Other):  27   (Other):  31   (Other):  29   21:   1   (Other):  18   (Other):  18  
-    LAOC_TD     ACGL_TD     TABR2_TD       CHNO_TD        ABAM_TD        THPL_TD        TSHE_TD     BEPA_TD  PREM_TD 
- 0      :2721   0:2725   0      :2709   0      :2696   0      :2162   0      :2634   0      :2407   0:2736   0:2724  
- 1      :   5   1:   9   1      :  13   1      :  14   1      : 113   1      :  50   1      :  91   1:   1   1:   8  
- 3      :   4   2:   2   3      :   4   2      :   8   2      :  66   2      :  25   2      :  43   3:   1   2:   1  
- 2      :   1   3:   1   4      :   4   3      :   6   6      :  51   3      :   9   3      :  43   6:   1   3:   1  
- 5      :   1   5:   1   8      :   2   5      :   4   3      :  48   4      :   4   6      :  36            4:   2  
- 6      :   1   6:   1   2      :   1   10     :   3   4      :  43   5      :   3   5      :  23            5:   1  
- (Other):   6            (Other):   6   (Other):   8   (Other): 256   (Other):  14   (Other):  96            6:   2  
- POTR5_TD  PIAL_TD  ALRU2_TD ABPR_TD  PIMO3_TD  PRVI_TD  Other_TD ACMA3_TD  PSMA_TD  ALRH2_TD POBAT_TD PISI_TD 
- 0 :2724   0:2693   0:2731   0:2737   0 :2709   0:2733   0:2737   0 :2730   0:2737   0:2738   0:2736   0:2738  
- 1 :   6   1:  26   1:   3   2:   1   1 :  23   1:   1   1:   1   1 :   3   1:   2   1:   1   1:   1   1:   1  
- 2 :   4   2:  10   2:   3   4:   1   2 :   3   2:   1   3:   1   2 :   2                     2:   1           
- 3 :   2   3:   6   3:   1            3 :   1   4:   1            4 :   2                     3:   1           
- 6 :   2   4:   2   7:   1            5 :   1   6:   1            6 :   1                                      
- 27:   1   5:   1                     6 :   1   7:   1            14:   1                                      
-           7:   1                     13:   1   8:   1                                                         
-    total_TD              STANDPLOT_CN    largest_1          largest_2          max_spp1       max_spp2   
- 0      :1241   12964449010497_1:   1   Min.   :    0.00   Min.   :   0.00   zero   :1241   zero   :2135  
- 1      : 313   12964449010497_3:   1   1st Qu.:    0.00   1st Qu.:   0.00   ABAM_TD: 444   ABAM_TD: 114  
- 2      : 182   12964449010497_4:   1   Median :   74.97   Median :   0.00   ABLA_TD: 240   TSHE_TD:  98  
- 3      : 138   12964657010497_1:   1   Mean   :  378.90   Mean   :  53.12   TSHE_TD: 206   TSME_TD:  74  
- 4      : 106   12965290010497_2:   1   3rd Qu.:  299.86   3rd Qu.:   0.00   PSME_TD: 188   PSME_TD:  64  
- 6      : 103   12965572010497_4:   1   Max.   :25338.26   Max.   :6596.94   ABGR_TD:  94   THPL_TD:  47  
- (Other): 656   (Other)         :2733                                        (Other): 326   (Other): 207  </code></pre>
+<pre><code>    PIPO_TD        ABLA_TD        TSME_TD        PSME_TD        ABGR_TD     LALY_TD      PIEN_TD        PICO_TD        LAOC_TD     ACGL_TD     TABR2_TD       CHNO_TD        ABAM_TD        THPL_TD        TSHE_TD     BEPA_TD  PREM_TD  POTR5_TD  PIAL_TD  ALRU2_TD ABPR_TD  PIMO3_TD  PRVI_TD  Other_TD ACMA3_TD  PSMA_TD  ALRH2_TD POBAT_TD PISI_TD     total_TD              STANDPLOT_CN    largest_1          largest_2          max_spp1       max_spp2   
+ 0      :2682   0      :2447   0      :2586   0      :2464   0      :2629   0 :2723   0      :2659   0      :2671   0      :2721   0:2725   0      :2709   0      :2696   0      :2162   0      :2634   0      :2407   0:2736   0:2724   0 :2724   0:2693   0:2731   0:2737   0 :2709   0:2733   0:2737   0 :2730   0:2737   0:2738   0:2736   0:2738   0      :1241   12964449010497_1:   1   Min.   :    0.00   Min.   :   0.00   zero   :1241   zero   :2135  
+ 1      :  42   1      :  61   1      :  55   1      : 143   1      :  30   1 :   7   1      :  32   1      :  32   1      :   5   1:   9   1      :  13   1      :  14   1      : 113   1      :  50   1      :  91   1:   1   1:   8   1 :   6   1:  26   1:   3   2:   1   1 :  23   1:   1   1:   1   1 :   3   1:   2   1:   1   1:   1   1:   1   1      : 313   12964449010497_3:   1   1st Qu.:    0.00   1st Qu.:   0.00   ABAM_TD: 444   ABAM_TD: 114  
+ 2      :   7   2      :  58   2      :  28   2      :  45   2      :  17   2 :   3   2      :  11   2      :   8   3      :   4   2:   2   3      :   4   2      :   8   2      :  66   2      :  25   2      :  43   3:   1   2:   1   2 :   4   2:  10   2:   3   4:   1   2 :   3   2:   1   3:   1   2 :   2                     2:   1            2      : 182   12964449010497_4:   1   Median :   74.97   Median :   0.00   ABLA_TD: 240   TSHE_TD:  98  
+ 4      :   3   4      :  26   3      :  23   3      :  31   3      :  16   3 :   2   3      :   8   4      :   4   2      :   1   3:   1   4      :   4   3      :   6   6      :  51   3      :   9   3      :  43   6:   1   3:   1   3 :   2   3:   6   3:   1            3 :   1   4:   1            4 :   2                     3:   1            3      : 138   12964657010497_1:   1   Mean   :  378.90   Mean   :  53.12   TSHE_TD: 206   TSME_TD:  74  
+ 3      :   1   6      :  23   4      :  13   4      :  13   4      :  11   4 :   2   4      :   6   3      :   3   5      :   1   5:   1   8      :   2   5      :   4   3      :  48   4      :   4   6      :  36            4:   2   6 :   2   4:   2   7:   1            5 :   1   6:   1            6 :   1                                       4      : 106   12965290010497_2:   1   3rd Qu.:  299.86   3rd Qu.:   0.00   PSME_TD: 188   PSME_TD:  64  
+ 6      :   1   3      :  21   6      :   7   5      :  12   6      :   7   7 :   1   5      :   5   8      :   3   6      :   1   6:   1   2      :   1   10     :   3   4      :  43   5      :   3   5      :  23            5:   1   27:   1   5:   1                     6 :   1   7:   1            14:   1                                       6      : 103   12965572010497_4:   1   Max.   :25338.26   Max.   :6596.94   ABGR_TD:  94   THPL_TD:  47  
+ (Other):   3   (Other): 103   (Other):  27   (Other):  31   (Other):  29   21:   1   (Other):  18   (Other):  18   (Other):   6            (Other):   6   (Other):   8   (Other): 256   (Other):  14   (Other):  96            6:   2             7:   1                     13:   1   8:   1                                                          (Other): 656   (Other)         :2733                                        (Other): 326   (Other): 207  </code></pre>
 </div>
 </div>
 <p>The largest count in North Cascades is 328 seedlings for a single species and 362 of all species on a subplot.</p>
@@ -1418,53 +1373,53 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td style="text-align: right;">4</td>
-<td style="text-align: right;">11</td>
-<td style="text-align: right;">0.64</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">0.62</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">14</td>
-<td style="text-align: right;">0.58</td>
-</tr>
-<tr class="odd">
 <td style="text-align: right;">4</td>
 <td style="text-align: right;">15</td>
-<td style="text-align: right;">0.58</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">10</td>
 <td style="text-align: right;">0.56</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">4</td>
-<td style="text-align: right;">12</td>
-<td style="text-align: right;">0.56</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">0.54</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">4</td>
-<td style="text-align: right;">13</td>
+<td style="text-align: right;">11</td>
 <td style="text-align: right;">0.52</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">4</td>
-<td style="text-align: right;">8</td>
-<td style="text-align: right;">0.44</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.46</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">4</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.44</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4</td>
 <td style="text-align: right;">9</td>
+<td style="text-align: right;">0.42</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">8</td>
 <td style="text-align: right;">0.40</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">4</td>
 <td style="text-align: right;">7</td>
-<td style="text-align: right;">0.38</td>
+<td style="text-align: right;">0.30</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">4</td>
 <td style="text-align: right;">6</td>
-<td style="text-align: right;">0.22</td>
+<td style="text-align: right;">0.24</td>
 </tr>
 </tbody>
 </table>
@@ -1491,9 +1446,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="fu">clean_mem</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>          used  (Mb) gc trigger  (Mb) max used (Mb)
-Ncells 2586440 138.2    4455682 238.0  4455682  238
-Vcells 4803074  36.7   10146329  77.5  8388607   64</code></pre>
+<pre><code>          used  (Mb) gc trigger  (Mb) max used  (Mb)
+Ncells 2586594 138.2    4448967 237.7  4448967 237.7
+Vcells 4804091  36.7   10146329  77.5  8352344  63.8</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -1886,7 +1841,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("https:\/\/KingBlkMouth\.github\.io\/Regen_Regression\.github\.io\/");
+      var filterRegex = new RegExp('/' + window.location.host + '/');
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
