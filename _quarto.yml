@@ -76,13 +76,13 @@ format:
     grid: 
       sidebar-width: 150px
       margin-width: 300px
-      body-width: 1200px
+      body-width: 950px
     df-print: kable
 
 knitr:
   opts_chunk: 
     R.options:
-      width: 1100
+      width: 900
 
 
 
