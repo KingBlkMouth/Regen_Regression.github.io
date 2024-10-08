@@ -72,7 +72,7 @@ format:
   html:
     theme: Darkly
     css: styles.css
-    toc: true
+    toc: true 
     grid: 
       sidebar-width: 150px
       margin-width: 300px
