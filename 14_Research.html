@@ -234,6 +234,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#part-2-1" id="toc-part-2-1" class="nav-link" data-scroll-target="#part-2-1">Part 2</a></li>
   </ul></li>
   </ul></li>
+  <li><a href="#john-shaw-sqlite" id="toc-john-shaw-sqlite" class="nav-link" data-scroll-target="#john-shaw-sqlite">John Shaw, SQLite</a></li>
   <li><a href="#end" id="toc-end" class="nav-link" data-scroll-target="#end">END</a></li>
   </ul>
 </nav>
@@ -362,7 +363,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Last updated on</strong></p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "2024-10-07 09:57:59 PDT"</code></pre>
+<pre><code>[1] "2024-10-08 09:22:56 PDT"</code></pre>
 </div>
 </div>
 <hr>
@@ -377,47 +378,50 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="water" class="level3">
 <h3 class="anchored" data-anchor-id="water">Water</h3>
 <ul>
-<li>2.4.19 <em>WATERCD</em>, Water on plot code. Water body &lt;1 acre in size or a stream &lt;30 feet wide that has the greatest impact on the area within the sampled portions of any of the four subplots. The coding hierarchy is listed in order from large permanent water to temporary water. May not be populated for some FIA work units.
-<ul>
-<li>0 None - no water sources within the sampled condition class(es).</li>
-<li>1 Permanent streams or ponds too small to qualify as noncensus water.</li>
-<li>2 Permanent water in the form of deep swamps, bogs, marshes without standing trees present and less than 1.0 acre in size, or with standing trees.</li>
-<li>3 Ditch/canal - human-made channels used as a means of moving water, e.g., for irrigation or drainage, which are too small to qualify as noncensus water.</li>
-<li>4 Temporary streams.</li>
-<li>5 Flood zones - evidence of flooding when bodies of water exceed their natural banks.</li>
-<li>9 Other temporary water.</li>
-</ul></li>
+<li>2.4.19 <em>WATERCD</em>,</li>
 </ul>
+<p>Water on plot code. Water body &lt;1 acre in size or a stream &lt;30 feet wide that has the greatest impact on the area within the sampled portions of any of the four subplots. The coding hierarchy is listed in order from large permanent water to temporary water. May not be populated for some FIA work units. + 0 None - no water sources within the sampled condition class(es). + 1 Permanent streams or ponds too small to qualify as noncensus water. + 2 Permanent water in the form of deep swamps, bogs, marshes without standing trees present and less than 1.0 acre in size, or with standing trees. + 3 Ditch/canal - human-made channels used as a means of moving water, e.g., for irrigation or drainage, which are too small to qualify as noncensus water. + 4 Temporary streams. + 5 Flood zones - evidence of flooding when bodies of water exceed their natural banks. + 9 Other temporary water.</p>
 </section>
 <section id="visits-and-sampling" class="level3">
 <h3 class="anchored" data-anchor-id="visits-and-sampling">Visits and Sampling</h3>
 <p>This could be a good code to use in filtering, if it is filled for all plots.</p>
 <ul>
-<li><p>2.4.41 <em>SAMP_METHOD_CD</em>, Sample method code. A code indicating if the plot was observed in the field or remotely sensed in the office. 1 = Field visited, meaning a field crew physically examined the plot and recorded information at least about subplot 1 center condition (see SUBP_EXAMINE_CD below)</p>
-<ul>
-<li>When the plot is sampled remotely, the number of subplots examined (SUBP_EXAMINE_CD) usually equals 1.</li>
-</ul></li>
-<li><p>2.4.42 <em>SUBP_EXAMINE_CD</em>, Subplots examined code. A code indicating the number of subplots examined. By default, PLOT_STATUS_CD = 1 plots have all 4 subplots examined. 4 = All four subplots fully described (no assumptions/inferences).</p></li>
-<li><p>1.2.1 Sampling, <strong>Phase 1 (P1) is used for stratification, while Phase 2 (P2) consists of plots that are visited or photo-interpreted.</strong></p></li>
-<li><p>2.4.11 <em>PLOT_NONSAMPLE_REASN_CD</em> Plot nonsampled reason code. A code indicating the reason an entire plot was not sampled. 1-11 = not-sampled. Perhaps NULL indicates sampled.</p></li>
-<li><p>2.4.50 <em>NF_PLOT_STATUS_CD</em>, Nonforest plot status code. A code describing the sampling status of the nonforest plot. 1 = Sampled at least one accessible nonforest land condition present on the plot.</p></li>
+<li>2.4.41 <em>SAMP_METHOD_CD</em>,</li>
 </ul>
+<p>Sample method code. A code indicating if the plot was observed in the field or remotely sensed in the office. 1 = Field visited, meaning a field crew physically examined the plot and recorded information at least about subplot 1 center condition (see SUBP_EXAMINE_CD below) + When the plot is sampled remotely, the number of subplots examined (SUBP_EXAMINE_CD) usually equals 1.</p>
+<ul>
+<li>2.4.42 <em>SUBP_EXAMINE_CD</em>,</li>
+</ul>
+<p>Subplots examined code. A code indicating the number of subplots examined. By default, PLOT_STATUS_CD = 1 plots have all 4 subplots examined. 4 = All four subplots fully described (no assumptions/inferences).</p>
+<ul>
+<li><p>1.2.1 Sampling, <strong>Phase 1 (P1) is used for stratification, while Phase 2 (P2) consists of plots that are visited or photo-interpreted.</strong></p></li>
+<li><p>2.4.11 <em>PLOT_NONSAMPLE_REASN_CD</em></p></li>
+</ul>
+<p>Plot nonsampled reason code. A code indicating the reason an entire plot was not sampled. 1-11 = not-sampled. Perhaps NULL indicates sampled.</p>
+<ul>
+<li>2.4.50 <em>NF_PLOT_STATUS_CD</em>,</li>
+</ul>
+<p>Nonforest plot status code. A code describing the sampling status of the nonforest plot. 1 = Sampled at least one accessible nonforest land condition present on the plot.</p>
 </section>
 <section id="hexagons" class="level3">
 <h3 class="anchored" data-anchor-id="hexagons">Hexagons</h3>
 <p>Emap hexagons are not the hexagons that outline FIA plots for large area estimation. The hexagons refered to in Intesity are the ones that I needed for the error map.</p>
 <ul>
-<li><p>2.4.40 <em>EMAP_HEX</em>, EMAP hexagon. The identifier for the approximately 160,000 acre Environmental Monitoring and Assessment Program (EMAP) hexagon in which the plot is located. EMAP hexagons are available to the public, cover the coterminous United States, and have been used in summarizing and aggregating data about numerous natural resources.</p></li>
-<li><p>2.4.44 <em>INTENSITY</em>,<br>
-Intensity. A code used to identify Federal base grid annual inventory plots and plots that have been added to intensify a particular sample. Under the Federal base grid, one plot is collected in each theoretical hexagonal polygon, which is slightly more than 5,900 acres in size. Plots with INTENSITY = 1 are part of the Federal base grid. In some instances, States and/or agencies have provided additional support to increase the sampling intensity for an area. Supplemental plots have INTENSITY set to higher numbers depending on the amount of plot intensification chosen for the particular estimation unit. Populated when MANUAL 1.0.</p></li>
+<li>2.4.40 <em>EMAP_HEX</em>,</li>
 </ul>
+<p>EMAP hexagon. The identifier for the approximately 160,000 acre Environmental Monitoring and Assessment Program (EMAP) hexagon in which the plot is located. EMAP hexagons are available to the public, cover the coterminous United States, and have been used in summarizing and aggregating data about numerous natural resources.</p>
+<ul>
+<li>2.4.44 <em>INTENSITY</em>,</li>
+</ul>
+<p>Intensity. A code used to identify Federal base grid annual inventory plots and plots that have been added to intensify a particular sample. Under the Federal base grid, one plot is collected in each theoretical hexagonal polygon, which is slightly more than 5,900 acres in size. Plots with INTENSITY = 1 are part of the Federal base grid. In some instances, States and/or agencies have provided additional support to increase the sampling intensity for an area. Supplemental plots have INTENSITY set to higher numbers depending on the amount of plot intensification chosen for the particular estimation unit. Populated when MANUAL 1.0.</p>
 </section>
 </section>
 <section id="cond-table" class="level2">
 <h2 class="anchored" data-anchor-id="cond-table">COND table</h2>
 <ul>
-<li>2.5.9 <em>COND_STATUS_CD</em>, Condition status code. A code indicating the basic land classification.</li>
+<li>2.5.9 <em>COND_STATUS_CD</em>,</li>
 </ul>
+<p>Condition status code. A code indicating the basic land classification.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="C:/RxFire/Regen/Regeneration_2_16Sept24/Images/COND_STATUS_CD_Table.png" class="img-fluid figure-img"></p>
@@ -425,8 +429,11 @@ Intensity. A code used to identify Federal base grid annual inventory plots and 
 </figure>
 </div>
 <ul>
-<li><p>2.5.159 <em>FOREST_COND_STATUS_CHANGE_CD</em>, Forest land condition status change code. A code indicating change in forest land condition.</p></li>
-<li><p>3.1.27 <em>AGENTCD</em>, Cause of death (agent) code. (core: all remeasured plots when the tree was alive at the previous visit and at revisit is dead or removed OR the tree is standing dead in the current inventory and the tree is ingrowth, through growth, or a missed live tree; core optional: all initial plot visits when tree qualifies as a mortality tree) When PLOT.MANUAL 1.0, this attribute was collected on only dead and cut trees. When PLOT.MANUAL &lt;1.0, this attribute was collected on all trees (live, dead, and cut). Cause of damage was recorded for live trees if the presence of damage or pathogen activity was serious enough to reduce the quality or vigor of the tree. When a tree was damaged by more than one agent, the most severe damage was coded. When no damage was observed on a live tree, 00 was recorded. Damage recorded for dead trees was the cause of death. Each FIA program records specific codes that may differ from one State to the next. These codes fall within the ranges listed below. For the specific codes used in a particular State, contact the FIA work unit responsible for that State (table 1-1).</p>
+<li>2.5.159 <em>FOREST_COND_STATUS_CHANGE_CD</em>,</li>
+</ul>
+<p>Forest land condition status change code. A code indicating change in forest land condition.</p>
+<ul>
+<li>3.1.27 <em>AGENTCD</em>, Cause of death (agent) code. (core: all remeasured plots when the tree was alive at the previous visit and at revisit is dead or removed OR the tree is standing dead in the current inventory and the tree is ingrowth, through growth, or a missed live tree; core optional: all initial plot visits when tree qualifies as a mortality tree) When PLOT.MANUAL 1.0, this attribute was collected on only dead and cut trees. When PLOT.MANUAL &lt;1.0, this attribute was collected on all trees (live, dead, and cut). Cause of damage was recorded for live trees if the presence of damage or pathogen activity was serious enough to reduce the quality or vigor of the tree. When a tree was damaged by more than one agent, the most severe damage was coded. When no damage was observed on a live tree, 00 was recorded. Damage recorded for dead trees was the cause of death. Each FIA program records specific codes that may differ from one State to the next. These codes fall within the ranges listed below. For the specific codes used in a particular State, contact the FIA work unit responsible for that State (table 1-1).
 <ul>
 <li>30 = Fire</li>
 <li>00 = No agent recorded (only allowed on live trees in data prior to 1999).</li>
@@ -434,7 +441,8 @@ Intensity. A code used to identify Federal base grid annual inventory plots and 
 </ul>
 <section id="water-1" class="level3">
 <h3 class="anchored" data-anchor-id="water-1">Water</h3>
-<p>2.5.35 <em>PHYSCLCD</em>, Physiographic class code. A code indicating the general effect of land form, topographical position, and soil on moisture available to trees. +Note: When PLOT.MANUAL &lt;1.0, this attribute is populated for all forest periodic plots and all NCRS periodic plots that were measured as “nonforest with trees” (e.g., wooded pasture, windbreaks).</p>
+<p>2.5.35 <em>PHYSCLCD</em>,</p>
+<p>Physiographic class code. A code indicating the general effect of land form, topographical position, and soil on moisture available to trees. +Note: When PLOT.MANUAL &lt;1.0, this attribute is populated for all forest periodic plots and all NCRS periodic plots that were measured as “nonforest with trees” (e.g., wooded pasture, windbreaks).</p>
 <p>Xeric sites (normally low or deficient in available moisture)</p>
 <ul>
 <li>11 Dry Tops - Ridge tops with thin rock outcrops and considerable exposure to sun and wind.</li>
@@ -460,7 +468,8 @@ Intensity. A code used to identify Federal base grid annual inventory plots and 
 <li>35 Cypress ponds.</li>
 <li>39 Other hydric - All other hydric physiographic sites.</li>
 </ul>
-<p>2.5.131 <em>FOREST_COMMUNITY_PNWRS</em>, Forest type (Pacific Islands), Pacific Northwest Research Station. A code indicating the forest type that best describes the species with the plurality of crown cover for all live trees in the condition class that are not overtopped. Recorded for all accessible forest land condition classes in the Pacific Islands. Only populated by certain FIA work units (SURVEY.RSCD = 26). + Note: Pacific Island forest types are taken from Mueller-Dombois and Fosberg (1998).</p>
+<p>2.5.131 <em>FOREST_COMMUNITY_PNWRS</em>,</p>
+<p>Forest type (Pacific Islands), Pacific Northwest Research Station. A code indicating the forest type that best describes the species with the plurality of crown cover for all live trees in the condition class that are not overtopped. Recorded for all accessible forest land condition classes in the Pacific Islands. Only populated by certain FIA work units (SURVEY.RSCD = 26). + Note: Pacific Island forest types are taken from Mueller-Dombois and Fosberg (1998).</p>
 <ul>
 <li>1 Strand or halophytic vegetation - vegetation near the shore containing species adapted to high rates of evaporation by wind and to high salt concentrations from windblown ocean spray or inundation by salt water.</li>
 <li>2 Mangrove swamps - trees with high salt tolerance growing on tidally inundated shores and in landlocked depressions. Many species have pneumatophores, adaptive structures for aeration of waterlogged root systems.</li>
@@ -477,42 +486,44 @@ Intensity. A code used to identify Federal base grid annual inventory plots and 
 <section id="subp-regen-table" class="level2">
 <h2 class="anchored" data-anchor-id="subp-regen-table">SUBP Regen Table</h2>
 <ul>
-<li>6.2.10 <em>REGEN_SUBP_STATUS_CD</em>, Regeneration subplot status code. A code indicating whether or not the subplot was sampled for advanced regeneration. This attribute was retired starting with INVYR =</li>
+<li>6.2.10 <em>REGEN_SUBP_STATUS_CD</em>,</li>
 </ul>
-<ol start="2015" type="1">
-<li>Data for all years are now populated in REGEN_MICR_STATUS_CD.</li>
-</ol>
+<p>Regeneration subplot status code. A code indicating whether or not the subplot was sampled for advanced regeneration. This attribute was retired starting with INVYR = 2015. Data for all years are now populated in REGEN_MICR_STATUS_CD.</p>
 <ul>
-<li><p>6.2.12 <em>SUBPLOT_SITE_LIMITATIONS</em>, Subplot site limitations. A code indicating if the site has a limitation on at least 30 percent of the accessible forest area of the subplot that would inhibit or preclude the presence of regenerating seedlings. This attribute was retired starting with INVYR = 2015. Note: For INVYR &lt;2015, the field guide referenced the sampling unit as the subplot even though seedlings are and have only been counted on the microplots.</p>
+<li>6.2.12 <em>SUBPLOT_SITE_LIMITATIONS</em>,</li>
+</ul>
+<p>Subplot site limitations. A code indicating if the site has a limitation on at least 30 percent of the accessible forest area of the subplot that would inhibit or preclude the presence of regenerating seedlings. This attribute was retired starting with INVYR = 2015. Note: For INVYR &lt;2015, the field guide referenced the sampling unit as the subplot even though seedlings are and have only been counted on the microplots.</p>
 <ul>
-<li>1 No site limitation.</li>
-<li>2 Rocky surface with little or no soil.</li>
-<li>3 Water-saturated soils (during the growing season).</li>
-</ul></li>
-<li><p>6.2.13 <em>MICROPLOT_SITE_LIMITATIONS</em>, Microplot site limitations. A code indicating if the site has a limitation on at least 30 percent of the accessible forest area of the microplot that would inhibit or preclude the presence of regenerating seedlings.</p>
+<li><p>1 No site limitation.</p></li>
+<li><p>2 Rocky surface with little or no soil.</p></li>
+<li><p>3 Water-saturated soils (during the growing season).</p></li>
+<li><p>6.2.13 <em>MICROPLOT_SITE_LIMITATIONS</em>,</p></li>
+</ul>
+<p>Microplot site limitations. A code indicating if the site has a limitation on at least 30 percent of the accessible forest area of the microplot that would inhibit or preclude the presence of regenerating seedlings. + Same codes as above.</p>
 <ul>
-<li>Same codes as above.</li>
-</ul></li>
-<li><p>6.2.22 <em>REGEN_MICR_STATUS_CD</em>, Regeneration microplot status code. A code indicating whether the microplot was sampled for advanced regeneration. Based on the procedures described in Bechtold and Patterson (2005), POP_STRATUM.ADJ_FACTOR_REGEN_MICR should be applied when making population estimates. This compensates for any nonsampled microplots or cases where the sampling status is ambiguous (codes 3 through 9).</p>
+<li>6.2.22 <em>REGEN_MICR_STATUS_CD</em>,</li>
+</ul>
+<p>Regeneration microplot status code. A code indicating whether the microplot was sampled for advanced regeneration. Based on the procedures described in Bechtold and Patterson (2005), POP_STRATUM.ADJ_FACTOR_REGEN_MICR should be applied when making population estimates. This compensates for any nonsampled microplots or cases where the sampling status is ambiguous (codes 3 through 9).</p>
 <ul>
 <li>1 Advance regeneration sampled - accessible forest land condition present on the microplot.</li>
-</ul></li>
-<li><p>2 Advance regeneration sampled - no accessible forest land condition present on the microplot.</p></li>
-<li><p>3 Advance regeneration nonsampled - accessible forest land condition present on the microplot, but advance regeneration variables cannot be assessed (core SEEDLING.TREECOUNT is still measured).</p></li>
-<li><p>4 Advance regeneration nonsampled - QA/QC did not measure subplot/microplot for tree/sapling/seedling data (PLOT.QA_STATUS = 2-5 only).</p></li>
-<li><p>5 Nonsampled - subplot not sampled (SUBPLOT.SUBP_STATUS_CD = 3).</p></li>
-<li><p>9 Advance regeneration sample status is ambiguous - collected under earlier, more general definition; refer to REGEN_SUBP_STATUS_CD.</p></li>
+<li>2 Advance regeneration sampled - no accessible forest land condition present on the microplot.</li>
+<li>3 Advance regeneration nonsampled - accessible forest land condition present on the microplot, but advance regeneration variables cannot be assessed (core SEEDLING.TREECOUNT is still measured).</li>
+<li>4 Advance regeneration nonsampled - QA/QC did not measure subplot/microplot for tree/sapling/seedling data (PLOT.QA_STATUS = 2-5 only).</li>
+<li>5 Nonsampled - subplot not sampled (SUBPLOT.SUBP_STATUS_CD = 3).</li>
+<li>9 Advance regeneration sample status is ambiguous - collected under earlier, more general definition; refer to REGEN_SUBP_STATUS_CD.</li>
 </ul>
 </section>
 <section id="seedling-regeneration-table" class="level2">
 <h2 class="anchored" data-anchor-id="seedling-regeneration-table">Seedling Regeneration Table</h2>
-<p>6.3.14 <em>SEEDLING_SOURCE_CD</em>, Seedling source code. A code indicating the source of the seedlings</p>
+<p>6.3.14 <em>SEEDLING_SOURCE_CD</em>,</p>
+<p>Seedling source code. A code indicating the source of the seedlings</p>
 <ul>
 <li>1 Other seedling.</li>
 <li>2 Stump sprout.</li>
 <li>3 Competitive oak, hickory, or butternut seedling (Note: Research indicates that competitive seedlings are highly likely to become dominant or codominant stems in the next stand during forest succession. To be classified as competitive, stems must have a root collar diameter [d.r.c.] &gt;0.75 inches or have a length of at least 3 feet. In situations with relatively high tally, it should only be necessary to check at least 10% of d.r.c.’s.)</li>
 </ul>
-<p>6.3.15 <em>LENGTH_CLASS_CD</em>, Length class code. A code indicating the length class of the seedlings.</p>
+<p>6.3.15 <em>LENGTH_CLASS_CD</em>,</p>
+<p>Length class code. A code indicating the length class of the seedlings.</p>
 <ul>
 <li>1, 2 inches to less than 6 inches.</li>
 <li>2, 6 inches to less than 12 inches.</li>
@@ -524,13 +535,16 @@ Intensity. A code used to identify Federal base grid annual inventory plots and 
 </section>
 <section id="ground-cover-table" class="level2">
 <h2 class="anchored" data-anchor-id="ground-cover-table">Ground Cover Table</h2>
-<p>7.1.12 <em>GRND_CVR_TYP</em>, Ground cover type. A code indicating the ground cover type found on each transect segment. If multiple ground cover types (e.g., BARE, LITT, ROCK) are present on a segment, a separate record is populated for each category. Individual categories add up to 100 percent for each 10-foot segment along the transect.</p>
+<p>7.1.12 <em>GRND_CVR_TYP</em>,</p>
+<p>Ground cover type. A code indicating the ground cover type found on each transect segment. If multiple ground cover types (e.g., BARE, LITT, ROCK) are present on a segment, a separate record is populated for each category. Individual categories add up to 100 percent for each 10-foot segment along the transect.</p>
 </section>
 <section id="subplot-soil-sample-layer-table" class="level2">
 <h2 class="anchored" data-anchor-id="subplot-soil-sample-layer-table">Subplot Soil Sample Layer Table</h2>
 <p><strong>Look at this table. It has soil moisture measurements, but I am not sure that the sampling procedure will be helpful.</strong> <strong>If there are samples on our CNs, then it is worth looking at this further</strong></p>
 <ul>
-<li><p>8.2.29 <em>TEXTURE_CD</em>, Texture code. A code indicating the texture of the soil layer.</p>
+<li>8.2.29 <em>TEXTURE_CD</em>,</li>
+</ul>
+<p>Texture code. A code indicating the texture of the soil layer.</p>
 <ul>
 <li>0, Organic.</li>
 <li>1, Loamy.</li>
@@ -538,7 +552,6 @@ Intensity. A code used to identify Federal base grid annual inventory plots and 
 <li>3, Sandy.</li>
 <li>4, Coarse sand.</li>
 <li>9, Not measured.</li>
-</ul></li>
 </ul>
 <p>There are a bunch of codes for ph and nutrients.</p>
 </section>
@@ -549,8 +562,9 @@ Intensity. A code used to identify Federal base grid annual inventory plots and 
 <section id="plot-geometry-table" class="level2">
 <h2 class="anchored" data-anchor-id="plot-geometry-table">Plot Geometry Table</h2>
 <ul>
-<li>10.1.23 <em>FVS_LOC_CD</em>, Forest vegetation simulator location code</li>
+<li>10.1.23 <em>FVS_LOC_CD</em>,</li>
 </ul>
+<p>Forest vegetation simulator location code</p>
 </section>
 </section>
 <section id="section" class="level1">
@@ -992,6 +1006,77 @@ Intensity. A code used to identify Federal base grid annual inventory plots and 
 </ol>
 </section>
 </section>
+</section>
+<section id="john-shaw-sqlite" class="level1">
+<h1>John Shaw, SQLite</h1>
+<p>I’m wondering if the buffering part is necessary, or even desirable. If you buffer on the OkWen boundaries first, it’s possible that you can bring in an ECOSUBCD that doesn’t occur on either forest. An alternative would be to get a list that’s based on the forests themselves, and then use that list to cast the larger net. My first step is just getting the ECOSUBCD list, which gives me 16 ECOSUBCDs with numbers of plots (all years) ranging between 10 and 797.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="st">"SELECT FS_FIADB_PLOT.ECOSUBCD, </span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="st">Count(FS_FIADB_COND.CN) </span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="st">AS CountOfCN </span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="st">INTO OkWen_ECOSUBCDList</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="st">FROM FS_FIADB_COND </span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="st">INNER JOIN FS_FIADB_PLOT ON FS_FIADB_COND.PLT_CN = FS_FIADB_PLOT.CN</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="st">WHERE (((FS_FIADB_COND.ADFORCD)=608 Or (FS_FIADB_COND.ADFORCD)=617))</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="st">GROUP BY FS_FIADB_PLOT.ECOSUBCD;"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>In the next step I’m using the ECOSUBCD list as the anchor for the rest of the selections, with some of your other filtering criteria applied and the remainder included as columns. For example, since we previously had a conversation about all conditions with trees (vs forested conditions), I’m leaving the query open to all single-condition plots. I’ve never looked at the PNW data closely to see if it happens, but theoretically it’s possible to have a multi-condition plot based on a break in the macroplot. Just to be safe, I’m also requiring MACROPROP_UNADJ=1. This is also the point where I’d grab everything I think I’ll need in the analysis from COND or PLOT, so all you’d have to do after this is use your keys (either COND.CN + COND.CONDID or PLOT.CN) to go fishing for your trees:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="st">"SELECT OkWen_ECOSUBCDList.ECOSUBCD, FS_FIADB_PLOT.CN, FS_FIADB_COND.CN AS COND_CN, </span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="st">FS_FIADB_COND.CONDID, </span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="st">FS_FIADB_PLOT.DESIGNCD, </span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="st">FS_FIADB_COND.CONDPROP_UNADJ, </span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="st">FS_FIADB_COND.MACRPROP_UNADJ, </span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="st">FS_FIADB_PLOT.PLOT_STATUS_CD, </span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="st">FS_FIADB_COND.FORTYPCD, </span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="st">FS_FIADB_COND.FLDTYPCD, </span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="st">FS_FIADB_COND.PRESNFCD, </span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="st">FS_FIADB_COND.HABTYPCD1, </span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="st">FS_FIADB_COND.HABTYPCD1_PUB_CD, FS_FIADB_COND.HABTYPCD1_DESCR_PUB_CD, </span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="st">FS_FIADB_COND.DSTRBCD1, </span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="st">FS_FIADB_COND.DSTRBYR1, </span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="st">FS_FIADB_COND.DSTRBCD2, </span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="st">FS_FIADB_COND.DSTRBYR2, </span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="st">FS_FIADB_COND.DSTRBCD3, </span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="st">FS_FIADB_COND.DSTRBYR3, </span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="st">FS_FIADB_COND.TRTCD1, </span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="st">FS_FIADB_COND.TRTYR1, </span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="st">FS_FIADB_COND.TRTCD2, </span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="st">FS_FIADB_COND.TRTYR2, </span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="st">FS_FIADB_COND.TRTCD3, </span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="st">FS_FIADB_COND.TRTYR3 </span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="st">INTO OkWen_AllPlot_CONDPROP1</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="st">FROM </span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="st">(FS_FIADB_COND RIGHT JOIN FS_FIADB_PLOT ON FS_FIADB_COND.PLT_CN = FS_FIADB_PLOT.CN) </span></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="st">RIGHT JOIN OkWen_ECOSUBCDList ON FS_FIADB_PLOT.ECOSUBCD = OkWen_ECOSUBCDList.ECOSUBCD</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="st">WHERE (((FS_FIADB_PLOT.DESIGNCD)=501 Or (FS_FIADB_PLOT.DESIGNCD)=502) AND ((FS_FIADB_COND.CONDPROP_UNADJ)=1) AND ((FS_FIADB_COND.MACRPROP_UNADJ)=1));"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>I get 9617 plots from that step, but I’ve included everything including nonforest, water, etc. Depending on the goal, you can filter by FORTYPCD&gt;0 (only forested conditions) or PLOT_STATUS_CD (1 or 2, to get forest and nonforest, but not water and other stuff).</p>
+<p>An alternative approach that I’ve used to cast the larger net would be to use HABTYPCD1 as your anchor instead of ECOSUBCD, especially since you’re using the former as an independent variable in the analysis. When you use ECOSUBCD to reach out, you’re likely getting HABTYPCDs that don’t occur on OkWen. I’m guessing that they would be unneeded additions. If you take the HABTYPCD approach, you basically ignore the ECOSUBCD boundaries and look for anywhere that the HABTYPCD occurs. We had some discussions about this in some of the work I did with R1, since there were varying degrees of confidence within the team that a given habitat type was more-or-less the same thing wherever you found it. In my mind, that’s the whole purpose of habitat typing, and that’s now pretty much a standard approach for the planners. Back East they don’t use HTs like we do here, so ECOSUBCDs or other classifications pretty much have to be use there. The only difference between what I did for R1 and what’s above is that in the first step you use HABTYPCD1 as the grouping variable to make the list, and in the second step you use that list to extract the list.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="st">"SELECT FS_FIA_FVS_FVS_STANDINIT_PLOT.* </span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="st">INTO OkWen_StandInit_Plot</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="st">FROM OkWen_AllPlot_CONDPROP1 </span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="st">LEFT JOIN FS_FIA_FVS_FVS_STANDINIT_PLOT </span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="st">ON OkWen_AllPlot_CONDPROP1.CN = FS_FIA_FVS_FVS_STANDINIT_PLOT.STAND_CN;</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="st"> </span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="st">SELECT </span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="st">FS_FIA_FVS_FVS_TREEINIT_PLOT.* </span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="st">INTO OkWen_TreeInit_Plot</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="st">FROM OkWen_AllPlot_CONDPROP1 </span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="st">LEFT JOIN FS_FIA_FVS_FVS_TREEINIT_PLOT </span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="st">ON OkWen_AllPlot_CONDPROP1.CN = FS_FIA_FVS_FVS_TREEINIT_PLOT.STAND_CN;"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Now you pretty much have everything you need, both to run the analysis and FVS (after renaming from what I have above), without actually manipulating any variables. If there’s a need to do more, you have the basic tables from which to do that.</p>
 </section>
 <section id="end" class="level1">
 <h1>END</h1>
