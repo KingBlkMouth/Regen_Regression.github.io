@@ -129,17 +129,18 @@ rstudioapi::getSourceEditorContext()$path %>% basename()
 ```{r}
 #| echo: false
 
-ymd_hms(file.info("./Research.qmd")$ctime, tz = "America/Los_Angeles")
+ymd_hms(file.info("./14_Research.qmd")$ctime, tz = "America/Los_Angeles")
 ```
 
 **Last updated on**
 ```{r}
 #| echo: false
 
-ymd_hms(file.info("./Research.qmd")$atime, tz = "America/Los_Angeles")
+ymd_hms(file.info("./14_Research.qmd")$atime, tz = "America/Los_Angeles")
 ```
 
 ___
+
 
 
 
@@ -163,6 +164,7 @@ Also, I'm looking at tables that I have never had the oportunity look at before.
 
 
 - 2.4.19 *WATERCD*, 
+
 Water on plot code. Water body <1 acre in size or a stream <30 feet wide that has the
 greatest impact on the area within the sampled portions of any of the four subplots. The
 coding hierarchy is listed in order from large permanent water to temporary water. May
@@ -194,6 +196,7 @@ not be populated for some FIA work units.
 This could be a good code to use in filtering, if it is filled for all plots. 
 
 - 2.4.41 *SAMP_METHOD_CD*, 
+
 Sample method code. A code indicating if the plot was observed in the field or remotely
 sensed in the office. 
 1 =  Field visited, meaning a field crew physically examined the plot and recorded information
@@ -201,6 +204,7 @@ at least about subplot 1 center condition (see SUBP_EXAMINE_CD below)
   + When the plot is sampled remotely, the number of subplots examined (SUBP_EXAMINE_CD) usually equals 1.
 
 - 2.4.42 *SUBP_EXAMINE_CD*, 
+
 Subplots examined code. A code indicating the number of subplots examined. 
 By default, PLOT_STATUS_CD = 1 plots have all 4 subplots examined. 
 4 = All four subplots fully described (no assumptions/inferences).
@@ -209,11 +213,14 @@ By default, PLOT_STATUS_CD = 1 plots have all 4 subplots examined.
 or photo-interpreted.**
 
 - 2.4.11 *PLOT_NONSAMPLE_REASN_CD* 
+
 Plot nonsampled reason code. A code indicating the reason an entire plot was not 
 sampled. 
 1-11 = not-sampled. Perhaps NULL indicates sampled. 
 
+
 - 2.4.50 *NF_PLOT_STATUS_CD*, 
+
 Nonforest plot status code. A code describing the sampling status of the nonforest plot.
 1 = Sampled at least one accessible nonforest land condition present on the plot.
 
@@ -228,12 +235,14 @@ Emap hexagons are not the hexagons that outline FIA plots for large area estimat
 The hexagons refered to in Intesity are the ones that I needed for the error map. 
 
 - 2.4.40 *EMAP_HEX*, 
+
 EMAP hexagon. The identifier for the approximately 160,000 acre Environmental
 Monitoring and Assessment Program (EMAP) hexagon in which the plot is located. EMAP
 hexagons are available to the public, cover the coterminous United States, and have been
 used in summarizing and aggregating data about numerous natural resources.
 
 - 2.4.44 *INTENSITY*,  
+
 Intensity. A code used to identify Federal base grid annual inventory plots and plots that
 have been added to intensify a particular sample. Under the Federal base grid, one plot is
 collected in each theoretical hexagonal polygon, which is slightly more than 5,900 acres in
@@ -258,6 +267,7 @@ MANUAL 1.0.
 
 
 - 2.5.9 *COND_STATUS_CD*, 
+
 Condition status code. A code indicating the basic land classification. 
 
 
@@ -265,6 +275,7 @@ Condition status code. A code indicating the basic land classification.
 ![Cond Status cd](C:/RxFire/Regen/Regeneration_2_16Sept24/Images/COND_STATUS_CD_Table.png)
 
 - 2.5.159 *FOREST_COND_STATUS_CHANGE_CD*, 
+
 Forest land condition status change code. A code indicating change in forest land
 condition.
 
@@ -292,6 +303,7 @@ work unit responsible for that State (table 1-1).
 ### Water
 
 2.5.35 *PHYSCLCD*, 
+
 Physiographic class code. A code indicating the general effect of land form, topographical
 position, and soil on moisture available to trees.
   +Note: When PLOT.MANUAL <1.0, this attribute is populated for all forest periodic plots
@@ -349,6 +361,7 @@ sites in the Carolina bays in the Southeast United States.
 
 
 2.5.131 *FOREST_COMMUNITY_PNWRS*, 
+
 Forest type (Pacific Islands), Pacific Northwest Research Station. A code indicating the
 forest type that best describes the species with the plurality of crown cover for all live
 trees in the condition class that are not overtopped. Recorded for all accessible forest land
@@ -388,11 +401,13 @@ species that replace indigenous forests and savannas.
 ## SUBP Regen Table
 
 - 6.2.10 *REGEN_SUBP_STATUS_CD*, 
+
 Regeneration subplot status code. A code indicating whether or not the subplot was
 sampled for advanced regeneration. This attribute was retired starting with INVYR =
 2015. Data for all years are now populated in REGEN_MICR_STATUS_CD. 
 
 - 6.2.12 *SUBPLOT_SITE_LIMITATIONS*, 
+
 Subplot site limitations. A code indicating if the site has a limitation on at least 30
 percent of the accessible forest area of the subplot that would inhibit or preclude the
 presence of regenerating seedlings. This attribute was retired starting with INVYR = 2015.
@@ -404,12 +419,14 @@ though seedlings are and have only been counted on the microplots.
   + 3 Water-saturated soils (during the growing season).
 
 - 6.2.13 *MICROPLOT_SITE_LIMITATIONS*, 
+
 Microplot site limitations. A code indicating if the site has a limitation on at least 30
 percent of the accessible forest area of the microplot that would inhibit or preclude the
 presence of regenerating seedlings.
   + Same codes as above. 
   
 - 6.2.22 *REGEN_MICR_STATUS_CD*, 
+
 Regeneration microplot status code. A code indicating whether the microplot was
 sampled for advanced regeneration. Based on the procedures described in Bechtold and
 Patterson (2005), POP_STRATUM.ADJ_FACTOR_REGEN_MICR should be applied when
@@ -434,6 +451,7 @@ definition; refer to REGEN_SUBP_STATUS_CD.
 
 
 6.3.14 *SEEDLING_SOURCE_CD*, 
+
 Seedling source code. A code indicating the source of the seedlings
 
   + 1 Other seedling.
@@ -445,6 +463,7 @@ root collar diameter [d.r.c.] >0.75 inches or have a length of at least 3 feet. 
 with relatively high tally, it should only be necessary to check at least 10% of d.r.c.’s.)
 
 6.3.15 *LENGTH_CLASS_CD*, 
+
 Length class code. A code indicating the length class of the seedlings.
 
   + 1, 2 inches to less than 6 inches.
@@ -459,6 +478,7 @@ Length class code. A code indicating the length class of the seedlings.
 ## Ground Cover Table
 
 7.1.12 *GRND_CVR_TYP*, 
+
 Ground cover type. A code indicating the ground cover type found on each transect
 segment. If multiple ground cover types (e.g., BARE, LITT, ROCK) are present on a
 segment, a separate record is populated for each category. Individual categories add up to
@@ -473,6 +493,7 @@ segment, a separate record is populated for each category. Individual categories
 
 
 - 8.2.29 *TEXTURE_CD*, 
+
 Texture code. A code indicating the texture of the soil layer.
 
   + 0, Organic.
@@ -493,6 +514,7 @@ These aren't useful here, but there is information that is used to infer the dat
 ## Plot Geometry Table
 
 - 10.1.23 *FVS_LOC_CD*, 
+
 Forest vegetation simulator location code
 
 
@@ -933,6 +955,114 @@ That is why they do not get the empty classes error.
 1. For each row, in parallel, impute the new targets to a matrix
 2. Create a raster from the matrix. 
 3. save and exit.
+
+
+
+# John Shaw, SQLite
+
+I’m wondering if the buffering part is necessary, or even desirable. 
+If you buffer on the OkWen boundaries first, it’s possible that you can bring in an ECOSUBCD that doesn’t occur on either forest. 
+An alternative would be to get a list that’s based on the forests themselves, and then use that list to cast the larger net. 
+My first step is just getting the ECOSUBCD list, which gives me 16 ECOSUBCDs with numbers of plots (all years) ranging between 10 and 797.
+
+```{r}
+#| eval: false
+
+"SELECT FS_FIADB_PLOT.ECOSUBCD, 
+Count(FS_FIADB_COND.CN) 
+AS CountOfCN 
+INTO OkWen_ECOSUBCDList
+FROM FS_FIADB_COND 
+INNER JOIN FS_FIADB_PLOT ON FS_FIADB_COND.PLT_CN = FS_FIADB_PLOT.CN
+WHERE (((FS_FIADB_COND.ADFORCD)=608 Or (FS_FIADB_COND.ADFORCD)=617))
+GROUP BY FS_FIADB_PLOT.ECOSUBCD;"
+```
+
+
+In the next step I’m using the ECOSUBCD list as the anchor for the rest of the selections, with some of your other 
+filtering criteria applied and the remainder included as columns. 
+For example, 
+since we previously had a conversation about all conditions with trees (vs forested conditions), 
+I’m leaving the query open to all single-condition plots. 
+I’ve never looked at the PNW data closely to see if it happens, but theoretically it’s possible to have a 
+multi-condition plot based on a break in the macroplot. 
+Just to be safe, I’m also requiring MACROPROP_UNADJ=1. 
+This is also the point where I’d grab everything I think I’ll need in the analysis from COND or PLOT, so all you’d have 
+to do after this is use your keys (either COND.CN + COND.CONDID or PLOT.CN) to go fishing for your trees:
+
+
+```{r}
+#| eval: false
+ 
+"SELECT OkWen_ECOSUBCDList.ECOSUBCD, FS_FIADB_PLOT.CN, FS_FIADB_COND.CN AS COND_CN, 
+FS_FIADB_COND.CONDID, 
+FS_FIADB_PLOT.DESIGNCD, 
+FS_FIADB_COND.CONDPROP_UNADJ, 
+FS_FIADB_COND.MACRPROP_UNADJ, 
+FS_FIADB_PLOT.PLOT_STATUS_CD, 
+FS_FIADB_COND.FORTYPCD, 
+FS_FIADB_COND.FLDTYPCD, 
+FS_FIADB_COND.PRESNFCD, 
+FS_FIADB_COND.HABTYPCD1, 
+FS_FIADB_COND.HABTYPCD1_PUB_CD, FS_FIADB_COND.HABTYPCD1_DESCR_PUB_CD, 
+FS_FIADB_COND.DSTRBCD1, 
+FS_FIADB_COND.DSTRBYR1, 
+FS_FIADB_COND.DSTRBCD2, 
+FS_FIADB_COND.DSTRBYR2, 
+FS_FIADB_COND.DSTRBCD3, 
+FS_FIADB_COND.DSTRBYR3, 
+FS_FIADB_COND.TRTCD1, 
+FS_FIADB_COND.TRTYR1, 
+FS_FIADB_COND.TRTCD2, 
+FS_FIADB_COND.TRTYR2, 
+FS_FIADB_COND.TRTCD3, 
+FS_FIADB_COND.TRTYR3 
+INTO OkWen_AllPlot_CONDPROP1
+FROM 
+(FS_FIADB_COND RIGHT JOIN FS_FIADB_PLOT ON FS_FIADB_COND.PLT_CN = FS_FIADB_PLOT.CN) 
+RIGHT JOIN OkWen_ECOSUBCDList ON FS_FIADB_PLOT.ECOSUBCD = OkWen_ECOSUBCDList.ECOSUBCD
+WHERE (((FS_FIADB_PLOT.DESIGNCD)=501 Or (FS_FIADB_PLOT.DESIGNCD)=502) AND ((FS_FIADB_COND.CONDPROP_UNADJ)=1) AND ((FS_FIADB_COND.MACRPROP_UNADJ)=1));"
+```
+
+
+I get 9617 plots from that step, but I’ve included everything including nonforest, water, etc. 
+Depending on the goal, you can filter by FORTYPCD>0 (only forested conditions) or 
+PLOT_STATUS_CD (1 or 2, to get forest and nonforest, but not water and other stuff).
+ 
+An alternative approach that I’ve used to cast the larger net would be to use HABTYPCD1 as your anchor instead of ECOSUBCD, 
+especially since you’re using the former as an independent variable in the analysis. 
+When you use ECOSUBCD to reach out, you’re likely getting HABTYPCDs that don’t occur on OkWen. 
+I’m guessing that they would be unneeded additions. 
+If you take the HABTYPCD approach, you basically ignore the ECOSUBCD boundaries and look for anywhere that the HABTYPCD occurs. 
+We had some discussions about this in some of the work I did with R1, 
+since there were varying degrees of confidence within the team that a given habitat type was more-or-less the same thing 
+wherever you found it. 
+In my mind, that’s the whole purpose of habitat typing, and that’s now pretty much a standard approach for the planners. 
+Back East they don’t use HTs like we do here, so ECOSUBCDs or other classifications pretty much have to be use there. 
+The only difference between what I did for R1 and what’s above is that in the first step you use HABTYPCD1 as the 
+grouping variable to make the list, and in the second step you use that list to extract the list.
+
+
+```{r}
+#| eval: false
+
+"SELECT FS_FIA_FVS_FVS_STANDINIT_PLOT.* 
+INTO OkWen_StandInit_Plot
+FROM OkWen_AllPlot_CONDPROP1 
+LEFT JOIN FS_FIA_FVS_FVS_STANDINIT_PLOT 
+ON OkWen_AllPlot_CONDPROP1.CN = FS_FIA_FVS_FVS_STANDINIT_PLOT.STAND_CN;
+ 
+SELECT 
+FS_FIA_FVS_FVS_TREEINIT_PLOT.* 
+INTO OkWen_TreeInit_Plot
+FROM OkWen_AllPlot_CONDPROP1 
+LEFT JOIN FS_FIA_FVS_FVS_TREEINIT_PLOT 
+ON OkWen_AllPlot_CONDPROP1.CN = FS_FIA_FVS_FVS_TREEINIT_PLOT.STAND_CN;"
+```
+
+Now you pretty much have everything you need, both to run the analysis and FVS (after renaming from what I have above), without actually manipulating any variables. If there’s a need to do more, you have the basic tables from which to do that.
+
+
 
 
 # END

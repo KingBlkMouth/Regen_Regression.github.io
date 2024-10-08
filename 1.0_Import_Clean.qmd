@@ -613,6 +613,7 @@ seedlings <- seedlings |> select(PLT_CN, TREECOUNT, SPCD)
 ```{r}
 t <- add_row(t, seedlings)
 t |> nrow()
+tnull <- t %>% filter(is.na(TREECOUNT)) %>% select(PLT_CN) %>% unique()
 t <- t |> filter(!is.na(TREECOUNT))
 t |> nrow()
 
