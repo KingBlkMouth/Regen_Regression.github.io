@@ -123,10 +123,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
-<span class="menu-text">Home</span></a>
-  </li>  
-  <li class="nav-item">
     <a class="nav-link" href="./1.0_Import_Clean.html"> 
 <span class="menu-text">Data Prep</span></a>
   </li>  
@@ -234,8 +230,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#part-2-1" id="toc-part-2-1" class="nav-link" data-scroll-target="#part-2-1">Part 2</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#john-shaw-sqlite" id="toc-john-shaw-sqlite" class="nav-link" data-scroll-target="#john-shaw-sqlite">John Shaw, SQLite</a></li>
   <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1">——————————-</a></li>
+  <li><a href="#john-shaw-sqlite" id="toc-john-shaw-sqlite" class="nav-link" data-scroll-target="#john-shaw-sqlite">John Shaw, SQLite</a></li>
+  <li><a href="#section-2" id="toc-section-2" class="nav-link" data-scroll-target="#section-2">——————————-</a></li>
   <li><a href="#git" id="toc-git" class="nav-link" data-scroll-target="#git">Git</a></li>
   <li><a href="#end" id="toc-end" class="nav-link" data-scroll-target="#end">END</a></li>
   </ul>
@@ -365,7 +362,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Last updated on</strong></p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "2024-10-08 11:05:51 PDT"</code></pre>
+<pre><code>[1] "2024-10-09 14:00:20 PDT"</code></pre>
 </div>
 </div>
 <hr>
@@ -1009,8 +1006,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 </section>
 </section>
+<section id="section-1" class="level1">
+<h1>——————————-</h1>
+</section>
 <section id="john-shaw-sqlite" class="level1">
 <h1>John Shaw, SQLite</h1>
+<p>This is from an email exchange with John Shaw. We asked him to review the filtering process in Oct 2024. Below is part of the exchange where he outlines the SQLite code to do what I did in R. He takes a slightly different approach by starting the process from all plots in OkWen. Otherwise, this is essentially the same thing as is in Data Prep/Import and Clean.</p>
+<hr>
 <p>I’m wondering if the buffering part is necessary, or even desirable. If you buffer on the OkWen boundaries first, it’s possible that you can bring in an ECOSUBCD that doesn’t occur on either forest. An alternative would be to get a list that’s based on the forests themselves, and then use that list to cast the larger net. My first step is just getting the ECOSUBCD list, which gives me 16 ECOSUBCDs with numbers of plots (all years) ranging between 10 and 797.</p>
 <div class="cell">
 <details class="code-fold">
@@ -1080,7 +1082,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Now you pretty much have everything you need, both to run the analysis and FVS (after renaming from what I have above), without actually manipulating any variables. If there’s a need to do more, you have the basic tables from which to do that.</p>
 </section>
-<section id="section-1" class="level1">
+<section id="section-2" class="level1">
 <h1>——————————-</h1>
 </section>
 <section id="git" class="level1">
@@ -1194,7 +1196,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
+      var filterRegex = new RegExp("https:\/\/KingBlkMouth\.github\.io\/Regen_Regression\.github\.io\/");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }

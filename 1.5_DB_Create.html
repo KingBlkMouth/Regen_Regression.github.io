@@ -123,10 +123,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
-<span class="menu-text">Home</span></a>
-  </li>  
-  <li class="nav-item">
     <a class="nav-link active" href="./1.0_Import_Clean.html" aria-current="page"> 
 <span class="menu-text">Data Prep</span></a>
   </li>  
@@ -212,15 +208,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#rachelss-code" id="toc-rachelss-code" class="nav-link active" data-scroll-target="#rachelss-code">Rachels’s Code</a></li>
-  <li><a href="#re-write" id="toc-re-write" class="nav-link" data-scroll-target="#re-write">Re-Write</a>
+  <li><a href="#cc-ba-sdi" id="toc-cc-ba-sdi" class="nav-link active" data-scroll-target="#cc-ba-sdi">CC, BA, SDI</a>
+  <ul class="collapse">
+  <li><a href="#ba-live" id="toc-ba-live" class="nav-link" data-scroll-target="#ba-live">BA live</a></li>
+  <li><a href="#cc" id="toc-cc" class="nav-link" data-scroll-target="#cc">CC</a></li>
+  </ul></li>
+  <li><a href="#db-creation" id="toc-db-creation" class="nav-link" data-scroll-target="#db-creation">DB Creation</a>
   <ul class="collapse">
   <li><a href="#pseudo-code" id="toc-pseudo-code" class="nav-link" data-scroll-target="#pseudo-code">Pseudo code</a></li>
   <li><a href="#parts-1-3" id="toc-parts-1-3" class="nav-link" data-scroll-target="#parts-1-3">Parts 1-3</a></li>
-  <li><a href="#part-4-1" id="toc-part-4-1" class="nav-link" data-scroll-target="#part-4-1">Part 4</a></li>
+  <li><a href="#part-4" id="toc-part-4" class="nav-link" data-scroll-target="#part-4">Part 4</a></li>
   <li><a href="#part-5" id="toc-part-5" class="nav-link" data-scroll-target="#part-5">Part 5</a></li>
   </ul></li>
-  <li><a href="#difference-in-nrows" id="toc-difference-in-nrows" class="nav-link" data-scroll-target="#difference-in-nrows">Difference in nrows</a></li>
   <li><a href="#difference-in-.out-file" id="toc-difference-in-.out-file" class="nav-link" data-scroll-target="#difference-in-.out-file">Difference in .out file</a></li>
   <li><a href="#end" id="toc-end" class="nav-link" data-scroll-target="#end">End</a></li>
   </ul>
@@ -303,498 +302,122 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Last updated on</strong></p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "2024-10-08 10:57:05 PDT"</code></pre>
+<pre><code>[1] "2024-10-09 13:59:20 PDT"</code></pre>
 </div>
 </div>
 <hr>
-<section id="rachelss-code" class="level1">
-<h1>Rachels’s Code</h1>
-<p><strong>Breaking down Rachel’s code</strong></p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Pseudo code</p>
-<ol type="1">
-<li>setup</li>
-</ol>
-<ul>
-<li>scientific notation off</li>
-<li>set wd to folder with FIADB.</li>
-<li>read in standlist (?TM)</li>
-<li>ensure there are no repeat plt_cns</li>
-<li>add a key for quicker sorting and filtering</li>
-<li>read in fuelmap DWM table (?FM)</li>
-<li>find FM’s Observed PLT_CNs in standlist (TM’s) CNs</li>
-<li>list files DBs in folder</li>
-<li>filter for sqlite db names</li>
-</ul>
-<ol start="2" type="1">
-<li>Tree table</li>
-</ol>
-<ul>
-<li>Create header for tree table.</li>
-<li>Ensure blank tree table to write to</li>
-<li>For each database in the list of state dbs
-<ul>
-<li>connect to the state db</li>
-<li>get the list of tables</li>
-<li>set tree to those columns needed for FVS from FIA TREE table</li>
-<li>join standlist and TREE table</li>
-<li>Change FIA.TREE.SPCD to Species, Set History to 1, and Change CR to CrRatio</li>
-<li>Where AgentCD is not null set History to 8</li>
-<li>list the columns to select</li>
-<li>select the columns</li>
-<li>concatenate and print the stats in db have been found</li>
-<li>Disconnect and start the loop over.</li>
-</ul></li>
-<li>Find forest type reference in a db, this is confusing, there is no connection</li>
-<li>set the tree table names</li>
-<li>find all plots with trees in the tree list.</li>
-</ul>
-<ol start="3" type="1">
-<li>Plots table</li>
-</ol>
-<ul>
-<li>set the stand header</li>
-<li>ensure a blank canvas with NULL stand &amp; fuels tables</li>
-<li>For each db in the list of DBs
-<ol type="a">
-<li>connect</li>
-</ol>
-<ul>
-<li>find the db path and connect to it</li>
-<li>list the tables</li>
-</ul>
-<ol start="2" type="a">
-<li>set tables</li>
-</ol>
-<ul>
-<li>select CN and invyr from plot</li>
-<li>find all standlist in plot table by CN</li>
-<li>set a key for sorting and filtering quickly</li>
-</ul>
-<ol start="3" type="a">
-<li>alter tables</li>
-</ol>
-<ul>
-<li>Set := INV_YEAR = 2014: Adds a new column INV_YEAR with all entries set to 2014.</li>
-<li>CASE = (INVYR): Adds a new column CASE and sets its values to be the same as those in the existing column INVYR.</li>
-<li>INVYR = NULL: Removes the INVYR column from the data.table.</li>
-<li>BASAL_AREA_FACTOR = 0: Adds a new column BASAL_AREA_FACTOR with all entries set to 0.</li>
-<li>INV_PLOT_SIZE = 1: Adds a new column INV_PLOT_SIZE with all entries set to 1.</li>
-<li>BRK_DBH = 999: Adds a new column BRK_DBH with all entries set to 999.</li>
-</ul>
-<ol start="4" type="a">
-<li>make the stand table</li>
-</ol>
-<ul>
-<li>add the stand info from each db to the stand table</li>
-</ul>
-<ol start="5" type="a">
-<li>Fine Fuels</li>
-</ol>
-<ul>
-<li>fine woody debris is list of columns from COND_DWM_CALC</li>
-<li>Complete is * from COND_DWM_CALC</li>
-<li>find the FM pred CNs in the db</li>
-<li>Set the FVS variables from the FIA variables and correct Tons to lbs</li>
-<li>Add our CN’s fwd to the the fine fuels table</li>
-</ul>
-<ol start="6" type="a">
-<li>Course Fuels</li>
-</ol>
-<ul>
-<li>get columns from DWM_Coarse Woody degris</li>
-<li>get * from DWM_Coarse Woody degris</li>
-<li>filter db for our Pred cns</li>
-</ul>
-<ol start="7" type="a">
-<li>fix CWD table</li>
-</ol>
-<ul>
-<li>group CWD by PLT_CN</li>
-<li>set each FVS fuel group to the sum of fuels with diameters at correct size and correct for tons to lbs.</li>
-<li>add this states data to the new table</li>
-<li>concatenate and print complete</li>
-<li>disconnect and start the next state</li>
-</ul></li>
-</ul>
-<ol start="4" type="1">
-<li>New db</li>
-</ol>
-<ul>
-<li>correct CNs to chr</li>
-<li>add coarse fuel data from FM to TM</li>
-<li>add fine fuel data from FM to TM</li>
-<li>set column names</li>
-<li>add fuel to the new stand table
-<ul>
-<li>I am not sure why FWD and stuff are being multiplied by 2</li>
-</ul></li>
-<li>Set CN to STAND_CN for FVS</li>
-<li>Set X and X.1 to Null</li>
-<li>Set a key to sort and filter</li>
-<li>add fine fuels to new stand table</li>
-<li>join the fine and coarse fuel tables</li>
-<li>Remove PredCN and NA values</li>
-<li>write new db.</li>
-</ul>
-<section id="part-1" class="level2">
-<h2 class="anchored" data-anchor-id="part-1">Part 1</h2>
+<section id="cc-ba-sdi" class="level1">
+<h1>CC, BA, SDI</h1>
+<p>I thought that I could get the predictor variables from computations or FIA. Unfortunately, CC is hard to compute. It’s so involved, that it is easier to run FVS.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">999</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Set working directory as the master folder with all FIA SQLite databases within their </span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="do">## individual folders. Named: FIADBs.</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"C:</span><span class="sc">\\</span><span class="st">Users</span><span class="sc">\\</span><span class="st">Houtmanr</span><span class="sc">\\</span><span class="st">FVS_Tradeoffs</span><span class="sc">\\</span><span class="st">rFVSProcessing</span><span class="sc">\\</span><span class="st">FIADBs"</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># This file lists all unique stand identifiers (Plot_CN) values for the study area</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="do">### ENTER CORRECT STAND TABLE PATHWAY HERE </span><span class="al">###</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>target_stands <span class="ot">&lt;-</span> <span class="fu">read.table</span>(</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"C:/Users/houtmanr/FVS_Tradeoffs/rFVSProcessing/FIADBs/Stands_byVariantR1_Carbon_2014.csv"</span>, <span class="at">sep =</span> <span class="st">","</span>, <span class="at">header =</span> <span class="cn">TRUE</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>target_stands <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(<span class="fu">unique</span>(target_stands[<span class="st">"CN"</span>]))</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>target_stands <span class="ot">&lt;-</span> <span class="fu">setkey</span>(target_stands, CN)</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>fuel_stands <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read.table</span>(</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"C:/Users/houtmanr/FVS_Tradeoffs/rFVSProcessing/FVSInputFiles/DWM_table_with_mangrove_v5.csv"</span>, <span class="at">sep =</span> <span class="st">","</span>, <span class="at">header =</span> <span class="cn">TRUE</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>fuel_stands_filtered <span class="ot">&lt;-</span> fuel_stands[fuel_stands<span class="sc">$</span>ObsCN <span class="sc">%in%</span> target_stands<span class="sc">$</span>CN,]</span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>states <span class="ot">&lt;-</span> <span class="fu">list.dirs</span>()</span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>states <span class="ot">&lt;-</span> <span class="fu">grep</span>(<span class="st">"SQLit"</span>, states, <span class="at">value =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="part-2" class="level2">
-<h2 class="anchored" data-anchor-id="part-2">Part 2</h2>
-<ol start="2" type="1">
-<li>Tree table</li>
-</ol>
-<ul>
-<li>Create header for tree table.</li>
-<li>Ensure blank tree table to write to</li>
-<li>For each database in the list of state dbs
-<ul>
-<li>connect to the state db</li>
-<li>get the list of tables</li>
-<li>set tree to those columns needed for FVS from FIA TREE table</li>
-<li>join standlist and TREE table</li>
-<li>Change FIA.TREE.SPCD to Species, Set History to 1, and Change CR to CrRatio</li>
-<li>Where AgentCD is not null set History to 8</li>
-<li>list the columns to select</li>
-<li>select the columns</li>
-<li>concatenate and print the stats in db have been found</li>
-<li>Disconnect and start the loop over.</li>
-</ul></li>
-<li>Find forest type reference in a db, this is confusing, there is no connection</li>
-<li>set the tree table names</li>
-<li>find all plots with trees in the tree list.</li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>tree_header <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"STAND_CN"</span>, <span class="st">"INVYR"</span>, <span class="st">"STATUSCD"</span>, <span class="st">"Tree_count"</span>, <span class="st">"SPCD"</span>, <span class="st">"DBH"</span>, <span class="st">"HT"</span>, <span class="st">"ACTUALHT"</span>, <span class="st">"CR"</span>, <span class="st">"SUBP"</span>, <span class="st">"TREE"</span>, <span class="st">"AGENTCD"</span>, </span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Species"</span>, <span class="st">"History"</span>, <span class="st">"CrRatio"</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># This loop iterates through every state database and extracts the tree data from FIA</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>tree_table <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(db <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(states)){</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># connect to the sqlite file</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  dbtitle <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> states[db], <span class="at">full.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  dbname <span class="ot">&lt;-</span> <span class="fu">paste0</span>(states[db], <span class="st">"</span><span class="sc">\\</span><span class="st">"</span>, dbtitle)</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  con <span class="ot">=</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), <span class="at">dbname=</span>dbname)</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># get a list of all tables</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  alltables <span class="ot">=</span> <span class="fu">dbListTables</span>(con)</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  alltables</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  tree <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dbGetQuery</span>(</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>      con, <span class="st">'select PLT_CN, INVYR, STATUSCD, TPA_UNADJ, SPCD, DIA, HT, ACTUALHT, CR, SUBP, TREE, AGENTCD from TREE'</span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  target_stands<span class="sc">$</span>CN <span class="ot">&lt;-</span> <span class="fu">as.character</span>(target_stands<span class="sc">$</span>CN)</span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  tree_filtered <span class="ot">&lt;-</span> <span class="fu">merge</span>(tree, target_stands, <span class="at">by.x =</span> <span class="st">"PLT_CN"</span>, <span class="at">by.y =</span> <span class="st">"CN"</span>) </span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  tree_filtered[, <span class="st">':='</span> (<span class="at">Species =</span> (SPCD), <span class="at">History =</span> <span class="dv">1</span>, <span class="at">CrRatio =</span> CR )]</span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  tree_filtered[AGENTCD <span class="sc">!=</span> <span class="st">'NULL'</span>, <span class="st">':='</span> (<span class="at">History =</span> <span class="dv">8</span>)]</span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>  tree_characteristics <span class="ot">=</span> <span class="fu">c</span>(</span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>    <span class="st">"PLT_CN"</span>, <span class="st">"INVYR"</span>, <span class="st">"STATUSCD"</span>, <span class="st">"TPA_UNADJ"</span>, <span class="st">"SPCD"</span>, <span class="st">"DIA"</span>, <span class="st">"HT"</span>, <span class="st">"ACTUALHT"</span>, <span class="st">"CR"</span>, <span class="st">"SUBP"</span>, <span class="st">"TREE"</span>, <span class="st">"AGENTCD"</span>, </span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Species"</span>, <span class="st">"History"</span>, <span class="st">"CrRatio"</span></span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>  tree_table <span class="ot">&lt;-</span> <span class="fu">rbind</span>(tree_table, tree_filtered[, tree_characteristics, <span class="at">with=</span><span class="cn">FALSE</span>])</span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"The trees in "</span>, states[db], <span class="st">" have been found."</span>)</span>
-<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbDisconnect</span>(con)</span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>forest_type <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(<span class="fu">dbGetQuery</span>(con, <span class="st">'select * FROM REF_FOREST_TYPE'</span>))</span>
-<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(tree_table) <span class="ot">&lt;-</span> tree_header</span>
-<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>plots <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">unique</span>(tree_table<span class="sc">$</span>STAND_CN))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="part-3" class="level2">
-<h2 class="anchored" data-anchor-id="part-3">Part 3</h2>
-<ol start="3" type="1">
-<li>Plots table</li>
-</ol>
-<ul>
-<li>set the stand header</li>
-<li>ensure a blank canvas with NULL stand &amp; fuels tables</li>
-<li>For each db in the list of DBs
-<ol type="a">
-<li>connect</li>
-</ol>
-<ul>
-<li>find the db path and connect to it</li>
-<li>list the tables</li>
-</ul>
-<ol start="2" type="a">
-<li>set tables</li>
-</ol>
-<ul>
-<li>select CN and invyr from plot</li>
-<li>find all standlist in plot table by CN</li>
-<li>set a key for sorting and filtering quickly</li>
-</ul>
-<ol start="3" type="a">
-<li>alter tables</li>
-</ol>
-<ul>
-<li>Set := INV_YEAR = 2014: Adds a new column INV_YEAR with all entries set to 2014.</li>
-<li>CASE = (INVYR): Adds a new column CASE and sets its values to be the same as those in the existing column INVYR.</li>
-<li>INVYR = NULL: Removes the INVYR column from the data.table.</li>
-<li>BASAL_AREA_FACTOR = 0: Adds a new column BASAL_AREA_FACTOR with all entries set to 0.</li>
-<li>INV_PLOT_SIZE = 1: Adds a new column INV_PLOT_SIZE with all entries set to 1.</li>
-<li>BRK_DBH = 999: Adds a new column BRK_DBH with all entries set to 999.</li>
-</ul>
-<ol start="4" type="a">
-<li>make the stand table</li>
-</ol>
-<ul>
-<li>add the stand info from each db to the stand table</li>
-</ul>
-<ol start="5" type="a">
-<li>Fine Fuels</li>
-</ol>
-<ul>
-<li>fine woody debris is list of columns from COND_DWM_CALC</li>
-<li>Complete is * from COND_DWM_CALC</li>
-<li>find the FM pred CNs in the db</li>
-<li>Set the FVS variables from the FIA variables and correct Tons to lbs</li>
-<li>Add our CN’s fwd to the the fine fuels table</li>
-</ul>
-<ol start="6" type="a">
-<li>Course Fuels</li>
-</ol>
-<ul>
-<li>get columns from DWM_Coarse Woody degris</li>
-<li>get * from DWM_Coarse Woody degris</li>
-<li>filter db for our Pred cns</li>
-</ul>
-<ol start="7" type="a">
-<li>fix CWD table</li>
-</ol>
-<ul>
-<li>group CWD by PLT_CN</li>
-<li>set each FVS fuel group to the sum of fuels with diameters at correct size and correct for tons to lbs.</li>
-<li>add this states data to the new table</li>
-<li>concatenate and print complete</li>
-<li>disconnect and start the next state</li>
-</ul></li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This loop iterates through the stand characteristics and builds an input stand table for FVS</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>stand_header <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"STAND_CN"</span>, <span class="st">"INV_YEAR"</span>, <span class="st">"CASE"</span>, <span class="st">"BASAL_AREA_FACTOR"</span>, <span class="st">"INV_PLOT_SIZE"</span>, <span class="st">"BRK_DBH"</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>stand_table <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>fine_fuels_table <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>coarse_fuels_table <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(db <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(states)){</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># connect to the sqlite file</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  dbtitle <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> states[db], <span class="at">full.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  dbname <span class="ot">&lt;-</span> <span class="fu">paste0</span>(states[db], <span class="st">"</span><span class="sc">\\</span><span class="st">"</span>, dbtitle)</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  con <span class="ot">=</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), <span class="at">dbname=</span>dbname[<span class="dv">1</span>])</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># get a list of all tables</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  alltables <span class="ot">=</span> <span class="fu">dbListTables</span>(con)</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  plot_table <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(<span class="fu">dbGetQuery</span>(con, <span class="st">'select CN, INVYR from PLOT'</span>))</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  plot_filtered <span class="ot">&lt;-</span> plot_table[CN <span class="sc">%in%</span> target_stands<span class="sc">$</span>CN,]</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  plot_filtered <span class="ot">&lt;-</span> <span class="fu">setkey</span>(plot_filtered, CN)</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  plot_filtered <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    plot_filtered[</span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>      , <span class="st">':='</span> (</span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>      <span class="at">INV_YEAR =</span> <span class="dv">2014</span>, <span class="at">CASE =</span> (INVYR), <span class="at">INVYR =</span> <span class="cn">NULL</span>, <span class="at">BASAL_AREA_FACTOR =</span> <span class="dv">0</span>, <span class="at">INV_PLOT_SIZE =</span> <span class="dv">1</span>, <span class="at">BRK_DBH =</span> <span class="dv">999</span></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>      ]</span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>  stand_table <span class="ot">&lt;-</span> <span class="fu">rbind</span>(stand_table, plot_filtered)</span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>  stand_table <span class="ot">&lt;-</span><span class="fu">setkey</span>(stand_table,CN)</span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Fuels</span></span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>  fwd_table <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(</span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dbGetQuery</span>(con, <span class="fu">paste0</span>(</span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>               <span class="st">'select '</span>,</span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>               <span class="st">'PLT_CN, INVYR, FWD_SM_CARBON_COND, FWD_SM_DRYBIO_COND,FWD_MD_CARBON_COND, FWD_MD_DRYBIO_COND,'</span>, </span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>               <span class="st">'FWD_LG_CARBON_COND, FWD_LG_DRYBIO_COND, LITTER_CARBON, LITTER_BIOMASS, DUFF_CARBON, DUFF_BIOMASS '</span>, </span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>               <span class="st">'from COND_DWM_CALC'</span></span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>               ))</span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>  fwd_table_complete <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(<span class="fu">dbGetQuery</span>(con, <span class="st">'select * from COND_DWM_CALC'</span>))</span>
-<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>  fwd_filtered <span class="ot">&lt;-</span> <span class="fu">unique</span>(fwd_table[PLT_CN <span class="sc">%in%</span> fuel_stands_filtered<span class="sc">$</span>PredCN,])</span>
-<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add Fuels data</span></span>
-<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>  fwd_table<span class="sc">$</span>Fuel_0_25_H <span class="ot">&lt;-</span> fwd_table<span class="sc">$</span>FWD_SM_DRYBIO_COND<span class="sc">/</span><span class="dv">2000</span></span>
-<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>  fwd_table<span class="sc">$</span>Fuel_25_1_H <span class="ot">&lt;-</span> fwd_table<span class="sc">$</span>FWD_MD_DRYBIO_COND<span class="sc">/</span><span class="dv">2000</span></span>
-<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>  fwd_table<span class="sc">$</span>Fuel_1_3_H <span class="ot">&lt;-</span> fwd_table<span class="sc">$</span>FWD_LG_DRYBIO_COND<span class="sc">/</span><span class="dv">2000</span></span>
-<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>  fine_fuels_table <span class="ot">&lt;-</span> <span class="fu">rbind</span>(fine_fuels_table, fwd_filtered)</span>
-<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>  cwd_table <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(<span class="fu">dbGetQuery</span>(con, <span class="st">'select PLT_CN, DRYBIO_AC_COND, DECAYCD, TRANSDIA from DWM_COARSE_WOODY_DEBRIS'</span>))</span>
-<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>  cwd_table <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(<span class="fu">dbGetQuery</span>(con, <span class="st">'select * from DWM_COARSE_WOODY_DEBRIS'</span>))</span>
-<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>  cwd_fuels <span class="ot">&lt;-</span> cwd_table[PLT_CN <span class="sc">%in%</span> fuel_stands_filtered<span class="sc">$</span>PredCN,]</span>
-<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>  groupcwd <span class="ot">&lt;-</span> <span class="fu">group_by</span>(cwd_fuels, PLT_CN)</span>
-<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>  coarsefuels <span class="ot">=</span> <span class="fu">as.data.table</span>(</span>
-<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(groupcwd, </span>
-<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>              <span class="at">Fuel_3_6_H =</span>   <span class="fu">sum</span>(DRYBIO_AC_COND[DECAYCD <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>) <span class="sc">&amp;</span> TRANSDIA <span class="sc">&gt;=</span> <span class="dv">3</span>  <span class="sc">&amp;</span> TRANSDIA <span class="sc">&lt;</span> <span class="dv">6</span>])<span class="sc">/</span><span class="dv">2000</span>,</span>
-<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>              <span class="at">Fuel_6_12_H =</span>  <span class="fu">sum</span>(DRYBIO_AC_COND[DECAYCD <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>) <span class="sc">&amp;</span> TRANSDIA <span class="sc">&gt;=</span> <span class="dv">6</span>  <span class="sc">&amp;</span> TRANSDIA <span class="sc">&lt;</span> <span class="dv">12</span>])<span class="sc">/</span><span class="dv">2000</span>,</span>
-<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>              <span class="at">Fuel_12_20_H =</span> <span class="fu">sum</span>(DRYBIO_AC_COND[DECAYCD <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>) <span class="sc">&amp;</span> TRANSDIA <span class="sc">&gt;=</span> <span class="dv">12</span> <span class="sc">&amp;</span> TRANSDIA <span class="sc">&lt;</span> <span class="dv">20</span>])<span class="sc">/</span><span class="dv">2000</span>,</span>
-<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>              <span class="at">Fuel_20_35_H =</span> <span class="fu">sum</span>(DRYBIO_AC_COND[DECAYCD <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>) <span class="sc">&amp;</span> TRANSDIA <span class="sc">&gt;=</span> <span class="dv">20</span> <span class="sc">&amp;</span> TRANSDIA <span class="sc">&lt;</span> <span class="dv">35</span>])<span class="sc">/</span><span class="dv">2000</span>,</span>
-<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>              <span class="at">Fuel_35_50_H =</span> <span class="fu">sum</span>(DRYBIO_AC_COND[DECAYCD <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>) <span class="sc">&amp;</span> TRANSDIA <span class="sc">&gt;=</span> <span class="dv">35</span> <span class="sc">&amp;</span> TRANSDIA <span class="sc">&lt;</span> <span class="dv">50</span>])<span class="sc">/</span><span class="dv">2000</span>,</span>
-<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>              <span class="at">Fuel_gt_50_H =</span> <span class="fu">sum</span>(DRYBIO_AC_COND[DECAYCD <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>) <span class="sc">&amp;</span> TRANSDIA <span class="sc">&gt;=</span> <span class="dv">50</span>])<span class="sc">/</span><span class="dv">2000</span>, </span>
-<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>              </span>
-<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a>              <span class="at">Fuel_3_6_S =</span>   <span class="fu">sum</span>(DRYBIO_AC_COND[DECAYCD <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">5</span>)   <span class="sc">&amp;</span> TRANSDIA <span class="sc">&gt;=</span> <span class="dv">3</span>  <span class="sc">&amp;</span> TRANSDIA <span class="sc">&lt;</span> <span class="dv">6</span>])<span class="sc">/</span><span class="dv">2000</span>,</span>
-<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>              <span class="at">Fuel_6_12_S =</span>  <span class="fu">sum</span>(DRYBIO_AC_COND[DECAYCD <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">5</span>)   <span class="sc">&amp;</span> TRANSDIA <span class="sc">&gt;=</span> <span class="dv">6</span>  <span class="sc">&amp;</span> TRANSDIA <span class="sc">&lt;</span> <span class="dv">12</span>])<span class="sc">/</span><span class="dv">2000</span>,</span>
-<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>              <span class="at">Fuel_12_20_S =</span> <span class="fu">sum</span>(DRYBIO_AC_COND[DECAYCD <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">5</span>)   <span class="sc">&amp;</span> TRANSDIA <span class="sc">&gt;=</span> <span class="dv">12</span> <span class="sc">&amp;</span> TRANSDIA <span class="sc">&lt;</span> <span class="dv">20</span>])<span class="sc">/</span><span class="dv">2000</span>,</span>
-<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>              <span class="at">Fuel_20_35_S =</span> <span class="fu">sum</span>(DRYBIO_AC_COND[DECAYCD <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">5</span>)   <span class="sc">&amp;</span> TRANSDIA <span class="sc">&gt;=</span> <span class="dv">20</span> <span class="sc">&amp;</span> TRANSDIA <span class="sc">&lt;</span> <span class="dv">35</span>])<span class="sc">/</span><span class="dv">2000</span>,</span>
-<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>              <span class="at">Fuel_35_50_S =</span> <span class="fu">sum</span>(DRYBIO_AC_COND[DECAYCD <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">5</span>)   <span class="sc">&amp;</span> TRANSDIA <span class="sc">&gt;=</span> <span class="dv">35</span> <span class="sc">&amp;</span> TRANSDIA <span class="sc">&lt;</span> <span class="dv">50</span>])<span class="sc">/</span><span class="dv">2000</span>,</span>
-<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>              <span class="at">Fuel_gt_50_S =</span> <span class="fu">sum</span>(DRYBIO_AC_COND[DECAYCD <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">5</span>)   <span class="sc">&amp;</span> TRANSDIA <span class="sc">&gt;=</span> <span class="dv">50</span>])<span class="sc">/</span><span class="dv">2000</span></span>
-<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a>              )</span>
-<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>  coarse_fuels_table <span class="ot">&lt;-</span> <span class="fu">rbind</span>(coarse_fuels_table, coarsefuels)</span>
-<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"The stands in "</span>, states[db], <span class="st">" have been found.</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbDisconnect</span>(con)</span>
-<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="part-4" class="level2">
-<h2 class="anchored" data-anchor-id="part-4">Part 4</h2>
-<ol start="4" type="1">
-<li>New db</li>
-</ol>
-<ul>
-<li>correct CNs to chr</li>
-<li>add coarse fuel data from FM to TM</li>
-<li>add fine fuel data from FM to TM</li>
-<li>set column names</li>
-<li>add fuel to the new stand table
-<ul>
-<li>I am not sure why FWD and stuff are being multiplied by 2</li>
-</ul></li>
-<li>Set CN to STAND_CN for FVS</li>
-<li>Set X and X.1 to Null</li>
-<li>Set a key to sort and filter</li>
-<li>add fine fuels to new stand table</li>
-<li>join the fine and coarse fuel tables</li>
-<li>Remove PredCN and NA values</li>
-<li>write new db.</li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(fuel_stands_filtered)[<span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="st">"STAND_CN"</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>fuel_stands_filtered<span class="sc">$</span>X<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>fuel_stands_filtered<span class="sc">$</span>X <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>fuel_stands_filtered <span class="ot">&lt;-</span> <span class="fu">setkey</span>(fuel_stands_filtered, STAND_CN)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>stand_table <span class="ot">&lt;-</span> <span class="fu">setkey</span>(stand_table, STAND_CN)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Add fine fuels.</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>stands_with_finefuels <span class="ot">&lt;-</span> <span class="fu">merge</span>(</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  stand_table, </span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  fuel_stands_filtered[, <span class="fu">c</span>(<span class="st">"STAND_CN"</span>,<span class="st">"Fuel_0_25_H"</span>,<span class="st">"Fuel_25_1_H"</span>,<span class="st">"Fuel_1_3_H"</span>,<span class="st">"Fuel_Litter"</span>,<span class="st">"Fuel_Duff"</span>)])</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>stands_with_finefuels <span class="ot">&lt;-</span> <span class="fu">setkey</span>(stands_with_finefuels, STAND_CN)</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(coarse_fuels_table_stands)[<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="st">"STAND_CN"</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>coarse_fuels_table_stands <span class="ot">&lt;-</span> <span class="fu">setkey</span>(coarse_fuels_table_stands, STAND_CN)</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>stands_with_fuels <span class="ot">&lt;-</span> <span class="fu">left_join</span>(stands_with_finefuels, coarse_fuels_table_stands)</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>stands_with_fuels<span class="sc">$</span>PredCN <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove NA values when writing files (FVS does NOT like them)</span></span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="do">### UPDATE YOUR OUTPUT FILE NAMES HERE </span><span class="al">###</span></span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(tree_table, <span class="at">file =</span> <span class="st">"tree_table_R1_Carbon_2014.csv"</span>, <span class="at">na =</span> <span class="st">""</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(stands_with_fuels, <span class="at">file =</span> <span class="st">"stand_table_R1_Carbon2014.csv"</span>, <span class="at">na =</span> <span class="st">""</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>buffer_ecos <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./data/1_Import_Clean_JS_ECOSUBCD.csv"</span>, </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                        <span class="co"># show_col_types = F, </span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">col_types =</span> <span class="st">"ccnnnnnnnnccnnnnnnnnnnnnn"</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                        )</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>buffer_ecos <span class="ot">&lt;-</span> <span class="fu">clean_na_cols</span>(buffer_ecos)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Original stand data from Fuel Map.</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>fuel_stands_filtered<span class="sc">$</span>PredCN <span class="ot">&lt;-</span> <span class="fu">as.character</span>(fuel_stands_filtered<span class="sc">$</span>PredCN)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>fuel_stands_filtered<span class="sc">$</span>ObsCN <span class="ot">&lt;-</span> <span class="fu">as.character</span>(fuel_stands_filtered<span class="sc">$</span>ObsCN)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>coarse_fuels_table_stands <span class="ot">&lt;-</span> <span class="fu">merge</span>(</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  fuel_stands_filtered[, <span class="fu">c</span>(<span class="st">"PredCN"</span>, <span class="st">"ObsCN"</span>)], </span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  coarse_fuels_table,  <span class="at">by.x =</span> <span class="st">"PredCN"</span>, <span class="at">by.y =</span> <span class="st">"PLT_CN"</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>fine_fuels_table_stands <span class="ot">&lt;-</span> <span class="fu">merge</span>(</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  fuel_stands_filtered[,<span class="fu">c</span>(<span class="st">"PredCN"</span>, <span class="st">"ObsCN"</span>)], </span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  fine_fuels_table,  <span class="at">by.y =</span> <span class="st">"PLT_CN"</span>, <span class="at">by.x =</span> <span class="st">"PredCN"</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(stand_table) <span class="ot">&lt;-</span> stand_header</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="do">## Add fuel variables to the stand data</span></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>fuel_stands_filtered<span class="sc">$</span>Fuel_0_25_H <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span>fuel_stands_filtered<span class="sc">$</span>FWD_SM_CARBON_COND<span class="sc">/</span><span class="dv">2000</span></span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>fuel_stands_filtered<span class="sc">$</span>Fuel_25_1_H <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span>fuel_stands_filtered<span class="sc">$</span>FWD_MD_CARBON_COND<span class="sc">/</span><span class="dv">2000</span></span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>fuel_stands_filtered<span class="sc">$</span>Fuel_1_3_H <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span>fuel_stands_filtered<span class="sc">$</span>FWD_LG_CARBON_COND<span class="sc">/</span><span class="dv">2000</span></span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>fuel_stands_filtered<span class="sc">$</span>Fuel_Litter <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span>fuel_stands_filtered<span class="sc">$</span>LITTER_CARBON<span class="sc">/</span><span class="dv">2000</span></span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>fuel_stands_filtered<span class="sc">$</span>Fuel_Duff <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span>fuel_stands_filtered<span class="sc">$</span>DUFF_CARBON<span class="sc">/</span><span class="dv">2000</span></span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(fuel_stands_filtered)[<span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="st">"STAND_CN"</span></span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>fuel_stands_filtered<span class="sc">$</span>X<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>fuel_stands_filtered<span class="sc">$</span>X <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>fuel_stands_filtered <span class="ot">&lt;-</span> <span class="fu">setkey</span>(fuel_stands_filtered, STAND_CN)</span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>stand_table <span class="ot">&lt;-</span> <span class="fu">setkey</span>(stand_table, STAND_CN)</span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Add fine fuels.</span></span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>stands_with_finefuels <span class="ot">&lt;-</span> <span class="fu">merge</span>(</span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>  stand_table, </span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>  fuel_stands_filtered[, <span class="fu">c</span>(<span class="st">"STAND_CN"</span>,<span class="st">"Fuel_0_25_H"</span>,<span class="st">"Fuel_25_1_H"</span>,<span class="st">"Fuel_1_3_H"</span>,<span class="st">"Fuel_Litter"</span>,<span class="st">"Fuel_Duff"</span>)]</span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>stands_with_finefuels <span class="ot">&lt;-</span> <span class="fu">setkey</span>(stands_with_finefuels, STAND_CN)</span>
-<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(coarse_fuels_table_stands)[<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="st">"STAND_CN"</span></span>
-<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>coarse_fuels_table_stands <span class="ot">&lt;-</span> <span class="fu">setkey</span>(coarse_fuels_table_stands, STAND_CN)</span>
-<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>stands_with_fuels <span class="ot">&lt;-</span> <span class="fu">left_join</span>(stands_with_finefuels, coarse_fuels_table_stands)</span>
-<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>stands_with_fuels<span class="sc">$</span>PredCN <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove NA values when writing files (FVS does NOT like them)</span></span>
-<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a><span class="do">### UPDATE YOUR OUTPUT FILE NAMES HERE </span><span class="al">###</span></span>
-<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(tree_table, <span class="at">file =</span> <span class="st">"tree_table_R1_Carbon_2014.csv"</span>, <span class="at">na =</span> <span class="st">""</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(stands_with_fuels, <span class="at">file =</span> <span class="st">"stand_table_R1_Carbon2014.csv"</span>, <span class="at">na =</span> <span class="st">""</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>cns_buffer <span class="ot">&lt;-</span> buffer_ecos <span class="sc">%&gt;%</span> <span class="fu">select</span>(CN) <span class="sc">%&gt;%</span> <span class="fu">unique</span>()</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(cns_buffer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4075</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>cns <span class="ot">&lt;-</span> <span class="fu">db_list</span>(cns_buffer, CN)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>() , <span class="st">"C:/RxFire/Data/_FIADB_WA.db"</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>trees <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con,     <span class="fu">str_c</span>(<span class="st">"select * from TREE where PLT_CN in ("</span>, cns, <span class="st">")"</span>))</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>seedlings <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con, <span class="fu">str_c</span>(<span class="st">"select * from SEEDLING where PLT_CN in ("</span>, cns, <span class="st">")"</span>))</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>cond <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con,      <span class="fu">str_c</span>(<span class="st">"select * from COND where PLT_CN in ("</span>, cns, <span class="st">")"</span>))</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="fu">n_distinct</span>(trees<span class="sc">$</span>PLT_CN)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4052</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">n_distinct</span>(seedlings<span class="sc">$</span>PLT_CN)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3265</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>trees <span class="ot">&lt;-</span> <span class="fu">clean_na_cols</span>(trees)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>seedlings <span class="ot">&lt;-</span> <span class="fu">clean_na_cols</span>(seedlings)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>cond <span class="ot">&lt;-</span> <span class="fu">clean_na_cols</span>(cond)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In the ecosubcode group, there were 4075 plots of the current plot design and single condition, that were sampled, didn’t have fire, or artificial regen. 4052 have trees (live or dead) and 3265 have seedlings.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> trees <span class="sc">|&gt;</span> <span class="fu">select</span>(PLT_CN, <span class="at">TREECOUNT =</span> TPA_UNADJ, SPCD, DIA)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> seedlings <span class="sc">|&gt;</span> <span class="fu">select</span>(PLT_CN, TREECOUNT, SPCD) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">DIA =</span> .<span class="dv">1</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>trees_all <span class="ot">&lt;-</span> <span class="fu">add_row</span>(t, s)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(t)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> trees <span class="sc">%&gt;%</span> <span class="fu">filter</span>(STATUSCD <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(PLT_CN, <span class="at">TREECOUNT =</span> TPA_UNADJ, SPCD, DIA)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>trees_live <span class="ot">&lt;-</span> <span class="fu">add_row</span>(t, s)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(t,s)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="fu">n_distinct</span>(trees_all<span class="sc">$</span>PLT_CN)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4062</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">n_distinct</span>(trees_live<span class="sc">$</span>PLT_CN)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4030</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>trees_live <span class="ot">&lt;-</span> trees <span class="sc">%&gt;%</span> <span class="fu">filter</span>(STATUSCD <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(PLT_CN, <span class="at">TREECOUNT =</span> TPA_UNADJ, SPCD, DIA)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">n_distinct</span>(trees_live<span class="sc">$</span>PLT_CN)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3968</code></pre>
+</div>
+</div>
+<p>4062 of the 4075 have trees (Live or Dead) or seedlings. 4030 have live trees and seedlings. 3968 have live trees.</p>
+<section id="ba-live" class="level2">
+<h2 class="anchored" data-anchor-id="ba-live">BA live</h2>
+<p>BALIVE from the cond table says it is only populated for forested plots. I thought that meant I would need to calculate it for the non-forest conditions, but it appears that it is populated for all of these plots.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>cond_ba <span class="ot">&lt;-</span> cond <span class="sc">%&gt;%</span> <span class="fu">select</span>(PLT_CN, BALIVE)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>preds_eco <span class="ot">&lt;-</span> buffer_ecos <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="at">PLT_CN =</span> CN, ECOSUBCD, FLDTYPCD, HABTYPCD1)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>preds_eco<span class="sc">$</span>PLT_CN <span class="ot">&lt;-</span> <span class="fu">as.character</span>(preds_eco<span class="sc">$</span>PLT_CN)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>preds_eco <span class="ot">&lt;-</span> <span class="fu">left_join</span>(preds_eco, cond_ba, <span class="fu">join_by</span>(PLT_CN))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
+<section id="cc" class="level2">
+<h2 class="anchored" data-anchor-id="cc">CC</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>cond_cc <span class="ot">&lt;-</span> cond <span class="sc">%&gt;%</span> <span class="fu">select</span>(PLT_CN, <span class="at">CC =</span> LIVE_CANOPY_CVR_PCT, <span class="at">CC2 =</span> LIVE_MISSING_CANOPY_CVR_PCT)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(cond_cc<span class="sc">$</span>CC))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2046</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(cond_cc<span class="sc">$</span>CC2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2046</code></pre>
 </div>
 </div>
+<p>CC is not recorded for most of these plt_cns. I looked at the calculations and it would be easier to run this in FVS. That means that I do not need to run FVS for SDI.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># con &lt;- dbConnect(RSQLite::SQLite() , "C:/RxFire/Data/_FIADB_WA.db")</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co"># cond.cn &lt;-   dbGetQuery(con, str_c("select CN, PLT_CN from COND where PLT_CN in (", cns, ")"))</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># fvs_trees_plot &lt;- dbGetQuery(con, str_c("select * from FVS_TREEINIT_PLOT where STAND_CN in (", cns, ")"))</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co"># fvs_plots_plot &lt;- dbGetQuery(con, str_c("select * from FVS_STANDINIT_PLOT where STAND_CN in (", cns, ")"))</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co"># cns &lt;- db_list(cond.cn, CN)</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="co"># fvs_trees_cond &lt;- dbGetQuery(con, str_c("select * from FVS_TREEINIT_COND where STAND_CN in (", cns, ")"))</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="co"># fvs_plots_cond &lt;- dbGetQuery(con, str_c("select * from FVS_STANDINIT_COND where STAND_CN in (", cns, ")"))</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="co"># dbDisconnect(con)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>The FVS_Ready tables to not have all of our plots in either the cond or plot tables. I need to build the tables.</p>
 </section>
-<section id="re-write" class="level1">
-<h1>Re-Write</h1>
+</section>
+<section id="db-creation" class="level1">
+<h1>DB Creation</h1>
 <section id="pseudo-code" class="level3">
 <h3 class="anchored" data-anchor-id="pseudo-code">Pseudo code</h3>
+<p><strong>I didn’t update the Pseudo code</strong></p>
 <ol type="1">
 <li><strong>setup</strong></li>
 </ol>
@@ -884,388 +507,213 @@ Note
 <section id="parts-1-3" class="level2">
 <h2 class="anchored" data-anchor-id="parts-1-3">Parts 1-3</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Part 1 Setup</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>standlist <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./data/1_Import_Clean2.csv"</span>, </span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">col_types =</span> <span class="st">"ccc"</span>)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>standlist <span class="ot">&lt;-</span> standlist <span class="sc">|&gt;</span> <span class="fu">mutate</span>(</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">SUBP =</span> <span class="fu">str_sub</span>(STANDPLOT_CN, <span class="sc">-</span><span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>)</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span> </span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(SUBP, <span class="at">.after =</span> PLT_CN)</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>target_stands <span class="ot">&lt;-</span> standlist <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="at">CN =</span> PLT_CN) <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">as.data.table</span>()</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>target_stands <span class="ot">&lt;-</span> <span class="fu">setkey</span>(target_stands, CN)</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>plt_cn <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>plt_cn <span class="ot">&lt;-</span> <span class="fu">str_c</span>(<span class="st">"'"</span>, target_stands<span class="sc">$</span>CN, <span class="st">"'"</span>)</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>plt_cn <span class="ot">&lt;-</span> <span class="fu">str_flatten_comma</span>(plt_cn)</span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Part 2 Tree Table ------------------------------------------------------------------------------------------------</span></span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>tree_header <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>  <span class="st">"STAND_CN"</span>, <span class="st">"STATUSCD"</span>, <span class="st">"Tree_count"</span>, <span class="st">"SPCD"</span>, <span class="st">"DBH"</span>, <span class="st">"HT"</span>, <span class="st">"ACTUALHT"</span>, <span class="st">"CR"</span>, <span class="st">"SUBP"</span>, <span class="st">"TREE"</span>, <span class="st">"AGENTCD"</span>, </span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Species"</span>, <span class="st">"History"</span>, <span class="st">"CrRatio"</span></span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="co"># This loop iterates through every state database and extracts the tree data from FIA</span></span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>tree_table <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a><span class="co"># connect to the sqlite file</span></span>
-<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>con <span class="ot">=</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), <span class="st">"C:/RxFire/Data/_FIADB_WA.db"</span>)</span>
-<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a><span class="do">#######</span></span>
-<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Add statuscd to fix live or dead trees like: HISTORY = ifelse(STATUSCD != 1, 8, 1)  Live tree == 1, dead == 2, </span></span>
-<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a><span class="co"># other = not there. </span></span>
-<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>tree <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(</span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbGetQuery</span>(</span>
-<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>    con, <span class="fu">str_c</span>(<span class="st">'select PLT_CN, INVYR, STATUSCD, TPA_UNADJ, SPCD, DIA, HT, ACTUALHT, CR, SUBP, TREE, AGENTCD from TREE '</span>, </span>
-<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>               <span class="st">'where PLT_CN in ('</span>, plt_cn, <span class="st">")"</span>)</span>
-<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a><span class="co"># n_distinct(tree$PLT_CN)</span></span>
-<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a><span class="co"># 3426 PLT_CNs have trees in the TREE table</span></span>
-<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>tree <span class="ot">&lt;-</span> tree <span class="sc">|&gt;</span> <span class="fu">mutate</span>(</span>
-<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">Species =</span> SPCD, </span>
-<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">History =</span> <span class="fu">ifelse</span>(STATUSCD <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> <span class="fu">is.na</span>(AGENTCD), <span class="dv">1</span>, <span class="dv">8</span>),</span>
-<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">History =</span> <span class="fu">ifelse</span>(STATUSCD <span class="sc">!=</span> <span class="dv">1</span> <span class="sc">|</span> <span class="sc">!</span><span class="fu">is.na</span>(AGENTCD), <span class="dv">8</span>, <span class="dv">1</span>),</span>
-<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a>  <span class="at">CrRatio =</span> CR</span>
-<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>INVYR)</span>
-<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a><span class="co"># tree %&gt;% select(STATUSCD, AGENTCD, History) %&gt;% unique()</span></span>
-<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a>forest_type <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(<span class="fu">dbGetQuery</span>(con, <span class="st">'select * FROM REF_FOREST_TYPE'</span>))</span>
-<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span>
-<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(tree) <span class="ot">&lt;-</span> <span class="fu">toupper</span>(tree_header)</span>
-<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a><span class="co"># Part 3 Plot Table --------------------------------------------------------------------------------------------</span></span>
-<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a>stand_header <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"STAND_CN"</span>, <span class="st">"INV_YEAR"</span>, <span class="st">"CASE"</span>, <span class="st">"BASAL_AREA_FACTOR"</span>, <span class="st">"INV_PLOT_SIZE"</span>, <span class="st">"BRK_DBH"</span>)</span>
-<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a><span class="co"># connect to the sqlite file</span></span>
-<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span>  <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), <span class="st">"C:/RxFire/Data/_FIADB_WA.db"</span>)</span>
-<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a>plot_table <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(<span class="fu">dbGetQuery</span>(con, <span class="fu">str_c</span>(</span>
-<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a>  <span class="st">'select CN, INVYR from PLOT where CN in ('</span>, </span>
-<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a>  plt_cn, <span class="st">")"</span>)</span>
-<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a>  ))</span>
-<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a>plot_table <span class="ot">&lt;-</span> <span class="fu">setkey</span>(plot_table, CN)</span>
-<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a>plot_table <span class="ot">&lt;-</span> plot_table <span class="sc">|&gt;</span>  </span>
-<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a>    <span class="at">INV_YEAR =</span> <span class="dv">2014</span>, </span>
-<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a>    <span class="at">CASE =</span> (INVYR), </span>
-<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a>    <span class="at">INVYR =</span> <span class="cn">NA</span>, </span>
-<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a>    <span class="at">BASAL_AREA_FACTOR =</span> <span class="dv">0</span>, </span>
-<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a>    <span class="at">INV_PLOT_SIZE =</span> <span class="dv">1</span>, </span>
-<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a>    <span class="at">BRK_DBH =</span> <span class="dv">999</span></span>
-<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.table</span>() <span class="sc">|&gt;</span> <span class="fu">rename</span>(<span class="at">STAND_CN =</span> CN) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>INVYR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Part 1 Setup</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>standlist <span class="ot">&lt;-</span> cns_buffer</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>target_stands <span class="ot">&lt;-</span> standlist <span class="sc">|&gt;</span> <span class="fu">select</span>(CN) <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">as.data.table</span>()</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>target_stands <span class="ot">&lt;-</span> <span class="fu">setkey</span>(target_stands, CN)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>plt_cn <span class="ot">&lt;-</span> <span class="fu">db_list</span>(target_stands, CN)</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Part 2 Tree Table ------------------------------------------------------------------------------------------------</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>tree_header <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"STAND_CN"</span>, <span class="st">"STATUSCD"</span>, <span class="st">"Tree_count"</span>, <span class="st">"SPCD"</span>, <span class="st">"DBH"</span>, <span class="st">"HT"</span>, <span class="st">"ACTUALHT"</span>, <span class="st">"CR"</span>, <span class="st">"SUBP"</span>, <span class="st">"TREE"</span>, <span class="st">"AGENTCD"</span>, </span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Species"</span>, <span class="st">"History"</span>, <span class="st">"CrRatio"</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a><span class="co"># This loop iterates through every state database and extracts the tree data from FIA</span></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>tree_table <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a><span class="co"># connect to the sqlite file</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>con <span class="ot">=</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), <span class="st">"C:/RxFire/Data/_FIADB_WA.db"</span>)</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>tree <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(</span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbGetQuery</span>(</span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>    con, <span class="fu">str_c</span>(<span class="st">'select PLT_CN, INVYR, STATUSCD, TPA_UNADJ, SPCD, DIA, HT, ACTUALHT, CR, SUBP, TREE, AGENTCD from TREE '</span>, </span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>               <span class="st">'where PLT_CN in ('</span>, plt_cn, <span class="st">")"</span>)</span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>tree <span class="ot">&lt;-</span> tree <span class="sc">|&gt;</span> <span class="fu">mutate</span>(</span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">Species =</span> SPCD, </span>
+<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">History =</span> <span class="fu">ifelse</span>(STATUSCD <span class="sc">==</span> <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">8</span>),</span>
+<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># History = ifelse(STATUSCD != 1 | !is.na(AGENTCD), 8, 1),</span></span>
+<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">CrRatio =</span> CR</span>
+<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>INVYR)</span>
+<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-40"><a href="#cb24-40" aria-hidden="true" tabindex="-1"></a><span class="co"># tree %&gt;% select(STATUSCD, AGENTCD, History) %&gt;% unique()</span></span>
+<span id="cb24-41"><a href="#cb24-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-42"><a href="#cb24-42" aria-hidden="true" tabindex="-1"></a>forest_type <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(<span class="fu">dbGetQuery</span>(con, <span class="st">'select * FROM REF_FOREST_TYPE'</span>))</span>
+<span id="cb24-43"><a href="#cb24-43" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span>
+<span id="cb24-44"><a href="#cb24-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-45"><a href="#cb24-45" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(tree) <span class="ot">&lt;-</span> <span class="fu">toupper</span>(tree_header)</span>
+<span id="cb24-46"><a href="#cb24-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-47"><a href="#cb24-47" aria-hidden="true" tabindex="-1"></a><span class="co"># Part 3 Plot Table --------------------------------------------------------------------------------------------</span></span>
+<span id="cb24-48"><a href="#cb24-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-49"><a href="#cb24-49" aria-hidden="true" tabindex="-1"></a>stand_header <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"STAND_CN"</span>, <span class="st">"INV_YEAR"</span>, <span class="st">"CASE"</span>, <span class="st">"BASAL_AREA_FACTOR"</span>, <span class="st">"INV_PLOT_SIZE"</span>, <span class="st">"BRK_DBH"</span>)</span>
+<span id="cb24-50"><a href="#cb24-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-51"><a href="#cb24-51" aria-hidden="true" tabindex="-1"></a><span class="co"># connect to the sqlite file</span></span>
+<span id="cb24-52"><a href="#cb24-52" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span>  <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), <span class="st">"C:/RxFire/Data/_FIADB_WA.db"</span>)</span>
+<span id="cb24-53"><a href="#cb24-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-54"><a href="#cb24-54" aria-hidden="true" tabindex="-1"></a>plot_table <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(<span class="fu">dbGetQuery</span>(con, <span class="fu">str_c</span>(</span>
+<span id="cb24-55"><a href="#cb24-55" aria-hidden="true" tabindex="-1"></a>  <span class="st">'select CN, INVYR from PLOT where CN in ('</span>, </span>
+<span id="cb24-56"><a href="#cb24-56" aria-hidden="true" tabindex="-1"></a>  plt_cn, <span class="st">")"</span>)</span>
+<span id="cb24-57"><a href="#cb24-57" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb24-58"><a href="#cb24-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-59"><a href="#cb24-59" aria-hidden="true" tabindex="-1"></a>plot_table <span class="ot">&lt;-</span> <span class="fu">setkey</span>(plot_table, CN)</span>
+<span id="cb24-60"><a href="#cb24-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-61"><a href="#cb24-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-62"><a href="#cb24-62" aria-hidden="true" tabindex="-1"></a>plot_table <span class="ot">&lt;-</span> plot_table <span class="sc">|&gt;</span>  </span>
+<span id="cb24-63"><a href="#cb24-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb24-64"><a href="#cb24-64" aria-hidden="true" tabindex="-1"></a>    <span class="at">INV_YEAR =</span> <span class="dv">2014</span>, </span>
+<span id="cb24-65"><a href="#cb24-65" aria-hidden="true" tabindex="-1"></a>    <span class="at">CASE =</span> (INVYR), </span>
+<span id="cb24-66"><a href="#cb24-66" aria-hidden="true" tabindex="-1"></a>    <span class="at">INVYR =</span> <span class="cn">NA</span>, </span>
+<span id="cb24-67"><a href="#cb24-67" aria-hidden="true" tabindex="-1"></a>    <span class="at">BASAL_AREA_FACTOR =</span> <span class="dv">0</span>, </span>
+<span id="cb24-68"><a href="#cb24-68" aria-hidden="true" tabindex="-1"></a>    <span class="at">INV_PLOT_SIZE =</span> <span class="dv">1</span>, </span>
+<span id="cb24-69"><a href="#cb24-69" aria-hidden="true" tabindex="-1"></a>    <span class="at">BRK_DBH =</span> <span class="dv">999</span></span>
+<span id="cb24-70"><a href="#cb24-70" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb24-71"><a href="#cb24-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.table</span>() <span class="sc">|&gt;</span> <span class="fu">rename</span>(<span class="at">STAND_CN =</span> CN) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>INVYR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="part-4-1" class="level2">
-<h2 class="anchored" data-anchor-id="part-4-1">Part 4</h2>
+<section id="part-4" class="level2">
+<h2 class="anchored" data-anchor-id="part-4">Part 4</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Part 4 Seedling Table ----------------------------------------------------------------------------------------</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>tree_header <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"STAND_CN"</span>, <span class="st">"STATUSCD"</span>, <span class="st">"Tree_count"</span>, <span class="st">"SPCD"</span>, <span class="st">"DBH"</span>, <span class="st">"HT"</span>, <span class="st">"ACTUALHT"</span>, <span class="st">"CR"</span>, <span class="st">"SUBP"</span>, <span class="st">"TREE"</span>, <span class="st">"AGENTCD"</span>, </span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Species"</span>, <span class="st">"History"</span>, <span class="st">"CrRatio"</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># This loop iterates through every state database and extracts the tree data from FIA</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>seed <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co"># connect to the sqlite file</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span>  <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), <span class="st">"C:/RxFire/Data/_FIADB_WA.db"</span>)</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>seed <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(</span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbGetQuery</span>(</span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    con, <span class="fu">str_c</span>(<span class="st">'select PLT_CN, INVYR, SUBP, TPA_UNADJ, SPCD from SEEDLING '</span>, </span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>               <span class="st">'where PLT_CN in ('</span>, plt_cn, <span class="st">")"</span>)</span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>  ) </span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="co"># These are not in the seedlings table: STATUSCD, DIA, HT, ACTUALHT, CR, SUBP, TREE, AGENTCD</span></span>
-<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a><span class="co"># n_distinct(seed$PLT_CN)</span></span>
-<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="co"># 2818 PLT_CNs have trees in the SEEDLINGS table</span></span>
-<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>seed <span class="ot">&lt;-</span> seed <span class="sc">|&gt;</span> <span class="fu">mutate</span>(</span>
-<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">STAND_CN   =</span>  PLT_CN,      </span>
-<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">INVYR      =</span>  INVYR,         </span>
-<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">STATUSCD   =</span>  <span class="dv">1</span>,         </span>
-<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">Tree_count =</span>  TPA_UNADJ,         </span>
-<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">SPCD       =</span>  SPCD,         </span>
-<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">DBH        =</span>  <span class="fl">0.1</span>,         </span>
-<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">HT         =</span>  <span class="cn">NA</span>,</span>
-<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">ACTUALHT   =</span>  <span class="cn">NA</span>,</span>
-<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">CR         =</span>  <span class="cn">NA</span>,</span>
-<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">SUBP       =</span>  SUBP,</span>
-<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">TREE       =</span>  <span class="cn">NA</span>,</span>
-<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">AGENTCD    =</span>  <span class="cn">NA</span>,</span>
-<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">Species    =</span> SPCD,</span>
-<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">History    =</span> <span class="dv">1</span>,</span>
-<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">CrRatio    =</span> <span class="cn">NA</span></span>
-<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span> <span class="fu">select</span>(</span>
-<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>  STAND_CN, INVYR, STATUSCD, Tree_count, SPCD, DBH, HT, ACTUALHT, </span>
-<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>  CR, SUBP, TREE, AGENTCD, Species,History, CrRatio) <span class="sc">|&gt;</span> </span>
-<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>INVYR)</span>
-<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(seed) <span class="ot">&lt;-</span> seed <span class="sc">|&gt;</span> <span class="fu">names</span>() <span class="sc">|&gt;</span> <span class="fu">toupper</span>()</span>
-<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a><span class="co"># Fixing the Tree column. </span></span>
-<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a>seed <span class="ot">&lt;-</span> seed <span class="sc">|&gt;</span> <span class="fu">group_by</span>(STAND_CN) <span class="sc">|&gt;</span> </span>
-<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a>    <span class="at">Nrow =</span> <span class="fu">row_number</span>(), </span>
-<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">TREE =</span> (<span class="dv">100100</span> <span class="sc">+</span> Nrow)</span>
-<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>Nrow)</span>
-<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a><span class="do">## Checking that it worked as planned. </span></span>
-<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a><span class="co"># seed |&gt; group_by(STAND_CN) |&gt; </span></span>
-<span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a><span class="co">#   summarise(n = n()) |&gt; </span></span>
-<span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a><span class="co">#   arrange(desc(n))</span></span>
-<span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a><span class="co"># seed |&gt; filter(STAND_CN == "40220797010497")</span></span>
-<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a><span class="co"># seed |&gt; filter(STAND_CN == "22398336010497")</span></span>
-<span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a><span class="co"># seed |&gt; filter(STAND_CN == "645308766126144")</span></span>
-<span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a>fvs_tree <span class="ot">&lt;-</span> <span class="fu">add_row</span>(tree, seed)</span>
-<span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a><span class="co"># fvs_tree</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Part 4 Seedling Table ----------------------------------------------------------------------------------------</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>tree_header <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"STAND_CN"</span>, <span class="st">"STATUSCD"</span>, <span class="st">"Tree_count"</span>, <span class="st">"SPCD"</span>, <span class="st">"DBH"</span>, <span class="st">"HT"</span>, <span class="st">"ACTUALHT"</span>, <span class="st">"CR"</span>, <span class="st">"SUBP"</span>, <span class="st">"TREE"</span>, <span class="st">"AGENTCD"</span>, </span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Species"</span>, <span class="st">"History"</span>, <span class="st">"CrRatio"</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="co"># This loop iterates through every state database and extracts the tree data from FIA</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>seed <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="co"># connect to the sqlite file</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span>  <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), <span class="st">"C:/RxFire/Data/_FIADB_WA.db"</span>)</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>seed <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbGetQuery</span>(</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>    con, <span class="fu">str_c</span>(<span class="st">'select PLT_CN, INVYR, SUBP, TPA_UNADJ, SPCD from SEEDLING '</span>, </span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>               <span class="st">'where PLT_CN in ('</span>, plt_cn, <span class="st">")"</span>)</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>  ) </span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>seed <span class="ot">&lt;-</span> seed <span class="sc">|&gt;</span> <span class="fu">mutate</span>(</span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">STAND_CN   =</span>  PLT_CN,      </span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">INVYR      =</span>  INVYR,         </span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">STATUSCD   =</span>  <span class="dv">1</span>,         </span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">Tree_count =</span>  TPA_UNADJ,         </span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">SPCD       =</span>  SPCD,         </span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">DBH        =</span>  <span class="fl">0.1</span>,         </span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">HT         =</span>  <span class="cn">NA</span>,</span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">ACTUALHT   =</span>  <span class="cn">NA</span>,</span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">CR         =</span>  <span class="cn">NA</span>,</span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">SUBP       =</span>  SUBP,</span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">TREE       =</span>  <span class="cn">NA</span>,</span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">AGENTCD    =</span>  <span class="cn">NA</span>,</span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">Species    =</span> SPCD,</span>
+<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">History    =</span> <span class="dv">1</span>,</span>
+<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">CrRatio    =</span> <span class="cn">NA</span></span>
+<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span> <span class="fu">select</span>(</span>
+<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a>  STAND_CN, INVYR, STATUSCD, Tree_count, SPCD, DBH, HT, ACTUALHT, </span>
+<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a>  CR, SUBP, TREE, AGENTCD, Species,History, CrRatio) <span class="sc">|&gt;</span> </span>
+<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>INVYR)</span>
+<span id="cb25-43"><a href="#cb25-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-44"><a href="#cb25-44" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(seed) <span class="ot">&lt;-</span> seed <span class="sc">|&gt;</span> <span class="fu">names</span>() <span class="sc">|&gt;</span> <span class="fu">toupper</span>()</span>
+<span id="cb25-45"><a href="#cb25-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-46"><a href="#cb25-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-47"><a href="#cb25-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-48"><a href="#cb25-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Fixing the Tree column. </span></span>
+<span id="cb25-49"><a href="#cb25-49" aria-hidden="true" tabindex="-1"></a>seed <span class="ot">&lt;-</span> seed <span class="sc">|&gt;</span> <span class="fu">group_by</span>(STAND_CN) <span class="sc">|&gt;</span> </span>
+<span id="cb25-50"><a href="#cb25-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb25-51"><a href="#cb25-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">Nrow =</span> <span class="fu">row_number</span>(), </span>
+<span id="cb25-52"><a href="#cb25-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">TREE =</span> (<span class="dv">100100</span> <span class="sc">+</span> Nrow)</span>
+<span id="cb25-53"><a href="#cb25-53" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>Nrow)</span>
+<span id="cb25-54"><a href="#cb25-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-55"><a href="#cb25-55" aria-hidden="true" tabindex="-1"></a>fvs_tree <span class="ot">&lt;-</span> <span class="fu">add_row</span>(tree, seed)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="part-5" class="level2">
 <h2 class="anchored" data-anchor-id="part-5">Part 5</h2>
-<p><em>Adding Standplot_cn to the tables</em></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>splt_cn <span class="ot">&lt;-</span> fvs_tree <span class="sc">|&gt;</span> <span class="fu">select</span>(STAND_CN, SUBP) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">STANDPLOT_CN =</span> <span class="fu">str_c</span>(STAND_CN, <span class="st">"_"</span>, SUBP)) <span class="sc">|&gt;</span> </span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>fvs_tree <span class="ot">&lt;-</span> fvs_tree <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">STANDPLOT_CN =</span> <span class="fu">str_c</span>(STAND_CN, <span class="st">"_"</span>, SUBP)) <span class="sc">|&gt;</span> <span class="fu">relocate</span>(STANDPLOT_CN, <span class="at">.after =</span> STAND_CN)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>plot_table <span class="ot">&lt;-</span> plot_table <span class="sc">|&gt;</span> </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">uncount</span>(<span class="at">weights =</span> <span class="dv">4</span>, <span class="at">.id =</span> <span class="st">"SUBP"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">STANDPLOT_CN =</span> <span class="fu">str_c</span>(STAND_CN, <span class="st">"_"</span>, SUBP)) <span class="sc">|&gt;</span> </span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(STANDPLOT_CN, <span class="at">.after =</span> STAND_CN) <span class="sc">|&gt;</span> </span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>SUBP)</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>plot_table <span class="ot">&lt;-</span> <span class="fu">left_join</span>(splt_cn, plot_table, <span class="fu">join_by</span>(STANDPLOT_CN, STAND_CN))</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="fu">n_distinct</span>(fvs_tree<span class="sc">$</span>STANDPLOT_CN)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 15369</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">n_distinct</span>(fvs_tree<span class="sc">$</span>STAND_CN)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 3945</code></pre>
-</div>
-</div>
-<p>There are fewer plots here than I started with, but I am pretty sure they were plots with dead trees.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>plot_table <span class="sc">|&gt;</span> <span class="fu">filter</span>(STAND_CN <span class="sc">==</span> <span class="st">"12981943010497"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div class="kable-table">
-<table class="caption-top table table-sm table-striped small">
-<colgroup>
-<col style="width: 16%">
-<col style="width: 5%">
-<col style="width: 18%">
-<col style="width: 9%">
-<col style="width: 5%">
-<col style="width: 19%">
-<col style="width: 15%">
-<col style="width: 8%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">STAND_CN</th>
-<th style="text-align: right;">SUBP</th>
-<th style="text-align: left;">STANDPLOT_CN</th>
-<th style="text-align: right;">INV_YEAR</th>
-<th style="text-align: right;">CASE</th>
-<th style="text-align: right;">BASAL_AREA_FACTOR</th>
-<th style="text-align: right;">INV_PLOT_SIZE</th>
-<th style="text-align: right;">BRK_DBH</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">12981943010497</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: left;">12981943010497_1</td>
-<td style="text-align: right;">2014</td>
-<td style="text-align: right;">2005</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">999</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">12981943010497</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: left;">12981943010497_2</td>
-<td style="text-align: right;">2014</td>
-<td style="text-align: right;">2005</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">999</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">12981943010497</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: left;">12981943010497_3</td>
-<td style="text-align: right;">2014</td>
-<td style="text-align: right;">2005</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">999</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">12981943010497</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: left;">12981943010497_4</td>
-<td style="text-align: right;">2014</td>
-<td style="text-align: right;">2005</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">999</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<p>I am not sure why I am getting a different number of trees here, 3434. At the end of section 2 of 1_Import and Clean, 3,531 of 3,552 plots have trees. There are a few less plots here, and I am surprised.</p>
-<p>Rachel’s code here is using CSVs, that might be easier than running with an Sqlite db.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>plot_table <span class="ot">&lt;-</span> plot_table <span class="sc">|&gt;</span> <span class="fu">rename</span>(<span class="at">OYEAR =</span> CASE) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>SUBP)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>fvs_tree <span class="ot">&lt;-</span> fvs_tree <span class="sc">|&gt;</span> <span class="fu">select</span>(STAND_CN, STANDPLOT_CN, TREE, TREE_COUNT, HISTORY, SPECIES, DBH, HT, CR, CRRATIO)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>fvs_tree <span class="ot">&lt;-</span> fvs_tree <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">STAND_CN      =</span>  <span class="fu">as.character</span>(STAND_CN),  </span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">STANDPLOT_CN  =</span>  <span class="fu">as.character</span>(STANDPLOT_CN),</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">TREE          =</span>  <span class="fu">as.character</span>(TREE), </span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">TREE_COUNT    =</span>  <span class="fu">as.numeric</span>(TREE_COUNT), </span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">HISTORY       =</span>  <span class="fu">as.numeric</span>(HISTORY), </span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">SPECIES       =</span>  <span class="fu">as.character</span>(SPECIES), </span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>                   <span class="at">DBH           =</span>  <span class="fu">as.numeric</span>(DBH), </span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>                   <span class="at">HT            =</span>  <span class="fu">as.numeric</span>(HT), </span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>                   <span class="at">CR            =</span>  <span class="fu">as.numeric</span>(CR), </span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>                   <span class="at">CRRATIO       =</span>  <span class="fu">as.numeric</span>(CRRATIO)</span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>                     )</span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co"># str(fvs_tree)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>plot_table <span class="ot">&lt;-</span> plot_table <span class="sc">|&gt;</span> <span class="fu">rename</span>(<span class="at">OYEAR =</span> CASE)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>fvs_tree <span class="ot">&lt;-</span> fvs_tree <span class="sc">|&gt;</span> <span class="fu">select</span>(STAND_CN, TREE, TREE_COUNT, HISTORY, SPECIES, DBH, HT, CR, CRRATIO)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>fvs_tree <span class="ot">&lt;-</span> fvs_tree <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">STAND_CN      =</span>  <span class="fu">as.character</span>(STAND_CN),  </span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>                   <span class="co"># STANDPLOT_CN  =  as.character(STANDPLOT_CN),</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">TREE          =</span>  <span class="fu">as.character</span>(TREE), </span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">TREE_COUNT    =</span>  <span class="fu">as.numeric</span>(TREE_COUNT), </span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">HISTORY       =</span>  <span class="fu">as.numeric</span>(HISTORY), </span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">SPECIES       =</span>  <span class="fu">as.character</span>(SPECIES), </span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>                   <span class="at">DBH           =</span>  <span class="fu">as.numeric</span>(DBH), </span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>                   <span class="at">HT            =</span>  <span class="fu">as.numeric</span>(HT), </span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>                   <span class="at">CR            =</span>  <span class="fu">as.numeric</span>(CR), </span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>                   <span class="at">CRRATIO       =</span>  <span class="fu">as.numeric</span>(CRRATIO)</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>                     )</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a><span class="co"># str(fvs_tree)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Part 5 Create DB ---------------------------------------------------------------------------------</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Just to make it easier to integrate this into the other scripts I am renaming the tables FVS_...</span></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), <span class="at">dbname =</span> <span class="st">"./data/homemade_fvs_db_17sept24.db"</span>)</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="fu">dbWriteTable</span>(<span class="at">conn =</span> con, <span class="at">name =</span> <span class="st">"FVS_PLOTINIT"</span>, <span class="at">value =</span> plot_table, <span class="at">overwrite =</span> T)</span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="fu">dbWriteTable</span>(<span class="at">conn =</span> con, <span class="at">name =</span> <span class="st">"FVS_TREEINIT"</span>, <span class="at">value =</span> fvs_tree, <span class="at">overwrite =</span> T)</span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the schema</span></span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(con, <span class="fu">str_c</span>(<span class="st">"CREATE TABLE FVS_PLOTINIT_PLOT ("</span>,</span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"STAND_CN TEXT, "</span>,</span>
-<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"STANDPLOT_CN TEXT, "</span>,</span>
-<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"INV_YEAR INTEGER, "</span>,</span>
-<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"OYEAR INTEGER, "</span>,</span>
-<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"BASAL_AREA_FACTOR REAL, "</span>,</span>
-<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"INV_PLOT_SIZE REAL, "</span>,</span>
-<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"BRK_DBH REAL)"</span>))</span>
-<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>plot_table <span class="sc">|&gt;</span> <span class="fu">names</span>()</span>
-<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(con, <span class="fu">str_c</span>(<span class="st">"INSERT INTO FVS_PLOTINIT_PLOT SELECT * FROM FVS_PLOTINIT"</span>))</span>
-<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(con, <span class="st">"DROP TABLE FVS_PLOTINIT"</span>)</span>
-<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a><span class="co"># 9.2 TREE SCHEMA ---------------------------------------------------------</span></span>
-<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(con, <span class="fu">str_c</span>(<span class="st">"CREATE TABLE FVS_TREEINIT_PLOT ( "</span>,</span>
-<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"STAND_CN TEXT, "</span>,</span>
-<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"STANDPLOT_CN TEXT, "</span>,</span>
-<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"TREE TEXT, "</span>,</span>
-<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"TREE_COUNT REAL, "</span>,</span>
-<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"HISTORY   REAL, "</span>,</span>
-<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"SPECIES   TEXT, "</span>,</span>
-<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"DBH REAL, "</span>,</span>
-<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"HT REAL, "</span>,</span>
-<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"CR    REAL, "</span>,</span>
-<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"CRRATIO   REAL)"</span>))</span>
-<span id="cb18-44"><a href="#cb18-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-45"><a href="#cb18-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-46"><a href="#cb18-46" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(con, <span class="fu">str_c</span>(<span class="st">"INSERT INTO FVS_TREEINIT_PLOT SELECT * FROM FVS_TREEINIT"</span>))</span>
-<span id="cb18-47"><a href="#cb18-47" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(con, <span class="st">"DROP TABLE FVS_TREEINIT"</span>)</span>
-<span id="cb18-48"><a href="#cb18-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-49"><a href="#cb18-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-50"><a href="#cb18-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-51"><a href="#cb18-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-52"><a href="#cb18-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-53"><a href="#cb18-53" aria-hidden="true" tabindex="-1"></a><span class="fu">dbListTables</span>(<span class="at">conn =</span> con)</span>
-<span id="cb18-54"><a href="#cb18-54" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span>
-<span id="cb18-55"><a href="#cb18-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-56"><a href="#cb18-56" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove NA values when writing files (FVS does NOT like them)</span></span>
-<span id="cb18-57"><a href="#cb18-57" aria-hidden="true" tabindex="-1"></a><span class="do">### UPDATE YOUR OUTPUT FILE NAMES HERE </span><span class="al">###</span></span>
-<span id="cb18-58"><a href="#cb18-58" aria-hidden="true" tabindex="-1"></a><span class="co"># write.csv(tree_table, file = "data/tree_table_R1_Carbon_2014.csv", na = "", row.names = FALSE)</span></span>
-<span id="cb18-59"><a href="#cb18-59" aria-hidden="true" tabindex="-1"></a><span class="co"># write.csv(stands_with_fuels, file = "data/stand_table_R1_Carbon2014.csv", na = "", row.names = FALSE)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># splt_cn &lt;- splt_cn |&gt; select(STAND_CN, STANDPLOT_CN)</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(splt_cn, "./data/1.5_dbCreation_standlist.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Part 5 Create DB ---------------------------------------------------------------------------------</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Just to make it easier to integrate this into the other scripts I am renaming the tables FVS_...</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), <span class="at">dbname =</span> <span class="st">"./data/homemade_fvs_db_08Oct24.db"</span>)</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="fu">dbWriteTable</span>(<span class="at">conn =</span> con, <span class="at">name =</span> <span class="st">"FVS_PLOTINIT"</span>, <span class="at">value =</span> plot_table, <span class="at">overwrite =</span> T)</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="fu">dbWriteTable</span>(<span class="at">conn =</span> con, <span class="at">name =</span> <span class="st">"FVS_TREEINIT"</span>, <span class="at">value =</span> fvs_tree, <span class="at">overwrite =</span> T)</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the schema</span></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(con, <span class="fu">str_c</span>(<span class="st">"CREATE TABLE FVS_PLOTINIT_PLOT ("</span>,</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"STAND_CN TEXT, "</span>,</span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>                     <span class="co"># "STANDPLOT_CN TEXT, ",</span></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"INV_YEAR INTEGER, "</span>,</span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"OYEAR INTEGER, "</span>,</span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"BASAL_AREA_FACTOR REAL, "</span>,</span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"INV_PLOT_SIZE REAL, "</span>,</span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"BRK_DBH REAL)"</span>))</span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>plot_table <span class="sc">|&gt;</span> <span class="fu">names</span>()</span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(con, <span class="fu">str_c</span>(<span class="st">"INSERT INTO FVS_PLOTINIT_PLOT SELECT * FROM FVS_PLOTINIT"</span>))</span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(con, <span class="st">"DROP TABLE FVS_PLOTINIT"</span>)</span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a><span class="co"># 9.2 TREE SCHEMA ---------------------------------------------------------</span></span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(con, <span class="fu">str_c</span>(<span class="st">"CREATE TABLE FVS_TREEINIT_PLOT ( "</span>,</span>
+<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"STAND_CN TEXT, "</span>,</span>
+<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a>                     <span class="co"># "STANDPLOT_CN TEXT, ",</span></span>
+<span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"TREE TEXT, "</span>,</span>
+<span id="cb27-37"><a href="#cb27-37" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"TREE_COUNT REAL, "</span>,</span>
+<span id="cb27-38"><a href="#cb27-38" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"HISTORY   REAL, "</span>,</span>
+<span id="cb27-39"><a href="#cb27-39" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"SPECIES   TEXT, "</span>,</span>
+<span id="cb27-40"><a href="#cb27-40" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"DBH REAL, "</span>,</span>
+<span id="cb27-41"><a href="#cb27-41" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"HT REAL, "</span>,</span>
+<span id="cb27-42"><a href="#cb27-42" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"CR    REAL, "</span>,</span>
+<span id="cb27-43"><a href="#cb27-43" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"CRRATIO   REAL)"</span>))</span>
+<span id="cb27-44"><a href="#cb27-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-45"><a href="#cb27-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-46"><a href="#cb27-46" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(con, <span class="fu">str_c</span>(<span class="st">"INSERT INTO FVS_TREEINIT_PLOT SELECT * FROM FVS_TREEINIT"</span>))</span>
+<span id="cb27-47"><a href="#cb27-47" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(con, <span class="st">"DROP TABLE FVS_TREEINIT"</span>)</span>
+<span id="cb27-48"><a href="#cb27-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-49"><a href="#cb27-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-50"><a href="#cb27-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-51"><a href="#cb27-51" aria-hidden="true" tabindex="-1"></a><span class="fu">dbListTables</span>(<span class="at">conn =</span> con)</span>
+<span id="cb27-52"><a href="#cb27-52" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-</section>
-<section id="difference-in-nrows" class="level1">
-<h1>Difference in nrows</h1>
-<p><strong>Where is the difference</strong></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># end1.5 &lt;- read_csv("./data/1.5_dbCreation_standlist.csv")</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># end1.0 &lt;- read_csv("./data/1_Import_Clean2.csv", </span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                       col_types = "ccc")</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co"># t &lt;- anti_join(end1.0, end1.5, join_by(STANDPLOT_CN))</span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co"># n_distinct(t$STANDPLOT_CN)</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co"># t %&gt;% head()</span></span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co"># cns &lt;- db_list(t, PLT_CN)</span></span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="co"># con &lt;- dbConnect(RSQLite::SQLite(), "c:/RxFire/Data/_FIADB_WA.db")</span></span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="co"># trees &lt;- dbGetQuery(con, str_c("select * from TREE where PLT_CN in (", cns, ")"))</span></span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="co"># seeds &lt;- dbGetQuery(con, str_c("select * from SEEDLING where PLT_CN in (", cns, ")"))</span></span>
-<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="co"># trees &lt;- clean_na_cols(trees)</span></span>
-<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a><span class="co"># seeds &lt;- clean_na_cols(seeds)</span></span>
-<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="co"># sum(is.na(trees$AGENTCD))</span></span>
-<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a><span class="co"># nrow(trees)</span></span>
-<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a><span class="co"># unique(trees$STATUSCD)</span></span>
-<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a><span class="co"># trees %&gt;% filter(!is.na(AGENTCD))</span></span>
-<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a><span class="co"># t &lt;- trees %&gt;% filter(STATUSCD != 1 &amp; !is.na(AGENTCD))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>I went back up and found where the reduction in subplots came in, they are subplots that were created in the first script, but didn’t have matches in the tree table. The Plt CNs match but the standplot cns do not.</p>
 </section>
 <section id="difference-in-.out-file" class="level1">
 <h1>Difference in .out file</h1>
@@ -1629,7 +1077,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
+      var filterRegex = new RegExp("https:\/\/KingBlkMouth\.github\.io\/Regen_Regression\.github\.io\/");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
